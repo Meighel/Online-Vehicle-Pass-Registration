@@ -1,0 +1,42 @@
+:root {
+    --primary-bg: hsl(0, 0%, 0%);
+    --secondary-bg: hsl(220, 2%, 26%);
+    --text-light: hsl(0, 0%, 100%);
+    --border-highlight: hsl(60, 100%, 50%);
+  }
+  
+  
+  /* Navbar */
+  .navbar {
+    background-color: var(--secondary-bg);
+    padding: 10px 0;
+  }
+  .navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+  }
+
+  /* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
+    color: var(--text-light);
+    padding: 100px 0;
+    text-align: left;
+  }
+  .display-4 {
+    font-size: calc(1.475rem + 2.7vw);
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: left;
+  }
+  .lead {
+    text-align: left;
+  }
+  
+  .vehicle-gif {
+    mix-blend-mode: multiply;
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+  }
