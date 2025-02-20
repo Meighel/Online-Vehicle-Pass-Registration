@@ -20,7 +20,7 @@
 
   /* Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
+    background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg), var(--text-light));
     color: var(--text-light);
     padding: 100px 0;
     text-align: left;
