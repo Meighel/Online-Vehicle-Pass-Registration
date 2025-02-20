@@ -1,6 +1,7 @@
 :root {
     --primary-bg: hsl(0, 0%, 0%);
     --secondary-bg: hsl(220, 2%, 26%);
+    --section-bg: hsl(220, 2%, 18%);
     --text-light: hsl(0, 0%, 100%);
     --border-highlight: hsl(60, 100%, 50%);
   }
@@ -40,3 +41,35 @@
     max-width: 900px;
     height: auto;
   }
+
+  
+/* feature section */
+.feature-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-highlight);
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    color: var(--text-light);
+    box-shadow: 0 0 10px var(--border-bg);
+}
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 15px rgba(255, 255, 0, 0.5);
+}
+
+.features {
+    background: linear-gradient(135deg, var(--primary-bg) var(--secondary-bg));
+  }
+  
+  input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    opacity: 1;
+  }
+  
+  input {
+    background-color: var(--primary-bg);
+    color: var(--text-light);
+    border: 1px solid var(--border-highlight);
+  }
+  
