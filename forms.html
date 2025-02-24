@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeFi AppAssets</title>
+  <link rel="stylesheet" href="includes/css/style.css">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-bg: hsl(0, 5%, 4%);
+      --secondary-bg: hsl(220, 2%, 26%);
+      --section-bg: hsl(220, 2%, 18%);
+      --text-light: hsl(0, 0%, 100%);
+      --border-highlight: hsl(60, 100%, 50%);
+    }
+
+    .features {
+      background-color: var(--section-bg);
+    }
+  </style>
+</head>
+<body>
+<div class = "container">
+    <h2 class="text-center mb-4">Online Form Registration</h2>
+    <form>
+        <!-- Personal Details -->
+        <h4>Personal Information</h4>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label class="form-label">First Name:</label>
+                <input type="text" class="form-control" required>
+            </div><br>
+            <div class="col-md-4">
+                <label class="form-label">Middle Name:</label>
+                <input type="text" class="form-control" required>
+            </div><br>
+            <div class="col-md-4">
+                <label class="form-label">Last Name:</label>
+                <input type="text" class="form-control" required>
+            </div>
+        </div><br>
+
+        <div class="row mb-3">
+            <label class="form-label">Corporate Email:</label>
+            <input type="email" class="form-control" required>
+        </div><br>
+        
+        <label class="form-label">School Role:</label>
+        <div class="mb-3 form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="role" value="Student" required>
+            <label class="form-check-label">Student</label>
+        </div>
+        <div class="mb-3 form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="role" value="Faculty" required>
+            <label class="form-check-label">Faculty</label>
+        </div><br>
+
+        <div class="mb-3">
+            <label class="form-label">Driver's License's Number:</label>
+            <input type="text" class="form-control" required>
+        </div>
+        <!-- Vehicle Details -->
+         <h4>Vehicle Details</h4>
+         <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Model:</label>
+                <input type="text" class="form-control" required>
+            </div><br>
+            <div class="col-mid-6">
+                <label class="form-label">Color:</label>
+                <input type="text" class="form-control" required>
+            </div>
+         </div><br>
+
+         <label class="form-label">Vehicle Type:</label>
+         <div class="mb-3 form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="type" value="Car" required>
+            <label class="form-check-label">Car</label>
+         </div>
+         <div class="mb-3 form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="type" value="Motorbike" required>
+            <label class="form-check-label">Motorbike</label>
+         </div>
+
+         <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">OR Number:</label>
+                <input type="text" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">CR Number:</label>
+                <input type="text" class="form-control" required>
+            </div>
+        </div>
+
+        <script>
+            function toggleOwnerDetails() {
+                const isOwner = document.getElementById('Yes').checked;
+                const ownerFields = document.querySelectorAll('#owner-details input');
+
+                ownerFields.forEach(field => {
+                    field.disabled = isOwner;
+                    field.required = !isOwner;
+                });
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                document.getElementById("Yes").addEventListener("change", toggleOwnerDetails);
+                document.getElementById("No").addEventListener("change", toggleOwnerDetails);
+                toggleOwnerDetails();
+            });
+        </script>
+         <!-- Ownership -->
+        <label class="form-label">Are you the owner of the vehicle?</label>
+        <div class="mb-3 form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="owner" value="Yes" required id="Yes">
+            <label class="form-check-label" for="Yes">Yes, I am the owner.</label>
+        </div>
+        <div class="mb-3 form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="owner" value="No" required id="No">
+            <label class="form-check-label" for="No">No,I am registering on behalf of the owner.</label>
+        </div>
+
+        <h5>If no, provide the owner's details:</h5>
+        <div class="row mb-3" id="owner-details">
+            <div class="col-md-6">
+                <label class="form-label">First Name:</label>
+                <input type="text" class="form-control" id="firstname" required disabled>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Middle Name;</label>
+                <input type="text" class="form-control" id="middlename" required disabled>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Last Name:</label>
+                <input type="text" class="form-control" id="lastname" required disabled>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Contact Number:</label>
+                <input type="text" class="form-control" id="contactnumber" required disabled>
+            </div>
+        </div>
+        <button type="submit" class=" btn btn-primary">Submit</button>
+    </form>
+</div>
+</body>
+</html>
