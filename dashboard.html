@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="includes/css/dashboard-style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <!-- Brand Name -->
+        <a class="navbar-brand ms-4 fs-3 fw-bold text-warning brand-logo" href="#">OVR</a>
+
+        <!-- Toggle Button -->
+        <button class="toggle-btn" id="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+        <br>
+        <p>Main Menu</p>
+        <ul>
+            <li>
+                <a href="#">
+                    <img src="/includes/images/home.png" alt="house" width="15" height="15">
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="/includes/images/user.png" alt="profile" width="15" height="15">
+                    <span>Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="/includes/images/settings.png" alt="setting" width="15" height="15">
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+
+        <a href="#" id="logout">
+            <center><img src="/includes/images/power-off.png" alt="logout" width="20" height="20"></center>
+            <span>Logout</span>
+        </a>
+
+        <!-- Profile Section -->
+        <div class="profile">
+            <img src="/includes/images/profile-placeholder.png" alt="Profile Picture"> 
+            <div class="profile-info">
+                <span class="name">John Doe</span>
+                <span class="position">Admin</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content" id="content">
+        <div class="title" id="title">
+            <h6>Dashboard</h6>
+            <small><span id="real-time-date"></span></small>
+        </div>
+        <hr>
+        
+        <div class="top-bar">
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" placeholder="Search..." id="search-bar">
+                <button class="search-btn">🔍</button> <!-- Added search button -->
+            </div>
+
+            <!-- Right Side Icons -->
+            <div class="icons-container">
+                <button id="filter" class="icon-btn fs-6"><small>Filter</small></button> <!-- Filter Button -->
+                <button id="notification" class="icon-btn">🔔</button> <!-- Notification Bell -->
+                <button id="help" class="icon-btn">❓</button> <!-- Help Button -->
+            </div>
+        </div>
+
+    
+        <div class="container-flex mt-4">
+            <div class="scroll-container">
+                <div class="scroll-row"> <!-- Keeps all boxes in one row -->
+                    
+                    <!-- Box 1 -->
+                    <div class="custom-box">
+                        <div class="box-header">
+                            <h5>
+                                <img src="includes/images/student.png" alt="Student Icon" width="25" height="25">
+                                Students Accounts
+                            </h5>
+                            <button class="options-btn" aria-label="More options">⋮</button>
+                        </div>
+                        <h6>255</h6>
+                        <small><p>+2.5% than usual</p></small>
+                    </div>
+    
+                    <!-- Box 2 -->
+                    <div class="custom-box">
+                        <div class="box-header">
+                            <h5>
+                                <img src="includes/images/worker.png" alt="Worker Icon" width="25" height="25">
+                                Faculty Accounts
+                            </h5>
+                            <button class="options-btn" aria-label="More options">⋮</button>
+                        </div>
+                        <h6>34</h6>
+                        <small><p>-0.1% than usual</p></small>
+                    </div>
+    
+                    <!-- Box 3 -->
+                    <div class="custom-box">
+                        <div class="box-header">
+                            <h5>
+                                <img src="includes/images/clock.png" alt="Clock Icon" width="25" height="25">
+                                Pending Application
+                            </h5>
+                            <button class="options-btn" aria-label="More options">⋮</button>
+                        </div>
+                        <h6>50</h6>
+                        <small><p>-10% compared to last month</p></small>
+                    </div>
+    
+                    <!-- Box 4 -->
+                    <div class="custom-box">
+                        <div class="box-header">
+                            <h5>
+                                <img src="includes/images/money.png" alt="Money Icon" width="25" height="25">
+                                Total Paid Client
+                            </h5>
+                            <button class="options-btn" aria-label="More options">⋮</button>
+                        </div>
+                        <h6>360</h6>
+                        <small><p>+15% increase in the past week</p></small>
+                    </div>
+
+                    <!-- Box 5 -->
+                    <div class="custom-box">
+                        <div class="box-header">
+                            <h5>
+                                <img src="includes/images/check.png" alt="Check Icon" width="25" height="25">
+                                Verified Application
+                            </h5>
+                            <button class="options-btn" aria-label="More options">⋮</button>
+                        </div>
+                        <h6>80</h6>
+                        <small><p>same as last week</p></small>
+                    </div>
+
+                    <!-- Box 6 -->
+                    <div class="custom-box">
+                        <div class="box-header">
+                            <h5>
+                                <img src="includes/images/remove.png" alt="X Icon" width="25" height="25">
+                                Rejected Application
+                            </h5>
+                            <button class="options-btn" aria-label="More options">⋮</button>
+                        </div>
+                        <h6>10</h6>
+                        <small><p>-8% decreases over the last 30 days</p></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Row-->
+
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Transactions Table -->
+                <div class="col-12 col-md-6">
+                    <div class="table-container p-3 border rounded shadow-sm">
+                        <h6 class="mb-3">Transactions</h6>   
+                        <table class="table table-hover table-borderless">
+                            <thead class="border-bottom">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Processed By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr onclick="window.location='#';">
+                                    <td>John Doe</td>
+                                    <td>2025-02-24</td>
+                                    <td><span class="status-badge status-approved">Approved</span></td>
+                                    <td>Admin</td>
+                                </tr>
+                                <tr onclick="window.location='#';">
+                                    <td>Jane Smith</td>
+                                    <td>2025-02-23</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td>Cashier</td>
+                                </tr>
+                                <tr onclick="window.location='#';">
+                                    <td>Michael Johnson</td>
+                                    <td>2025-02-22</td>
+                                    <td><span class="status-badge status-rejected">Rejected</span></td>
+                                    <td>Security Personnel</td>
+                                </tr>
+                                <tr onclick="window.location='#';">
+                                    <td>Emily Davis</td>
+                                    <td>2025-02-18</td>
+                                    <td><span class="status-badge status-verified">Verified</span></td>
+                                    <td>Accounting</td>
+                                </tr>
+                                <tr onclick="window.location='#';">
+                                    <td>Carlos Rodriguez</td>
+                                    <td>2025-02-24</td>
+                                    <td><span class="status-badge status-verified">Verified</span></td>
+                                    <td>Security Personnel</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        
+                <!-- Doughnut Chart -->
+                <div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
+                    <div class="chart-container p-3 border rounded shadow-sm w-100">
+                        <canvas id="registrationChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Slots Counter -->
+                <div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
+                    <div class="slots-container">
+                            <h4>REMAINING SLOTS</h4>
+                            <h6>380</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    
+    <script>
+        // Get the canvas element
+        var ctx = document.getElementById('registrationChart').getContext('2d');
+    
+        // Chart data
+        var data = {
+            labels: ["Pending Applicants", "Rejected", "Approved"],
+            datasets: [{
+                data: [550, 185, 120], // Change values as needed
+                backgroundColor: ["#007bff", "#dc3545", "#28a745"], // Blue, Red, Green
+                hoverOffset: 10
+            }]
+        };
+    
+        // Create Doughnut Chart
+        var registrationChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ["Applicants", "Rejected", "Approved"],
+                datasets: [{
+                    data: [550, 185, 120],
+                    backgroundColor: ["#007bff", "#dc3545", "#28a745"],
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: 5
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Registration Overview', // Your chart title
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        color: '#000',
+                        padding: {
+                            top: 10,
+                            bottom: 10
+                        }
+                    }
+                }
+            }
+        });
+
+    </script>
+    <script src="includes/javascript/dashboard-sidebar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+</body>
+</html>
