@@ -12,7 +12,7 @@ class User(BaseModel):
     lastName = models.CharField(max_length=25)
     firstName = models.CharField(max_length=50)
     middleName = models.CharField(max_length=25)
-    suffix = models.CharField(max_lenght=5) #if applicable
+    suffix = models.CharField(max_length=5) #if applicable
     dl_number = models.CharField(max_length=15)
     college = models.CharField(max_length=100) #conditional
     program = models.CharField(max_length=100) #conditional
@@ -28,7 +28,7 @@ class Security(BaseModel):
     lastName = models.CharField(max_length=25)
     firstName = models.CharField(max_length=50)
     middleInitial = models.CharField(max_length=5)
-    suffix = models.CharField(max_lenght=5) #if applicable
+    suffix = models.CharField(max_length=5) #if applicable
     corporate_email = models.CharField(max_length=50)
     position = models.CharField(max_length=30)
 
@@ -41,7 +41,7 @@ class Cashier(BaseModel):
     lastName = models.CharField(max_length=25)
     firstName = models.CharField(max_length=50)
     middleInitial = models.CharField(max_length=5)
-    suffix = models.CharField(max_lenght=5) #if applicable
+    suffix = models.CharField(max_length=5) #if applicable
     corporate_email = models.CharField(max_length=50)
 
     def __str__(self):
@@ -78,7 +78,7 @@ class Verified(BaseModel):
     passNumber = models.ForeignKey(Pass, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
-    
+
     
 
 
