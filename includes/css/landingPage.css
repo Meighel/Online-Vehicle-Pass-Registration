@@ -234,6 +234,37 @@ body {
   color: white;
 }
 
+.footer p {
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.footer-policy {
+  color: var(--highlight-yellow);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.footer-policy:hover {
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .footer .row {
+      text-align: center;
+  }
+  
+  .footer .col-md-4 {
+      text-align: center;
+      margin-bottom: 10px;
+  }
+}
+
+
 /* ========================================= */
 /*                ANIMATIONS                 */
 /* ========================================= */
