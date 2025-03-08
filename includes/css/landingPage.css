@@ -184,6 +184,7 @@ body {
   height: auto;
   filter: brightness(1.1) contrast(1) saturate(1);
   transition: transform 0.5s ease-in-out;
+  transform: rotate(10deg);
 }
 
 .vehicle-gif:hover {
@@ -212,6 +213,19 @@ body {
 .feature-card:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 10px var(--border-bg);
+}
+
+/* Make the entire feature card clickable */
+.feature-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.feature-link:hover .feature-card {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(255, 215, 0, 0.5);
 }
 
 /* ========================================= */
