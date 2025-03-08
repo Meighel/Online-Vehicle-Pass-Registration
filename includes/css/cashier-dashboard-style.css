@@ -1,0 +1,310 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: white;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: right;
+    width: 250px;
+    height: 100vh;
+    background: linear-gradient(135deg, #ffffff, #fff346);
+    color: black !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: width 0.3s ease;
+    overflow-x: hidden;
+    padding-top: 20px;
+    overflow-y: hidden;
+}
+
+/* Sidebar Menu Items */
+.sidebar ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.sidebar ul li {
+    padding: 10px 20px;
+    text-align: left;
+    margin: 10px;
+}
+
+.sidebar ul li a {
+    color: black; /* Ensure links are visible */
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    font-weight: 200;
+}
+
+.sidebar ul li a img {
+    margin-left: 3%;
+    margin-right: 3%;
+    align-items: center;
+}
+
+.sidebar p {
+    font-size: 14px;
+    color: rgb(133, 133, 136);
+    padding-top: 10px;
+    padding-left: 23px;
+    font-weight: bold;
+}
+
+/* Sidebar Collapse */
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed ul li {
+    margin: 0;
+}
+
+/* Hide text inside the sidebar when collapsed */
+.sidebar.collapsed ul li a {
+    text-align: center;
+    font-size: 0;
+}
+
+/* Show only icons when collapsed */
+.sidebar.collapsed ul li a::before {
+    font-size: 20px;
+}
+
+.sidebar.collapsed .toggle-btn {
+    left: 50%;
+}
+
+.content.expanded {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar.collapsed p {
+    display: none;
+}
+
+.sidebar.collapsed .navbar-brand {
+    display: none;
+}
+
+/* Toggle Button */
+.toggle-btn {
+    position: absolute;
+    top: 95%;
+    transform: translate(-50%, -50%);
+    left: 220px;
+    background: none;
+    border: none;
+    color: black !important;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px 5px;
+    border-radius: 5px;
+    transition: left 0.3s ease;
+}
+
+.profile {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    align-self: center;
+    padding: 20px;
+    gap: 10px;
+}
+
+.profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: gray;
+    object-fit: cover;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    color: black;
+}
+
+.profile-info .name {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.profile-info .position {
+    font-size: 14px;
+    color: rgb(90, 90, 90);
+}
+
+#logout {
+    position: absolute;
+    left: 35%;
+    bottom: 100px;
+    color: brown;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.sidebar.collapsed .profile {
+    display: none;
+}
+
+.sidebar.collapsed #logout {
+    display: none;
+}
+
+/* Move Toggle Button to Stay Visible */
+.sidebar.collapsed .toggle-btn {
+    left: 50%;
+}
+
+/* Default Active Menu Item */
+.sidebar ul li.active {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+/* Hover Effect */
+.sidebar ul li:hover {
+    background: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    background: yellow;
+    color: black;
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+.nav-link {
+    color: white;
+    padding: 10px;
+}
+
+.nav-link:hover, .active {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+.content {
+    margin-left: 270px;
+    width: calc(100% - 270px);
+}
+
+.stat-card {
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Recent Applications */
+.recent-applications {
+    border-radius: 8px;
+    background: #1e1e2f;
+    color: #ffffff;
+}
+
+/* Top Bar Layout */
+.top-bar {
+    display: flex;
+    justify-content: space-between; /* Aligns left & right elements */
+    align-items: center;
+    padding: 5px 0;
+}
+
+/* Search Bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    gap: 5px;
+}
+
+#search-bar {
+    width: 250px;
+    height: 30px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+}
+
+/* Search Button */
+.search-btn {
+    background: #f2e570;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-btn:hover {
+    background: #e0d060;
+}
+
+.announcements {
+    background: #1e1e1e;
+    color: white;
+    border-radius: 8px;
+}
+
+/* Search Bar Styling */
+.search-bar {
+    border-radius: 20px;
+    padding: 10px;
+    background: #29293d;
+    color: white;
+    border: 1px solid #444;
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.7);
+}
+
+/* Styling for user list */
+.user-item {
+    background: #29293d;
+    color: white;
+    border: 1px solid #444;
+    display: flex; /* Ensures list items are always aligned */
+}
+
+/* Styling for "No results found" message */
+#noResults {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ccc;
+}
+
+/* Placeholder text color */
+.search-bar::placeholder {
+    color: #bbb;
+}
+
+/* Graph Container Styling */
+.graph-container {
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+}
+
+.graph-container canvas {
+    width: 100% !important;
+    height: 300px !important;
+}
