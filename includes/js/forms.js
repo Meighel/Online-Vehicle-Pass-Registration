@@ -14,4 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleOwnerDetails();
 });
 
-
+// for next form
+document.getElementById("nextButton").addEventListener("click", function(event) {
+    event.preventDefault(); // Prevent actual form submission
+    window.location.href = "../Forms/forms_2.html"; // Redirect to the next form page
+});
