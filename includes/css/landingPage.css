@@ -176,7 +176,7 @@ body {
   width: 150%;
   max-width: 520px;
   margin: auto;
-  mix-blend-mode: color-dodge;
+  mix-blend-mode: color-dodge;  
 }
 
 .vehicle-gif {
@@ -184,6 +184,7 @@ body {
   height: auto;
   filter: brightness(1.1) contrast(1) saturate(1);
   transition: transform 0.5s ease-in-out;
+  transform: rotate(15deg);
 }
 
 .vehicle-gif:hover {
