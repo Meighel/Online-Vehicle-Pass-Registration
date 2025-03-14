@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin 
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from django.core.exceptions import ValidationError
 
 class CustomUserManager(BaseUserManager):
@@ -88,9 +88,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
+    groups = models.ManyToManyField(
+        Group,
+        related_name='customuser_groups',
+        blank=True
+    )
+    
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='customuser_permissions',
+        blank=True
+    )
+
     USERNAME_FIELD = 'corporate_email'
     REQUIRED_FIELDS = ['username']
-
 
     def __str__(self):
         return f"{self.corporate_email} - {self.role}"
