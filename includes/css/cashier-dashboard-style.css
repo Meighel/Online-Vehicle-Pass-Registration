@@ -12,7 +12,7 @@ body {
     align-items: right;
     width: 250px;
     height: 100vh;
-    background: linear-gradient(135deg, #ffffff, #fff346);
+    background: #242424;
     color: black !important;
     position: fixed;
     top: 0;
@@ -36,10 +36,10 @@ body {
 }
 
 .sidebar ul li a {
-    color: black; /* Ensure links are visible */
+    color: white;
     text-decoration: none;
     display: block;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 200;
 }
 
@@ -51,7 +51,7 @@ body {
 
 .sidebar p {
     font-size: 14px;
-    color: rgb(133, 133, 136);
+    color: rgb(134, 136, 133);
     padding-top: 10px;
     padding-left: 23px;
     font-weight: bold;
@@ -168,14 +168,15 @@ body {
 
 /* Default Active Menu Item */
 .sidebar ul li.active {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    background: black;
+    border-radius: 20px;
 }
 
 /* Hover Effect */
 .sidebar ul li:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background: yellow;
     cursor: pointer;
+    border-radius: 10px;
 }
 
 .logo {
@@ -194,7 +195,7 @@ body {
 }
 
 .nav-link:hover, .active {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: yellow !important;
     border-radius: 5px;
 }
 
