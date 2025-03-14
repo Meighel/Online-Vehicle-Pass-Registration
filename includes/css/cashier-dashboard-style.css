@@ -40,7 +40,7 @@ body {
     text-decoration: none;
     display: block;
     font-size: 18px;
-    font-weight: 200;
+    font-weight: 200% !important;
 }
 
 .sidebar ul li a img {
@@ -103,7 +103,7 @@ body {
     left: 220px;
     background: none;
     border: none;
-    color: black !important;
+    color: yellow !important;
     font-size: 20px;
     cursor: pointer;
     padding: 10px 5px;
@@ -111,18 +111,23 @@ body {
     transition: left 0.3s ease;
 }
 
+/* Profile Section */
 .profile {
     position: absolute;
-    bottom: 20px;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
-    align-self: center;
-    padding: 20px;
+    align-items: center;
+    flex-direction: row; /* Aligns image and text in a row */
     gap: 10px;
+    padding: 10px;
+    width: max-content;
 }
 
 .profile img {
-    width: 50px;
-    height: 50px;
+    width: 40px; /* Adjusted size for better proportion */
+    height: 40px;
     border-radius: 50%;
     background-color: gray;
     object-fit: cover;
@@ -131,27 +136,49 @@ body {
 .profile-info {
     display: flex;
     flex-direction: column;
-    color: black;
+    color: white; /* Ensure text is readable */
+    font-size: 14px;
 }
 
 .profile-info .name {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .profile-info .position {
-    font-size: 14px;
-    color: rgb(90, 90, 90);
+    font-size: 12px;
+    color: rgb(170, 170, 170); /* Lighter color */
 }
 
+/* Logout Button Styling */
 #logout {
     position: absolute;
-    left: 35%;
-    bottom: 100px;
-    color: brown;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
     text-decoration: none;
     font-weight: 500;
+    font-size: 14px;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
 }
+
+/* Logout Icon */
+#logout img {
+    width: 26px; /* Slightly smaller icon */
+    height: 26px;
+    transition: transform 0.4s ease-in-out;
+}
+
+/* Logout Button Hover Effect */
+#logout img:hover {
+    transform:scale(1.2);
+    color: #ffd700;
+}
+
 
 .sidebar.collapsed .profile {
     display: none;
@@ -168,15 +195,23 @@ body {
 
 /* Default Active Menu Item */
 .sidebar ul li.active {
-    background: black;
+    background: yellow; 
     border-radius: 20px;
 }
 
+.sidebar ul li.active a {
+    color: black !important; /* Ensure text is always black */
+}
 /* Hover Effect */
 .sidebar ul li:hover {
-    background: yellow;
+    background: rgba(255, 255, 0, 0.237);
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 20px;
+}
+
+.sidebar ul li:hover a {
+    color: #121212 !important;
+    font-weight: 100 !important;
 }
 
 .logo {
@@ -187,6 +222,21 @@ body {
     display: inline-block;
     padding: 5px 15px;
     border-radius: 5px;
+    width: 100%;
+    text-align: center;
+}
+
+.sidebar.collapsed .logo {
+    font-size: 0; /* Hide text when collapsed */
+    padding: 0;
+}
+
+.sidebar.collapsed .logo::before {
+    content: "⚡"; /* Show an icon or small text */
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+    display: block;
 }
 
 .nav-link {

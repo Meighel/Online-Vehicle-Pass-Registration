@@ -1,3 +1,4 @@
+//toggle collapse
 document.addEventListener("DOMContentLoaded", function () {
     const sidebar = document.getElementById("sidebar");
     const toggleBtn = document.getElementById("toggle-btn");
@@ -63,3 +64,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+//sidebar
+document.addEventListener("DOMContentLoaded", () => {
+    const menuItems = document.querySelectorAll(".sidebar ul li");
+
+    menuItems.forEach(item => {
+        item.addEventListener("click", function () {
+            // Remove 'active' class from all items
+            menuItems.forEach(i => i.classList.remove("active"));
+            
+            // Add 'active' class to the clicked item
+            this.classList.add("active");
+        });
+    });
+});
+
