@@ -231,7 +231,6 @@ body {
     border-radius: 5px;
 }
 
-
 /* ========================================= */
 /*         Main Content                      */
 /* ========================================= */
@@ -243,6 +242,90 @@ body {
 }
 .content p {
     color: rgb(103, 100, 100) !important;
+}
+
+.d-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px; 
+}
+
+.title h2 {
+    margin: 0; 
+    font-size: 30pxpx; 
+    display: flex;
+    align-items: center; 
+    font-weight: bold;
+    color: yellow;
+}
+
+
+#real-time-date {
+    font-size: 12px;
+    color: rgb(213, 213, 213);
+    margin: 0;
+    display: flex;
+    align-items: center; 
+}
+
+.icons-container {
+    display: flex;
+    gap: 15px;
+    opacity: 1;
+    visibility: visible !important;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.top-bar a {
+    margin-right: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.top-bar a .badge {
+    font-size: 12px;
+    padding: 5px 5px;
+}
+
+/* Search Bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    gap: 5px;
+}
+
+#search-bar {
+    width: 250px;
+    height: 30px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+}
+
+/* Search Button */
+.search-btn {
+    background: #ffe600;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-btn:hover {
+    background: #ffe100;
 }
 
 /* Stat Card */
@@ -401,7 +484,7 @@ body {
 /* Graph Container Styling */
 .graph-container {
     padding: 20px;
-    background-color: #1e1e1e;
+    background-color: #29293d;
     border-radius: 10px;
 }
 

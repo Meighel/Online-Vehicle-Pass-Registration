@@ -261,7 +261,7 @@ body {
     padding: 5px 10px; 
 }
 
-.title h6 {
+.title h2 {
     margin: 0; 
     font-size: 25px; 
     display: flex;
@@ -531,7 +531,9 @@ body {
 
 .slots-container h6 {
     color: #ffc107;
-    font-size: large;
+    font-size: 80px;
+    margin-top: 20px;
+    font-weight: bold;
 }
 
 .content.expanded {
