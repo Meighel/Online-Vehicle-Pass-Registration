@@ -133,6 +133,7 @@ class UserProfile(BaseModel):
 
 class SecurityProfile(BaseModel):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    badgeNumber = models.CharField(max_length=10)
     username = models.CharField(max_length=15)
     lastname = models.CharField(max_length=25)
     firstname = models.CharField(max_length=50)
@@ -141,7 +142,7 @@ class SecurityProfile(BaseModel):
     job_title = models.CharField(max_length=30)
 
     def __str__(self):
-        return f"{self.username} - {self.firstname} {self.lastname}"
+        return f"Security Personnel {self.lastname}, {self.badgeNumber}"
 
 
 class CashierProfile(BaseModel):
@@ -154,7 +155,7 @@ class CashierProfile(BaseModel):
     job_title = models.CharField(max_length=40)
 
     def __str__(self):
-        return f"{self.username} - {self.firstname} {self.lastname}"
+        return f"Cashier {self.firstname} {self.lastname}"
 
 class AdminProfile(BaseModel):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -164,7 +165,7 @@ class AdminProfile(BaseModel):
     middle_initial = models.CharField(max_length=5)
 
     def __str__(self):
-        return f"{self.username} - {self.firstname} {self.lastname}"
+        return f"Admin {self.firstname} {self.lastname}"
     
 
 class Vehicle(BaseModel):
@@ -199,8 +200,9 @@ class Registration(BaseModel):
 class RegistrationStatus(BaseModel):
     status_choices = [
         ('pending', 'Pending'),
+        ('cancelled', 'cancelled'),
         ('for payment', 'For Payment'),
-        ('Reviewing Documents', 'Reviewing Documents'),
+        ('reviewing documents', 'Reviewing Documents'),
         ('for final inspection', 'For Final Inspection'),
         ('approved', 'Approved'),
         ('rejected', 'Rejected')
@@ -223,7 +225,7 @@ class VehiclePass(BaseModel):
         return self.passNumber
     
 
-class PaymentStatus(BaseModel):
+class PaymentTransaction(BaseModel):
     status_choices = [
         ('pending', 'Pending'),
         ('paid', 'Paid'),
@@ -231,9 +233,22 @@ class PaymentStatus(BaseModel):
         ('void', 'Void')
     ]
     registration = models.ForeignKey(Registration, on_delete=models.CASCADE)
+    receipt_number = models.CharField(max_length=20, unique=True)
     cashier = models.ForeignKey(CashierProfile, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=status_choices)
     date_processed = models.DateTimeField(auto_now_add=True)
+
+
+class InspectionReport(BaseModel):
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE)
+    security = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE)
+    inspection_date = models.DateTimeField(auto_now_add=True)
+    remarks = models.TextField()
+    is_approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Inspection {self.registration.applicationNumber} - {'Approved' if self.is_approved else 'Rejected'}"
+
 
 class Notification(BaseModel):
     NOTIFICATION_TYPES = [

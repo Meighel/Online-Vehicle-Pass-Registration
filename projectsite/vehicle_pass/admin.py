@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
     CustomUser, UserProfile, SecurityProfile, CashierProfile, AdminProfile,
     Vehicle, Registration, RegistrationStatus, VehiclePass,
-    PaymentStatus, Notification, Announcement
+    PaymentTransaction, Notification, Announcement
 )
 
 @admin.register(CustomUser)
@@ -41,7 +41,7 @@ class RegistrationStatusAdmin(admin.ModelAdmin):
 class VehiclePassAdmin(admin.ModelAdmin):
     list_display = ('vehicle', 'passNumber', 'passExpire', 'status')
 
-@admin.register(PaymentStatus)
+@admin.register(PaymentTransaction)
 class PaymentStatusAdmin(admin.ModelAdmin):
     list_display = ('registration', 'cashier', 'status', 'date_processed')
 
