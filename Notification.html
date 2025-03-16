@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script>
+        function showSection(section) {
+            document.getElementById('notifications').style.display = section === 'notifications' ? 'block' : 'none';
+            document.getElementById('alerts').style.display = section === 'alerts' ? 'block' : 'none';
+            
+            document.getElementById('notifBtn').classList.toggle('text-yellow-400', section === 'notifications');
+            document.getElementById('notifBtn').classList.toggle('text-gray-400', section !== 'notifications');
+            document.getElementById('notifBtn').classList.toggle('border-yellow-400', section === 'notifications');
+            document.getElementById('notifBtn').classList.toggle('border-transparent', section !== 'notifications');
+            
+            document.getElementById('alertBtn').classList.toggle('text-yellow-400', section === 'alerts');
+            document.getElementById('alertBtn').classList.toggle('text-gray-400', section !== 'alerts');
+            document.getElementById('alertBtn').classList.toggle('border-yellow-400', section === 'alerts');
+            document.getElementById('alertBtn').classList.toggle('border-transparent', section !== 'alerts');
+        }
+    </script>
+</head>
+<body class="bg-black text-white">
+    <div class="flex h-screen">
+
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-900 p-5 flex flex-col justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-300">VR</h1>
+                <nav class="mt-4">
+                    <ul class="space-y-2">
+                        <a href="AdminDash.html">
+                            <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                                <span class="text-xl">🏠</span>
+                                <span>Dashboard</span>
+                            </li>
+                        </a>
+                        <a href="ApplyPass.html">
+                            <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                                <span class="text-xl">📝</span>
+                                <span>Apply for Pass</span>
+                            </li>
+                        </a>
+                        <a href="Tracking.html">
+                            <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                                <span class="text-xl">🚗</span>
+                                <span>Pass Status Tracking</span>
+                            </li>
+                        </a>
+                        <a href="Notification.html">
+                            <li class="bg-yellow-400 text-black p-3 rounded flex items-center space-x-2">
+                                <span class="text-xl">🔔</span>
+                                <span>Notification & Alerts</span>
+                            </li>
+                        </a>
+                        <a href="Settings.html">
+                            <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                                <span class="text-xl">⚙️</span>
+                                <span>Settings</span>
+                            </li>
+                        </a>
+                    </ul>
+                </nav>                
+            </div>
+            <div class="text-left">
+                <img src="mark.jpg" class="rounded-full w-16 h-16 border-4 border-gray-700" alt="User">
+                <p class="text-sm mt-2">User Name</p>
+                <p class="text-xs text-gray-400">Username 1</p>
+                <button class="mt-4 bg-red-600 p-2 w-full rounded flex items-center justify-center space-x-2">
+                    <span class="text-xl">↩️</span>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="flex-1 p-6 overflow-auto">
+            <header class="flex justify-between">
+                <h2 class="text-xl font-semibold">Notifications & Alerts</h2>
+                <p class="text-sm">Monday, 10 February 2025</p>
+            </header>
+            
+            <!-- Notification Section -->
+            <section class="mt-4 bg-gray-800 p-4 rounded-lg">
+                <div class="flex border-b border-gray-700 pb-2">
+                    <button id="notifBtn" onclick="showSection('notifications')" class="text-yellow-400 font-bold border-b-2 border-yellow-400 px-4 pb-2">Notifications</button>
+                    <button id="alertBtn" onclick="showSection('alerts')" class="ml-4 text-gray-400 border-transparent px-4 pb-2">Alerts</button>
+                </div>
+                
+                <div id="notifications" class="mt-2 text-sm space-y-2">
+                    <div class="bg-gray-700 p-2 rounded">
+                        <span class="text-yellow-400">⚠️</span>
+                        <span class="font-bold">Parking Violation:</span> Your vehicle was parked in a restricted zone.
+                        <p class="text-gray-400 text-xs">Feb 10, 2025 - 2:30 PM</p>
+                    </div>
+                    <div class="bg-gray-700 p-2 rounded">
+                        <span class="text-yellow-400">⚠️</span>
+                        <span class="font-bold">Parking Violation:</span> Your vehicle was parked in a restricted zone.
+                        <p class="text-gray-400 text-xs">Feb 10, 2025 - 2:30 PM</p>
+                    </div>
+                    <div class="bg-gray-700 p-2 rounded">
+                        <span class="text-yellow-400">⚠️</span>
+                        <span class="font-bold">Parking Violation:</span> Your vehicle was parked in a restricted zone.
+                        <p class="text-gray-400 text-xs">Feb 10, 2025 - 2:30 PM</p>
+                    </div>
+                    <div class="bg-gray-700 p-2 rounded">
+                        <span class="text-yellow-400">⚠️</span>
+                        <span class="font-bold">Parking Violation:</span> Your vehicle was parked in a restricted zone.
+                        <p class="text-gray-400 text-xs">Feb 10, 2025 - 2:30 PM</p>
+                    </div>
+                    <div class="bg-gray-700 p-2 rounded">
+                        <span class="text-yellow-400">⚠️</span>
+                        <span class="font-bold">Parking Violation:</span> Your vehicle was parked in a restricted zone.
+                        <p class="text-gray-400 text-xs">Feb 10, 2025 - 2:30 PM</p>
+                    </div>
+                </div>
+                
+                <div id="alerts" class="mt-2 text-sm space-y-2" style="display: none;">
+                    <div class="bg-red-600 p-2 rounded">
+                        <span class="text-white">⚠️</span>
+                        <span class="font-bold">Security Alert:</span> Unauthorized vehicle spotted in restricted parking.
+                        <p class="text-gray-200 text-xs">Feb 9, 2025 - 4:30 PM</p>
+                    </div>
+                    <div class="bg-red-600 p-2 rounded">
+                        <span class="text-white">⚠️</span>
+                        <span class="font-bold">Security Alert:</span> Unauthorized vehicle spotted in restricted parking.
+                        <p class="text-gray-200 text-xs">Feb 9, 2025 - 4:30 PM</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
