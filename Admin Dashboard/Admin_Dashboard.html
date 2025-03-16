@@ -10,48 +10,66 @@
 </head>
 <body>
     
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <!-- Brand Name -->
-        <a class="navbar-brand ms-4 fs-3 fw-bold text-warning brand-logo" href="#">OVR</a>
-
-        <!-- Toggle Button -->
-        <button class="toggle-btn" id="toggle-btn" onclick="toggleSidebar()">☰</button>
-
-        <br>
-        <p>Main Menu</p>
-        <ul>
-            <li>
-                <a href="#">
-                    <img src="../includes/images/home.png" alt="house" width="15" height="15">
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="../includes/images/user.png" alt="profile" width="15" height="15">
-                    <span>Profile</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="../includes/images/settings.png" alt="setting" width="15" height="15">
-                    <span>Settings</span>
-                </a>
-            </li>
-        </ul>
-
-        <a href="#" id="logout">
-            <center><img src="../includes/images/power-off.png" alt="logout" width="20" height="20"></center>
-            <span>Logout</span>
-        </a>
-
-        <!-- Profile Section -->
-        <div class="profile">
-            <img src="../includes/images/profile-placeholder.png" alt="Profile Picture"> 
-            <div class="profile-info">
-                <span class="name">John Doe</span>
-                <span class="position">Admin</span>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <a class="navbar-brand ms-4 fs-3 fw-bold text-warning brand-logo" href="#">OVR</a>
+                <!-- Toggle Button -->
+            <button class="toggle-btn" id="toggle-btn" onclick="toggleSidebar()">☰</button>
+        
+            <br>
+            <p>Main Menu</p>
+            <ul>
+                <li>
+                    <a href="#">
+                        <img src="../includes/images/home.png" alt="house" width="30" height="30">
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="../includes/images/user.png" alt="user" width="30" height="30">
+                        <span>Manage User</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="../includes/images/passes.png" alt="Passes" width="30" height="30">
+                        <span>Manage Passes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="../includes/images/payment.png" alt="Payments" width="25" height="25">
+                        <span>Manage Payments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="../includes/images/report.png" alt="Report" width="25" height="25">
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="../includes/images/settings.png" alt="setting" width="25" height="25">
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        
+            <a href="#" id="logout">
+                <center><img src="../includes/images/power-off.png" alt="logout" width="25" height="25"></center>
+                <span>Logout</span>
+            </a>
+        
+            <!-- Profile Section -->
+            <div class="profile">
+                <img src="../includes/images/profile-placeholder.png" alt="Profile Picture"> 
+                <div class="profile-info">
+                    <span class="name">Admin Name</span>
+                    <span class="position">Cashier</span>
+                </div>
             </div>
         </div>
     </div>
@@ -60,24 +78,28 @@
     <div class="content" id="content">
         <div class="title" id="title">
             <h6>Dashboard</h6>
-            <small><span id="real-time-date"></span></small>
+            <div class="top-bar">
+                    <!-- Notification Bell -->
+                    <a href="Announcements.html" class="text-decoration-none text-light">
+                        <img src="../includes/images/notification.png" alt="Notifications" width="30" height="30">
+                        <span class="position-absolute top-0 start-100 translate-middle bg-danger"> </span>
+                    </a>
+                <!-- Right Side Icons -->
+                <div class="icons-container">
+                    <button id="filter" class="icon-btn fs-6"><small>Filter</small></button>
+                    <button id="help" class="icon-btn">❓</button>           
+                </div>
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <input type="text" placeholder="Search..." id="search-bar">
+                    <button class="search-btn">🔍</button> <!-- Added search button -->
+                </div>
+            </div>
         </div>
-        <hr>
         
-        <div class="top-bar">
-            <!-- Search Bar -->
-            <div class="search-container">
-                <input type="text" placeholder="Search..." id="search-bar">
-                <button class="search-btn">🔍</button> <!-- Added search button -->
-            </div>
-
-            <!-- Right Side Icons -->
-            <div class="icons-container">
-                <button id="filter" class="icon-btn fs-6"><small>Filter</small></button> <!-- Filter Button -->
-                <button id="notification" class="icon-btn">🔔</button> <!-- Notification Bell -->
-                <button id="help" class="icon-btn">❓</button> <!-- Help Button -->
-            </div>
-        </div>
+        <hr>
+        <small><span id="real-time-date"></span></small>
+        
 
     
         <div class="container-flex mt-4">
@@ -169,8 +191,8 @@
 
         <div class="container mt-4">
             <div class="row">
-                <!-- Transactions Table -->
-                <div class="col-12 col-md-6">
+                <!-- Transactions Table (Full Width) -->
+                <div class="col-12">
                     <div class="table-container p-3 border rounded shadow-sm">
                         <h6 class="mb-3">Transactions</h6>   
                         <table class="table table-hover table-borderless">
@@ -218,24 +240,24 @@
                     </div>
                 </div>
         
-                <!-- Doughnut Chart -->
-                <div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
-                    <div class="chart-container p-3 border rounded shadow-sm w-100">
-                        <canvas id="registrationChart"></canvas>
+                <div class="col-12 d-flex flex-wrap mt-3">
+                    <!-- Doughnut Chart -->
+                    <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="chart-container p-3 border rounded shadow-sm w-100">
+                            <canvas id="registrationChart"></canvas>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Slots Counter -->
-                <div class="col-12 col-md-3 d-flex align-items-center justify-content-center">
-                    <div class="slots-container">
+                
+                    <!-- Slots Counter -->
+                    <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
+                        <div class="slots-container w-100">
                             <h4>REMAINING SLOTS</h4>
                             <h6>380</h6>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-
     </div>
     
     <script>

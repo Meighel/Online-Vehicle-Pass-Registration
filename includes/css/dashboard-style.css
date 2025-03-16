@@ -14,7 +14,11 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Sidebar Styling */
+
+/* ========================================= */
+/*              SIDEBAR                      */
+/* ========================================= */
+
 .sidebar {
     display: flex;
     flex-direction: column;
@@ -22,12 +26,11 @@ body {
     align-items: right;
     width: 250px;
     height: 100vh;
-    background: linear-gradient(135deg, #ffffff, #fff346);
+    background: #242424;
     color: black !important;
     position: fixed;
     top: 0;
     left: 0;
-    transition: width 0.3s ease;
     overflow-x: hidden;
     padding-top: 20px;
     overflow-y: hidden;
@@ -46,11 +49,11 @@ body {
 }
 
 .sidebar ul li a {
-    color: black; /* Ensure links are visible */
+    color: white;
     text-decoration: none;
     display: block;
-    font-size: 16px;
-    font-weight: 200;
+    font-size: 18px;
+    font-weight: 200% !important;
 }
 
 .sidebar ul li a img {
@@ -61,7 +64,7 @@ body {
 
 .sidebar p {
     font-size: 14px;
-    color:rgb(133, 133, 136);
+    color: rgb(134, 136, 133);
     padding-top: 10px;
     padding-left: 23px;
     font-weight: bold;
@@ -85,7 +88,16 @@ body {
 /* Show only icons when collapsed */
 .sidebar.collapsed ul li a::before {
     font-size: 20px;
-    
+}
+
+.sidebar.collapsed .toggle-btn {
+    left: 50%;
+}
+
+.content.expanded {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+    transition: margin-left 0.3s ease;
 }
 
 .sidebar.collapsed p {
@@ -104,7 +116,7 @@ body {
     left: 220px;
     background: none;
     border: none;
-    color: black !important;
+    color: yellow !important;
     font-size: 20px;
     cursor: pointer;
     padding: 10px 5px;
@@ -112,74 +124,128 @@ body {
     transition: left 0.3s ease;
 }
 
+/* Profile Section */
 .profile {
     position: absolute;
-    top: 60%;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
-    align-self: center;
-    padding: 20px;
+    align-items: center;
+    flex-direction: row;
     gap: 10px;
+    padding: 10px;
+    width: max-content;
 }
 
 .profile img {
-    width: 50px; /* Adjust size */
-    height: 50px;
-    border-radius: 50%; /* Makes it circular */
-    background-color: gray; /* Placeholder color */
-    object-fit: cover; /* Ensures image fits */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: gray;
+    object-fit: cover;
 }
 
 .profile-info {
     display: flex;
     flex-direction: column;
-    color: black;
+    color: white;
+    font-size: 14px;
 }
 
 .profile-info .name {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .profile-info .position {
-    font-size: 14px;
-    color: rgb(90, 90, 90);
+    font-size: 12px;
+    color: rgb(170, 170, 170); 
 }
 
+/* Logout */
 #logout {
     position: absolute;
-    left: 35%;
-    top: 80%;
-    color: brown;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
     text-decoration: none;
     font-weight: 500;
+    font-size: 14px;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-.sidebar.collapsed .profile{
+#logout img {
+    width: 26px;
+    height: 26px;
+    transition: transform 0.4s ease-in-out;
+}
+#logout img:hover {
+    transform:scale(1.2);
+    color: #ffd700;
+}
+.sidebar.collapsed .profile {
     display: none;
 }
 
-.sidebar.collapsed #logout{
+.sidebar.collapsed #logout {
     display: none;
 }
-
-/* Move Toggle Button to Stay Visible */
 .sidebar.collapsed .toggle-btn {
     left: 50%;
 }
-
-/* Default Active Menu Item */
 .sidebar ul li.active {
-    background: rgba(0, 0, 0, 0.2); /* Subtle highlight */
-    border-radius: 10px;
+    background: yellow !important; 
+    border-radius: 20px;
 }
-
-/* Hover Effect */
+.sidebar ul li.active a {
+    color: black !important;
+}
 .sidebar ul li:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 0, 0.237);
     cursor: pointer;
+    border-radius: 20px;
+}
+.sidebar ul li:hover a {
+    color: #121212 !important;
+    font-weight: 100 !important;
+}
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    background: yellow;
+    color: black;
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
 }
 
-/* Content Area */
+.sidebar.collapsed .logo {
+    font-size: 0;
+    padding: 0;
+}
+
+.nav-link {
+    color: white;
+    padding: 10px;
+}
+
+.nav-link:hover, .active {
+    background-color: yellow !important;
+    border-radius: 5px;
+}
+
+
+/* ========================================= */
+/*             MAIN CONTENT                  */
+/* ========================================= */
+
 .content {
     flex-grow: 1;
     margin-left: 250px;
@@ -190,17 +256,18 @@ body {
 
 .title {
     display: flex;
-    justify-content: space-between; /* Pushes elements apart */
+    justify-content: space-between;
     align-items: center;
     padding: 5px 10px; 
 }
 
-/* Ensure h6 and span align properly */
 .title h6 {
     margin: 0; 
-    font-size: 16px; 
+    font-size: 25px; 
     display: flex;
     align-items: center; 
+    font-weight: bold;
+    color: yellow;
 }
 
 
@@ -212,12 +279,31 @@ body {
     align-items: center; 
 }
 
-/* Top Bar Layout */
+.icons-container {
+    display: flex;
+    gap: 15px;
+    opacity: 1;
+    visibility: visible !important;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
 .top-bar {
     display: flex;
-    justify-content: space-between; /* Aligns left & right elements */
+    justify-content: space-between;
     align-items: center;
     padding: 5px 0;
+}
+
+.top-bar a {
+    margin-right: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.top-bar a .badge {
+    font-size: 12px;
+    padding: 5px 5px;
 }
 
 /* Search Bar */
@@ -240,7 +326,7 @@ body {
 
 /* Search Button */
 .search-btn {
-    background: #f2e570;
+    background: #ffe600;
     border: none;
     padding: 5px 12px;
     border-radius: 5px;
@@ -249,17 +335,9 @@ body {
 }
 
 .search-btn:hover {
-    background: #e0d060;
+    background: #ffe100;
 }
 
-/* Right Side Icons */
-.icons-container {
-    display: flex;
-    gap: 10px; /* Spacing between icons */
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
 
 .top-bar:hover .icons-container {
     opacity: 1;
@@ -268,7 +346,7 @@ body {
 
 .icon-btn {
     background: none;
-    border: 2px solid rgb(90, 90, 90); /* Added width and solid style */
+    border: 2px solid rgb(90, 90, 90);
     border-radius: 5px;
     font-size: 10px;
     cursor: pointer;
@@ -278,8 +356,8 @@ body {
 }
 
 .icon-btn:hover {
-    color: #f2e570; /* Highlight effect */
-    border-color: #f2e570; /* Change border color on hover */
+    color: #f2e570;
+    border-color: #f2e570;
 }
 
 .scroll-container {
@@ -290,25 +368,24 @@ body {
 
 /* Webkit-based browsers (Chrome, Edge, Safari) */
 .scroll-container::-webkit-scrollbar {
-    height: 8px; /* Adjust thickness */
+    height: 8px;
 }
 
 .scroll-container::-webkit-scrollbar-track {
-    background: #1e1e1e; /* Dark background */
+    background: #1e1e1e;
     border-radius: 10px;
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
-    background: #444; /* Scrollbar color */
+    background: #444;
     border-radius: 10px;
     transition: background 0.3s ease;
 }
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
-    background: #666; /* Lighter on hover */
+    background: #666;
 }
 
-/* Firefox */
 .scroll-container {
     scrollbar-width: thin;
     scrollbar-color: #444 #1e1e1e;
@@ -320,18 +397,16 @@ body {
 }
 
 .custom-box {
-    flex: 0 0 250px; /* Each box has a fixed width */
-    border: 2px solid rgb(90, 90, 90); /* Border for each box */
+    flex: 0 0 250px;
+    border: 2px solid rgb(90, 90, 90);
     padding: 20px;
     padding-bottom: 5px;
     border-radius: 8px;
     position: relative;
-    background-color: #0e0e0e; /* Adjust as needed */
+    background-color: #0e0e0e;
     color: white;
-    margin-right: 15px; /* Space between boxes */
+    margin-right: 15px;
 }
-
-/* Style for the options button */
 .options-btn {
     position: absolute;
     top: 10px;
@@ -347,7 +422,9 @@ body {
     color: #f2e570;
 }
 
-.table-container, .chart-container {
+
+/* Transaction */
+.table-container {
     font-size: 14px;
     color: #0e0e0e;
     border-radius: 8px;
@@ -357,25 +434,6 @@ body {
     margin-top: 20px;
 }
 
-.chart-container {
-    padding: 0;
-    width: 100%;
-    height: 310px; /* Define a height */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.chart-container canvas {
-    width: 100% !important;  /* Force canvas to stay within div */
-    height: 100% !important;
-    max-width: 300px; /* Adjust based on available space */
-    max-height: 300px;
-}
 
 .table-hover tbody tr {
     cursor: pointer;
@@ -413,25 +471,57 @@ body {
     color: #f8f9fa;
 }
 
-.chart-container {
-    max-width: 100%;
+.chart-container, .slots-container {
+    width: 100%;
+    max-width: 450px;
+    height: 310px;
     padding: 20px;
     background: white;
     border-radius: 8px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.slots-container {
-    font-size: 20px;
-    margin-top: 20px;
+/* Chart and Slot Container */
+.chart-container {
+    padding: 0;
     width: 100%;
-    height: 90%;
-    padding: 90px 50px;
+    max-width: 410px;
+    height: 310px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    min-height: 300px;
+    margin: 20px 10px 10px 10px;
+}
+
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 300px;
+    max-height: 300px;
+}
+
+.slots-container {
+    text-align: center;
+    padding: 40px;
     border: 20px solid;
     border-image: linear-gradient(90deg, #ffffff, #00f2fe);
     border-image-slice: 1;
-    text-align: center;
     color: #ffffff;
+    background: linear-gradient(135deg, #1a1a2e, #16213e); /* Better contrast */
+    border-radius: 8px;
+    font-size: 20px;
+    margin-top: 20px;
+    margin-left: 30px;
+    width: 100%;
+    max-width: 450px;
+    height: 310px;
+    margin-top: 10px;
 }
 
 .slots-container h4 {
@@ -444,7 +534,6 @@ body {
     font-size: large;
 }
 
-/* Expand Content When Sidebar is Collapsed */
 .content.expanded {
     margin-left: 60px;
     width: calc(100% - 60px);
@@ -470,5 +559,13 @@ body {
 @media (max-width: 1000px) {
     .table-container, .chart-container, .slots-container {
         min-width: 400px; /* Further adjusts for smaller screens */
+    }
+}
+
+/* Adjust for responsiveness */
+@media (max-width: 768px) {
+    .chart-container, .slots-container {
+        min-height: auto;
+        padding: 20px;
     }
 }
