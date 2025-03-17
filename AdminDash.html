@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-black text-white">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-900 p-5 flex flex-col justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-300">VR</h1>
+                <nav class="mt-4">
+                    <ul class="space-y-2">
+                        <a href="AdminDash.html"></a>
+                        <li class="bg-yellow-400 text-black p-3 rounded flex items-center space-x-2">
+                            <span class="text-xl">🏠</span>
+                            <span>Dashboard</span>
+                        </li>
+                        <a href="ApplyPass.html">
+                            <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                                <span class="text-xl">📝</span>
+                                <span>Apply for Pass</span>
+                            </li>
+                        </a>
+                        <a href="Tracking.html">
+                            <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                                <span class="text-xl">🚗</span>
+                                <span>Pass Status Tracking</span>
+                            </li>
+                        </a>
+                        <a href="Notification.html">
+                            <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                                <span class="text-xl">🔔</span>
+                                <span>Notification & Alerts</span>
+                            </li>
+                        </a>
+                        <a href="Settings.html">
+                            <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                                <span class="text-xl">⚙️</span>
+                                <span>Settings</span>
+                            </li>
+                        </a>
+                    </ul>
+                </nav>                
+            </div>
+            <div class="text-left">
+                <img src="mark.jpg" class="rounded-full w-16 h-16 border-4 border-gray-700" alt="User">
+                <p class="text-sm mt-2">User Name</p>
+                <p class="text-xs text-gray-400">Username 1</p>
+                <button class="mt-4 bg-red-600 p-2 w-full rounded flex items-center justify-center space-x-2">
+                    <span class="text-xl">↩️</span>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="flex-1 p-6 overflow-auto">
+            <header class="flex justify-between">
+                <h2 class="text-xl font-semibold">HI, Mark Jardin</h2>
+                <p class="text-sm">Monday, 10 February 2025</p>
+            </header>
+            
+            <!-- Profile Section -->
+            <section class="bg-gray-800 p-6 rounded-lg mt-4 flex items-center text-left relative">
+                <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-gray-800">
+                    <img src="mark.jpg" class="w-full h-full object-cover" alt="User">
+                </div>
+                <div class="ml-6">
+                    <p class="text-lg font-bold">Name: Mark Jardin</p>
+                    <p>Student ID: 2022-8-125M</p>
+                    <p>College: College of Sciences</p>
+                </div>
+            </section>
+            
+            <!-- Application Status & Announcements -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div class="bg-gray-900 p-4 rounded-lg border-2 border-red-500 relative">
+                    <p class="text-lg flex items-center font-semibold">
+                        <span class="text-red-500 text-2xl">🚗</span>
+                        <span class="ml-2">Status of Application</span>
+                    </p>
+                    <div class="bg-gradient-to-r from-red-500 to-orange-400 text-black p-3 rounded-lg mt-2">
+                        <p class="text-2xl font-bold">In Progress</p>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Date Applied: 02-12-2025</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg border border-green-500">
+                    <p class="text-lg font-bold flex items-center">Announcements and Recent Updates <span class="ml-2">📢</span></p>
+                    <div class="mt-2 text-sm">
+                        <p><span class="font-bold">From Security Department:</span> Temporary suspension of the vehicle pass operation due to inclement weather.</p>
+                        <p class="text-gray-400 text-xs text-right">11:35 am (February 10, 2025)</p>
+                        <p class="mt-2"><span class="font-bold">From System Administrator:</span> Due to high demand, online payment will be an option in version 3.0.</p>
+                        <p class="text-gray-400 text-xs text-right">3:15 am (February 10, 2025)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Application History -->
+            <section class="bg-gray-800 p-4 rounded-lg mt-4 border border-gray-600">
+                <p class="text-lg font-bold">Application History</p>
+                <div class="overflow-auto mt-2">
+                    <table class="w-full text-left border border-gray-600">
+                        <thead>
+                            <tr class="bg-gray-700">
+                                <th class="border-b p-2">Application Number</th>
+                                <th class="border-b p-2">Vehicle Type</th>
+                                <th class="border-b p-2">Date of Approval</th>
+                                <th class="border-b p-2">Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-center bg-gray-900 border-t border-gray-600">
+                                <td class="p-2">123456</td>
+                                <td class="p-2">Sedan</td>
+                                <td class="p-2">02-15-2025</td>
+                                <td class="p-2">Approved</td>
+                            </tr>
+                            <tr class="text-center bg-gray-900 border-t border-gray-600">
+                                <td class="p-2">789012</td>
+                                <td class="p-2">SUV</td>
+                                <td class="p-2">02-10-2025</td>
+                                <td class="p-2">Pending</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+</body>
+</html>
