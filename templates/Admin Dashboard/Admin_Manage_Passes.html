@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../static/css/AdminPasses.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+    <!-- Main Content -->
+    <div class="content" id="content">
+        <div class="title" id="title">
+            <h2>Manage Passes</h2>
+            <div class="top-bar">
+                    <!-- Notification Bell -->
+                    <a href="Announcements.html" class="text-decoration-none text-light">
+                        <img src="../../static/images/notification.png" alt="Notifications" width="30" height="30">
+                        <span class="position-absolute top-0 start-100 translate-middle bg-danger"> </span>
+                    </a>
+                <!-- Right Side Icons -->
+                <div class="icons-container">
+                    <button id="help" class="icon-btn">❓</button>    
+                    <button id="filter" class="icon-btn fs-6"><small>Filter</small></button>       
+                </div>
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <input type="text" placeholder="Search..." id="search-bar">
+                    <button class="search-btn">🔍</button> <!-- Added search button -->
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+    </br>
+        <small><span id="real-time-date"></span></small>
+
+            <!-- Passes Table -->
+            <section class="table-container">
+                <table class="passes-table">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Username</th>
+                            <th>Application ID</th>
+                            <th>Plate Number</th>
+                            <th>Type</th>
+                            <th>Account</th>
+                            <th>Department</th>
+                            <th>Date Applied</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <button class="btn btn--approve">Approve</button>
+                                <button class="btn btn--reject">Reject</button>
+                            </td>
+                            <td>SWIFT, TAYLOR ALLISON</td>
+                            <td>2025-0-001</td>
+                            <td>9199-VG</td>
+                            <td>Motorcycle</td>
+                            <td>Student</td>
+                            <td>College of Sciences</td>
+                            <td>mm/dd/yyyy</td>
+                            <td><i class="fas fa-trash-alt delete-icon"></i></td>
+                        </tr>
+                        <!-- Additional rows -->
+                        <tr>
+                            <td>
+                                <button class="btn btn--approve">Approve</button>
+                                <button class="btn btn--reject">Reject</button>
+                            </td>
+                            <td>LAST NAME, FIRST NAME, MI</td>
+                            <td>2025-0-00X</td>
+                            <td>VAA-1892</td>
+                            <td>SUV</td>
+                            <td>Visitor</td>
+                            <td>College of Teachers Education</td>
+                            <td>mm/dd/yyyy</td>
+                            <td><i class="fas fa-trash-alt delete-icon"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+    
+    <script src="../../static/javascript/dashboard-sidebar.js"></script> 
+</body>
+</html>
