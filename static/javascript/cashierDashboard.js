@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadSidebar() {
-    return fetch("../../templates/includes/sidebar.html")
+    return fetch("../../templates/includes/cashier_sidebar.html")
         .then(response => response.text())
         .then(html => {
             document.getElementById("sidebar-container").innerHTML = html;

@@ -1,39 +1,60 @@
-function toggleSidebar() {
-    const sidebar = document.getElementById("sidebar");
-    const content = document.getElementById("content");
-    const toggleBtn = document.getElementById("toggle-btn");
-
-    if (sidebar.classList.contains("collapsed")) {
-        sidebar.classList.remove("collapsed");
-        content.classList.remove("expanded");
-    } else {
-        sidebar.classList.add("collapsed");
-        content.classList.add("expanded");
-    }
-}
-
-
+// FETCH SIDEBAR
 document.addEventListener("DOMContentLoaded", function () {
-    const menuItems = document.querySelectorAll(".sidebar ul li");
-
-    const activeMenu = localStorage.getItem("activeMenu");
-
-    if (activeMenu) {
-        const activeItem = document.querySelector(`.sidebar ul li[data-id='${activeMenu}']`);
-        if (activeItem) {
-            activeItem.classList.add("active");
-        }
-    }
-
-    menuItems.forEach((item) => {
-        item.addEventListener("click", function () {
-            menuItems.forEach((li) => li.classList.remove("active"));
-            this.classList.add("active");
-            localStorage.setItem("activeMenu", this.getAttribute("data-id"));
-        });
+    loadSidebar().then(() => {
+        setupSidebarToggle();
+        setupSidebarHighlight();
     });
 });
 
+function loadSidebar() {
+    return fetch("../../templates/includes/admin_sidebar.html")
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById("sidebar-container").innerHTML = html;
+        })
+        .catch(error => console.error("Error loading sidebar:", error));
+}
+
+// Sidebar Toggle Function
+function setupSidebarToggle() {
+    const sidebar = document.getElementById("sidebar");
+    const toggleBtn = document.getElementById("toggle-btn");
+
+    if (!sidebar || !toggleBtn) return;
+
+    toggleBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("collapsed");
+        localStorage.setItem("sidebarState", sidebar.classList.contains("collapsed") ? "collapsed" : "expanded");
+    });
+
+    if (localStorage.getItem("sidebarState") === "collapsed") {
+        sidebar.classList.add("collapsed");
+    }
+}
+
+// Sidebar Active Item Highlight
+function setupSidebarHighlight() {
+    const items = document.querySelectorAll(".sidebar ul li");
+
+    items.forEach(item => {
+        item.addEventListener("click", () => {
+            document.querySelector(".sidebar ul li.active")?.classList.remove("active");
+            item.classList.add("active");
+            localStorage.setItem("activeMenu", item.dataset.menu);
+        });
+
+        if (item.dataset.menu === localStorage.getItem("activeMenu")) {
+            item.classList.add("active");
+        }
+    });
+}
+
+
+//time 
+function updateDate() {
+    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+    document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', options);
+}
 
 function updateDate() {
     const dateElement = document.getElementById("real-time-date");

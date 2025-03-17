@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+
+<!-- sidebar.html -->
+<aside id="sidebar" class="w-64 bg-gray-900 text-white h-screen fixed transition-all duration-300">
+    <div class="flex items-center justify-between px-6 py-4">
+        <a href="#" class="text-2xl font-bold text-yellow-500">OVR</a>
+        <button id="toggleSidebar" class="md:hidden text-gray-400 text-2xl">☰</button>
+    </div>
+
+    <p class="text-gray-500 uppercase px-6 text-sm">Main Menu</p>
+
+    <ul class="mt-4 space-y-2">
+        <li data-menu="dashboard">
+            <a href="#" class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-800 transition">
+                <img src="../../static/images/home.png" alt="Dashboard" class="w-6">
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li data-menu="payment">
+            <a href="#" class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-800 transition">
+                <img src="../../static/images/payment.png" alt="Payment" class="w-6">
+                <span>Payment</span>
+            </a>
+        </li>
+        <li data-menu="transactions">
+            <a href="#" class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-800 transition">
+                <img src="../../static/images/transaction.png" alt="Transactions" class="w-6">
+                <span>Transactions</span>
+            </a>
+        </li>
+        <li data-menu="settings">
+            <a href="#" class="flex items-center space-x-3 px-6 py-3 hover:bg-gray-800 transition">
+                <img src="../../static/images/settings.png" alt="Settings" class="w-6">
+                <span>Settings</span>
+            </a>
+        </li>
+    </ul>
+
+    <a href="#" id="logout" class="flex items-center space-x-3 px-6 py-3 mt-6 hover:bg-red-600 transition">
+        <img src="../../static/images/power-off.png" alt="Logout" class="w-6">
+        <span>Logout</span>
+    </a>
+
+    <!-- Profile Section -->
+    <div class="absolute bottom-6 left-6 flex items-center space-x-3">
+        <img src="../../static/images/profile-placeholder.png" alt="Profile Picture" class="w-10 h-10 rounded-full">
+        <div class="text-sm">
+            <p class="font-bold">Cashier Name</p>
+            <p class="text-gray-400">Cashier</p>
+        </div>
+    </div>
+</aside>
+
+</div>
+
+<!-- Link to JavaScript -->
+<script src="../../static/js/sidebar.js"></script>
+
+</body>
+</html>
