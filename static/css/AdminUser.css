@@ -9,24 +9,25 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* ========== Passes Table ========== */
-.passes-table {
+/* ========== User Table ========== */
+.user-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate; /* Use separate border model */
+    border-spacing: 0 10px; /* Add space between rows */
     background: #333;
     border-radius: 10px;
     overflow: hidden;
 }
 
 /* ========== Table Header ========== */
-.passes-table thead {
+.user-table thead {
     background: #444;
 }
 
-.passes-table th {
+.user-table th {
     padding: 14px;
     text-align: left;
-    color: yellow;
+    color: #ffe600; /* Light yellow for better contrast */
     font-size: 15px;
     font-weight: bold;
     text-transform: uppercase;
@@ -35,23 +36,79 @@
 }
 
 /* ========== Table Rows & Cells ========== */
-.passes-table tbody tr {
+.user-table tbody tr {
     transition: background 0.3s ease-in-out;
+    background: #292929; /* Background color for rows */
 }
 
-.passes-table td {
+.user-table td {
     padding: 14px;
     font-size: 14px;
     border-bottom: 1px solid #444;
-    color: #ddd;
+    color: #f5f5f5; /* Light gray for better contrast */
+    vertical-align: top; /* Align text to the top */
 }
 
-.passes-table tbody tr:nth-child(even) {
-    background: #292929;
-}
-
-.passes-table tbody tr:hover {
+.user-table tbody tr:hover {
     background: #3a3a3a;
+}
+
+/* ========== Custom Radio Button ========== */
+.custom-radio {
+    display: inline-block;
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+    user-select: none;
+    vertical-align: top; /* Align radio button to the top */
+}
+
+.custom-radio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radio-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+}
+
+.custom-radio input:checked ~ .radio-box {
+    background-color: #2196F3;
+    border-color: #2196F3;
+}
+
+.radio-box:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-radio input:checked ~ .radio-box:after {
+    display: block;
+}
+
+.custom-radio .radio-box:after {
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+/* ========== Action Buttons Container ========== */
+.btn-container {
+    display: flex;
+    gap: 10px; /* Space between buttons */
 }
 
 /* ========== Action Buttons ========== */
@@ -88,27 +145,14 @@
     transform: scale(1.05);
 }
 
-/* ========== Delete Icon ========== */
-.delete-icon {
-    color: #dc3545;
-    font-size: 18px;
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
-}
-
-.delete-icon:hover {
-    color: #ff4d4d;
-    transform: scale(1.2);
-}
-
 /* ========== Responsive Design ========== */
 @media (max-width: 768px) {
     .table-container {
         padding: 10px;
     }
     
-    .passes-table th, 
-    .passes-table td {
+    .user-table th, 
+    .user-table td {
         padding: 10px;
         font-size: 12px;
     }

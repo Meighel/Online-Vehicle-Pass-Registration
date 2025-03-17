@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage User</title>
+    <link rel="stylesheet" href="../../static/css/AdminPayment.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+     <!-- Sidebar -->
+     <div id="sidebar-container"></div>
+         <!-- Main Content -->
+    <div class="content">
+        <h2 class="title">Payments</h2>
+
+        <!-- Filter Section -->
+        <div class="filter-container">
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date">
+            
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date">
+            
+            <button class="filter-btn">Filter</button>
+
+            <input type="text" id="search-bar" placeholder="Search username...">
+        </div>
+
+        <!-- Payments Table -->
+        <section class="table-container">
+            <table class="payments-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Username</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
+                        <th>Amount</th>
+                        <th>Processed by</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Dynamic Rows Will Be Inserted Here -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button id="first-page">First</button>
+            <button id="prev-page">Prev</button>
+            <span id="page-numbers"></span>
+            <button id="next-page">Next</button>
+            <button id="last-page">Last</button>
+        </div>
+
+        <p id="entries-info"></p>
+    </div>
+     
+     <script src="../../static/javascript/dashboard-sidebar.js"></script> 
+     <script src="../../static/javascript/payments.js"></script>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+</body>
+</html>

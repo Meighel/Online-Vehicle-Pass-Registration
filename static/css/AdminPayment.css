@@ -1,0 +1,150 @@
+/* ========== Global Styles ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    display: flex;
+    background-color: #1e1e1e;
+    color: white;
+}
+
+/* ========== Sidebar ========== */
+
+.content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 20px;
+}
+
+/* ========== Title ========== */
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: yellow;
+    margin-bottom: 15px;
+}
+
+/* ========== Filter Section ========== */
+.filter-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.filter-container input {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+}
+
+.filter-btn {
+    background: yellow;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.filter-btn:hover {
+    background: orange;
+}
+
+#search-bar {
+    padding: 8px;
+    width: 200px;
+    border-radius: 5px;
+    border: none;
+}
+
+/* ========== Table Styling ========== */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    background-color: #252525;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.payments-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.payments-table thead {
+    background: #444;
+}
+
+.payments-table th {
+    padding: 12px;
+    text-align: left;
+    color: yellow;
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 2px solid #555;
+}
+
+.payments-table td {
+    padding: 12px;
+    font-size: 14px;
+    border-bottom: 1px solid #444;
+    color: #ddd;
+}
+
+.payments-table tbody tr:nth-child(even) {
+    background: #292929;
+}
+
+.payments-table tbody tr:hover {
+    background: #3a3a3a;
+}
+
+/* ========== Pagination Styling ========== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.pagination button {
+    background: yellow;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.pagination button:hover {
+    background: orange;
+}
+
+#entries-info {
+    text-align: center;
+    margin-top: 10px;
+    color: #ccc;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+    .filter-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+}
