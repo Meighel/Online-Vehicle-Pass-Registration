@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import (CustomUser, UserProfile, SecurityProfile, CashierProfile, 
-                     AdminProfile, Vehicle, Registration, RegistrationStatus, VehiclePass,
+                     AdminProfile, Vehicle, Registration, VehiclePass,
                      PaymentTransaction, InspectionReport, Notification, Announcement)
 
 class UserRegistrationForm(UserCreationForm):
@@ -52,11 +52,6 @@ class VehicleForm(forms.ModelForm):
 class RegistrationForm(forms.ModelForm):
     class Meta:
         model = Registration
-        fields = '__all__'
-
-class RegistrationStatusForm(forms.ModelForm):
-    class Meta:
-        model = RegistrationStatus
         fields = '__all__'
 
 class VehiclePassForm(forms.ModelForm):

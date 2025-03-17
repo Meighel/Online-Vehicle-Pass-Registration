@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     CustomUser, UserProfile, SecurityProfile, CashierProfile, AdminProfile,
-    Vehicle, Registration, RegistrationStatus, VehiclePass,
+    Vehicle, Registration, VehiclePass,
     PaymentTransaction, InspectionReport, Notification, Announcement
 )
 
@@ -14,29 +14,59 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 
+
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'firstname', 'lastname', 'program', 'department')
-    search_fields = ('user', 'user__corporate_email', 'firstname', 'lastname')
-    list_filter = ('user__role','program', 'department')
+    search_fields = ('user__corporate_email', 'firstname', 'lastname')
+    list_filter = ('program', 'department')
+
 
 @admin.register(SecurityProfile)
 class SecurityProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'username', 'firstname', 'lastname', 'job_title')
-    search_fields = ('user__corporate_email', 'firstname', 'lastname')
+    # We display the related UserProfile and custom methods for first and last names.
+    list_display = ('user', 'badgeNumber', 'first_name', 'last_name', 'job_title')
+    search_fields = ('user__corporate_email', 'user__firstname', 'user__lastname', 'badgeNumber')
     list_filter = ('job_title',)
+
+    def first_name(self, obj):
+        return obj.user.firstname
+    first_name.short_description = 'First Name'
+
+    def last_name(self, obj):
+        return obj.user.lastname
+    last_name.short_description = 'Last Name'
+
 
 @admin.register(CashierProfile)
 class CashierProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'username', 'firstname', 'lastname', 'job_title')
-    search_fields = ('user__corporate_email', 'firstname', 'lastname')
+    list_display = ('user', 'cashier_id', 'first_name', 'last_name', 'job_title')
+    search_fields = ('user__corporate_email', 'user__firstname', 'user__lastname', 'cashier_id')
     list_filter = ('job_title',)
+
+    def first_name(self, obj):
+        return obj.user.firstname
+    first_name.short_description = 'First Name'
+
+    def last_name(self, obj):
+        return obj.user.lastname
+    last_name.short_description = 'Last Name'
+
 
 @admin.register(AdminProfile)
 class AdminProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'username', 'firstname', 'lastname')
-    search_fields = ('user__corporate_email', 'firstname', 'lastname')
-    list_filter = ('user__role',)
+    list_display = ('user', 'admin_id', 'first_name', 'last_name')
+    search_fields = ('user__corporate_email', 'user__firstname', 'user__lastname', 'admin_id')
+    # Removed invalid list_filter referencing user__role
+
+    def first_name(self, obj):
+        return obj.user.firstname
+    first_name.short_description = 'First Name'
+
+    def last_name(self, obj):
+        return obj.user.lastname
+    last_name.short_description = 'Last Name'
+
 
 @admin.register(Vehicle)
 class VehicleAdmin(admin.ModelAdmin):
@@ -44,17 +74,14 @@ class VehicleAdmin(admin.ModelAdmin):
     search_fields = ('plateNumber', 'owner__firstname', 'owner__lastname')
     list_filter = ('color', 'model', 'type')
 
+
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ('applicationNumber', 'user', 'vehicle', 'files')
-    search_fields = ('applicationNumber', 'user__firstname', 'vehicle__plateNumber')
-    list_filter = ('vehicle', 'user__department')
+    # Adjusted field names to match the model (registrationNumber, plate_number)
+    list_display = ('registrationNumber', 'user', 'plate_number', 'files')
+    search_fields = ('registrationNumber', 'user__firstname', 'plate_number__plateNumber')
+    list_filter = ('user__department',)  # Filtering on a valid field from UserProfile
 
-@admin.register(RegistrationStatus)
-class RegistrationStatusAdmin(admin.ModelAdmin):
-    list_display = ('registration', 'remarks')
-    search_fields = ('registration__applicationNumber', 'remarks')
-    list_filter = ('remarks', 'registration__user__department')
 
 @admin.register(VehiclePass)
 class VehiclePassAdmin(admin.ModelAdmin):
@@ -62,23 +89,29 @@ class VehiclePassAdmin(admin.ModelAdmin):
     search_fields = ('passNumber', 'vehicle__plateNumber')
     list_filter = ('status',)
 
+
 @admin.register(PaymentTransaction)
 class PaymentTransactionAdmin(admin.ModelAdmin):
     list_display = ('receipt_number', 'registration', 'cashier', 'status', 'date_processed')
-    search_fields = ('receipt_number', 'registration__applicationNumber', 'cashier__firstname',)
+    search_fields = ('receipt_number', 'registration__registrationNumber', 'cashier__user__firstname',)
     list_filter = ('status', 'date_processed')
+
 
 @admin.register(InspectionReport)
 class InspectionReportAdmin(admin.ModelAdmin):
-    list_display = ('registration', 'security', 'inspection_date', 'is_approved')
-    search_fields = ('registration__applicationNumber', 'security__firstname')
+    # Changed list_display to use actual model fields; using payment_number instead of registration.
+    list_display = ('payment_number', 'security', 'inspection_date', 'is_approved')
+    search_fields = ('payment_number__registration__registrationNumber', 'security__user__firstname')
     list_filter = ('is_approved', 'inspection_date')
+
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'type', 'message', 'date', 'is_read')
-    search_fields = ('user__corporate_email', 'message')
+    # Removed 'user' from list_display since Notification does not have a user field.
+    list_display = ('type', 'message', 'date', 'is_read')
+    search_fields = ('message',)
     list_filter = ('type', 'is_read', 'date')
+
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
