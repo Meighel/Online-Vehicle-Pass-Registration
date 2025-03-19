@@ -78,7 +78,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'corporate_email'
-    REQUIRED_FIELDS = []  # Fixed issue with missing 'username'
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return f"{self.corporate_email} - {self.role}"
@@ -127,7 +127,6 @@ class CashierProfile(BaseModel):
 class AdminProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     admin_id = models.CharField(max_length=15)
- 
 
     def __str__(self):
         return f"Admin {self.admin_id}"
