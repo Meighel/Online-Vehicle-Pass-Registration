@@ -50,6 +50,7 @@ function setupSidebarHighlight() {
 }
 
 
+
 //time 
 function updateDate() {
     const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
