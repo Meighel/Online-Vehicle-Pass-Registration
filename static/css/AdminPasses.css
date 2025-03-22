@@ -9,6 +9,52 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* ========== Filter Section ========== */
+.filter-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Pushes search bar to the right */
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap; /* Keeps responsiveness */
+}
+
+.filter-container input {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+}
+
+.filter-btn {
+    background: yellow !important;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.filter-btn:hover {
+    background: orange;
+}
+
+#search-bar {
+    margin-left: auto;
+    padding: 8px;
+    width: 220px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #ffffff;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+#search-bar:focus {
+    border-color: yellow;
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 255, 0, 0.7);
+}
+
 /* ========== Passes Table ========== */
 .passes-table {
     width: 100%;
@@ -16,25 +62,22 @@
     background: #333;
     border-radius: 10px;
     overflow: hidden;
+    text-align: center; /* Ensures table content is aligned center */
 }
 
-/* ========== Table Header ========== */
+/* Table Header */
 .passes-table thead {
     background: #444;
 }
 
 .passes-table th {
     padding: 14px;
-    text-align: left;
+    text-align: center; 
     color: yellow;
-    font-size: 15px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid #555;
+    font-size: 16px;
 }
 
-/* ========== Table Rows & Cells ========== */
+/* Table Rows */
 .passes-table tbody tr {
     transition: background 0.3s ease-in-out;
 }
@@ -43,7 +86,16 @@
     padding: 14px;
     font-size: 14px;
     border-bottom: 1px solid #444;
-    color: #ddd;
+    color: #ffffff;
+    text-align: center; /* Center align all table data */
+}
+
+/* First column (Action buttons) */
+.passes-table td:nth-child(1) {
+    display: flex;
+    justify-content: center; /* Center the action buttons */
+    gap: 5px;
+    padding-right: 15px;
 }
 
 .passes-table tbody tr:nth-child(even) {
@@ -55,50 +107,62 @@
 }
 
 /* ========== Action Buttons ========== */
-.btn {
-    padding: 10px 20px; /* Adjusted padding for larger buttons */
+.btn-approve {
+    background-color: #28a745 !important; 
+    color: white !important;
     border: none;
-    font-size: 16px; /* Adjusted font size for larger buttons */
-    font-weight: bold;
+    padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    flex: 1; /* Ensure buttons take equal space */
-    text-align: center; /* Center text in buttons */
-    margin: 5px 0; /* Add margin for better visibility */
 }
 
-.btn--approve {
-    background: #28a745 !important;
-    color: white;
+.btn-approve:hover {
+    background-color: #218838;
 }
 
-.btn--approve:hover {
-    background: #218838;
-    transform: scale(1.05);
-}
-
-.btn--reject {
-    background: #dc3545 !important;
-    color: white;
-}
-
-.btn--reject:hover {
-    background: #c82333;
-    transform: scale(1.05);
-}
-
-/* ========== Delete Icon ========== */
-.delete-icon {
-    color: #dc3545;
-    font-size: 18px;
+.btn-reject {
+    background-color: #dc3545 !important; 
+    color: white !important;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: 0.2s ease-in-out;
 }
 
-.delete-icon:hover {
-    color: #ff4d4d;
-    transform: scale(1.2);
+.btn-reject:hover {
+    background-color: #c82333;
+}
+
+
+/* Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: flex-end; /* Align to right */
+    margin-top: 20px;
+}
+
+.pagination {
+    display: flex;
+    gap: 5px;
+}
+
+.pagination button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.pagination button.active {
+    background-color: yellow;
+    color: black;
+}
+
+.pagination button:hover {
+    background-color: orange;
 }
 
 /* ========== Responsive Design ========== */
@@ -114,7 +178,16 @@
     }
     
     .btn {
-        padding: 8px 14px; /* Adjusted padding for smaller buttons on small screens */
-        font-size: 14px; /* Adjusted font size for smaller buttons on small screens */
+        padding: 5px 9px; 
+        font-size: 12px; 
+    }
+
+    .filter-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #search-bar {
+        width: 100%;
     }
 }

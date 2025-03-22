@@ -8,6 +8,13 @@ $(document).ready(function () {
         return new Date(parts[2], parts[0] - 1, parts[1]);
     }
 
+     /**
+     * ========== FILTERING FUNCTION ==========
+     * This function filters the table based on:
+     * - Username (search input)
+     * - Date range (Start Date & End Date)
+     * - Processed By (dropdown filter)
+     */
     function filterRows() {
         let searchText = $("#search-bar").val().toLowerCase().trim();
         let startDate = $("#start-date").val() ? new Date($("#start-date").val()) : null;
@@ -36,7 +43,11 @@ $(document).ready(function () {
         showPage(1);
     }
 
-    // pagination
+     /**
+     * ========== PAGINATION FUNCTIONS ==========
+     * - Updates the pagination controls
+     * - Handles page switching
+     */
     function updatePagination() {
         let totalRows = filteredRows.length;
         let totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
@@ -61,6 +72,11 @@ $(document).ready(function () {
         filteredRows.hide().slice(start, end).show();
     }
 
+    /**
+     * ========== EVENT LISTENERS ==========
+     * - Handles page button clicks
+     * - Triggers filtering when input values change
+     */
     $(document).on("click", ".page-btn", function () {
         $(".page-btn").removeClass("active");
         $(this).addClass("active");
