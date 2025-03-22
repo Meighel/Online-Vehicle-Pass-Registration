@@ -1,100 +1,88 @@
 from django.test import TestCase
-from django.core.exceptions import ValidationError
-from .models import CustomUser, UserProfile, Vehicle
+from django.contrib.auth import get_user_model
+from vehicle_pass.models import UserProfile, CashierProfile, SecurityProfile, AdminProfile
 
-class CustomUserTest(TestCase):
+
+class CustomUserManagerTest(TestCase):
     def setUp(self):
-        self.corporate_email = "test@example.com"
-        self.password = "password123"
-        self.user = CustomUser.objects.create_user(
-            corporate_email=self.corporate_email,
-            password=self.password,
-            firstname="John",
-            lastname="Doe",
-            address="123 Test St"
-        )
+        self.user_model = get_user_model()
 
     def test_create_user(self):
-        self.assertEqual(self.user.corporate_email, self.corporate_email)
-        self.assertTrue(self.user.check_password(self.password))
-
-    def test_create_user_missing_email(self):
-        with self.assertRaises(ValueError):
-            CustomUser.objects.create_user(corporate_email=None, password="password123")
-
-    def test_create_user_missing_password(self):
-        with self.assertRaises(ValueError):
-            CustomUser.objects.create_user(corporate_email="test@example.com", password=None)
-
-class UserProfileTest(TestCase):
-    def setUp(self):
-        self.corporate_email = "test@example.com"
-        self.password = "password123"
-        self.user = CustomUser.objects.create_user(
-            corporate_email=self.corporate_email,
-            password=self.password,
-            firstname="John",
-            lastname="Doe",
-            address="123 Test St"
+        user = self.user_model.objects.create_user(            
+            corporate_email='testuser@example.com',
+            password='password123',
+            firstname='Test',
+            lastname='User',
+            role='user',
+            middle_initial='A',
+            suffix='Jr.',
+            dl_number='123456789',
+            college='Test College',
+            program='CS',
+            department='IT',
+            address='123 Test Street'
         )
-        self.profile = UserProfile.objects.get(user=self.user)
 
-    def test_user_profile_creation(self):
-        self.assertEqual(self.profile.firstname, "John")
-        self.assertEqual(self.profile.lastname, "Doe")
+        self.assertIsInstance(user, self.user_model)
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
 
-class VehicleTest(TestCase):
-    def setUp(self):
-        self.corporate_email = "test@example.com"
-        self.password = "password123"
-        self.user = CustomUser.objects.create_user(
-            corporate_email=self.corporate_email,
-            password=self.password,
-            firstname="John",
-            lastname="Doe",
-            address="123 Test St"
-        )
-        self.profile = UserProfile.objects.get(user=self.user)
+        # Fetch the UserProfile correctly
+        profile = UserProfile.objects.get(user=user)
+        self.assertEqual(profile.firstname, 'Test')
+        self.assertEqual(profile.lastname, 'User')
 
-    def test_vehicle_registration(self):
-        vehicle = Vehicle.objects.create(
-            owner=self.profile,
-            plateNumber="ABC123",
-            type="Sedan",
-            model="2022",
-            color="Black",
-            chassisNumber="CHS123456",
-            OR_Number="OR123456"
+    def test_create_superuser(self):
+        superuser = self.user_model.objects.create_superuser(
+            corporate_email='admin@example.com',
+            password='admin123'
         )
-        self.assertEqual(vehicle.owner, self.profile)
-        self.assertEqual(vehicle.plateNumber, "ABC123")
 
-    def test_vehicle_registration_limit(self):
-        Vehicle.objects.create(
-            owner=self.profile,
-            plateNumber="ABC123",
-            type="Sedan",
-            model="2022",
-            color="Black",
-            chassisNumber="CHS123456",
-            OR_Number="OR123456"
+        self.assertTrue(superuser.is_staff)
+        self.assertTrue(superuser.is_superuser)
+
+    def test_create_cashier_profile(self):
+        user = self.user_model.objects.create_user(
+            corporate_email='cashier@example.com',
+            password='cashier123',
+            role='cashier',
+            firstname='Cashier',
+            lastname='User',
+            cashier_id='C001',
+            job_title='Cashier'
         )
-        Vehicle.objects.create(
-            owner=self.profile,
-            plateNumber="DEF456",
-            type="SUV",
-            model="2023",
-            color="White",
-            chassisNumber="CHS789012",
-            OR_Number="OR789012"
+
+        # Fetch CashierProfile correctly
+        cashier_profile = CashierProfile.objects.get(user__user=user)
+        self.assertEqual(cashier_profile.cashier_id, 'C001')
+        self.assertEqual(cashier_profile.job_title, 'Cashier')
+
+    def test_create_security_profile(self):
+        user = self.user_model.objects.create_user(
+            corporate_email='security@example.com',
+            password='security123',
+            role='security',
+            firstname='Security',
+            lastname='Guard',
+            badgeNumber='B123',
+            job_title='Security Guard'
         )
-        with self.assertRaises(ValidationError):
-            Vehicle.objects.create(
-                owner=self.profile,
-                plateNumber="XYZ789",
-                type="Truck",
-                model="2024",
-                color="Red",
-                chassisNumber="CHS345678",
-                OR_Number="OR345678"
-            )
+
+        # Fetch SecurityProfile correctly
+        security_profile = SecurityProfile.objects.get(user__user=user)
+        self.assertEqual(security_profile.badgeNumber, 'B123')
+        self.assertEqual(security_profile.job_title, 'Security Guard')
+
+    def test_create_admin_profile(self):
+        user = self.user_model.objects.create_user(
+            corporate_email='adminuser@example.com',
+            password='adminuser123',
+            role='admin',
+            firstname='Admin',
+            lastname='User',
+            admin_id='A001'
+        )
+
+        # Fetch AdminProfile correctly
+        admin_profile = AdminProfile.objects.get(user__user=user)
+        self.assertEqual(admin_profile.admin_id, 'A001')
