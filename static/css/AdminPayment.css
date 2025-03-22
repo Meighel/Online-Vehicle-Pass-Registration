@@ -1,0 +1,137 @@
+/* ========== Global Styles ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    display: flex;
+    background-color: #1e1e1e;
+    color: white;
+}
+
+/* ========== Sidebar ========== */
+
+.content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 20px;
+}
+
+/* ========== Title ========== */
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: yellow;
+    margin-bottom: 15px;
+}
+
+/* ========== Filter Section ========== */
+.filter-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.filter-container input {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+}
+
+.filter-btn {
+    background: yellow;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.filter-btn:hover {
+    background: orange;
+}
+
+#search-bar {
+    padding: 8px;
+    width: 200px;
+    border-radius: 5px;
+    border: none;
+}
+
+/* Table */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.payments-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #292929;
+    color: white;
+}
+
+.payments-table th {
+    background-color: #555353;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.payments-table td {
+    padding: 12px;
+    border-bottom: 1px solid #444;
+}
+
+.payments-table tr:nth-child(even) {
+    background-color: #555353;
+}
+
+.payments-table th:first-child {
+    cursor: pointer;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: flex-end; /* position of btn */
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background-color: yellow;
+    color: black;
+}
+
+/* Entries Info */
+.entries-info {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+    .filter-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+}

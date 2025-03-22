@@ -1,0 +1,164 @@
+/* ========== Table Container ========== */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+    background-color: #252525;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ========== User Table ========== */
+.user-table {
+    width: 100%;
+    border-collapse: separate; /* Use separate border model */
+    border-spacing: 0 10px; /* Add space between rows */
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* ========== Table Header ========== */
+.user-table thead {
+    background: #444;
+}
+
+.user-table th {
+    padding: 14px;
+    text-align: left;
+    color: #ffe600; /* Light yellow for better contrast */
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #555;
+}
+
+/* ========== Table Rows & Cells ========== */
+.user-table tbody tr {
+    transition: background 0.3s ease-in-out;
+    background: #292929; /* Background color for rows */
+}
+
+.user-table td {
+    padding: 14px;
+    font-size: 14px;
+    border-bottom: 1px solid #444;
+    color: #f5f5f5; /* Light gray for better contrast */
+    vertical-align: top; /* Align text to the top */
+}
+
+.user-table tbody tr:hover {
+    background: #3a3a3a;
+}
+
+/* ========== Custom Radio Button ========== */
+.custom-radio {
+    display: inline-block;
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+    user-select: none;
+    vertical-align: top; /* Align radio button to the top */
+}
+
+.custom-radio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radio-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+}
+
+.custom-radio input:checked ~ .radio-box {
+    background-color: #2196F3;
+    border-color: #2196F3;
+}
+
+.radio-box:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-radio input:checked ~ .radio-box:after {
+    display: block;
+}
+
+.custom-radio .radio-box:after {
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+/* ========== Action Buttons Container ========== */
+.btn-container {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+/* ========== Action Buttons ========== */
+.btn {
+    padding: 10px 20px; /* Adjusted padding for larger buttons */
+    border: none;
+    font-size: 16px; /* Adjusted font size for larger buttons */
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    flex: 1; /* Ensure buttons take equal space */
+    text-align: center; /* Center text in buttons */
+    margin: 5px 0; /* Add margin for better visibility */
+}
+
+.btn--approve {
+    background: #28a745 !important;
+    color: white;
+}
+
+.btn--approve:hover {
+    background: #218838;
+    transform: scale(1.05);
+}
+
+.btn--reject {
+    background: #dc3545 !important;
+    color: white;
+}
+
+.btn--reject:hover {
+    background: #c82333;
+    transform: scale(1.05);
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+    .table-container {
+        padding: 10px;
+    }
+    
+    .user-table th, 
+    .user-table td {
+        padding: 10px;
+        font-size: 12px;
+    }
+    
+    .btn {
+        padding: 8px 14px; /* Adjusted padding for smaller buttons on small screens */
+        font-size: 14px; /* Adjusted font size for smaller buttons on small screens */
+    }
+}
