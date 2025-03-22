@@ -1,0 +1,170 @@
+/* ======= MAIN CONTENT STYLES ======= */
+.main-content {
+    margin-left: 250px; /* Adjust to match sidebar width */
+    padding: 20px;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* When Sidebar is Collapsed */
+.sidebar.collapsed + .main-content {
+    margin-left: 60px;
+}
+
+/* ======= TOP BAR STYLES ======= */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Icons in the Top Bar */
+.top-bar .icons-container {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-btn {
+    background: #444;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.icon-btn:hover {
+    background: yellow;
+    color: black;
+}
+
+/* ======= SEARCH BAR ======= */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#search-bar {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    width: 200px;
+    background: #333;
+    color: white;
+}
+
+.search-btn {
+    background: yellow;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-btn:hover {
+    background: orange;
+}
+
+/* ======= CARD STYLES ======= */
+.card {
+    background-color: #1f1f1f;
+    color: white;
+    border-radius: 8px;
+    padding: 20px;
+    transition: 0.3s ease-in-out;
+}
+
+.card-header {
+    background-color: #2a2a2a;
+    padding: 15px;
+    font-weight: bold;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+/* Profile Card */
+.profile-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #444;
+    border-radius: 10px;
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #444;
+}
+
+.profile-info {
+    margin-left: 20px;
+}
+
+/* Status Card */
+.bg-gradient {
+    background: linear-gradient(to right, red, orange);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* ======= TABLE STYLES ======= */
+.table {
+    color: white;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.table thead {
+    background: #2a2a2a;
+    color: yellow;
+}
+
+.table tbody tr {
+    transition: 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background: #333;
+}
+
+/* ======= RESPONSIVE DESIGN ======= */
+@media (max-width: 1024px) {
+    .main-content {
+        margin-left: 210px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 60px;
+        padding: 15px;
+    }
+
+    .top-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #search-bar {
+        width: 100%;
+    }
+}

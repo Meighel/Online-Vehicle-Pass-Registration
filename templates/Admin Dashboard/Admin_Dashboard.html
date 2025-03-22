@@ -3,76 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="../../static/css/dashboard-style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    
-    <div class="d-flex">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <a class="navbar-brand ms-4 fs-3 fw-bold text-warning brand-logo" href="#">OVR</a>
-                <!-- Toggle Button -->
-            <button class="toggle-btn" id="toggle-btn" onclick="toggleSidebar()">☰</button>
-        
-            <br>
-            <p>Main Menu</p>
-            <ul>
-                <li>
-                    <a href="#">
-                        <img src="../../static/images/home.png" alt="house" width="30" height="30">
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img src="../../static/images/user.png" alt="user" width="30" height="30">
-                        <span>Manage User</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img src="../../static/images/passes.png" alt="Passes" width="30" height="30">
-                        <span>Manage Passes</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img src="../../static/images/payment.png" alt="Payments" width="25" height="25">
-                        <span>Manage Payments</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img src="../../static/images/report.png" alt="Report" width="25" height="25">
-                        <span>Reports</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img src="../../static/images/settings.png" alt="setting" width="25" height="25">
-                        <span>Settings</span>
-                    </a>
-                </li>
-            </ul>
-        
-            <a href="#" id="logout">
-                <center><img src="../../static/images/power-off.png" alt="logout" width="25" height="25"></center>
-                <span>Logout</span>
-            </a>
-        
-            <!-- Profile Section -->
-            <div class="profile">
-                <img src="../../static/images/profile-placeholder.png" alt="Profile Picture"> 
-                <div class="profile-info">
-                    <span class="name">Admin Name</span>
-                    <span class="position">Cashier</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
 
     <!-- Main Content -->
     <div class="content" id="content">
@@ -260,60 +198,7 @@
         </div>
     </div>
     
-    <script>
-        // Get the canvas element
-        var ctx = document.getElementById('registrationChart').getContext('2d');
-    
-        // Chart data
-        var data = {
-            labels: ["Pending Applicants", "Rejected", "Approved"],
-            datasets: [{
-                data: [550, 185, 120], // Change values as needed
-                backgroundColor: ["#007bff", "#dc3545", "#28a745"], // Blue, Red, Green
-                hoverOffset: 10
-            }]
-        };
-    
-        // Create Doughnut Chart
-        var registrationChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ["Applicants", "Rejected", "Approved"],
-                datasets: [{
-                    data: [550, 185, 120],
-                    backgroundColor: ["#007bff", "#dc3545", "#28a745"],
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                layout: {
-                    padding: 5
-                },
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    },
-                    title: {
-                        display: true,
-                        text: 'Registration Overview', // Your chart title
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        },
-                        color: '#000',
-                        padding: {
-                            top: 10,
-                            bottom: 10
-                        }
-                    }
-                }
-            }
-        });
-
-    </script>
-    <script src="../../static/javascript/dashboard-sidebar.js"></script>
+    <script src="../../static/javascript/dashboard-sidebar.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
