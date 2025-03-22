@@ -31,9 +31,11 @@ body {
 /* ========== Filter Section ========== */
 .filter-container {
     display: flex;
-    gap: 10px;
     align-items: center;
+    justify-content: space-between; /* Pushes search bar to the right */
+    gap: 10px;
     margin-bottom: 15px;
+    flex-wrap: wrap; /* Keeps responsiveness */
 }
 
 .filter-container input {
@@ -43,7 +45,7 @@ body {
 }
 
 .filter-btn {
-    background: yellow;
+    background: yellow !important;
     border: none;
     padding: 8px 12px;
     border-radius: 5px;
@@ -73,7 +75,8 @@ body {
 
 .payments-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0 10px;
     background-color: #292929;
     color: white;
 }
@@ -87,12 +90,69 @@ body {
     font-size: 15px;
 }
 
+.payments-table tr {
+    color: white;
+}
+
+.payments-table tbody tr {
+    background-color: #292929;
+    border-radius: 5px; /* Rounded corners for a cleaner look */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Optional: Adds slight shadow */
+}
+
 .payments-table tr:nth-child(even) {
     background-color: #555353;
 }
 
 .payments-table th:first-child {
     cursor: pointer;
+}
+
+/* Center Action Column */
+.payments-table th:nth-child(7),
+.payments-table td:nth-child(7) { 
+    text-align: center;
+}
+
+/* Align buttons inside the Action column to the right */
+.payments-table td:nth-child(7) {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 5px; 
+    padding-right: 15px; /* Add some padding for spacing */
+}
+
+/* BUTTON */
+.btn-view {
+    background-color: #007bff !important; 
+    color: white;
+}
+.btn-view:hover {
+    background-color: #0056b3;
+}
+
+.btn-approve {
+    background-color: #28a745 !important; 
+    color: white;
+}
+.btn-approve:hover {
+    background-color: #218838;
+}
+
+.btn-reject {
+    background-color: #dc3545 !important; 
+    color: white;
+}
+.btn-reject:hover {
+    background-color: #c82333;
+}
+
+.btn-delete {
+    background-color: #6c757d !important;
+    color: white;
+}
+.btn-delete:hover {
+    background-color: #5a6268;
 }
 
 /* Pagination */
@@ -127,6 +187,31 @@ body {
     text-align: right;
     font-size: 14px;
     margin-top: 10px;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background: #222;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content {
+    color: white;
+}
+
+.close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
 }
 
 /* ========== Responsive Design ========== */

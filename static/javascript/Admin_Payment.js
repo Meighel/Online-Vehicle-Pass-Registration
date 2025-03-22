@@ -36,6 +36,7 @@ $(document).ready(function () {
         showPage(1);
     }
 
+    // pagination
     function updatePagination() {
         let totalRows = filteredRows.length;
         let totalPages = Math.ceil(totalRows / rowsPerPage) || 1;

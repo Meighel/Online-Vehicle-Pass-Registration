@@ -103,3 +103,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+
+// Reflect Status in the User Dashboard
+$(document).ready(function () {
+    let userId = "2025-0-001"; // Replace with dynamic user identification
+    let applications = JSON.parse(localStorage.getItem("applications")) || {};
+
+    if (applications[userId]) {
+        $(".application-status").text(`Status: ${applications[userId]}`);
+    } else {
+        $(".application-status").text("Status: Pending");
+    }
+});
+
+
