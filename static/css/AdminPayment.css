@@ -62,79 +62,66 @@ body {
     border: none;
 }
 
-/* ========== Table Styling ========== */
+/* Table */
 .table-container {
     width: 100%;
     overflow-x: auto;
-    background-color: #252525;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .payments-table {
     width: 100%;
     border-collapse: collapse;
-    background: #333;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.payments-table thead {
-    background: #444;
+    background-color: #292929;
+    color: white;
 }
 
 .payments-table th {
+    background-color: #555353;
+    color: white;
     padding: 12px;
     text-align: left;
-    color: yellow;
-    font-size: 15px;
-    font-weight: bold;
-    text-transform: uppercase;
-    border-bottom: 2px solid #555;
 }
 
 .payments-table td {
     padding: 12px;
-    font-size: 14px;
     border-bottom: 1px solid #444;
-    color: #ddd;
 }
 
-.payments-table tbody tr:nth-child(even) {
-    background: #292929;
+.payments-table tr:nth-child(even) {
+    background-color: #555353;
 }
 
-.payments-table tbody tr:hover {
-    background: #3a3a3a;
+.payments-table th:first-child {
+    cursor: pointer;
 }
 
-/* ========== Pagination Styling ========== */
+/* Pagination */
 .pagination {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
+    justify-content: flex-end; /* position of btn */
     gap: 10px;
+    margin-top: 20px;
 }
 
 .pagination button {
-    background: yellow;
+    background: #333;
+    color: white;
     border: none;
-    padding: 6px 12px;
+    padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;
 }
 
-.pagination button:hover {
-    background: orange;
+.pagination button.active {
+    background-color: yellow;
+    color: black;
 }
 
-#entries-info {
-    text-align: center;
+/* Entries Info */
+.entries-info {
+    text-align: right;
+    font-size: 14px;
     margin-top: 10px;
-    color: #ccc;
 }
 
 /* ========== Responsive Design ========== */
