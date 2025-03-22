@@ -76,15 +76,12 @@ body {
 }
 
 .payments-table th {
-    background-color: #555353;
-    color: white;
-    padding: 12px;
-    text-align: left;
+    font-weight: bold;
+    padding: 14px;
 }
-
 .payments-table td {
     padding: 12px;
-    border-bottom: 1px solid #444;
+    font-size: 15px;
 }
 
 .payments-table tr:nth-child(even) {
@@ -101,6 +98,11 @@ body {
     justify-content: flex-end; /* position of btn */
     gap: 10px;
     margin-top: 20px;
+}
+
+.pagination-container {
+    overflow-x: auto;
+    padding: 10px 0;
 }
 
 .pagination button {
