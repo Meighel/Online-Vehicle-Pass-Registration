@@ -9,10 +9,10 @@
 body {
     display: flex;
     background-color: #1e1e1e;
-    color: rgb(19, 12, 12);
+    color: white;
 }
 
-/* ========== Sidebar ========== */
+/* ========== Sidebar & Content ========== */
 
 .content {
     margin-left: 260px;
@@ -21,12 +21,11 @@ body {
 }
 
 .title {
-    font-size: 24px;
+    font-size: px;
     font-weight: bold;
     color: yellow;
     margin-bottom: 15px;
 }
-
 
 /* ========== Notification ========== */
 .top-bar {
@@ -34,6 +33,7 @@ body {
     top: 15px;
     right: 20px;
 }
+
 
 /* ========== Filter Section ========== */
 .filter-container {
@@ -81,6 +81,7 @@ body {
     box-shadow: 0 0 5px rgba(255, 255, 0, 0.7);
 }
 
+
 /* ========== Table Styling ========== */
 
 .table-container {
@@ -88,17 +89,14 @@ body {
     padding: 20px;
     border-radius: 10px;
 }
-
 .payments-table {
     width: 100%;
     border-collapse: collapse;
     background: #333;
+    border: 10px;
     border-radius: 10px;
     overflow: hidden;
     text-align: center; /* Ensures table content is aligned center */
-    /* Remove border and box-shadow */
-    border: none;
-    box-shadow: none;
 }
 
 .payments-table thead {
@@ -140,6 +138,7 @@ body {
     background: #3a3a3a;
 }
 
+
 /* Status Badges */
 .status-badge {
     padding: 5px 10px;
@@ -160,30 +159,18 @@ body {
     background-color: gray;
 }
 
-/* Center the Action Column */
-.payments-table th:last-child,
-.payments-table td:last-child {
-    text-align: center;
-}
 
-/* Align buttons inside the Action column */
-.payments-table td:last-child {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-}
 
 /* ========== Pagination ========== */
-.pagination {
+.pagination-container {
     display: flex;
-    justify-content: flex-end; /* position of btn */
-    gap: 10px;
+    justify-content: flex-end; /* Align to right */
     margin-top: 20px;
 }
 
-.pagination-container {
-    overflow-x: auto;
-    padding: 10px 0;
+.pagination {
+    display: flex;
+    gap: 5px;
 }
 
 .pagination button {
@@ -193,11 +180,16 @@ body {
     padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .pagination button.active {
     background-color: yellow;
     color: black;
+}
+
+.pagination button:hover {
+    background-color: orange;
 }
 
 /* Entries Info */

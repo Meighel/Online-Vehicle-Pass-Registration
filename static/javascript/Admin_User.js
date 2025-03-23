@@ -1,13 +1,21 @@
 $(document).ready(function () {
     const rowsPerPage = 5;
     let allRows = $(".payments-table tbody tr");
-    let filteredRows = allRows; // This will hold the current set of rows after filtering
+    let filteredRows = allRows;
 
     function formatDate(dateStr) {
-        let parts = dateStr.split("/");
-        return new Date(parts[2], parts[0] - 1, parts[1]);
+        const parts = dateStr.split("/");
+        if (parts.length !== 3) return null;
+        return new Date(parts[2], parts[0] - 1, parts[1]); // MM/DD/YYYY format
     }
 
+    /**
+     * ========== FILTERING FUNCTION ==========
+     * Filters based on:
+     * - Username
+     * - Application ID
+     * - Date Range (Start & End Date)
+     */
     function filterRows() {
         let searchText = $("#search-bar").val().toLowerCase().trim();
         let startDate = $("#start-date").val() ? new Date($("#start-date").val()) : null;
@@ -15,35 +23,36 @@ $(document).ready(function () {
 
         filteredRows = allRows.filter(function () {
             let row = $(this);
-            let username = row.find("td:nth-child(2)").text().trim().toLowerCase(); // Username column
-            let applicationId = row.find("td:nth-child(3)").text().trim().toLowerCase(); // Application ID column
-            let dateText = row.find("td:nth-child(5)").text().trim(); // Date column
+            let username = row.find("td:nth-child(2)").text().trim().toLowerCase();
+            let applicationId = row.find("td:nth-child(3)").text().trim().toLowerCase();
+            let dateText = row.find("td:nth-child(5)").text().trim();
             let rowDate = formatDate(dateText);
 
-            let show = true;
-
-            // Search filter for username and application ID
-            if (searchText && !username.includes(searchText) && !applicationId.includes(searchText)) {
-                show = false;
+            if (!rowDate) {
+                console.warn("Skipping invalid date:", dateText);
+                return false;
             }
 
-            // Filter by start and end date
-            if (startDate && rowDate < startDate) show = false;
-            if (endDate && rowDate > endDate) show = false;
+            let matchesSearch = !searchText || username.includes(searchText) || applicationId.includes(searchText);
+            let matchesDateRange = true;
 
-            return show;
+            if (startDate && rowDate < startDate) matchesDateRange = false;
+            if (endDate && rowDate > endDate) matchesDateRange = false;
+
+            return matchesSearch && matchesDateRange;
         });
 
-        // Hide all rows and only show filtered ones
-        allRows.hide();
+        $(".payments-table tbody tr").hide();
         filteredRows.show();
-
-        updatePagination(filteredRows.length);
+        updatePagination();
         showPage(1);
     }
 
-    // Pagination Update
-    function updatePagination(totalRows) {
+    /**
+     * ========== PAGINATION FUNCTIONS ==========
+     */
+    function updatePagination() {
+        let totalRows = filteredRows.length;
         let totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
         let pagination = $(".pagination").empty();
 
@@ -57,24 +66,25 @@ $(document).ready(function () {
 
         $(".entries-info").text(`Showing ${totalRows} entries`);
         $(".page-btn").first().addClass("active");
+        showPage(1);
     }
 
     function showPage(page) {
-        let startIndex = (page - 1) * rowsPerPage;
-        let endIndex = startIndex + rowsPerPage;
-
-        // for pagination purposes
-        filteredRows.hide();
-        filteredRows.slice(startIndex, endIndex).show();
+        let start = (page - 1) * rowsPerPage;
+        let end = start + rowsPerPage;
+        filteredRows.hide().slice(start, end).show();
     }
 
+    /**
+     * ========== EVENT LISTENERS ==========
+     */
     $(document).on("click", ".page-btn", function () {
         $(".page-btn").removeClass("active");
         $(this).addClass("active");
         showPage($(this).data("page"));
     });
 
-    $("#filter-btn, #search-bar, #application, #start-date, #end-date").on("input change", function () {
+    $("#filter-btn, #search-bar, #start-date, #end-date").on("input change", function () {
         filterRows();
     });
 
@@ -85,57 +95,43 @@ $(document).ready(function () {
     $(document).on("click", ".btn-view", function () {
         let row = $(this).closest("tr");
 
-        // Collect user data
+        // Collect user data 
+        // another page eto for admin to view the user details. pero hindi ko alam kong anong details yun. kung personal info
+        // or registration details
         let userData = {
-            firstName: row.data("first-name"),
-            middleName: row.data("middle-name"),
-            lastName: row.data("last-name"),
-            email: row.data("email"),
-            role: row.data("role"),
-            plateNumber: row.data("plate-number"),
-            model: row.data("model"),
-            color: row.data("color"),
-            vehicleType: row.data("vehicle-type"),
-            owner: row.data("owner"),
-            googleDriveLink: row.data("google-drive")
+            username: row.find("td:nth-child(2)").text().trim(),
+            applicationId: row.find("td:nth-child(3)").text().trim(),
+            account: row.find("td:nth-child(4)").text().trim(),
+            date: row.find("td:nth-child(5)").text().trim(),
+            status: row.find("td:nth-child(6)").text().trim(),
         };
 
         // Store data in sessionStorage
         sessionStorage.setItem("userDetails", JSON.stringify(userData));
 
-        // Redirect to the details page
+        // Redirect to details page
         window.location.href = "user_details.html";
     });
 
     $(document).on("click", ".btn-approve", function () {
         let row = $(this).closest("tr");
-        let userId = row.find("td:nth-child(3)").text().trim(); // Assuming Application ID is in 3rd column
+        let userId = row.find("td:nth-child(3)").text().trim();
 
-        // Update the row visually
         row.find(".status").text("Approved").css("color", "green");
-
-        // Update status in localStorage (simulating database)
         updateUserStatus(userId, "Approved");
     });
 
     $(document).on("click", ".btn-reject", function () {
         let row = $(this).closest("tr");
-        let userId = row.find("td:nth-child(3)").text().trim(); // Assuming Application ID is in 3rd column
+        let userId = row.find("td:nth-child(3)").text().trim();
 
-        // Update the row visually
         row.find(".status").text("Rejected").css("color", "red");
-
-        // Update status in localStorage (simulating database)
         updateUserStatus(userId, "Rejected");
     });
 
     function updateUserStatus(userId, status) {
         let applications = JSON.parse(localStorage.getItem("applications")) || {};
-
-        // Update status for the user
         applications[userId] = status;
-
-        // Save back to storage
         localStorage.setItem("applications", JSON.stringify(applications));
     }
 
@@ -143,22 +139,18 @@ $(document).ready(function () {
         let row = $(this).closest("tr");
         let userId = row.find("td:nth-child(3)").text().trim();
 
-        // Remove from localStorage
         let applications = JSON.parse(localStorage.getItem("applications")) || {};
         delete applications[userId];
         localStorage.setItem("applications", JSON.stringify(applications));
 
-        // Remove row from DOM and re-filter
         row.remove();
         filterRows();
     });
 
-    // Handle Modal Close
     $(".close").click(function () {
         $("#user-modal").fadeOut();
     });
 
-    // Initialize pagination
-    updatePagination(allRows.length);
+    updatePagination();
     showPage(1);
 });

@@ -1,93 +1,94 @@
 $(document).ready(function () {
-    let rowsPerPage = 5;
-    let currentPage = 1;
-    let allRows = $(".passes-table tbody tr"); // Store all rows initially
-    let filteredRows = allRows; // Stores filtered rows for pagination
+    const rowsPerPage = 5;
+    let allRows = $(".passes-table tbody tr");
+    let filteredRows = allRows;
 
-    /**
-     * Function to show only the selected page rows
-     */
-    function showPage(page) {
-        let totalRows = filteredRows.length;
-        let totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
-
-        if (page < 1) page = 1;
-        if (page > totalPages) page = totalPages;
-
-        let start = (page - 1) * rowsPerPage;
-        let end = start + rowsPerPage;
-
-        filteredRows.hide().slice(start, end).show();
-        currentPage = page;
-        updatePagination(totalPages);
+    function formatDate(dateStr) {
+        const parts = dateStr.split("/");
+        if (parts.length !== 3) return null;
+        return new Date(parts[2], parts[0] - 1, parts[1]); // MM/DD/YYYY format
     }
 
     /**
-     * Function to update the pagination UI
+     * ========== FILTERING FUNCTION ==========
+     * Filters based on:
+     * - Username
+     * - Application ID
+     * - Date Range (Start & End Date)
      */
-    function updatePagination(totalPages) {
-        let pagination = $(".pagination");
-        pagination.empty();
-
-        if (totalPages > 1) {
-            pagination.append(`<button class="prev-btn" ${currentPage === 1 ? "disabled" : ""}>&laquo; Prev</button>`);
-
-            for (let i = 1; i <= totalPages; i++) {
-                let btn = $(`<button>`).text(i).addClass("page-btn").attr("data-page", i);
-                if (i === currentPage) btn.addClass("active");
-                pagination.append(btn);
-            }
-
-            pagination.append(`<button class="next-btn" ${currentPage === totalPages ? "disabled" : ""}>Next &raquo;</button>`);
-        }
-    }
-
-    /**
-     * Function to filter the table based on search input
-     */
-    function filterTable() {
+    function filterRows() {
         let searchText = $("#search-bar").val().toLowerCase().trim();
+        let appIDText = $("#application-id").val()?.toLowerCase().trim() || "";
+        let startDate = $("#start-date").val() ? new Date($("#start-date").val()) : null;
+        let endDate = $("#end-date").val() ? new Date($("#end-date").val()) : null;
 
-        // Filter rows based on username or application ID
         filteredRows = allRows.filter(function () {
             let row = $(this);
-            let username = row.find("td:nth-child(2)").text().toLowerCase();
-            let appID = row.find("td:nth-child(3)").text().toLowerCase();
+            let username = row.find("td:nth-child(2)").text().toLowerCase().trim();
+            let appID = row.find("td:nth-child(3)").text().toLowerCase().trim();
+            let dateText = row.find("td:nth-child(8)").text().trim();
+            let rowDate = formatDate(dateText);
 
-            return username.includes(searchText) || appID.includes(searchText);
+            if (!rowDate) {
+                console.warn("Skipping invalid date:", dateText);
+                return false;
+            }
+
+            let matchesUsername = !searchText || username.includes(searchText);
+            let matchesAppID = !appIDText || appID.includes(appIDText);
+            let matchesDateRange = true;
+
+            if (startDate && rowDate < startDate) matchesDateRange = false;
+            if (endDate && rowDate > endDate) matchesDateRange = false;
+
+            return matchesUsername && matchesAppID && matchesDateRange;
         });
 
-        $(".passes-table tbody tr").hide(); // Hide all rows first
-        filteredRows.show(); // Show only filtered rows
-        updatePagination(Math.ceil(filteredRows.length / rowsPerPage)); // Update pagination
-        showPage(1); // Reset to page 1 after filtering
+        $(".passes-table tbody tr").hide();
+        filteredRows.show();
+        updatePagination();
+        showPage(1);
     }
 
     /**
-     * Event Listeners for pagination and filtering
+     * ========== PAGINATION FUNCTIONS ==========
+     */
+    function updatePagination() {
+        let totalRows = filteredRows.length;
+        let totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
+        let pagination = $(".pagination").empty();
+
+        for (let i = 1; i <= totalPages; i++) {
+            let btn = $("<button>")
+                .text(i)
+                .addClass("page-btn")
+                .attr("data-page", i);
+            pagination.append(btn);
+        }
+
+        $(".entries-info").text(`Showing ${totalRows} entries`);
+        $(".page-btn").first().addClass("active");
+        showPage(1);
+    }
+
+    function showPage(page) {
+        let start = (page - 1) * rowsPerPage;
+        let end = start + rowsPerPage;
+        filteredRows.hide().slice(start, end).show();
+    }
+
+    /**
+     * ========== EVENT LISTENERS ==========
      */
     $(document).on("click", ".page-btn", function () {
-        let page = parseInt($(this).data("page"));
-        showPage(page);
+        $(".page-btn").removeClass("active");
+        $(this).addClass("active");
+        showPage($(this).data("page"));
     });
 
-    $(document).on("click", ".prev-btn", function () {
-        if (currentPage > 1) {
-            showPage(currentPage - 1);
-        }
+    $("#filter-btn, #search-bar, #application-id, #start-date, #end-date").on("input change", function () {
+        filterRows();
     });
 
-    $(document).on("click", ".next-btn", function () {
-        let totalPages = $(".page-btn").length;
-        if (currentPage < totalPages) {
-            showPage(currentPage + 1);
-        }
-    });
-
-    $("#filter-btn, #search-bar").on("input", function () {
-        filterTable();
-    });
-
-    // Initialize first page load
-    showPage(1);
+    updatePagination();
 });

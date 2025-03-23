@@ -31,17 +31,17 @@ body {
 /* ========== Filter Section ========== */
 .filter-container {
     display: flex;
-    align-items: center;
-    justify-content: space-between; /* Pushes search bar to the right */
     gap: 10px;
+    align-items: center;
     margin-bottom: 15px;
-    flex-wrap: wrap; /* Keeps responsiveness */
 }
 
 .filter-container input {
-    padding: 5px;
+    padding: 8px;
     border-radius: 5px;
-    border: none;
+    border: 1px solid gray;
+    background: #333;
+    color: white;
 }
 
 .filter-btn {
@@ -63,14 +63,20 @@ body {
     width: 200px;
     border-radius: 3px;
     border: none;
-    background: #ffffff;
+    background: #000000;
+}
 
+#search-bar:focus {
+    border-color: yellow;
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 255, 0, 0.7);
 }
 
 /* Table */
 .table-container {
-    width: 100%;
-    overflow-x: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 .payments-table {
@@ -96,14 +102,13 @@ body {
     color: white;
 }
 
-.payments-table tbody tr {
-    background-color: #292929;
-    border-radius: 5px; /* Rounded corners for a cleaner look */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Optional: Adds slight shadow */
+/* Alternating row colors */
+.payments-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important; /* Dark Gray */
 }
 
-.payments-table tr:nth-child(even) {
-    background-color: #555353;
+.payments-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e !important; /* Black */
 }
 
 .payments-table th:first-child {
