@@ -3,8 +3,11 @@ document.addEventListener("DOMContentLoaded", function () {
         setupSidebarToggle();
         setupSidebarHighlight();
     });
+
     updateDate(); // Initialize date update
     setInterval(updateDate, 60000); // Refresh date every minute
+
+    loadApplicationData(); // Load and display application details
 });
 
 // ✅ Load Sidebar Dynamically
@@ -47,7 +50,7 @@ function setupSidebarHighlight() {
             localStorage.setItem("activeMenu", item.dataset.menu);
         });
 
-        // Set active menu from localStorage
+        // Restore active menu from localStorage
         if (item.dataset.menu === localStorage.getItem("activeMenu")) {
             item.classList.add("active");
         }
@@ -61,31 +64,34 @@ function updateDate() {
 
     const now = new Date();
     const options = {
-        weekday: "long", month: "short", day: "numeric",
-        year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true
     };
     dateElement.textContent = now.toLocaleString("en-US", options);
 }
 
-// ✅ Load Chart Only if Canvas Exists
+// ✅ Load Chart (if applicable)
 document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("registrationChart");
-    if (!canvas) return; // Exit if no chart element is found
+    if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
 
-    const data = {
-        labels: ["Pending Applicants", "Rejected", "Approved"],
-        datasets: [{
-            data: [550, 185, 120], // Example values
-            backgroundColor: ["#007bff", "#dc3545", "#28a745"], // Blue, Red, Green
-            hoverOffset: 10
-        }]
-    };
-
     new Chart(ctx, {
         type: "doughnut",
-        data: data,
+        data: {
+            labels: ["Pending Applicants", "Rejected", "Approved"],
+            datasets: [{
+                data: [550, 185, 120],
+                backgroundColor: ["#007bff", "#dc3545", "#28a745"],
+                hoverOffset: 10
+            }]
+        },
         options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -104,17 +110,36 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// ✅ Load Application Data (Simulated API Call)
+function loadApplicationData() {
+    const applicationData = {
+        status: "In Progress",
+        dateApplied: "02-12-2025",
+        history: [
+            { number: "123456", type: "Sedan", approvalDate: "02-15-2025", remarks: "Approved" },
+            { number: "789012", type: "SUV", approvalDate: "02-10-2025", remarks: "Pending" }
+        ]
+    };
 
-// Reflect Status in the User Dashboard
-$(document).ready(function () {
-    let userId = "2025-0-001"; // Replace with dynamic user identification
-    let applications = JSON.parse(localStorage.getItem("applications")) || {};
+    // Update Application Status
+    const statusElement = document.getElementById("application-status");
+    const dateElement = document.getElementById("date-applied");
 
-    if (applications[userId]) {
-        $(".application-status").text(`Status: ${applications[userId]}`);
-    } else {
-        $(".application-status").text("Status: Pending");
+    if (statusElement && dateElement) {
+        statusElement.innerHTML = `<p class="fs-4 fw-bold">${applicationData.status}</p>`;
+        dateElement.textContent = `Date Applied: ${applicationData.dateApplied}`;
     }
-});
 
-
+    // Populate Application History Table
+    const historyTable = document.getElementById("application-history");
+    if (historyTable) {
+        historyTable.innerHTML = applicationData.history.map(item => `
+            <tr>
+                <td>${item.number}</td>
+                <td>${item.type}</td>
+                <td>${item.approvalDate}</td>
+                <td class="${item.remarks === 'Approved' ? 'text-success' : 'text-warning'}">${item.remarks}</td>
+            </tr>
+        `).join('');
+    }
+}

@@ -46,7 +46,7 @@ $(document).ready(function () {
 
             sessionStorage.removeItem("userDetails"); // Clear session storage
             alert("Application Deleted!");
-            window.location.href = "Admin_Manage_User.html"; // Redirect back
+            window.location.href = "Admin_User.html"; // Redirect back
         }
     });
 });

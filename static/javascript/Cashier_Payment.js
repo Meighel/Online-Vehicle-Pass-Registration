@@ -123,4 +123,16 @@ $(document).ready(function () {
             $("#statusModal").modal("hide"); // Close the modal after updating
         }
     });
+        // Handle Update Status action
+     $("#btn-updateStatus").click(function () {
+        if (confirm("Are you sure you want to update this application?")) {
+            let applications = JSON.parse(localStorage.getItem("applications")) || {};
+            applications[userData.plateNumber] = status; // Use Plate Number as unique ID
+            localStorage.setItem("applications", JSON.stringify(applications));
+    
+            sessionStorage.updateStatus("userDetails"); // Clear session storage
+            alert("Application Deleted!");
+            window.location.href = "Cashier_Transaction.js"; // Redirect back
+        }
+    });
 });
