@@ -32,78 +32,96 @@ function setupSidebarToggle() {
     }
 }
 
-// Sidebar Active Item Highlight
 function setupSidebarHighlight() {
-    const items = document.querySelectorAll(".sidebar ul li");
+    const sidebarItems = document.querySelectorAll(".sidebar ul li");
 
-    items.forEach(item => {
+    // Check if transactions exist in localStorage
+    const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+
+    let activeMenu = localStorage.getItem("activeMenu") || "payments"; // Default to payments
+
+    // If there are transactions, switch active menu to "transactions"
+    if (transactions.length > 0) {
+        activeMenu = "transactions";
+        localStorage.setItem("activeMenu", "transactions"); // Store in localStorage
+    }
+
+    sidebarItems.forEach(item => {
+        item.classList.remove("active");
+
+        if (item.dataset.menu === activeMenu) {
+            item.classList.add("active");
+        }
+
         item.addEventListener("click", () => {
             document.querySelector(".sidebar ul li.active")?.classList.remove("active");
             item.classList.add("active");
             localStorage.setItem("activeMenu", item.dataset.menu);
         });
-
-        if (item.dataset.menu === localStorage.getItem("activeMenu")) {
-            item.classList.add("active");
-        }
     });
 }
 
-
 //time 
-function updateDate() {
-    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-    document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', options);
-}
-
-// Initial call and update every second (for future-proofing)
-updateDate();
-setInterval(updateDate, 1000);
-
-document.addEventListener("DOMContentLoaded", function () {
-    setupSidebarToggle();
-    setupSearchFilter();
-    setupChart();
+document.addEventListener("DOMContentLoaded", () => {
+    const dateElement = document.getElementById("date");
+    if (dateElement) {
+        dateElement.textContent = new Date().toLocaleDateString('en-US', {
+            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
+    }
 });
 
+
 // Chart.js Setup
-function setupChart() {
-    const ctx = document.getElementById("trendChart").getContext("2d");
-    
-    new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [
-                {
-                    label: "Paid Clients",
-                    data: [10, 15, 13, 20, 25, 22, 30, 28, 35, 40, 45, 50], // Sample Data
-                    borderColor: "#ffcc00",
-                    backgroundColor: "rgba(255, 204, 0, 0.2)",
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4,
-                },
-            ],
+document.addEventListener("DOMContentLoaded", () => {
+    const canvas = document.getElementById("trendChart");
+    if (!canvas) {
+        console.error("Canvas element #trendChart not found!");
+        return;
+    }
+
+    const ctx = canvas.getContext("2d");
+
+    const chartData = {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        datasets: [
+            {
+                label: "Paid Clients",
+                data: [10, 15, 13, 20, 25, 22, 30, 28, 35, 40, 45, 50], // Sample Data
+                borderColor: "#ffcc00",
+                backgroundColor: "rgba(255, 204, 0, 0.2)",
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+            },
+        ],
+    };
+
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+            },
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
+        scales: {
+            x: {
+                grid: {
                     display: false,
                 },
             },
-            scales: {
-                x: {
-                    grid: {
-                        display: false,
-                    },
-                },
-                y: {
-                    beginAtZero: true,
-                },
+            y: {
+                beginAtZero: true,
             },
         },
+    };
+
+    new Chart(ctx, {
+        type: "line",
+        data: chartData,
+        options: chartOptions,
     });
-}
+
+    console.log("Chart initialized successfully.");
+});

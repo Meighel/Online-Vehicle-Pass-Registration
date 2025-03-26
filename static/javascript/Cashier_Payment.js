@@ -3,13 +3,28 @@ $(document).ready(function () {
     let allRows = $(".payments-table tbody tr");
     let filteredRows = allRows;
 
-    // ========== FORMAT DATE ==========
+    // ========== Load Updated Data from localStorage ==========
+    function loadUpdatedPayments() {
+        $(".payments-table tbody tr").each(function () {
+            const row = $(this);
+            const appId = row.find("td:first").text().trim();
+            const storedData = localStorage.getItem(`payment_${appId}`);
+
+            if (storedData) {
+                const { status, paidDate } = JSON.parse(storedData);
+                row.find("td:eq(3)").html(`<span class="status-badge status-${status.toLowerCase()}">${status}</span>`);
+                row.find("td:eq(4)").text(paidDate || "N/A");
+            }
+        });
+    }
+
+    // ========== Format Date Helper Function ==========
     function formatDate(dateStr) {
         let parts = dateStr.split("/");
         return new Date(parts[2], parts[0] - 1, parts[1]);
     }
 
-    // ========== FILTER FUNCTION ==========
+    // ========== Filter Table Rows ==========
     function filterRows() {
         let searchText = $("#search-bar").val().toLowerCase().trim();
         let startDate = $("#start-date").val() ? new Date($("#start-date").val()) : null;
@@ -36,7 +51,7 @@ $(document).ready(function () {
         showPage(1);
     }
 
-    // ========== PAGINATION ==========
+    // ========== Pagination ==========
     function updatePagination() {
         let totalRows = filteredRows.length;
         let totalPages = Math.ceil(totalRows / rowsPerPage) || 1;
@@ -61,7 +76,7 @@ $(document).ready(function () {
         filteredRows.hide().slice(start, end).show();
     }
 
-    // ========== SORTING ==========
+    // ========== Sorting ==========
     $(".payments-table th").on("click", function () {
         let columnIndex = $(this).index();
         let rows = $(".payments-table tbody tr").toArray();
@@ -76,7 +91,17 @@ $(document).ready(function () {
         $(".payments-table tbody").empty().append(rows);
     });
 
-    // ========== EVENT LISTENERS ==========
+    // ========== Redirect to Update Page ==========
+    $(document).on("click", ".update-button", function () {
+        const applicationId = $(this).data("id");
+        const username = encodeURIComponent($(this).data("username"));
+        const email = encodeURIComponent($(this).data("email"));
+        const status = encodeURIComponent($(this).data("status"));
+        const date = encodeURIComponent($(this).data("date"));
+
+        window.location.href = `Update_Payment.html?id=${applicationId}&username=${username}&email=${email}&status=${status}&date=${date}`;
+    });
+
     $(document).on("click", ".page-btn", function () {
         $(".page-btn").removeClass("active");
         $(this).addClass("active");
@@ -87,52 +112,7 @@ $(document).ready(function () {
         filterRows();
     });
 
+    // Load updates & remove completed payments
+    loadUpdatedPayments();
     updatePagination();
-
-    // ========== UPDATE STATUS ========== //
-    $(document).ready(function () {
-        let selectedRow; // Store the selected row
-    
-        // Open Modal on "Update" Click
-        $(document).on("click", ".open-modal", function () {
-            selectedRow = $(this).closest("tr"); // Get the row that was clicked
-            $("#statusModal").modal("show"); // Show the modal
-        });
-    
-        // Approve Button Click
-        $("#approveBtn").on("click", function () {
-            updateStatus("Approved", "status-approved");
-        });
-    
-        // Reject Button Click
-        $("#rejectBtn").on("click", function () {
-            updateStatus("Rejected", "status-rejected");
-        });
-    
-        // Function to Update Status
-        function updateStatus(statusText, statusClass) {
-            let statusBadge = selectedRow.find(".status-badge"); // Find the status badge in the row
-    
-            // Update Status Text
-            statusBadge.text(statusText);
-    
-            // Update CSS Classes
-            statusBadge.removeClass("status-pending status-approved status-rejected")
-                        .addClass(statusClass);
-    
-            $("#statusModal").modal("hide"); // Close the modal after updating
-        }
-    });
-        // Handle Update Status action
-     $("#btn-updateStatus").click(function () {
-        if (confirm("Are you sure you want to update this application?")) {
-            let applications = JSON.parse(localStorage.getItem("applications")) || {};
-            applications[userData.plateNumber] = status; // Use Plate Number as unique ID
-            localStorage.setItem("applications", JSON.stringify(applications));
-    
-            sessionStorage.updateStatus("userDetails"); // Clear session storage
-            alert("Application Deleted!");
-            window.location.href = "Cashier_Transaction.js"; // Redirect back
-        }
-    });
 });
