@@ -34,32 +34,37 @@ function setupSidebarToggle() {
 
 function setupSidebarHighlight() {
     const sidebarItems = document.querySelectorAll(".sidebar ul li");
-
-    // Check if transactions exist in localStorage
-    const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-
-    let activeMenu = localStorage.getItem("activeMenu") || "payments"; // Default to payments
-
-    // If there are transactions, switch active menu to "transactions"
-    if (transactions.length > 0) {
-        activeMenu = "transactions";
-        localStorage.setItem("activeMenu", "transactions"); // Store in localStorage
-    }
+    let activeMenu = localStorage.getItem("activeMenu") || "dashboard"; // Default to "Dashboard"
 
     sidebarItems.forEach(item => {
+        const menuName = item.dataset.menu;
+
+        // Remove any existing active classes
         item.classList.remove("active");
 
-        if (item.dataset.menu === activeMenu) {
+        // Apply the active class if this item matches stored menu
+        if (menuName === activeMenu) {
             item.classList.add("active");
         }
 
+        // Add event listener for user clicks
         item.addEventListener("click", () => {
+            // Remove active class from previously selected menu
             document.querySelector(".sidebar ul li.active")?.classList.remove("active");
+
+            // Set new active menu
             item.classList.add("active");
-            localStorage.setItem("activeMenu", item.dataset.menu);
+            localStorage.setItem("activeMenu", menuName);
         });
     });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    loadSidebar().then(() => {
+        setupSidebarToggle();
+        setupSidebarHighlight();
+    });
+});
 
 //time 
 document.addEventListener("DOMContentLoaded", () => {
