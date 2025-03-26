@@ -1,4 +1,5 @@
-// FETCH SIDEBAR
+// THIS IS FOR SIDEBAR ANIMATION, THIS CODE IS ALREADY IN THE DASHBOARD JS FOR EVERY ROLE
+// fetch sidebar
 document.addEventListener("DOMContentLoaded", function () {
     loadSidebar().then(() => {
         setupSidebarToggle();
@@ -7,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadSidebar() {
-    return fetch("../../templates/includes/cashier_sidebar.html")
+    return fetch("../../includes/standardframework/sidebar.html")
         .then(response => response.text())
         .then(html => {
             document.getElementById("sidebar-container").innerHTML = html;
@@ -65,45 +66,3 @@ document.addEventListener("DOMContentLoaded", function () {
     setupSearchFilter();
     setupChart();
 });
-
-// Chart.js Setup
-function setupChart() {
-    const ctx = document.getElementById("trendChart").getContext("2d");
-    
-    new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [
-                {
-                    label: "Paid Clients",
-                    data: [10, 15, 13, 20, 25, 22, 30, 28, 35, 40, 45, 50], // Sample Data
-                    borderColor: "#ffcc00",
-                    backgroundColor: "rgba(255, 204, 0, 0.2)",
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false,
-                },
-            },
-            scales: {
-                x: {
-                    grid: {
-                        display: false,
-                    },
-                },
-                y: {
-                    beginAtZero: true,
-                },
-            },
-        },
-    });
-}
