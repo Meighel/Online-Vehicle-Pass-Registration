@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
@@ -9,10 +11,10 @@ class BaseModel(models.Model):
 
 class UserProfile(BaseModel):
     corporate_email = models.EmailField(max_length=50, unique=True)
-    password = models.CharField(max_length=20)
+    password = models.CharField(max_length=128)
     lastname = models.CharField(max_length=25)
     firstname = models.CharField(max_length=50)
-    middle_initial = models.CharField(max_length=25, blank=True, null=True)
+    middle_name = models.CharField(max_length=25, blank=True, null=True)
     suffix = models.CharField(max_length=5, blank=True, null=True)
     dl_number = models.CharField(max_length=15, blank=True, null=True)
     college = models.CharField(max_length=100, blank=True, null=True)
@@ -59,7 +61,7 @@ class Vehicle(BaseModel):
         return f"{self.plateNumber}"  
     
     def clean(self):
-        if self.pk is None and Vehicle.objects.filter(owner=self.owner).count() >= 2:
+        if not self.pk and Vehicle.objects.filter(owner=self.owner).count() >= 2:
             raise ValidationError({'owner': 'You can only register up to two vehicles.'})
 
 
@@ -68,7 +70,7 @@ class Vehicle(BaseModel):
         super().save(*args, **kwargs)
 
 class Registration(BaseModel):
-    status_choices = [
+    STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('cancelled', 'Cancelled'),
         ('for payment', 'For Payment'),
@@ -79,15 +81,15 @@ class Registration(BaseModel):
     ]
     registrationNumber = models.BigAutoField(primary_key=True) 
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    plate_number = models.ForeignKey(Vehicle, on_delete=models.CASCADE) 
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE) 
     files = models.URLField(max_length=250)
-    status = models.CharField(max_length=20, choices=status_choices, default='pending')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
 
     def __str__(self):
         return f"{self.registrationNumber}"  
 
 class VehiclePass(BaseModel):
-    status_choices = [
+    STATUS_CHOICES = [
         ('active', 'Active'),
         ('inactive', 'Inactive'),
         ('revoked', 'Revoked')
@@ -95,13 +97,13 @@ class VehiclePass(BaseModel):
     vehicle = models.OneToOneField(Vehicle, on_delete=models.CASCADE)
     passNumber = models.CharField(max_length=10)
     passExpire = models.DateField()
-    status = models.CharField(max_length=10, choices=status_choices)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
 
     def __str__(self):
         return f"{self.passNumber}"  
 
 class PaymentTransaction(BaseModel):
-    status_choices = [
+    STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('paid', 'Paid'),
         ('unpaid', 'Unpaid'),
@@ -110,7 +112,7 @@ class PaymentTransaction(BaseModel):
     registration = models.ForeignKey(Registration, on_delete=models.CASCADE)
     receipt_number = models.CharField(max_length=20, unique=True)
     cashier = models.ForeignKey(CashierProfile, on_delete=models.CASCADE)
-    status = models.CharField(max_length=10, choices=status_choices, default="pending")
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
     date_processed = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

@@ -16,52 +16,54 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 @admin.register(SecurityProfile)
 class SecurityProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'badgeNumber', 'first_name', 'last_name', 'job_title')
+    list_display = ('user', 'badgeNumber', 'job_title', 'get_first_name', 'get_last_name')
     search_fields = ('user__corporate_email', 'user__firstname', 'user__lastname', 'badgeNumber')
     list_filter = ('job_title',)
 
-    def first_name(self, obj):
+    def get_first_name(self, obj):
         return obj.user.firstname if obj.user else None
-    first_name.short_description = 'First Name'
+    get_first_name.short_description = 'First Name'
+    get_first_name.admin_order_field = 'user__firstname'
 
-    def last_name(self, obj):
+    def get_last_name(self, obj):
         return obj.user.lastname if obj.user else None
-    last_name.short_description = 'Last Name'
+    get_last_name.short_description = 'Last Name'
+    get_last_name.admin_order_field = 'user__lastname'
 
 
-@admin.register(CashierProfile)
 class CashierProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'cashier_id', 'first_name', 'last_name', 'job_title')
+    list_display = ('user', 'cashier_id', 'get_first_name', 'get_last_name', 'job_title')
     search_fields = ('user__corporate_email', 'user__firstname', 'user__lastname', 'cashier_id')
     list_filter = ('job_title',)
 
-    def first_name(self, obj):
+    def get_first_name(self, obj):
         return obj.user.firstname if obj.user else None
-    first_name.short_description = 'First Name'
+    get_first_name.short_description = 'First Name'
+    get_first_name.admin_order_field = 'user__firstname'
 
-    def last_name(self, obj):
+    def get_last_name(self, obj):
         return obj.user.lastname if obj.user else None
-    last_name.short_description = 'Last Name'
-
-
+    get_last_name.short_description = 'Last Name'
+    get_last_name.admin_order_field = 'user__lastname'
 
 @admin.register(AdminProfile)
 class AdminProfileAdmin(admin.ModelAdmin):
-    list_display = ('get_corporate_email', 'admin_id', 'first_name', 'last_name')
+    list_display = ('corporate_email', 'admin_id', 'get_first_name', 'get_last_name')
     search_fields = ('user__corporate_email', 'user__firstname', 'user__lastname', 'admin_id')
 
-    def get_corporate_email(self, obj):
+    def corporate_email(self, obj):
         return obj.user.corporate_email if obj.user else None
-    get_corporate_email.short_description = 'Corporate Email'
+    corporate_email.short_description = 'Corporate Email'
 
-    def first_name(self, obj):
+    def get_first_name(self, obj):
         return obj.user.firstname if obj.user else None
-    first_name.short_description = 'First Name'
+    get_first_name.short_description = 'First Name'
+    get_first_name.admin_order_field = 'user__firstname'
 
-    def last_name(self, obj):
+    def get_last_name(self, obj):
         return obj.user.lastname if obj.user else None
-    last_name.short_description = 'Last Name'
-
+    get_last_name.short_description = 'Last Name'
+    get_last_name.admin_order_field = 'user__lastname'
 
 @admin.register(Vehicle)
 class VehicleAdmin(admin.ModelAdmin):
@@ -72,8 +74,8 @@ class VehicleAdmin(admin.ModelAdmin):
 
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ('registrationNumber', 'user', 'plate_number', 'status', 'files')
-    search_fields = ('registrationNumber', 'user__firstname', 'user__lastname', 'plate_number__plateNumber')
+    list_display = ('registrationNumber', 'user', 'vehicle', 'status', 'files')
+    search_fields = ('registrationNumber', 'user__firstname', 'user__lastname')
     list_filter = ('status', 'user__department')
 
 
