@@ -6,6 +6,60 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+document.addEventListener("DOMContentLoaded", async function () {
+    await loadSidebar();
+    setupSidebarToggle();
+    setupSidebarHighlight();
+});
+
+async function loadSidebar() {
+    // TEMPORARY HARDCODED ROLE FOR TESTING (Change this to test different sidebars)
+    const userRole = "cashier"; // Change this to "cashier", "security", or "user"
+
+    // Map roles to sidebar file paths
+    const sidebarFiles = {
+        admin: "../templates/includes/admin_sidebar.html",
+        cashier: "../../templates/includes/cashier_sidebar.html",
+        security: "../templates/includes/security_sidebar.html",
+        user: "../templates/includes/user-sidebar.html"
+    };
+
+    // Get the sidebar container
+    const sidebarContainer = document.getElementById("sidebar-container");
+
+    if (!sidebarFiles[userRole]) {
+        console.error("Invalid role or sidebar not found:", userRole);
+        sidebarContainer.innerHTML = "<p>Error: Sidebar not available.</p>";
+        return;
+    }
+
+    try {
+        const response = await fetch(sidebarFiles[userRole]);
+        if (!response.ok) throw new Error("Failed to fetch sidebar");
+
+        sidebarContainer.innerHTML = await response.text();
+    } catch (error) {
+        console.error("Error loading sidebar:", error);
+        sidebarContainer.innerHTML = "<p>Error loading sidebar.</p>";
+    }
+}
+
+// Dummy functions for sidebar interactions
+function setupSidebarToggle() {
+    console.log("Sidebar toggle setup (add your code here)");
+}
+
+function setupSidebarHighlight() {
+    console.log("Sidebar highlight setup (add your code here)");
+}
+
+
+// Function to get user role (Replace this with actual logic)
+function getUserRole() {
+    return "cashier"; // Replace with actual role (e.g., from sessionStorage, API, backend response)
+}
+
+
 // Sidebar Toggle Function
 function setupSidebarToggle() {
     const sidebar = document.getElementById("sidebar");

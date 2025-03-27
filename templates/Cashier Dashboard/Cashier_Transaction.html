@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transactions</title>
-    
     <!-- CSS -->
     <link rel="stylesheet" href="../../static/css/CashierPayment.css">
+    <link rel="stylesheet" href="../../static/css/sidebar.css"> <!-- NOT USING BASE.HTML THIS-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -27,7 +25,9 @@
             </a>
         </div>
         <hr>
-        <small><span id="real-time-date"></span></small>
+        <small><span id="date"></span></small>
+        <br>
+        <br>
 
         <!-- Search Bar -->
         <div class="filter-container mt-3">
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="../../static/javascript/Cashier_Dashboard.js"></script>
+    <script src="../../static/javascript/base.js"></script> 
     <script src="../../static/javascript/Cashier_Transaction.js"></script>
 </body>
 </html>
