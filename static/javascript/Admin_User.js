@@ -1,6 +1,6 @@
 $(document).ready(function () {
     const rowsPerPage = 5;
-    let allRows = $(".payments-table tbody tr");
+    let allRows = $(".users-table tbody tr");
     let filteredRows = allRows;
 
     function formatDate(dateStr) {
@@ -42,7 +42,7 @@ $(document).ready(function () {
             return matchesSearch && matchesDateRange;
         });
 
-        $(".payments-table tbody tr").hide();
+        $(".users-table tbody tr").hide();
         filteredRows.show();
         updatePagination();
         showPage(1);

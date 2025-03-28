@@ -1,4 +1,6 @@
-/* 🔄 General Reset */
+/* ========================================= */
+/*               FORM 1                      */
+/* ========================================= */
 * {
   margin: 0;
   padding: 0;
@@ -156,3 +158,29 @@ h4 {
       padding: 15px;;
   }
   }
+
+  /* ========================================= */
+/*               FORM 2                      */
+/* ========================================= */
+.container {
+    max-width: 700px;
+    margin: auto;
+    padding: 20px;
+}
+.form-control {
+    background-color: #ffffff !important;
+    color: white !important;
+    border: 1px solid gray;
+}
+.form-control::placeholder {
+    color: #bbb;
+}
+.btn-submit {
+    background-color: yellow !important;
+    color: black;
+    font-weight: bold;
+    justify-content: flex-start;
+}
+.btn-submit:hover {
+    background-color: darkgoldenrod !important;
+}

@@ -3,16 +3,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     setupSidebarToggle();
     setupSidebarHighlight();
     displayCurrentDate();
-    setupChart();
     fixSidebarImagePaths();
 });
 
 // Get the user role (Can be dynamic based on auth logic)
 function getUserRole() {
-    return "cashier"; // Change this for testing
+    return "security"; // Change this for testing
 }
 
-// Get the correct sidebar path
+// Get the correct sidebar path - SOMETHING IS WRONG
 function getSidebarPath(userRole) {
     const currentPath = window.location.pathname;
     const depth = currentPath.split("/").filter(Boolean).length - 2; // Ignore empty parts
