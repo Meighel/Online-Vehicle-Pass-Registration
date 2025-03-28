@@ -1,19 +1,21 @@
 $(document).ready(function () {
     const rowsPerPage = 5;
-    let allRows = $(".payments-table tbody tr");
+    let allRows = $(".security-table tbody tr");
     let filteredRows = allRows;
 
     // ========== Load Updated Data from localStorage ==========
-    function loadUpdatedPayments() {
-        $(".payments-table tbody tr").each(function () {
+    function loadUpdatedSecurity() {
+        $(".security-table tbody tr").each(function () {
             const row = $(this);
             const appId = row.find("td:first").text().trim();
-            const storedData = localStorage.getItem(`payment_${appId}`);
+            const storedData = localStorage.getItem(`security_${appId}`);
 
             if (storedData) {
-                const { status, paidDate } = JSON.parse(storedData);
-                row.find("td:eq(3)").html(`<span class="status-badge status-${status.toLowerCase()}">${status}</span>`);
-                row.find("td:eq(4)").text(paidDate || "N/A");
+                const { status, date, remarks, processBy } = JSON.parse(storedData);
+                row.find("td:eq(2)").html(`<span class="status-badge status-${status.toLowerCase()}">${status}</span>`);
+                row.find("td:eq(3)").text(date || "N/A");
+                row.find("td:eq(4)").text(remarks || "N/A");
+                row.find("td:eq(5)").text(processBy || "N/A");
             }
         });
     }
@@ -34,7 +36,7 @@ $(document).ready(function () {
             let row = $(this);
             let username = row.find("td:nth-child(2)").text().toLowerCase().trim();
             let appID = row.find("td:nth-child(1)").text().trim();
-            let dateText = row.find("td:nth-child(5)").text().trim();
+            let dateText = row.find("td:nth-child(4)").text().trim();
             let rowDate = dateText !== "N/A" ? formatDate(dateText) : null;
 
             let show = true;
@@ -45,7 +47,7 @@ $(document).ready(function () {
             return show;
         });
 
-        $(".payments-table tbody tr").hide();
+        $(".security-table tbody tr").hide();
         filteredRows.show();
         updatePagination();
         showPage(1);
@@ -77,9 +79,9 @@ $(document).ready(function () {
     }
 
     // ========== Sorting ==========
-    $(".payments-table th").on("click", function () {
+    $(".security-table th").on("click", function () {
         let columnIndex = $(this).index();
-        let rows = $(".payments-table tbody tr").toArray();
+        let rows = $(".security-table tbody tr").toArray();
 
         rows.sort((a, b) => {
             let aText = $(a).find(`td:eq(${columnIndex})`).text().trim();
@@ -88,18 +90,19 @@ $(document).ready(function () {
             return aText.localeCompare(bText, undefined, { numeric: true });
         });
 
-        $(".payments-table tbody").empty().append(rows);
+        $(".security-table tbody").empty().append(rows);
     });
 
     // ========== Redirect to Update Page ==========
     $(document).on("click", ".update-button", function () {
         const applicationId = $(this).data("id");
         const username = encodeURIComponent($(this).data("username"));
-        const email = encodeURIComponent($(this).data("email"));
         const status = encodeURIComponent($(this).data("status"));
         const date = encodeURIComponent($(this).data("date"));
+        const remarks = encodeURIComponent($(this).data("remarks"));
+        const processBy = encodeURIComponent($(this).data("processby"));
 
-        window.location.href = `Update_Payment.html?id=${applicationId}&username=${username}&email=${email}&status=${status}&date=${date}`;
+        window.location.href = `Update_App_Status.html?id=${applicationId}&username=${username}&status=${status}&date=${date}&remarks=${remarks}&processby=${processBy}`;
     });
 
     $(document).on("click", ".page-btn", function () {
@@ -112,7 +115,7 @@ $(document).ready(function () {
         filterRows();
     });
 
-    // Load updates & remove completed 
-    loadUpdatedPayments();
+    // Load updates & remove completed securitys
+    loadUpdatedSecurity();
     updatePagination();
 });

@@ -160,15 +160,12 @@ body {
 }
 
 
-
 /* announcement */
 .announcements {
     background: #fff8c3;
     color: rgb(0, 0, 0);
     border-radius: 10px;
 }
-
-
 
 /* Recent Applications */
 .recent-applications {
@@ -178,49 +175,7 @@ body {
     margin-bottom: 20px;
     padding: 15px;
 }
-/* Search Bar */
-.search-container {
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
-    gap: 5px;
-}
-#search-bar {
-    width: 250px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    outline: none;
-}
-.search-btn {
-    background: #f2e570;
-    border: none;
-    padding: 5px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-.search-btn:hover {
-    background: #0f0f09;
-}
-.search-bar {
-    border-radius: 20px;
-    padding: 10px;
-    background: #29293d;
-    color: white;
-    border: 1px solid #444;
-}
-.search-bar:focus {
-    outline: none;
-    border-color: #4caf50;
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.7);
-}
 
-.search-bar::placeholder {
-    color: #bbb;
-}
 /* user list */
 .user-item {
     display: flex;

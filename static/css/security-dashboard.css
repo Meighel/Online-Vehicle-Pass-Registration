@@ -1,239 +1,90 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: white;
-}
-/* ========================================= */
-/*              Sidebar                      */
-/* ========================================= */
-
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: right;
-    width: 250px;
-    height: 100vh;
-    background: #242424;
-    color: black !important;
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow-x: hidden;
-    padding-top: 20px;
-    overflow-y: hidden;
-}
-
-/* Sidebar Menu Items */
-.sidebar ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-.sidebar ul li {
-    padding: 10px 20px;
-    text-align: left;
-    margin: 10px;
-}
-
-.sidebar ul li a {
-    color: white;
-    text-decoration: none;
-    display: block;
-    font-size: 18px;
-    font-weight: 200% !important;
-}
-
-.sidebar ul li a img {
-    margin-left: 3%;
-    margin-right: 3%;
-    align-items: center;
-}
-
-.sidebar p {
-    font-size: 14px;
-    color: rgb(134, 136, 133);
-    padding-top: 10px;
-    padding-left: 23px;
-    font-weight: bold;
-}
-
-/* Sidebar Collapse */
-.sidebar.collapsed {
-    width: 60px;
-}
-
-.sidebar.collapsed ul li {
+/* Reset Default Styles */
+* {
     margin: 0;
-}
-
-/* Hide text inside the sidebar when collapsed */
-.sidebar.collapsed ul li a {
-    text-align: center;
-    font-size: 0;
-}
-
-/* Show only icons when collapsed */
-.sidebar.collapsed ul li a::before {
-    font-size: 20px;
-}
-
-.sidebar.collapsed .toggle-btn {
-    left: 50%;
-}
-
-.content.expanded {
-    margin-left: 60px;
-    width: calc(100% - 60px);
-    transition: margin-left 0.3s ease;
-}
-
-.sidebar.collapsed p {
-    display: none;
-}
-
-.sidebar.collapsed .navbar-brand {
-    display: none;
-}
-
-/* Toggle Button */
-.toggle-btn {
-    position: absolute;
-    top: 95%;
-    transform: translate(-50%, -50%);
-    left: 220px;
-    background: none;
-    border: none;
-    color: yellow !important;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 10px 5px;
-    border-radius: 5px;
-    transition: left 0.3s ease;
-}
-
-/* Profile Section */
-.profile {
-    position: absolute;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    gap: 10px;
-    padding: 10px;
-    width: max-content;
-}
-
-.profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: gray;
-    object-fit: cover;
-}
-
-.profile-info {
-    display: flex;
-    flex-direction: column;
-    color: white;
-    font-size: 14px;
-}
-
-.profile-info .name {
-    font-weight: bold;
-    font-size: 15px;
-}
-
-.profile-info .position {
-    font-size: 12px;
-    color: rgb(170, 170, 170); 
-}
-
-/* Logout */
-#logout {
-    position: absolute;
-    left: 50%;
-    bottom: 30px;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 14px;
-    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
-}
-
-#logout img {
-    width: 26px;
-    height: 26px;
-    transition: transform 0.4s ease-in-out;
-}
-#logout img:hover {
-    transform:scale(1.2);
-    color: #ffd700;
-}
-.sidebar.collapsed .profile {
-    display: none;
-}
-
-.sidebar.collapsed #logout {
-    display: none;
-}
-.sidebar.collapsed .toggle-btn {
-    left: 50%;
-}
-.sidebar ul li.active {
-    background: yellow !important; 
-    border-radius: 20px;
-}
-.sidebar ul li.active a {
-    color: black !important;
-}
-.sidebar ul li:hover {
-    background: rgba(255, 255, 0, 0.237);
-    cursor: pointer;
-    border-radius: 20px;
-}
-.sidebar ul li:hover a {
-    color: #121212 !important;
-    font-weight: 100 !important;
-}
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    background: yellow;
-    color: black;
-    display: inline-block;
-    padding: 5px 15px;
-    border-radius: 5px;
-    width: 100%;
-    text-align: center;
-}
-
-.sidebar.collapsed .logo {
-    font-size: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-.nav-link {
-    color: white;
-    padding: 10px;
+/* Set the entire page to have a black background */
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+    display: flex;
+    background-color: black !important;
+    color: white !important; 
+    transition: all 0.3s ease;
 }
 
-.nav-link:hover, .active {
-    background-color: yellow !important;
+.content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 20px;
+}
+
+.title h2 {
+    margin: 0; 
+    font-size: 30px; 
+    display: flex;
+    align-items: center; 
+    font-weight: bold;
+    color: yellow;
+}
+
+/* ========== Notification ========== */
+.top-bar {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+/* ========== Filter Section ========== */
+.filter-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.filter-container input {
+    padding: 8px;
     border-radius: 5px;
+    border: 1px solid gray;
+    background: #333;
+    color: white;
 }
 
+.filter-btn {
+    background: yellow !important;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.filter-btn:hover {
+    background: orange;
+}
+
+#search-bar {
+    margin-left: auto;
+    padding: 8px;
+    width: 220px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #000000;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+#search-bar:focus {
+    border-color: yellow;
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 255, 0, 0.7);
+}
 
 /* ========================================= */
 /*         Main Content                      */
 /* ========================================= */
-
 
 .content {
     margin-left: 270px;
@@ -250,15 +101,14 @@ body {
     padding: 5px 10px; 
 }
 
-.title h2 {
+.d-flex h2 {
     margin: 0; 
-    font-size: 30pxpx; 
+    font-size: 30px; 
     display: flex;
     align-items: center; 
     font-weight: bold;
-    color: yellow;
+    color: yellow !important;
 }
-
 
 #real-time-date {
     font-size: 12px;
@@ -335,14 +185,8 @@ body {
     border-radius: 15px;
     z-index: 0;
     overflow: hidden;
-}
-.stat-card::before {
-    content: "";
-    position: absolute;
-    top: -5px; left: -5px; right: -5px; bottom: -5px;
-    background: linear-gradient(45deg, rgba(255, 255, 0, 0.8), rgba(135, 135, 16, 0.2));
-    border-radius: 20px;
-    z-index: -1;
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .stat-card h5 {
     color: #ffe5b4;
@@ -357,16 +201,12 @@ body {
     color: rgba(60, 59, 59, 0.6);
 }
 
-
-
-/* announcement */
+/* Announcements */
 .announcements {
     background: #fff8c3;
     color: rgb(0, 0, 0);
     border-radius: 10px;
 }
-
-
 
 /* Recent Applications */
 .recent-applications {
@@ -376,135 +216,360 @@ body {
     margin-bottom: 20px;
     padding: 15px;
 }
-/* Search Bar */
-.search-container {
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
-    gap: 5px;
+.recent-applications .table {
+    color: #ffffff;
 }
-#search-bar {
-    width: 250px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    outline: none;
+.recent-applications .table th, .recent-applications .table td {
+    border-top: none;
 }
-.search-btn {
-    background: #f2e570;
-    border: none;
-    padding: 5px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-.search-btn:hover {
-    background: #0f0f09;
-}
-.search-bar {
-    border-radius: 20px;
-    padding: 10px;
+.recent-applications .table thead th {
     background: #29293d;
-    color: white;
-    border: 1px solid #444;
 }
-.search-bar:focus {
-    outline: none;
-    border-color: #4caf50;
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.7);
-}
-
-.search-bar::placeholder {
-    color: #bbb;
-}
-/* user list */
-.user-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.recent-applications .table tbody tr {
     background: #29293d;
-    color: white;
-    border: 1px solid #444;
-    padding: 10px;
-    position: relative;
 }
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.recent-applications .table tbody tr:hover {
+    background: #3a3a4f;
 }
-.user-info .badge {
-    width: 30px;
-    height: 30px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.user-item div {
-    display: flex;
-    gap: 5px;
-    position: absolute;
-    right: 10px;
-}
-.user-item .btn {
+.recent-applications .btn {
     padding: 6px 10px;
     font-size: 14px;
     flex-shrink: 0;
     white-space: nowrap;
 }
-.user-item .btn:hover {
-    background: rgba(0, 128, 0, 0.581), rgba(255, 0, 0, 0.581), rgba(128, 128, 128, 0.789);
+.recent-applications .btn:hover {
+    background: rgba(0, 128, 0, 0.581);
 }
-.sidebar.collapsed .user-item div {
+
+/* Table Styling */
+.table-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #333;
+    border: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center; /* Ensures table content is aligned center */
+}
+.table thead {
+    background: #444;
+}
+.table th {
+    padding: 14px;
+    text-align: center; 
+    color: yellow;
+    font-size: 16px;
+}
+.table td {
+    padding: 14px;
+    font-size: 14px;
+    border-bottom: 1px solid #444;
+    color: #ffffff;
+    text-align: center; /* Center align all table data */
+}
+.table tbody tr {
+    transition: background 0.3s ease-in-out;
+}
+.table tbody tr:nth-child(even) {
+    background: #292929;
+}
+.table tbody tr:hover {
+    background: #3a3a3a;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+.status-approved {
+    background-color: green;
+}
+.status-rejected {
+    background-color: red;
+}
+.status-pending {
+    background-color: gray;
+}
+
+/* Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: flex-end; /* Align to right */
+    margin-top: 20px;
+}
+.pagination {
     display: flex;
     gap: 5px;
 }
-.sidebar.collapsed .user-item {
-    justify-content: center;
-}
-.sidebar.collapsed .user-item div {
-    display: flex;
-    flex-wrap: nowrap;
-}
-#noResults {
-    font-size: 16px;
+.pagination button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
     font-weight: bold;
-    color: #ccc;
+}
+.pagination button.active {
+    background-color: yellow;
+    color: black;
+}
+.pagination button:hover {
+    background-color: orange;
 }
 
+/* Entries Info */
+.entries-info {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 10px;
+}
 
+/* ========================================= */
+/*  security and update status page styling  */
+/* ========================================= */
 
-/* Graph Container Styling */
-.graph-container {
+.table-container {
+    background: white;
     padding: 20px;
-    background-color: #29293d;
     border-radius: 10px;
 }
-
-.graph-container canvas {
-    width: 100% !important;
-    height: 300px !important;
+.security-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #333;
+    border: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center; /* Ensures table content is aligned center */
 }
 
+.security-table thead {
+    background: #444;
+}
+
+.security-table th {
+    padding: 14px;
+    text-align: center; 
+    color: yellow;
+    font-size: 16px;
+}
+
+.security-table td {
+    padding: 14px;
+    font-size: 14px;
+    border-bottom: 1px solid #444;
+    color: #ffffff;
+    text-align: center; /* Center align all table data */
+}
+
+.security-table tbody tr {
+    transition: background 0.3s ease-in-out;
+}
+
+.app-status {
+    margin-left: 270px;
+    width: calc(100% - 270px);
+}
+
+.app-status .title h2 {
+    margin: 0;
+    font-size: 30px;
+    display: flex;
+    color: yellow !important;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.status-approved {
+    background-color: green;
+}
+
+.status-rejected {
+    background-color: red;
+}
+
+.status-pending {
+    background-color: gray;
+}
+
+/* ========== Pagination ========== */
+.pagination-container {
+    display: flex;
+    justify-content: flex-end; /* Align to right */
+    margin-top: 20px;
+}
+
+.pagination {
+    display: flex;
+    gap: 5px;
+}
+
+.pagination button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.pagination button.active {
+    background-color: yellow;
+    color: black;
+}
+
+.pagination button:hover {
+    background-color: orange;
+}
+
+/* Entries Info */
+.entries-info {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* ===== Update Application Status Styling ===== */
+/* Form Styling */
+form {
+    background: #1e1e2f;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Label Styling */
+label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ddd;
+}
+
+/* Input Fields */
+input[type="text"], textarea, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    background: #333;
+    color: white;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+/* Focus Effect */
+input[type="text"]:focus, textarea:focus, select:focus {
+    border-color: yellow;
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 255, 0, 0.7);
+}
+
+/* Disabled Input Styling */
+input[disabled] {
+    background: #444;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* Textarea Styling */
+textarea {
+    resize: vertical;
+    height: 80px;
+}
+
+/* Dropdown Styling */
+select {
+    appearance: none;
+    background: #333;
+}
+
+/* Button Styling */
+button, .btn {
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-success {
+    background: green;
+    color: white;
+}
+
+.btn-success:hover {
+    background: darkgreen;
+}
+
+.btn-secondary {
+    background: gray;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+}
+
+.btn-secondary:hover {
+    background: darkgray;
+}
+
+/* ========== Responsive Design ========== */
 @media (max-width: 768px) {
-    .user-item {
-        flex-direction: column;
-        align-items: flex-start;
-        padding-bottom: 50px;
+    .table-container {
+        padding: 10px; /* Reduces padding for smaller screens */
+        border-radius: 5px; /* Slightly smaller rounded corners */
     }
 
-    .user-item div {
-        position: absolute;
-        bottom: 5px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 8px;
+    .payments-table th, .payments-table td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .filter-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #search-bar {
+        width: 100%;
+    }
+    
+    .pagination {
+        flex-wrap: wrap;
+    }
+
+    .top-bar {
+        right: 10px; /* Reduce spacing for small screens */
+        top: 10px;
+    }
+    .app-status {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    form {
+        max-width: 100%;
     }
 }

@@ -11,7 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <!-- Sidebar (this is how to integrate a sidebar from other file together with the js below) -->
+    <!-- Sidebar-->
     <div id="sidebar-container"></div>
 
     <!-- Main Content -->
@@ -20,16 +20,15 @@
             <h2>PAYMENT STATUS FOR VEHICLE APPLICATION</h2>
             <div class="top-bar">
                 <!-- Notification Bell -->
-                <a href="Announcements.html" class="text-decoration-none">
+                <a href="Announcements.html" class="text-decoration-none text-light">
                     <img src="../../static/images/notification.png" alt="Notifications" width="30" height="30">
                     <span class="position-absolute top-0 start-100 translate-middle bg-danger"> </span>
                 </a>
             </div>
         </div>
         <hr>
-        <small><span id="date"></span></small>
-        </br>
-        <br>
+        <small><span id="real-time-date"></span></small>
+    </br>
 
         <!-- Filter Section -->
         <div class="filter-container">
@@ -41,7 +40,7 @@
                         
             <input type="text" id="search-bar" placeholder="🔍 Search">
         </div>
- 
+
 
         <!-- Payments Record Table -->
         <section class="table-container">
@@ -178,7 +177,6 @@
                     </tr>                
             </table>
         </section>
-
         <!-- Entries Info -->
         <div class="entries-info mt-2">Showing 0 entries</div>
 
@@ -192,4 +190,3 @@
     <script src="../../static/javascript/Cashier_Payment.js"></script> <!-- For search filtering and pagination -->
 </body>
 </html>
-
