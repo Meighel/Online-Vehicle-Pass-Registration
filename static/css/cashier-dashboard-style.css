@@ -31,18 +31,9 @@ body {
 }
 
 /* ========== Notification ========== */
-.top-bar {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-}
-
 .content {
     margin-left: 270px;
     width: calc(100% - 270px);
-}
-.content p {
-    color: rgb(103, 100, 100) !important;
 }
 
 .d-flex {
@@ -62,7 +53,7 @@ body {
 }
 
 
-#real-time-date {
+#date {
     font-size: 12px;
     color: rgb(213, 213, 213);
     margin: 0;
