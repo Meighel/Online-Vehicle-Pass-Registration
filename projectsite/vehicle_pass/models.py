@@ -117,7 +117,7 @@ class PaymentTransaction(BaseModel):
     
     def __str__(self):
         return self.receipt_number  
-
+ 
 class InspectionReport(BaseModel):
     REMARK_CHOICES = [
         ('sticker_released', 'Sticker Released'),
