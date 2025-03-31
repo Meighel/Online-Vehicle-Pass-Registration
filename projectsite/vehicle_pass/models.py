@@ -10,6 +10,11 @@ class BaseModel(models.Model):
         abstract = True
 
 class UserProfile(BaseModel):
+    ROLE_CHOICES = [('user', 'User'),
+        ('security', 'Security'),
+        ('cashier', 'Cashier'),
+        ('admin', 'Admin')
+        ]
     corporate_email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=128)
     lastname = models.CharField(max_length=25)
@@ -21,6 +26,7 @@ class UserProfile(BaseModel):
     program = models.CharField(max_length=100, blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True)
     address = models.CharField(max_length=100)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
 
     def __str__(self):
         return f"{self.firstname} {self.lastname}"  
@@ -151,4 +157,4 @@ class Announcement(BaseModel):
     title = models.CharField(max_length=50)
     message = models.TextField()
     date_posted = models.DateTimeField(auto_now_add=True)
-    posted_by = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, related_name="announcements")
+    posted_by = models.ForeignKey(AdminProfile, on_delete=models.SET_NULL, null=True, related_name="announcements")
