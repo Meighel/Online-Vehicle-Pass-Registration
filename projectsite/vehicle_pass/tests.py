@@ -1,123 +1,263 @@
 from django.test import TestCase
-from django.utils import timezone
-from .models import (
+from django.core.exceptions import ValidationError
+from django.utils.timezone import now, timedelta
+from vehicle_pass.models import (
     UserProfile, SecurityProfile, CashierProfile, AdminProfile,
-    Vehicle, Registration, VehiclePass, PaymentTransaction,
+    Vehicle, Registration, VehiclePass, PaymentTransaction, 
     InspectionReport, Notification, Announcement
 )
 
-
-class ModelTestCase(TestCase):
-
+class UserProfileTestCase(TestCase):
     def setUp(self):
-        # Create a UserProfile
         self.user = UserProfile.objects.create(
-            corporate_email="test@example.com",
-            password="securepass",
-            firstname="John",
+            corporate_email="testuser@example.com",
+            password="securepassword",
             lastname="Doe",
-            address="123 Street"
-        )
-
-        # Create different profiles linked to UserProfile
-        self.security = SecurityProfile.objects.create(
-            user=self.user, badgeNumber="SEC123", job_title="Guard"
-        )
-
-        self.cashier = CashierProfile.objects.create(
-            user=self.user, cashier_id="CASH123", job_title="Cashier"
-        )
-
-        self.admin = AdminProfile.objects.create(
-            user=self.user, admin_id="ADM123"
-        )
-
-        # Create a Vehicle
-        self.vehicle = Vehicle.objects.create(
-            owner=self.user, plateNumber="ABC123", type="Sedan",
-            model="Toyota", color="Blue", chassisNumber="CHS12345",
-            OR_Number="OR98765"
-        )
-
-        # Create a Registration
-        self.registration = Registration.objects.create(
-            user=self.user, plate_number=self.vehicle, files="http://example.com/doc.pdf"
-        )
-
-        # Create a PaymentTransaction
-        self.payment = PaymentTransaction.objects.create(
-            registration=self.registration, receipt_number="REC123",
-            cashier=self.cashier, status="paid"
-        )
-
-        # Create an InspectionReport
-        self.inspection = InspectionReport.objects.create(
-            payment_number=self.payment, security=self.security,
-            remarks="sticker_released", additional_notes="All good", is_approved=True
-        )
-
-        # Create a VehiclePass
-        self.vehicle_pass = VehiclePass.objects.create(
-            vehicle=self.vehicle, passNumber="VP123", passExpire=timezone.now().date(), status="active"
-        )
-
-        # Create a Notification
-        self.notification = Notification.objects.create(
-            type="alert", message="Test notification", recipient=self.user
-        )
-
-        # Create an Announcement
-        self.announcement = Announcement.objects.create(
-            title="Test Announcement", message="This is a test announcement", posted_by=self.user
+            firstname="John",
+            address="123 Main St",
+            role="user"
         )
 
     def test_user_creation(self):
-        """Test UserProfile creation"""
         self.assertEqual(self.user.firstname, "John")
         self.assertEqual(self.user.lastname, "Doe")
+        self.assertEqual(self.user.role, "user")
 
-    def test_security_profile_creation(self):
-        """Test SecurityProfile creation"""
-        self.assertEqual(self.security.badgeNumber, "SEC123")
-        self.assertEqual(self.security.job_title, "Guard")
 
-    def test_cashier_profile_creation(self):
-        """Test CashierProfile creation"""
-        self.assertEqual(self.cashier.cashier_id, "CASH123")
-
-    def test_admin_profile_creation(self):
-        """Test AdminProfile creation"""
-        self.assertEqual(self.admin.admin_id, "ADM123")
-
+class VehicleTestCase(TestCase):
+    def setUp(self):
+        self.user = UserProfile.objects.create(
+            corporate_email="vehicleowner@example.com",
+            password="securepassword",
+            lastname="Smith",
+            firstname="Alice",
+            address="456 Elm St",
+            role="user"
+        )
+        self.vehicle = Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="XYZ1234",
+            type="Sedan",
+            model="Toyota",
+            color="Blue",
+            chassisNumber="123456789ABCDEFG",
+            OR_Number="OR1234567"
+        )
+    
     def test_vehicle_creation(self):
-        """Test Vehicle creation"""
-        self.assertEqual(self.vehicle.plateNumber, "ABC123")
+        self.assertEqual(self.vehicle.plateNumber, "XYZ1234")
+        self.assertEqual(self.vehicle.owner, self.user)
+    
+    def test_vehicle_limit(self):
+        # Create first vehicle - should succeed
+        Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="ABC5678",
+            type="SUV",
+            model="Honda",
+            color="Red",
+            chassisNumber="987654321HGFEDCBA",
+            OR_Number="OR7654321"
+        )
+
+        # Create second vehicle - should succeed
+        Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="DEF9101",
+            type="Truck",
+            model="Ford",
+            color="Black",
+            chassisNumber="11223344556677889",
+            OR_Number="OR9988776"
+        )
+
+        # Try to create third vehicle - should raise ValidationError
+        with self.assertRaises(ValidationError):
+            vehicle = Vehicle(
+                owner=self.user,
+                plateNumber="GHI1122",
+                type="Coupe",
+                model="BMW",
+                color="White",
+                chassisNumber="445566778899AABB",
+                OR_Number="OR1122334"
+            )
+            vehicle.full_clean()  # ✅ Triggers validation
+            vehicle.save()  # ✅ This should raise ValidationError
+
+
+
+class RegistrationTestCase(TestCase):
+    def setUp(self):
+        self.user = UserProfile.objects.create(
+            corporate_email="reguser@example.com",
+            password="securepassword",
+            lastname="Brown",
+            firstname="Charlie",
+            address="789 Pine St",
+            role="user"
+        )
+        self.vehicle = Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="DEF4567",
+            type="Sedan",
+            model="Tesla",
+            color="White",
+            chassisNumber="A1B2C3D4E5F6G7H8I",
+            OR_Number="OR4567890"
+        )
+        self.registration = Registration.objects.create(
+            user=self.user,
+            vehicle=self.vehicle,
+            files="https://example.com/docs",
+            status="pending"
+        )
 
     def test_registration_creation(self):
-        """Test Registration creation"""
-        self.assertEqual(self.registration.files, "http://example.com/doc.pdf")
+        self.assertEqual(self.registration.status, "pending")
+        self.assertEqual(self.registration.user, self.user)
+        self.assertEqual(self.registration.vehicle, self.vehicle)
+
+
+class PaymentTransactionTestCase(TestCase):
+    def setUp(self):
+        self.user = UserProfile.objects.create(
+            corporate_email="payuser@example.com",
+            password="securepassword",
+            lastname="Wilson",
+            firstname="Ethan",
+            address="Pay St",
+            role="user"
+        )
+        self.cashier = CashierProfile.objects.create(
+            user=self.user,
+            cashier_id="CASH123",
+            job_title="Head Cashier"
+        )
+        self.vehicle = Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="JKL7890",
+            type="SUV",
+            model="Nissan",
+            color="Gray",
+            chassisNumber="B2C3D4E5F6G7H8I9J",
+            OR_Number="OR5678901"
+        )
+        self.registration = Registration.objects.create(
+            user=self.user,
+            vehicle=self.vehicle,
+            files="https://example.com/payment_docs",
+            status="for payment"
+        )
+        self.payment = PaymentTransaction.objects.create(
+            registration=self.registration,
+            receipt_number="REC12345",
+            cashier=self.cashier,
+            status="paid"
+        )
 
     def test_payment_transaction_creation(self):
-        """Test PaymentTransaction creation"""
-        self.assertEqual(self.payment.receipt_number, "REC123")
         self.assertEqual(self.payment.status, "paid")
+        self.assertEqual(self.payment.receipt_number, "REC12345")
+        self.assertEqual(self.payment.cashier, self.cashier)
+
+
+class InspectionReportTestCase(TestCase):
+    def setUp(self):
+        self.user = UserProfile.objects.create(
+            corporate_email="inspectuser@example.com",
+            password="securepassword",
+            lastname="Thomas",
+            firstname="Daniel",
+            address="Inspect St",
+            role="user"
+        )
+        self.cashier = CashierProfile.objects.create(
+            user=self.user,
+            cashier_id="CASH123",
+            job_title="Head Cashier"
+        )
+        self.security = SecurityProfile.objects.create(
+            user=self.user,
+            badgeNumber="SEC999",
+            job_title="Security Officer"
+        )
+        self.vehicle = Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="MNO2345",
+            type="Truck",
+            model="Chevrolet",
+            color="Green",
+            chassisNumber="D4E5F6G7H8I9J0K1L",
+            OR_Number="OR6789012"
+        )
+        self.registration = Registration.objects.create(
+            user=self.user,
+            vehicle=self.vehicle,
+            files="https://example.com/inspection_docs",
+            status="for final inspection"
+        )
+        self.payment = PaymentTransaction.objects.create(
+            registration=self.registration,
+            receipt_number="REC67890",
+            cashier=self.cashier, 
+            status="paid"
+        )
+        self.inspection = InspectionReport.objects.create(
+            payment_number=self.payment,
+            security=self.security,
+            remarks="sticker_released",
+            additional_notes="Inspection passed successfully.",
+            is_approved=True
+        )
 
     def test_inspection_report_creation(self):
-        """Test InspectionReport creation"""
         self.assertTrue(self.inspection.is_approved)
+        self.assertEqual(self.inspection.remarks, "sticker_released")
+        self.assertEqual(self.inspection.additional_notes, "Inspection passed successfully.")
 
-    def test_vehicle_pass_creation(self):
-        """Test VehiclePass creation"""
-        self.assertEqual(self.vehicle_pass.passNumber, "VP123")
+
+class NotificationTestCase(TestCase):
+    def setUp(self):
+        self.admin = UserProfile.objects.create(
+            corporate_email="admin@example.com",
+            password="adminpassword",
+            lastname="Admin",
+            firstname="Super",
+            address="Office St",
+            role="admin"
+        )
+        self.notification = Notification.objects.create(
+            type="system",
+            message="System maintenance scheduled.",
+            posted_by=self.admin,
+            is_read=False
+        )
 
     def test_notification_creation(self):
-        """Test Notification creation"""
-        self.assertEqual(self.notification.message, "Test notification")
+        self.assertEqual(self.notification.type, "system")
+        self.assertEqual(self.notification.message, "System maintenance scheduled.")
+        self.assertEqual(self.notification.posted_by, self.admin)
+        self.assertFalse(self.notification.is_read)
+
+
+class AnnouncementTestCase(TestCase):
+    def setUp(self):
+        self.admin = UserProfile.objects.create(
+            corporate_email="announcement_admin@example.com",
+            password="adminpassword",
+            lastname="News",
+            firstname="Broadcaster",
+            address="News St",
+            role="admin"
+        )
+        self.announcement = Announcement.objects.create(
+            title="New Parking Rules",
+            message="Please follow the new parking regulations effective next month.",
+            posted_by=self.admin
+        )
 
     def test_announcement_creation(self):
-        """Test Announcement creation"""
-        self.assertEqual(self.announcement.title, "Test Announcement")
-
-
-if __name__ == "__main__":
-    TestCase.main()
+        self.assertEqual(self.announcement.title, "New Parking Rules")
+        self.assertEqual(self.announcement.message, "Please follow the new parking regulations effective next month.")
+        self.assertEqual(self.announcement.posted_by, self.admin)

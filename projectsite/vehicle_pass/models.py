@@ -67,12 +67,11 @@ class Vehicle(BaseModel):
         return f"{self.plateNumber}"  
     
     def clean(self):
-        if not self.pk and Vehicle.objects.filter(owner=self.owner).count() >= 2:
+        if Vehicle.objects.filter(owner=self.owner).count() >= 2:
             raise ValidationError({'owner': 'You can only register up to two vehicles.'})
 
-
     def save(self, *args, **kwargs):
-        self.clean()
+        self.full_clean() 
         super().save(*args, **kwargs)
 
 class Registration(BaseModel):
@@ -150,11 +149,11 @@ class Notification(BaseModel):
     type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
     message = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
-    recipient = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    posted_by = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, related_name="notifications_posted")
     is_read = models.BooleanField(default=False)
 
 class Announcement(BaseModel):
     title = models.CharField(max_length=50)
     message = models.TextField()
     date_posted = models.DateTimeField(auto_now_add=True)
-    posted_by = models.ForeignKey(AdminProfile, on_delete=models.SET_NULL, null=True, related_name="announcements")
+    posted_by = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, related_name="announcements_posted")

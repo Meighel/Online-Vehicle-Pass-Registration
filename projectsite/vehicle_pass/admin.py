@@ -30,7 +30,7 @@ class SecurityProfileAdmin(admin.ModelAdmin):
     get_last_name.short_description = 'Last Name'
     get_last_name.admin_order_field = 'user__lastname'
 
-
+@admin.register(CashierProfile)
 class CashierProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'cashier_id', 'get_first_name', 'get_last_name', 'job_title')
     search_fields = ('user__corporate_email', 'user__firstname', 'user__lastname', 'cashier_id')
@@ -102,8 +102,8 @@ class InspectionReportAdmin(admin.ModelAdmin):
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('type', 'recipient', 'message', 'date', 'is_read')
-    search_fields = ('message', 'recipient__corporate_email')
+    list_display = ('type', 'posted_by', 'message', 'date', 'is_read')
+    search_fields = ('message', 'posted_by__corporate_email')
     list_filter = ('type', 'is_read', 'date')
 
 
