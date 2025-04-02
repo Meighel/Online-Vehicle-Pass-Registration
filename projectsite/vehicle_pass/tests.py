@@ -1,88 +1,263 @@
 from django.test import TestCase
-from django.contrib.auth import get_user_model
-from vehicle_pass.models import UserProfile, CashierProfile, SecurityProfile, AdminProfile
+from django.core.exceptions import ValidationError
+from django.utils.timezone import now, timedelta
+from vehicle_pass.models import (
+    UserProfile, SecurityProfile, CashierProfile, AdminProfile,
+    Vehicle, Registration, VehiclePass, PaymentTransaction, 
+    InspectionReport, Notification, Announcement
+)
 
-
-class CustomUserManagerTest(TestCase):
+class UserProfileTestCase(TestCase):
     def setUp(self):
-        self.user_model = get_user_model()
-
-    def test_create_user(self):
-        user = self.user_model.objects.create_user(            
-            corporate_email='testuser@example.com',
-            password='password123',
-            firstname='Test',
-            lastname='User',
-            role='user',
-            middle_initial='A',
-            suffix='Jr.',
-            dl_number='123456789',
-            college='Test College',
-            program='CS',
-            department='IT',
-            address='123 Test Street'
+        self.user = UserProfile.objects.create(
+            corporate_email="testuser@example.com",
+            password="securepassword",
+            lastname="Doe",
+            firstname="John",
+            address="123 Main St",
+            role="user"
         )
 
-        self.assertIsInstance(user, self.user_model)
-        self.assertFalse(user.is_staff)
-        self.assertFalse(user.is_superuser)
+    def test_user_creation(self):
+        self.assertEqual(self.user.firstname, "John")
+        self.assertEqual(self.user.lastname, "Doe")
+        self.assertEqual(self.user.role, "user")
 
-        # Fetch the UserProfile correctly
-        profile = UserProfile.objects.get(user=user)
-        self.assertEqual(profile.firstname, 'Test')
-        self.assertEqual(profile.lastname, 'User')
 
-    def test_create_superuser(self):
-        superuser = self.user_model.objects.create_superuser(
-            corporate_email='admin@example.com',
-            password='admin123'
+class VehicleTestCase(TestCase):
+    def setUp(self):
+        self.user = UserProfile.objects.create(
+            corporate_email="vehicleowner@example.com",
+            password="securepassword",
+            lastname="Smith",
+            firstname="Alice",
+            address="456 Elm St",
+            role="user"
+        )
+        self.vehicle = Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="XYZ1234",
+            type="Sedan",
+            model="Toyota",
+            color="Blue",
+            chassisNumber="123456789ABCDEFG",
+            OR_Number="OR1234567"
+        )
+    
+    def test_vehicle_creation(self):
+        self.assertEqual(self.vehicle.plateNumber, "XYZ1234")
+        self.assertEqual(self.vehicle.owner, self.user)
+    
+    def test_vehicle_limit(self):
+        # Create first vehicle - should succeed
+        Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="ABC5678",
+            type="SUV",
+            model="Honda",
+            color="Red",
+            chassisNumber="987654321HGFEDCBA",
+            OR_Number="OR7654321"
         )
 
-        self.assertTrue(superuser.is_staff)
-        self.assertTrue(superuser.is_superuser)
-
-    def test_create_cashier_profile(self):
-        user = self.user_model.objects.create_user(
-            corporate_email='cashier@example.com',
-            password='cashier123',
-            role='cashier',
-            firstname='Cashier',
-            lastname='User',
-            cashier_id='C001',
-            job_title='Cashier'
+        # Create second vehicle - should succeed
+        Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="DEF9101",
+            type="Truck",
+            model="Ford",
+            color="Black",
+            chassisNumber="11223344556677889",
+            OR_Number="OR9988776"
         )
 
-        # Fetch CashierProfile correctly
-        cashier_profile = CashierProfile.objects.get(user__user=user)
-        self.assertEqual(cashier_profile.cashier_id, 'C001')
-        self.assertEqual(cashier_profile.job_title, 'Cashier')
+        # Try to create third vehicle - should raise ValidationError
+        with self.assertRaises(ValidationError):
+            vehicle = Vehicle(
+                owner=self.user,
+                plateNumber="GHI1122",
+                type="Coupe",
+                model="BMW",
+                color="White",
+                chassisNumber="445566778899AABB",
+                OR_Number="OR1122334"
+            )
+            vehicle.full_clean()  # ✅ Triggers validation
+            vehicle.save()  # ✅ This should raise ValidationError
 
-    def test_create_security_profile(self):
-        user = self.user_model.objects.create_user(
-            corporate_email='security@example.com',
-            password='security123',
-            role='security',
-            firstname='Security',
-            lastname='Guard',
-            badgeNumber='B123',
-            job_title='Security Guard'
+
+
+class RegistrationTestCase(TestCase):
+    def setUp(self):
+        self.user = UserProfile.objects.create(
+            corporate_email="reguser@example.com",
+            password="securepassword",
+            lastname="Brown",
+            firstname="Charlie",
+            address="789 Pine St",
+            role="user"
+        )
+        self.vehicle = Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="DEF4567",
+            type="Sedan",
+            model="Tesla",
+            color="White",
+            chassisNumber="A1B2C3D4E5F6G7H8I",
+            OR_Number="OR4567890"
+        )
+        self.registration = Registration.objects.create(
+            user=self.user,
+            vehicle=self.vehicle,
+            files="https://example.com/docs",
+            status="pending"
         )
 
-        # Fetch SecurityProfile correctly
-        security_profile = SecurityProfile.objects.get(user__user=user)
-        self.assertEqual(security_profile.badgeNumber, 'B123')
-        self.assertEqual(security_profile.job_title, 'Security Guard')
+    def test_registration_creation(self):
+        self.assertEqual(self.registration.status, "pending")
+        self.assertEqual(self.registration.user, self.user)
+        self.assertEqual(self.registration.vehicle, self.vehicle)
 
-    def test_create_admin_profile(self):
-        user = self.user_model.objects.create_user(
-            corporate_email='adminuser@example.com',
-            password='adminuser123',
-            role='admin',
-            firstname='Admin',
-            lastname='User',
-            admin_id='A001'
+
+class PaymentTransactionTestCase(TestCase):
+    def setUp(self):
+        self.user = UserProfile.objects.create(
+            corporate_email="payuser@example.com",
+            password="securepassword",
+            lastname="Wilson",
+            firstname="Ethan",
+            address="Pay St",
+            role="user"
+        )
+        self.cashier = CashierProfile.objects.create(
+            user=self.user,
+            cashier_id="CASH123",
+            job_title="Head Cashier"
+        )
+        self.vehicle = Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="JKL7890",
+            type="SUV",
+            model="Nissan",
+            color="Gray",
+            chassisNumber="B2C3D4E5F6G7H8I9J",
+            OR_Number="OR5678901"
+        )
+        self.registration = Registration.objects.create(
+            user=self.user,
+            vehicle=self.vehicle,
+            files="https://example.com/payment_docs",
+            status="for payment"
+        )
+        self.payment = PaymentTransaction.objects.create(
+            registration=self.registration,
+            receipt_number="REC12345",
+            cashier=self.cashier,
+            status="paid"
         )
 
-        # Fetch AdminProfile correctly
-        admin_profile = AdminProfile.objects.get(user__user=user)
-        self.assertEqual(admin_profile.admin_id, 'A001')
+    def test_payment_transaction_creation(self):
+        self.assertEqual(self.payment.status, "paid")
+        self.assertEqual(self.payment.receipt_number, "REC12345")
+        self.assertEqual(self.payment.cashier, self.cashier)
+
+
+class InspectionReportTestCase(TestCase):
+    def setUp(self):
+        self.user = UserProfile.objects.create(
+            corporate_email="inspectuser@example.com",
+            password="securepassword",
+            lastname="Thomas",
+            firstname="Daniel",
+            address="Inspect St",
+            role="user"
+        )
+        self.cashier = CashierProfile.objects.create(
+            user=self.user,
+            cashier_id="CASH123",
+            job_title="Head Cashier"
+        )
+        self.security = SecurityProfile.objects.create(
+            user=self.user,
+            badgeNumber="SEC999",
+            job_title="Security Officer"
+        )
+        self.vehicle = Vehicle.objects.create(
+            owner=self.user,
+            plateNumber="MNO2345",
+            type="Truck",
+            model="Chevrolet",
+            color="Green",
+            chassisNumber="D4E5F6G7H8I9J0K1L",
+            OR_Number="OR6789012"
+        )
+        self.registration = Registration.objects.create(
+            user=self.user,
+            vehicle=self.vehicle,
+            files="https://example.com/inspection_docs",
+            status="for final inspection"
+        )
+        self.payment = PaymentTransaction.objects.create(
+            registration=self.registration,
+            receipt_number="REC67890",
+            cashier=self.cashier, 
+            status="paid"
+        )
+        self.inspection = InspectionReport.objects.create(
+            payment_number=self.payment,
+            security=self.security,
+            remarks="sticker_released",
+            additional_notes="Inspection passed successfully.",
+            is_approved=True
+        )
+
+    def test_inspection_report_creation(self):
+        self.assertTrue(self.inspection.is_approved)
+        self.assertEqual(self.inspection.remarks, "sticker_released")
+        self.assertEqual(self.inspection.additional_notes, "Inspection passed successfully.")
+
+
+class NotificationTestCase(TestCase):
+    def setUp(self):
+        self.admin = UserProfile.objects.create(
+            corporate_email="admin@example.com",
+            password="adminpassword",
+            lastname="Admin",
+            firstname="Super",
+            address="Office St",
+            role="admin"
+        )
+        self.notification = Notification.objects.create(
+            type="system",
+            message="System maintenance scheduled.",
+            posted_by=self.admin,
+            is_read=False
+        )
+
+    def test_notification_creation(self):
+        self.assertEqual(self.notification.type, "system")
+        self.assertEqual(self.notification.message, "System maintenance scheduled.")
+        self.assertEqual(self.notification.posted_by, self.admin)
+        self.assertFalse(self.notification.is_read)
+
+
+class AnnouncementTestCase(TestCase):
+    def setUp(self):
+        self.admin = UserProfile.objects.create(
+            corporate_email="announcement_admin@example.com",
+            password="adminpassword",
+            lastname="News",
+            firstname="Broadcaster",
+            address="News St",
+            role="admin"
+        )
+        self.announcement = Announcement.objects.create(
+            title="New Parking Rules",
+            message="Please follow the new parking regulations effective next month.",
+            posted_by=self.admin
+        )
+
+    def test_announcement_creation(self):
+        self.assertEqual(self.announcement.title, "New Parking Rules")
+        self.assertEqual(self.announcement.message, "Please follow the new parking regulations effective next month.")
+        self.assertEqual(self.announcement.posted_by, self.admin)
