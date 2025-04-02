@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // Get the user role (Can be dynamic based on auth logic)
 function getUserRole() {
-    return "user"; // Change this for testing
+    return "admin"; // Change this for testing
 }
 
 // Get the correct sidebar path - SOMETHING IS WRONG
