@@ -17,7 +17,7 @@ function getSidebarPath(userRole) {
     const depth = currentPath.split("/").filter(Boolean).length - 2;
     const basePath = "../".repeat(Math.max(depth, 0));
     
-    return `${basePath}templates/includes/${userRole}_sidebar.html`;
+    return `${basePath}static/includes/${userRole}_sidebar.html`;
 }
 
 // Fix broken sidebar image paths
