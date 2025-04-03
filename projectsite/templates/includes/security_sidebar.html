@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Security Sidebar</title>
+
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="../../static/css/sidebar.css">
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <a class="navbar-brand ms-4 fs-3 fw-bold text-warning brand-logo" href="#">OVR</a>
+    <button class="toggle-btn" id="toggle-btn">☰</button>
+
+    <ul>
+        <li data-menu="dashboard">
+            <a href="../Security Dashboard/Security_Dashboard.html">
+                <img src="../../static/images/home.png" alt="Dashboard" width="30">
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li data-menu="status">
+            <a href="../Security Dashboard/Security_App_Status.html">
+                <img src="../../static/images/transaction.png" alt="Status" width="30">
+                <span>Application Status</span>
+            </a>
+        </li>
+        <li data-menu="history">
+            <a href="../Security Dashboard/Security_Reg_History.html">
+                <img src="../../static/images/report.png" alt="History" width="25">
+                <span>Pass History</span>
+            </a>
+        </li>
+    </ul>
+
+    <a href="#" id="logout">
+        <img src="../../static/images/power-off.png" alt="Logout" width="25">
+        <span>Logout</span>
+    </a>
+
+    <div class="profile">
+        <img src="../../static/images/profile-placeholder.png" alt="Profile Picture">
+        <div class="profile-info">
+            <span class="name">Security Personnel Name</span>
+            <span class="position">Security 1</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

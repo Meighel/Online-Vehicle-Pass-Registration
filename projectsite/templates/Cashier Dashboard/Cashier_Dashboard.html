@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/css/cashier-dashboard-style.css">
+    <link rel="stylesheet" href="../../static/css/sidebar.css"> <!--THIS-->
+</head>
+<body>
+
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+        <!-- Main Content -->
+        <main class="content p-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>DASHBOARD</h2>
+                <div class="top-bar">
+                    <div class="position-relative me-3">
+                        <!-- Notification Bell -->
+                        <a href="Announcements.html" class="text-decoration-none text-light">
+                            <img src="../../static/images/notification.png" alt="Notifications" width="30" height="30">
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                        </a>
+                    </div>
+                    <!-- Search Bar -->
+                    <div class="search-container">
+                        <input type="text" placeholder="Search..." id="search-bar">
+                        <button class="search-btn">🔍</button> <!-- Added search button -->
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <small><span id="date"></span></small>
+            </br>
+            <br>
+            
+            <div class="row">
+                <!-- New Applications -->
+                <div class="col-md-6">
+                    <a href="Cashier_Payment.html" class="card stat-card bg-danger text-white text-decoration-none">
+                        <div class="card-body">
+                            <h5>New Applications</h5>
+                            <h2>24</h2>
+                            <p>+2.5% than usual</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Paid Clients -->
+                <div class="col-md-6">
+                    <a href="Cashier_Transaction.html" class="card stat-card bg-success text-white text-decoration-none">
+                        <div class="card-body">
+                            <h5>Total Paid Clients</h5>
+                            <h2>16</h2>
+                            <p>as of today</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Announcements -->
+            <a href="Announcements.html" class="text-decoration-none">
+                <div class="card mt-3 announcements">
+                    <div class="card-header bg-warning">📢 Announcements and Recent Updates!</div>
+                    <div class="card-body text-dark">
+                        <p><strong>Security Dept:</strong> Temporary suspension of vehicle pass due to weather.</p>
+                        <p><strong>Admin:</strong> Online payment option coming in v3.0.</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Recent Applications & Graph Section -->
+            <div class="row mt-4">
+                <!-- Recent Applications -->
+                <div class="col-md-12">
+                    <div class="card recent-applications">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>Recent Applications</span>
+                            <a href="Cashier_Payment.html" class="btn btn-success btn-sm">Open</a>
+                        </div>
+                        <div class="card-body">
+                            <input type="text" id="searchInput" class="form-control search-bar" placeholder="Search...">
+                            <ul class="list-group mt-3" id="userList">
+                                <li class="list-group-item d-flex justify-content-between align-items-center user-item">
+                                    <span class="user-info">
+                                        <span class="badge bg-warning text-dark">KC</span>
+                                        KEN CINCO - 202280328@psu.palawan.edu.ph
+                                    </span>
+                                    <div>
+                                        <button class="btn btn-outline-success btn-sm">✅ Approve</button>
+                                        <button class="btn btn-outline-danger btn-sm">❌ Reject</button>
+                                        <button class="btn btn-outline-secondary btn-sm">⏳ Cancel</button>
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center user-item">
+                                    <span class="user-info">
+                                        <span class="badge bg-danger">TB</span>
+                                        TRISTAN BALICE - 202090014@psu.palawan.edu.ph
+                                    </span>
+                                    <div>
+                                        <button class="btn btn-outline-success btn-sm">✅ Approve</button>
+                                        <button class="btn btn-outline-danger btn-sm">❌ Reject</button>
+                                        <button class="btn btn-outline-secondary btn-sm">⏳ Cancel</button>
+                                    </div>
+                                </li>
+                            </ul>
+                            <p id="noResults" class="text-center text-muted mt-3" style="display: none;">No results found</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Monthly Trend Graph -->
+                <div class="col-md-12">
+                    <a href="Reports.html" class="text-decoration-none">
+                        <div class="card graph-container">
+                            <div class="card-header bg-primary text-white">
+                                📈 Monthly Trend of Paid Clients: Tracking Growth Over Time
+                            </div>
+                            <div class="card-body">
+                                <canvas id="trendChart"></canvas>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../../static/javascript/base.js"></script>  <!--THIS-->
+    <script src="../../static/javascript/Cashier_Dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
