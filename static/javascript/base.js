@@ -14,7 +14,7 @@ function getUserRole() {
 // Get the correct sidebar path - SOMETHING IS WRONG
 function getSidebarPath(userRole) {
     const currentPath = window.location.pathname;
-    const depth = currentPath.split("/").filter(Boolean).length - 2; // Ignore empty parts
+    const depth = currentPath.split("/").filter(Boolean).length - 2;
     const basePath = "../".repeat(Math.max(depth, 0));
     
     return `${basePath}templates/includes/${userRole}_sidebar.html`;
