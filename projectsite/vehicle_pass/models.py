@@ -30,7 +30,7 @@ class UserProfile(BaseModel):
     program = models.CharField(max_length=100, blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user', null=True, null=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user', null=True)
 
     def __str__(self):
         return f"{self.firstname} {self.lastname}"
