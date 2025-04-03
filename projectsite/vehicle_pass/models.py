@@ -27,11 +27,21 @@ class UserProfile(BaseModel):
     college = models.CharField(max_length=100, blank=True, null=True)
     program = models.CharField(max_length=100, blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True)
-    address = models.CharField(max_length=100)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
+    address = models.CharField(max_length=100, blank=True, null=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user', null=True)
 
     def __str__(self):
-        return f"{self.firstname} {self.lastname}"  
+        return f"{self.firstname} {self.lastname}"
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.role == 'security' and not hasattr(self, 'securityprofile'):
+            SecurityProfile.objects.create(user=self)
+        elif self.role == 'cashier' and not hasattr(self, 'cashierprofile'):
+            CashierProfile.objects.create(user=self)
+        elif self.role == 'admin' and not hasattr(self, 'adminprofile'):
+            AdminProfile.objects.create(user=self)
 
 class SecurityProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
