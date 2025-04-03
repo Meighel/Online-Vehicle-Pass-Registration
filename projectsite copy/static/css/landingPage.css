@@ -1,0 +1,362 @@
+/* ========================================= */
+/*              GLOBAL STYLES               */
+/* ========================================= */
+
+:root {
+  --primary-bg: #000000;
+  --secondary-bg: #222222;
+  --accent-bg: #333333;
+  --text-light: #ffffff;
+  --text-gray: #bbbbbb;
+  --highlight-yellow: #FFD700;
+  --border-bg: rgba(255, 215, 0, 0.3);
+}
+
+body {
+  background-color: var(--primary-bg);
+  color: var(--text-light);
+  font-family: 'Arial', sans-serif;
+}
+
+/* ========================================= */
+/*                NAVBAR                     */
+/* ========================================= */
+
+.navbar {
+  background: transparent;
+  padding: 15px 0;
+  transition: all 0.4s ease-in-out;
+}
+
+.navbar.scrolled {
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  padding: 10px 0;
+}
+
+.navbar .nav-link {
+  color: var(--text-light);
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.navbar .nav-link:hover {
+  color: var(--highlight-yellow) !important;
+}
+
+.navbar .nav-link::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background: var(--highlight-yellow);
+  transition: width 0.3s ease-in-out;
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navbar .nav-link:hover::after {
+  width: 50%;
+}
+
+.navbar-toggler {
+  border: none;
+  outline: none;
+}
+
+.navbar-toggler-icon {
+  filter: invert(1);
+}
+
+/* ========================================= */
+/*              HERO SECTION                 */
+/* ========================================= */
+
+.hero-section {
+  padding: 100px 0;
+  background: linear-gradient(135deg, var(--primary-bg), var(--accent-bg));
+  text-align: center;
+}
+
+.hero-section h1 {
+  color: var(--highlight-yellow);
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.hero-section p {
+  color: var(--text-gray);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  margin-bottom: 20px;
+}
+
+/* Email Input Field */
+.email-input {
+  width: 100%;
+  padding: 12px 15px;
+  background: transparent;
+  color: var(--text-light); /* Ensures text is visible */
+  font-size: 1rem;
+  border: 2px solid var(--highlight-yellow);
+  border-radius: 5px;
+  outline: none;
+}
+
+.email-input::placeholder {
+  color: var(--text-gray);
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Hide Placeholder When User Starts Typing */
+.email-input:focus::placeholder {
+  opacity: 0;
+}
+
+/* Ensure Input Text is Always Visible */
+.email-input:focus, 
+.email-input:not(:placeholder-shown) {
+  color: var(--primary-bg) !important; /* Ensures text is visible */
+}
+
+/* ========================================= */
+/*             FORM STYLING                  */
+/* ========================================= */
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 450px;
+  margin: auto;
+}
+
+.form-container input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid var(--highlight-yellow);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+.form-container input::placeholder {
+  color: var(--text-gray);
+}
+
+.form-container .btn {
+  width: 100%;
+  background-color: var(--highlight-yellow);
+  color: var(--primary-bg);
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 5px;
+  border: none;
+  transition: 0.3s;
+}
+
+.form-container .btn:hover {
+  background-color: #e6c300;
+}
+
+/* ========================================= */
+/*                GIF STYLING                */
+/* ========================================= */
+
+.gif-container {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  width: 150%;
+  max-width: 600px;
+  margin: auto;
+  mix-blend-mode: color-dodge;  
+}
+
+.vehicle-gif {
+  width: 300%;
+  height: auto;
+  filter: brightness(1.1) contrast(1) saturate(1);
+  transition: transform 0.5s ease-in-out;
+  transform: rotate(15deg);
+}
+
+.vehicle-gif:hover {
+  transform: scale(1.10);
+}
+
+/* ========================================= */
+/*             FEATURES SECTION              */
+/* ========================================= */
+
+.features {
+  background-color: var(--secondary-bg);
+  padding: 60px 0;
+  text-align: center;
+}
+
+.feature-card {
+  background-color: var(--accent-bg);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--highlight-yellow);
+  transition: transform 0.3s, box-shadow 0.3s;
+  color: var(--text-light);
+}
+
+.feature-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px var(--border-bg);
+}
+
+/* Make the entire feature card clickable */
+.feature-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.feature-link:hover .feature-card {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(255, 215, 0, 0.5);
+}
+
+/* ========================================= */
+/*                 FOOTER                    */
+/* ========================================= */
+
+.footer {
+  background: var(--primary-bg);
+  padding: 20px 0;
+  text-align: center;
+}
+
+.footer-icons a {
+  color: var(--highlight-yellow);
+  margin: 0 10px;
+  transition: color 0.3s ease;
+}
+
+.footer-icons a:hover {
+  color: white;
+}
+
+.footer p {
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.footer-policy {
+  color: var(--highlight-yellow);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.footer-policy:hover {
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .footer .row {
+      text-align: center;
+  }
+  
+  .footer .col-md-4 {
+      text-align: center;
+      margin-bottom: 10px;
+  }
+}
+
+
+/* ========================================= */
+/*                ANIMATIONS                 */
+/* ========================================= */
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease-in-out forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-scale {
+  opacity: 0;
+  transform: scale(0.8);
+  animation: fadeScaleUp 1s ease-in-out forwards;
+}
+
+@keyframes fadeScaleUp {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ========================================= */
+/*            RESPONSIVE DESIGN              */
+/* ========================================= */
+
+@media (max-width: 992px) {
+  .hero-section {
+    text-align: center;
+  }
+  
+  .hero-section h1 {
+    font-size: 2.5rem;
+  }
+  
+  .gif-container {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+
+  .gif-container {
+    max-width: 350px;
+  }
+
+  .form-container {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section {
+    padding: 60px 0;
+  }
+
+  .hero-section h1 {
+    font-size: 1.8rem;
+  }
+
+  .form-container input,
+  .form-container .btn {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .gif-container {
+    max-width: 300px;
+  }
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pagination</title>
+    </head>
+    <body>
+        <h2>Pagination Form</h2>
+        <form id="paginationForm" action="/your-endpoint" method="GET">
+            <div class="pagination">
+                <button type="button" id="prevBtn">Prev</button>
+                <input type="number" id="pageInput" name="page" value="1" min="1">
+                <button type="button" id="nextBtn">Next</button>
+
+                <select name="items_per_page" id="itemsPerPage">
+                    <option value="10">10</option>
+                </select>
+            </div>
+        </form>
+        <script src="pagination.html"></script>
+    </body>
+</html>
