@@ -152,32 +152,46 @@ class PaymentTransaction(BaseModel):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
     due_date = models.DateTimeField(blank=True, null=True) 
     date_processed = models.DateTimeField(auto_now_add=True)
-    
+
     def save(self, *args, **kwargs):
         if self.status == "pending" and not self.due_date:
             self.due_date = now() + timedelta(days=7) 
 
         super().save(*args, **kwargs)
 
+        if self.status == "paid":
+            from .models import InspectionReport  
+
+            inspection_exists = InspectionReport.objects.filter(payment_number=self).exists()
+
+            if not inspection_exists:  
+                InspectionReport.objects.create(
+                    payment_number=self, 
+                    security = None,
+                    remarks="to_be_inspected",  
+                    is_approved=False
+                )
+
     def __str__(self):
         return self.receipt_number if self.receipt_number else f"Registration {self.registration.registrationNumber}"
  
 class InspectionReport(BaseModel):
     REMARK_CHOICES = [
+        ('to_be_inspected', 'To Be Inspected'),
         ('sticker_released', 'Sticker Released'),
         ('application_declined', 'Application Declined'),
         ('request_refund', 'To Request Refund'),
     ]
 
     payment_number = models.ForeignKey(PaymentTransaction, on_delete=models.CASCADE)
-    security = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE)
+    security = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True)
     inspection_date = models.DateTimeField(auto_now_add=True)
-    remarks = models.CharField(max_length=30, choices=REMARK_CHOICES, default='sticker_released')
+    remarks = models.CharField(max_length=30, choices=REMARK_CHOICES, default='to_be_inspected')
     additional_notes = models.TextField(blank=True, null=True)
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Inspection {self.payment_number} - {'Approved' if self.is_approved else 'Rejected'}"
+        return f"Inspection {self.payment_number}"
 
 class Notification(BaseModel):
     NOTIFICATION_TYPES = [
