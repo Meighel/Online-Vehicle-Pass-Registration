@@ -54,21 +54,7 @@
         <h3 class="fw-bold">Sign Up</h3>
         <form method="POST" action="{% url 'signup' %}">
             {% csrf_token %}
-            <div class="mb-3">
-                <input type="email" class="form-control" name="email" placeholder="Corporate Email" required>
-            </div>
-            <div class="mb-3">
-                <input type="text" class="form-control" name="firstname" placeholder="First Name" required>
-            </div>
-            <div class="mb-3">
-                <input type="text" class="form-control" name="lastname" placeholder="Last Name" required>
-            </div>
-            <div class="mb-3">
-                <input type="password" class="form-control" name="password1" placeholder="Password" required>
-            </div>
-            <div class="mb-3">
-                <input type="password" class="form-control" name="password2" placeholder="Confirm Password" required>
-            </div>
+            {{ form.as_p }}
             <button type="submit" class="btn btn-signup">Sign Up</button>
             <p class="mt-3 text-center"><a href="{% url 'login' %}">Already have an account? Login</a></p>
         </form>
