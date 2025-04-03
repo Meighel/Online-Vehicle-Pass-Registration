@@ -84,6 +84,8 @@ DATABASES = {
 }
 
 
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -123,6 +125,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = (
     BASE_DIR / 'static',
 )
+
+
+LOGIN_URL = "/login" 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
