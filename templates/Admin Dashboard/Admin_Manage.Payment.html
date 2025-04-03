@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payments</title>
+    <title>Payment</title>
     <link rel="stylesheet" href="../../static/css/admin-dashboard-style.css">
-    <link rel="stylesheet" href="../../static/css/sidebar.css">
+    <link rel="stylesheet" href="../../static/css/sidebar.css"> <!--THIS-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!--FOR MODALS-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-
-    <!-- Sidebar -->
+    <!-- Sidebar-->
     <div id="sidebar-container"></div>
 
     <!-- Main Content -->
     <div class="content" id="content">
-        <div class="title" id="title">
-            <h2>Manage Payment</h2>
+        <div class="title">
+            <h2>Manage Payments</h2>
             <div class="top-bar">
                 <!-- Notification Bell -->
                 <a href="Announcements.html" class="text-decoration-none text-light">
@@ -27,70 +27,167 @@
             </div>
         </div>
         <hr>
-        <small><span id="real-time-date"></span></small>
+        <small><span id="date"></span></small>
         <br>
+    <br>
 
         <!-- Filter Section -->
         <div class="filter-container">
             <label for="start-date">Start Date:</label>
             <input type="date" id="start-date">
-        
+                        
             <label for="end-date">End Date:</label>
             <input type="date" id="end-date">
-        
-            <label for="processed-by">Processed By:</label>
-            <select id="processed-by">
-                <option value="">All</option>
-                <option value="cashier a">Cashier A</option>
-                <option value="cashier b">Cashier B</option>
-                <option value="cashier c">Cashier C</option>
-            </select>
-        
+                        
             <input type="text" id="search-bar" placeholder="🔍 Search">
         </div>
 
-        <!-- Payments Table -->
+
+        <!-- Payments Record Table -->
         <section class="table-container">
             <table class="payments-table">
                 <thead>
                     <tr>
-                        <th>Date ⬇</th>
+                        <th>Application ID</th>
                         <th>Username</th>
+                        <th>Corporate Email</th>
                         <th>Status</th>
-                        <th>Remarks</th>
-                        <th>Amount</th>
-                        <th>Processed by</th>
+                        <th>Paid Date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>01/15/2025</td><td>SMITH, JOHN</td><td>Paid</td><td>Completed</td><td>500</td><td>Cashier A</td></tr>
-                    <tr><td>02/10/2025</td><td>DOE, JANE</td><td>Pending</td><td>Waiting</td><td>300</td><td>Cashier B</td></tr>
-                    <tr><td>03/05/2025</td><td>JOHNSON, MIKE</td><td>Paid</td><td>Completed</td><td>200</td><td>Cashier A</td></tr>
-                    <tr><td>03/20/2025</td><td>LEE, ANNA</td><td>Paid</td><td>Done</td><td>400</td><td>Cashier C</td></tr>
-                    <tr><td>04/01/2025</td><td>BROWN, CHRIS</td><td>Failed</td><td>Error</td><td>100</td><td>Cashier A</td></tr>
-                    <tr><td>05/12/2025</td><td>DAVIS, SARAH</td><td>Paid</td><td>Completed</td><td>350</td><td>Cashier B</td></tr>
-                    <tr><td>06/18/2025</td><td>WILSON, TOM</td><td>Paid</td><td>Done</td><td>250</td><td>Cashier C</td></tr>
-                    <tr><td>07/25/2025</td><td>MARTIN, KATE</td><td>Pending</td><td>Waiting</td><td>300</td><td>Cashier A</td></tr>
-                    <tr><td>08/30/2025</td><td>GARCIA, ROB</td><td>Paid</td><td>Completed</td><td>500</td><td>Cashier B</td></tr>
-                    <tr><td>09/10/2025</td><td>WALKER, LISA</td><td>Paid</td><td>Done</td><td>450</td><td>Cashier C</td></tr>
-                    <tr><td>10/05/2025</td><td>HARRIS, JAMES</td><td>Failed</td><td>Error</td><td>150</td><td>Cashier A</td></tr>
-                    <tr><td>11/15/2025</td><td>MOORE, RACHEL</td><td>Paid</td><td>Completed</td><td>600</td><td>Cashier B</td></tr>
-                    <tr><td>12/20/2025</td><td>CLARK, STEVE</td><td>Pending</td><td>Waiting</td><td>200</td><td>Cashier C</td></tr>
-                </tbody>
+                    <tr>
+                        <td>2025-01-001</td>
+                        <td>DELA CRUZ, JUAN</td>
+                        <td>20XX8XXXX@psu.palawan.edu.ph</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>N/A</td>
+                        <td>
+                            <button class="btn btn-primary update-button"
+                                data-id="2025-01-001"
+                                data-username="DELA CRUZ, JUAN"
+                                data-email="20XX8XXXX@psu.palawan.edu.ph"
+                                data-status="Pending"
+                                data-date="N/A">
+                                Update
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-002</td>
+                        <td>GARCIA, MARIA</td>
+                        <td>20XX9XXXX@psu.palawan.edu.ph</td>
+                        <td><span class="status-badge status-approved">Approved</span></td>
+                        <td>Completed</td>
+                        <td>
+                            <button class="btn btn-primary update-button"
+                                data-id="2025-01-002"
+                                data-username="GARCIA, MARIA"
+                                data-email="20XX9XXXX@psu.palawan.edu.ph"
+                                data-status="Approved"
+                                data-date="Completed">
+                                Update
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-003</td>
+                        <td>SANTOS, PEDRO</td>
+                        <td>20XX7XXXX@psu.palawan.edu.ph</td>
+                        <td><span class="status-badge status-rejected">Rejected</span></td>
+                        <td>Incomplete Docs</td>
+                        <td>
+                            <button class="btn btn-primary update-button"
+                                data-id="2025-01-003"
+                                data-username="SANTOS, PEDRO"
+                                data-email="20XX7XXXX@psu.palawan.edu.ph"
+                                data-status="Rejected"
+                                data-date="Incomplete Docs">
+                                Update
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-004</td>
+                        <td>REYES, ANA</td>
+                        <td>20XX6XXXX@psu.palawan.edu.ph</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>N/A</td>
+                        <td>
+                            <button class="btn btn-primary update-button"
+                                data-id="2025-01-004"
+                                data-username="REYES, ANA"
+                                data-email="20XX6XXXX@psu.palawan.edu.ph"
+                                data-status="Pending"
+                                data-date="N/A">
+                                Update
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-005</td>
+                        <td>LOPEZ, MIGUEL</td>
+                        <td>20XX5XXXX@psu.palawan.edu.ph</td>
+                        <td><span class="status-badge status-approved">Approved</span></td>
+                        <td>Verified</td>
+                        <td>
+                            <button class="btn btn-primary update-button"
+                                data-id="2025-01-005"
+                                data-username="LOPEZ, MIGUEL"
+                                data-email="20XX5XXXX@psu.palawan.edu.ph"
+                                data-status="Approved"
+                                data-date="Verified">
+                                Update
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-006</td>
+                        <td>TORRES, LUIS</td>
+                        <td>20XX4XXXX@psu.palawan.edu.ph</td>
+                        <td><span class="status-badge status-rejected">Rejected</span></td>
+                        <td>Invalid ID</td>
+                        <td>
+                            <button class="btn btn-primary update-button"
+                                data-id="2025-01-006"
+                                data-username="TORRES, LUIS"
+                                data-email="20XX4XXXX@psu.palawan.edu.ph"
+                                data-status="Rejected"
+                                data-date="Invalid ID">
+                                Update
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2025-01-007</td>
+                        <td>RAMOS, CARLA</td>
+                        <td>20XX3XXXX@psu.palawan.edu.ph</td>
+                        <td><span class="status-badge status-approved">Approved</span></td>
+                        <td>Submitted</td>
+                        <td>
+                            <button class="btn btn-primary update-button"
+                                data-id="2025-01-007"
+                                data-username="RAMOS, CARLA"
+                                data-email="20XX3XXXX@psu.palawan.edu.ph"
+                                data-status="Approved"
+                                data-date="Submitted">
+                                Update
+                            </button>
+                        </td>
+                    </tr>                
             </table>
         </section>
-
         <!-- Entries Info -->
-        <div class="entries-info">Showing 0 entries</div>
+        <div class="entries-info mt-2">Showing 0 entries</div>
 
         <!-- Pagination -->
         <div class="pagination-container">
             <div class="pagination" id="pagination"></div>
         </div>
-    </div>
+    </main>
 
-    <script src="../../static/javascript/base.js"></script>
-    <script src="../../static/javascript/Admin_Payment.js"></script>
-
+    <script src="../../static/javascript/base.js"></script>  <!--THIS-->
+    <script src="../../static/javascript/Admin_Payment.js"></script> <!-- For search filtering and pagination -->
 </body>
 </html>
