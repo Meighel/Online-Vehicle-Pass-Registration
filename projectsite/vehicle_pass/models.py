@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils.timezone import now
+from datetime import timedelta
 
 
 class BaseModel(models.Model):
@@ -90,8 +92,18 @@ class Registration(BaseModel):
     files = models.URLField(max_length=250)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
 
-    def __str__(self):
-        return f"{self.registrationNumber}"  
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs) 
+
+        if self.status == "for payment":
+            payment, created = PaymentTransaction.objects.get_or_create(
+                registration=self,
+                defaults={
+                    'status': 'pending',
+                }
+            )
+            if created:
+                payment.save() 
 
 class VehiclePass(BaseModel):
     STATUS_CHOICES = [
@@ -115,13 +127,20 @@ class PaymentTransaction(BaseModel):
         ('void', 'Void')
     ]
     registration = models.ForeignKey(Registration, on_delete=models.CASCADE)
-    receipt_number = models.CharField(max_length=20, unique=True)
-    cashier = models.ForeignKey(CashierProfile, on_delete=models.CASCADE)
+    receipt_number = models.CharField(max_length=20, unique=True, null=True)
+    cashier = models.ForeignKey(CashierProfile, on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
+    due_date = models.DateTimeField(blank=True, null=True) 
     date_processed = models.DateTimeField(auto_now_add=True)
     
+    def save(self, *args, **kwargs):
+        if self.status == "pending" and not self.due_date:
+            self.due_date = now() + timedelta(days=7) 
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.receipt_number  
+        return self.receipt_number if self.receipt_number else f"Registration {self.registration.registrationNumber}"
  
 class InspectionReport(BaseModel):
     REMARK_CHOICES = [
