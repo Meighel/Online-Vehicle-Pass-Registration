@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
+from .forms import UserSignupForm
 # from .forms import UserRegistrationForm, UserProfileForm, SecurityProfileForm, CashierProfileForm, AdminProfileForm
 # from .forms import VehicleForm, RegistrationForm, RegistrationStatusForm, VehiclePassForm, PaymentTransactionForm
 # from .forms import InspectionReportForm, NotificationForm, AnnouncementForm
@@ -69,6 +70,20 @@ def cashier_dashboard(request):
 @login_required
 def admin_dashboard(request):
     return render(request, "Admin Dashboard/Admin_Dashboard.html")
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = UserSignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "You have successfully signed up! Please log in.")
+            return redirect('login')
+        else:
+            messages.error(request, "There was an error with your signup. Please try again.")
+    else:
+        form = UserSignupForm()
+
+    return render(request, 'signup.html', {'form': form})
 
 # def register(request):
 #     if request.method == 'POST':
