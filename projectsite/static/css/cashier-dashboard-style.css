@@ -1,0 +1,480 @@
+/* Reset Default Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Set the entire page to have a black background */
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+    display: flex;
+    background-color: black !important;
+    color: white !important; 
+    transition: all 0.3s ease;
+}
+
+/* ========================================= */
+/*         Main Content                      */
+/* ========================================= */
+.content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 20px;
+}
+
+.d-flex h2 {
+    font-size: px;
+    font-weight: bold;
+    color: yellow !important;
+    margin-bottom: 15px;
+}
+
+/* ========== Notification ========== */
+.content {
+    margin-left: 270px;
+    width: calc(100% - 270px);
+}
+
+.d-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px; 
+}
+
+.title h2 {
+    margin: 0; 
+    font-size: 30pxpx; 
+    display: flex;
+    align-items: center; 
+    font-weight: bold;
+    color: yellow;
+}
+
+
+#date {
+    font-size: 12px;
+    color: rgb(213, 213, 213);
+    margin: 0;
+    display: flex;
+    align-items: center; 
+}
+
+.icons-container {
+    display: flex;
+    gap: 15px;
+    opacity: 1;
+    visibility: visible !important;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.top-bar a {
+    margin-right: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.top-bar a .badge {
+    font-size: 12px;
+    padding: 5px 5px;
+}
+
+/* Search Bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    gap: 5px;
+}
+
+#search-bar {
+    width: 250px;
+    height: 30px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+}
+
+/* Search Button */
+.search-btn {
+    background: #ffe600;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-btn:hover {
+    background: #ffe100;
+}
+
+/* Stat Card */
+.stat-card {
+    position: relative;
+    padding: 20px;
+    text-align: center;
+    border-radius: 15px;
+    z-index: 0;
+    overflow: hidden;
+}
+.stat-card::before {
+    content: "";
+    position: absolute;
+    top: -5px; left: -5px; right: -5px; bottom: -5px;
+    background: linear-gradient(45deg, rgba(255, 255, 0, 0.8), rgba(135, 135, 16, 0.2));
+    border-radius: 20px;
+    z-index: -1;
+}
+.stat-card h5 {
+    color: #ffe5b4;
+    font-weight: bold !important;
+}
+.stat-card h2 {
+    color: #ffffff;
+    font-size: 65px;
+    font-weight: bold !important;
+}
+.stat-card p {
+    color: rgba(60, 59, 59, 0.6);
+}
+
+
+/* announcement */
+.announcements {
+    background: #fff8c3;
+    color: rgb(0, 0, 0);
+    border-radius: 10px;
+}
+
+/* Recent Applications */
+.recent-applications {
+    border-radius: 8px;
+    background: #1e1e2f;
+    color: #ffffff;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+/* user list */
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #29293d;
+    color: white;
+    border: 1px solid #444;
+    padding: 10px;
+    position: relative;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.user-info .badge {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user-item div {
+    display: flex;
+    gap: 5px;
+    position: absolute;
+    right: 10px;
+}
+.user-item .btn {
+    padding: 6px 10px;
+    font-size: 14px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+.user-item .btn:hover {
+    background: rgba(0, 128, 0, 0.581), rgba(255, 0, 0, 0.581), rgba(128, 128, 128, 0.789);
+}
+.sidebar.collapsed .user-item div {
+    display: flex;
+    gap: 5px;
+}
+.sidebar.collapsed .user-item {
+    justify-content: center;
+}
+.sidebar.collapsed .user-item div {
+    display: flex;
+    flex-wrap: nowrap;
+}
+#noResults {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ccc;
+}
+
+
+
+/* Graph Container Styling */
+.graph-container {
+    padding: 20px;
+    background-color: #29293d;
+    border-radius: 10px;
+}
+
+.graph-container canvas {
+    width: 100% !important;
+    height: 300px !important;
+}
+
+@media (max-width: 768px) {
+    .user-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-bottom: 50px;
+    }
+
+    .user-item div {
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+    }
+}
+
+/* ========================================= */
+/*  payment and transaction page styling     */
+/* ========================================= */
+
+.content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 20px;
+}
+
+.title h2 {
+    margin: 0; 
+    font-size: 30pxpx; 
+    display: flex;
+    align-items: center; 
+    font-weight: bold;
+    color: yellow;
+}
+
+/* ========== Notification ========== */
+.top-bar {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+
+/* ========== Filter Section ========== */
+.filter-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.filter-container input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    background: #333;
+    color: white;
+}
+
+.filter-btn {
+    background: yellow !important;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.filter-btn:hover {
+    background: orange;
+}
+
+#search-bar {
+    margin-left: auto;
+    padding: 8px;
+    width: 220px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #000000;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+#search-bar:focus {
+    border-color: yellow;
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 255, 0, 0.7);
+}
+
+
+/* ========== Table Styling ========== */
+
+.table-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+.payments-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #333;
+    border: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center; /* Ensures table content is aligned center */
+}
+
+.payments-table thead {
+    background: #444;
+}
+
+.payments-table th {
+    padding: 14px;
+    text-align: center; 
+    color: yellow;
+    font-size: 16px;
+}
+
+.payments-table td {
+    padding: 14px;
+    font-size: 14px;
+    border-bottom: 1px solid #444;
+    color: #ffffff;
+    text-align: center; /* Center align all table data */
+}
+
+.payments-table tbody tr {
+    transition: background 0.3s ease-in-out;
+}
+
+/* First column (Action buttons) */
+.passes-table td:nth-child(1) {
+    display: flex;
+    justify-content: center; /* Center the action buttons */
+    gap: 5px;
+    padding-right: 15px;
+}
+
+.passes-table tbody tr:nth-child(even) {
+    background: #292929;
+}
+
+.passes-table tbody tr:hover {
+    background: #3a3a3a;
+}
+
+
+/* Status Badges */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.status-approved {
+    background-color: green;
+}
+
+.status-rejected {
+    background-color: red;
+}
+
+.status-pending {
+    background-color: gray;
+}
+
+
+
+/* ========== Pagination ========== */
+.pagination-container {
+    display: flex;
+    justify-content: flex-end; /* Align to right */
+    margin-top: 20px;
+}
+
+.pagination {
+    display: flex;
+    gap: 5px;
+}
+
+.pagination button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.pagination button.active {
+    background-color: yellow;
+    color: black;
+}
+
+.pagination button:hover {
+    background-color: orange;
+}
+
+/* Entries Info */
+.entries-info {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+    .table-container {
+        padding: 10px; /* Reduces padding for smaller screens */
+        border-radius: 5px; /* Slightly smaller rounded corners */
+    }
+
+    .payments-table th, .payments-table td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .filter-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #search-bar {
+        width: 100%;
+    }
+    
+    .pagination {
+        flex-wrap: wrap;
+    }
+
+    .top-bar {
+        right: 10px; /* Reduce spacing for small screens */
+        top: 10px;
+    }
+}

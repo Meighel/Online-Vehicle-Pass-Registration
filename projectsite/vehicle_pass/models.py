@@ -2,6 +2,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.timezone import now
 from datetime import timedelta
+from django.utils.crypto import get_random_string
+from django.contrib.auth.hashers import make_password, check_password
 
 
 class BaseModel(models.Model):
@@ -28,20 +30,28 @@ class UserProfile(BaseModel):
     program = models.CharField(max_length=100, blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user', null=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user', null=True, null=True)
 
     def __str__(self):
-        return f"{self.firstname} {self.lastname}"  
+        return f"{self.firstname} {self.lastname}"
     
     def save(self, *args, **kwargs):
+        if not self.password.startswith("pbkdf2_sha256$"):  # Prevent double hashing
+            self.password = make_password(self.password)  # Hash password before saving
+            
         super().save(*args, **kwargs)
 
+        # Create profile based on role if not already existing
         if self.role == 'security' and not hasattr(self, 'securityprofile'):
             SecurityProfile.objects.create(user=self)
         elif self.role == 'cashier' and not hasattr(self, 'cashierprofile'):
             CashierProfile.objects.create(user=self)
         elif self.role == 'admin' and not hasattr(self, 'adminprofile'):
             AdminProfile.objects.create(user=self)
+
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)  # Check password
 
 class SecurityProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
