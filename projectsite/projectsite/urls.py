@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
-    default_dashboard, security_dashboard, cashier_dashboard, 
+    default_dashboard, security_dashboard, 
+    cashier_dashboard, 
     admin_dashboard, admin_manage_user, admin_manage_application, admin_manage_payments, admin_manage_passes, admin_report,
     home
 )
