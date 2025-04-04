@@ -15,7 +15,9 @@
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
-    <a class="navbar-brand ms-4 fs-3 fw-bold text-warning brand-logo" href="#">OVR</a>
+    <a href="#">
+        <img src="{% static 'images/navbar-brand img.png' %}" class="img-fluid" style="width: 100px; margin-left: 20px;">
+    </a>
     <button class="toggle-btn" id="toggle-btn">☰</button>
 
     <p>Main Menu</p>
@@ -67,7 +69,7 @@
     <div class="profile">
         <img src="{% static 'images/profile-placeholder.png' %}" alt="Profile Picture"> 
         <div class="profile-info">
-            <span class="name">Admin Name</span>
+            <span class="name">{{ admin_name }}</span>
             <span class="position">Admin</span>
         </div>
     </div>

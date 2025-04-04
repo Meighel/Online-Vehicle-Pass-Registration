@@ -69,7 +69,15 @@ def cashier_dashboard(request):
 
 @login_required
 def admin_dashboard(request):
-    return render(request, "Admin Dashboard/Admin_Dashboard.html")
+    try:
+        admin_user = UserProfile.objects.get(id=request.user.id, role='admin')
+    except UserProfile.DoesNotExist:
+        admin_user = None  
+
+    context = {
+        'admin_name': f"{admin_user.firstname} {admin_user.lastname}" if admin_user else "Admin"
+    }
+    return render(request, "Admin Dashboard/Admin_Dashboard.html", context)
 
 @login_required
 def admin_manage_user(request):
