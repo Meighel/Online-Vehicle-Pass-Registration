@@ -75,6 +75,14 @@ def admin_dashboard(request):
 def admin_manage_user(request):
     return render(request, "Admin Dashboard/Admin_Manage_User.html")
 
+@login_required
+def admin_manage_application(request):
+    return render(request, "Admin Dashboard/Admin_Application.html")
+
+@login_required
+def admin_manage_payments(request):
+    return render(request, "Admin Dashboard/Admin_Manage_Payment.html")
+
 
 def signup_view(request):
     email = request.GET.get('email_value', '')
