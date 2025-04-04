@@ -71,6 +71,10 @@ def cashier_dashboard(request):
 def admin_dashboard(request):
     return render(request, "Admin Dashboard/Admin_Dashboard.html")
 
+@login_required
+def admin_manage_user(request):
+    return render(request, "Admin Dashboard/Admin_Manage_User.html")
+
 def signup_view(request):
     email = request.GET.get('email_value', '')
     

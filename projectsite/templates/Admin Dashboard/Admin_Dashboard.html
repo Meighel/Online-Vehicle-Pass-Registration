@@ -1,202 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="../../static/css/admin-dashboard-style.css">
-    <link rel="stylesheet" href="../../static/css/sidebar.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <!-- Sidebar -->
-    <div id="sidebar-container"></div>
+{% extends 'includes/admin_sidebar.html' %}
+{% load static %}
 
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin-dashboard-style.css' %}">
+<style>
+    /* Ensure main content shifts to the right of sidebar */
+    .dashboard-wrapper {
+        display: flex;
+    }
+    .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        margin-left: 120px;
+    }
+    /* Ensure cards and table have proper spacing */
+    .dashboard-card {
+        min-height: 140px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper d-flex">
     <!-- Main Content -->
-    <div class="content" id="content">
-        <div class="title" id="title">
-            <h2>Dashboard</h2>
-            <div class="top-bar">
+        <!-- Main Content -->
+    <div class="main-content flex-grow-1 ms-uto">
+        <div class="container-fluid py-1">
+            <!-- Title & Top Bar -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+                <h2 class="title mb-3 mb-md-0">Dashboard</h2>
+                <div class="d-flex align-items-center gap-3">
                     <!-- Notification Bell -->
-                    <a href="Announcements.html" class="text-decoration-none text-light">
-                        <img src="../../static/images/notification.png" alt="Notifications" width="30" height="30">
-                        <span class="position-absolute top-0 start-100 translate-middle bg-danger"> </span>
+                    <a href="Announcements.html" class="text-decoration-none text-light position-relative">
+                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="30" height="30">
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
                     </a>
-                <!-- Search Bar -->
-                <div class="search-container">
-                    <input type="text" placeholder="Search..." id="search-bar">
-                    <button class="search-btn">🔍</button> <!-- Added search button -->
+                    <!-- Search Bar -->
+                    <div class="dashboard d-flex">
+                        <input type="text" class="form-control" placeholder="Search..." id="search-bar" width="30" height="30">
+                        <button class="btn btn-outline-secondary ms-1">🔍</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <hr>
-        <small><span id="real-time-date"></span></small>
-        
 
-    
-        <div class="container-flex mt-4">
-            <div class="scroll-container">
-                <div class="scroll-row"> <!-- Keeps all boxes in one row -->
-                    
-                    <!-- Box 1 -->
-                    <div class="custom-box">
-                        <div class="box-header">
-                            <h5>
-                                <img src="../../static/images/student.png" alt="Student Icon" width="25" height="25">
+            <hr>
+            <small><span id="date"></span></small>
+
+            <!-- Statistic Boxes -->
+            <div class="row g-4 mt-3">
+                {% for i in "1234" %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="p-3 border rounded shadow-sm dashboard-card">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">
+                                <img src="{% static 'images/student.png' %}" alt="Student Icon" width="25" height="25">
                                 Students Accounts
-                            </h5>
-                            <button class="options-btn" aria-label="More options">⋮</button>
+                            </h6>
                         </div>
-                        <h6>255</h6>
-                        <small><p>+2.5% than usual</p></small>
-                    </div>
-    
-                    <!-- Box 2 -->
-                    <div class="custom-box">
-                        <div class="box-header">
-                            <h5>
-                                <img src="../../static/images/worker.png" alt="Worker Icon" width="25" height="25">
-                                Faculty Accounts
-                            </h5>
-                            <button class="options-btn" aria-label="More options">⋮</button>
-                        </div>
-                        <h6>34</h6>
-                        <small><p>-0.1% than usual</p></small>
-                    </div>
-    
-                    <!-- Box 3 -->
-                    <div class="custom-box">
-                        <div class="box-header">
-                            <h5>
-                                <img src="../../static/images/clock.png" alt="Clock Icon" width="25" height="25">
-                                Pending Application
-                            </h5>
-                            <button class="options-btn" aria-label="More options">⋮</button>
-                        </div>
-                        <h6>50</h6>
-                        <small><p>-10% compared to last month</p></small>
-                    </div>
-    
-                    <!-- Box 4 -->
-                    <div class="custom-box">
-                        <div class="box-header">
-                            <h5>
-                                <img src="../../static/images/money.png" alt="Money Icon" width="25" height="25">
-                                Total Paid Client
-                            </h5>
-                            <button class="options-btn" aria-label="More options">⋮</button>
-                        </div>
-                        <h6>360</h6>
-                        <small><p>+15% increase in the past week</p></small>
-                    </div>
-
-                    <!-- Box 5 -->
-                    <div class="custom-box">
-                        <div class="box-header">
-                            <h5>
-                                <img src="../../static/images/check.png" alt="Check Icon" width="25" height="25">
-                                Verified Application
-                            </h5>
-                            <button class="options-btn" aria-label="More options">⋮</button>
-                        </div>
-                        <h6>80</h6>
-                        <small><p>same as last week</p></small>
-                    </div>
-
-                    <!-- Box 6 -->
-                    <div class="custom-box">
-                        <div class="box-header">
-                            <h5>
-                                <img src="../../static/images/remove.png" alt="X Icon" width="25" height="25">
-                                Rejected Application
-                            </h5>
-                            <button class="options-btn" aria-label="More options">⋮</button>
-                        </div>
-                        <h6>10</h6>
-                        <small><p>-8% decreases over the last 30 days</p></small>
+                        <h5>255</h5>
+                        <small><p class="text-success mb-0">+2.5% than usual</p></small>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-        </div>
 
-        <!-- Second Row-->
-
-        <div class="container mt-4">
-            <div class="row">
-                <!-- Transactions Table (Full Width) -->
+            <!-- Transactions Table -->
+            <div class="row mt-5">
                 <div class="col-12">
-                    <div class="table-container p-3 border rounded shadow-sm">
-                        <h6 class="mb-3">Transactions</h6>   
-                        <table class="table table-hover table-borderless">
-                            <thead class="border-bottom">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Processed By</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr onclick="window.location='#';">
-                                    <td>John Doe</td>
-                                    <td>2025-02-24</td>
-                                    <td><span class="status-badge status-approved">Approved</span></td>
-                                    <td>Admin</td>
-                                </tr>
-                                <tr onclick="window.location='#';">
-                                    <td>Jane Smith</td>
-                                    <td>2025-02-23</td>
-                                    <td><span class="status-badge status-pending">Pending</span></td>
-                                    <td>Cashier</td>
-                                </tr>
-                                <tr onclick="window.location='#';">
-                                    <td>Michael Johnson</td>
-                                    <td>2025-02-22</td>
-                                    <td><span class="status-badge status-rejected">Rejected</span></td>
-                                    <td>Security Personnel</td>
-                                </tr>
-                                <tr onclick="window.location='#';">
-                                    <td>Emily Davis</td>
-                                    <td>2025-02-18</td>
-                                    <td><span class="status-badge status-verified">Verified</span></td>
-                                    <td>Accounting</td>
-                                </tr>
-                                <tr onclick="window.location='#';">
-                                    <td>Carlos Rodriguez</td>
-                                    <td>2025-02-24</td>
-                                    <td><span class="status-badge status-verified">Verified</span></td>
-                                    <td>Security Personnel</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-        
-                <div class="col-12 d-flex flex-wrap mt-3">
-                    <!-- Doughnut Chart -->
-                    <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="chart-container p-3 border rounded shadow-sm w-100">
-                            <canvas id="registrationChart"></canvas>
-                        </div>
-                    </div>
-                
-                    <!-- Slots Counter -->
-                    <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                        <div class="slots-container w-100">
-                            <h4>REMAINING SLOTS</h4>
-                            <h6>380</h6>
+                    <div class="p-3 border rounded shadow-sm bg-white">
+                        <h6 class="mb-3">Transactions</h6>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-borderless align-middle">
+                                <thead class="border-bottom">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Processed By</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr onclick="window.location='#';" style="cursor: pointer;">
+                                        <td>John Doe</td>
+                                        <td>2025-02-24</td>
+                                        <td><span class="badge bg-success">Approved</span></td>
+                                        <td>Admin</td>
+                                    </tr>
+                                    <!-- Add more rows as needed -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    
-    <script src="../../static/javascript/base.js"></script>  <!--THIS-->
-    <script src="../../static/javascript/Admin_Dashboard.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-</body>
-</html>
+            </div> <!-- End Row -->
+        </div> <!-- End Container -->
+    </div> <!-- End Main Content -->
+</div> <!-- End Dashboard Wrapper -->
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'javascript/Admin_Dashboard.js' %}"></script>
+{% endblock %}

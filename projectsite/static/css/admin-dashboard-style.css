@@ -21,65 +21,32 @@ body {
 
 .content {
     flex-grow: 1;
-    margin-left: 250px;
     padding: 20px;
     transition: margin-left 0.3s ease, width 0.3s ease;
     width: calc(100% - 250px);
 }
 
 .title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 10px; 
-}
-
-.title h2 {
     margin: 0; 
-    font-size: 35px; 
+    font-size: 50px; 
     display: flex;
     align-items: center; 
     font-weight: bold;
     color: yellow;
+    justify-content: space-between;
+    padding: 5px 10px; 
 }
 
 
-#real-time-date {
+#date {
     font-size: 12px;
     color: rgb(213, 213, 213);
     margin: 0;
     display: flex;
     align-items: center; 
+    margin-bottom: 5px;
 }
 
-.icons-container {
-    display: flex;
-    gap: 15px;
-    opacity: 1;
-    visibility: visible !important;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 0;
-}
-
-.top-bar a {
-    margin-right: 15px;
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.top-bar a .badge {
-    font-size: 12px;
-    padding: 5px 5px;
-}
-
-/* Search Bar */
 .search-container {
     display: flex;
     align-items: center;
@@ -87,19 +54,8 @@ body {
     gap: 5px;
 }
 
-#search-bar {
-    width: 250px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    outline: none;
-}
-
-/* Search Button */
 .search-btn {
-    background: #ffe600;
+    background: #ffe600 !important;
     border: none;
     padding: 5px 12px;
     border-radius: 5px;
@@ -132,385 +88,69 @@ body {
     color: #f2e570;
     border-color: #f2e570;
 }
-
-.scroll-container {
-    overflow-x: auto;
-    white-space: nowrap;
-    padding-bottom: 10px;
-}
-
-/* Webkit-based browsers (Chrome, Edge, Safari) */
-.scroll-container::-webkit-scrollbar {
-    height: 8px;
-}
-
-.scroll-container::-webkit-scrollbar-track {
-    background: #1e1e1e;
-    border-radius: 10px;
-}
-
-.scroll-container::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 10px;
-    transition: background 0.3s ease;
-}
-
-.scroll-container::-webkit-scrollbar-thumb:hover {
-    background: #666;
-}
-
-.scroll-container {
-    scrollbar-width: thin;
-    scrollbar-color: yellow #1e1e1e;
-}
-
-.scroll-row{
-    display: flex;
-    flex-wrap: nowrap;
-}
-
-.custom-box {
-    flex: 0 0 250px;
-    border: 2px solid rgb(90, 90, 90);
-    padding: 20px;
-    padding-bottom: 5px;
-    border-radius: 8px;
-    position: relative;
-    background-color: #0e0e0e;
-    color: white;
-    margin-right: 15px;
-}
-.options-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.options-btn:hover {
-    color: #f2e570;
-}
-
-
-/* Transaction */
-.table-container {
-    font-size: 14px;
-    color: #0e0e0e;
-    border-radius: 8px;
-    padding: 15px;
-    background: rgb(255, 255, 255);
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-}
-
-
-.table-hover tbody tr {
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
-}
-
-.table-hover tbody tr:hover {
-    background: #f8f9fa;
-}
-
 .status-badge {
     padding: 5px 10px;
     border-radius: 5px;
-    font-size: 0.9rem;
+    color: white;
     font-weight: bold;
 }
 
 .status-approved {
-    background: #28a745;
-    color: white;
-}
-
-.status-pending {
-    background: #ffc107;
-    color: black;
+    background-color: green;
 }
 
 .status-rejected {
-    background: #dc3545;
-    color: white;
-}
-
-.status-verified {
-    background-color: blueviolet;
-    color: #f8f9fa;
-}
-
-.chart-container, .slots-container {
-    width: 100%;
-    max-width: 450px;
-    height: 310px;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Chart and Slot Container */
-.chart-container {
-    padding: 0;
-    width: 100%;
-    max-width: 410px;
-    height: 310px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    min-height: 300px;
-    margin: 20px 10px 10px 10px;
+    background-color: red;
 }
 
 
-.chart-container canvas {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 300px;
-    max-height: 300px;
+
+.status-pending {
+    background-color: gray;
 }
 
-.slots-container {
-    text-align: center;
-    padding: 40px;
-    border: 20px solid;
-    border-image: linear-gradient(90deg, #ffffff, #00f2fe);
-    border-image-slice: 1;
-    color: #ffffff;
-    background: linear-gradient(135deg, #1a1a2e, #16213e); /* Better contrast */
-    border-radius: 8px;
-    font-size: 20px;
-    margin-top: 20px;
-    margin-left: 30px;
-    width: 100%;
-    max-width: 450px;
-    height: 310px;
-    margin-top: 10px;
-}
-
-.slots-container h4 {
-    font-weight: bold;
-    font-size: larger;
-}
-
-.slots-container h6 {
-    color: #ffc107;
-    font-size: 80px;
-    margin-top: 20px;
-    font-weight: bold;
-}
-
-.content.expanded {
-    margin-left: 60px;
-    width: calc(100% - 60px);
-}
-
-.content.expanded .scroll-container{
-    margin: 0;
-    width: 100%;
-}
-
-@media (max-width: 768px){
-    body{
-        min-width: 768px;
-    }
-}
-
-@media (max-width: 992px) {
-    .container {
-        min-width: 600px; /* Sets a minimum width when screen is below 992px */
-    }
-}
-
-@media (max-width: 1000px) {
-    .table-container, .chart-container, .slots-container {
-        min-width: 400px; /* Further adjusts for smaller screens */
-    }
-}
-
-/* Adjust for responsiveness */
-@media (max-width: 768px) {
-    .chart-container, .slots-container {
-        min-height: auto;
-        padding: 20px;
-    }
-}
-
-
-.content {
-    margin-left: 260px;
-    width: calc(100% - 260px);
-    padding: 20px;
-}
-
-.title {
-    font-size: 24px;
-    font-weight: bold;
-    color: yellow;
-    margin-bottom: 15px;
-}
-
-.top-bar {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-}
-
-/* ========== Table Container ========== */
-.table-container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-/* ========== Filter Section ========== */
 .filter-container {
     display: flex;
-    gap: 10px;
     align-items: center;
-    margin-bottom: 15px;
-}
-
-.filter-container input {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid gray;
-    background: #333;
-    color: white;
-}
-
-.filter-btn {
-    background: yellow !important;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.filter-btn:hover {
-    background: orange;
+    gap: 5px;
+    margin-bottom: 10px;
 }
 
 #search-bar {
-    margin-left: auto;
+    width: 275px;
+    height: 40px;
     padding: 8px;
-    width: 220px;
-    border-radius: 5px;
     border: 1px solid #ccc;
-    background: #000000;
+    border-radius: 5px;
     font-size: 14px;
-    transition: all 0.3s ease-in-out;
-}
-
-#search-bar:focus {
-    border-color: yellow;
     outline: none;
-    box-shadow: 0 0 5px rgba(255, 255, 0, 0.7);
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 0px;
 }
 
-/* ========================================= */
-/*         passes page styling                */
-/* ========================================= */
-
-/* ========== Passes Table ========== */
-.passes-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #333;
-    border-radius: 10px;
-    overflow: hidden;
-    text-align: center; /* Ensures table content is aligned center */
-}
-
-/* Table Header */
-.passes-table thead {
-    background: #444;
-}
-
-.passes-table th {
-    padding: 14px;
-    text-align: center; 
-    color: yellow;
-    font-size: 16px;
-}
-
-/* Table Rows */
-.passes-table tbody tr {
-    transition: background 0.3s ease-in-out;
-}
-
-.passes-table td {
-    padding: 14px;
+.search-btn {
+    width: 50px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    cursor: pointer;
     font-size: 14px;
-    border-bottom: 1px solid #444;
-    color: #ffffff;
-    text-align: center; /* Center align all table data */
 }
 
-/* First column (Action buttons) */
-.passes-table td:nth-child(1) {
+
+/* ========== Pagination ========== */
+.pagination {
     display: flex;
-    justify-content: center; /* Center the action buttons */
-    gap: 5px;
-    padding-right: 15px;
-}
-
-.passes-table tbody tr:nth-child(even) {
-    background: #292929;
-}
-
-.passes-table tbody tr:hover {
-    background: #3a3a3a;
-}
-
-/* ========== Action Buttons ========== */
-.btn-approve {
-    background-color: #28a745 !important; 
-    color: white !important;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.btn-approve:hover {
-    background-color: #218838;
-}
-
-.btn-reject {
-    background-color: #dc3545 !important; 
-    color: white !important;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.btn-reject:hover {
-    background-color: #c82333;
-}
-
-
-/* Pagination */
-.pagination-container {
-    display: flex;
-    justify-content: flex-end; /* Align to right */
+    justify-content: flex-end; 
+    gap: 10px;
     margin-top: 20px;
 }
 
-.pagination {
-    display: flex;
-    gap: 5px;
+.pagination-container {
+    overflow-x: auto;
+    padding: 10px 0;
 }
 
 .pagination button {
@@ -520,7 +160,6 @@ body {
     padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
-    font-weight: bold;
 }
 
 .pagination button.active {
@@ -528,103 +167,14 @@ body {
     color: black;
 }
 
-.pagination button:hover {
-    background-color: orange;
+/* ========== Entries Info ========== */
+.entries-info {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 10px;
 }
 
-/* ========== Responsive Design ========== */
-@media (max-width: 768px) {
-    .table-container {
-        padding: 10px;
-        border-radius: 5px; /* Slightly smaller rounded corners */
-    }
-    
-    .passes-table th, 
-    .passes-table td {
-        padding: 10px;
-        font-size: 12px;
-    }
-    
-    .btn {
-        padding: 5px 9px; 
-        font-size: 12px; 
-    }
-
-    .filter-container {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    #search-bar {
-        width: 100%;
-    }
-    .pagination {
-        flex-wrap: wrap;
-    }
-}
-
-
-/* ========================================= */
-/*          user page styling                */
-/* ========================================= */
-
-.table-container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.users-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 10px;
-    background-color: #292929;
-    color: white;
-}
-
-.users-table th {
-    font-weight: bold;
-    padding: 14px;
-    color: yellow;
-    font-size: 16px;
-}
-.users-table td {
-    padding: 12px;
-    font-size: 15px;
-}
-
-.users-table tr {
-    color: white;
-}
-
-/* Alternating row colors */
-.users-table tbody tr:nth-child(odd) {
-    background-color: #1e1e1e !important; /* Dark Gray */
-}
-
-.users-table tbody tr:nth-child(even) {
-    background-color: #1e1e1e !important; /* Black */
-}
-
-.users-table th:first-child {
-    cursor: pointer;
-}
-
-/* Center Action Column */
-.users-table th:nth-child(7),
-.users-table td:nth-child(7) { 
-    text-align: center;
-}
-
-/* Align buttons inside the Action column to the right */
-.users-table td:nth-child(7) {
-    display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
-    gap: 5px; 
-    padding-right: 15px; /* Add some padding for spacing */
-}
-
-/* BUTTON */
+/* ========== Button ========== */
 .btn-view {
     background-color: #007bff !important; 
     color: white;
@@ -657,97 +207,142 @@ body {
     background-color: #5a6268;
 }
 
-/* Pagination */
-.pagination {
-    display: flex;
-    justify-content: flex-end; /* position of btn */
-    gap: 10px;
-    margin-top: 20px;
-}
 
-.pagination-container {
-    overflow-x: auto;
-    padding: 10px 0;
-}
-
-.pagination button {
-    background: #333;
-    color: white;
-    border: none;
-    padding: 8px 12px;
+.table-container {
+    background: white;
+    padding: 2px;
     border-radius: 5px;
-    cursor: pointer;
 }
 
-.pagination button.active {
-    background-color: yellow;
-    color: black;
-}
 
-/* Entries Info */
-.entries-info {
-    text-align: right;
-    font-size: 14px;
+
+
+/* ========== Admin Search Bar ========== */
+.dashboard .btn {
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 5px;
     margin-top: 10px;
+    height: 40px;
+
 }
 
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    background: #222;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+/* ========================================= */
+/*         passes page styling                */
+/* ========================================= */
+
+.passes-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #333;
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
 }
 
-.modal-content {
+.passes-table thead {
+    background: #444;
+}
+
+.passes-table th {
+    padding: 14px;
+    text-align: center; 
+    color: yellow;
+    font-size: 16px;
+}
+
+.passes-table tbody tr {
+    transition: background 0.3s ease-in-out;
+}
+
+.passes-table td {
+    padding: 14px;
+    font-size: 14px;
+    border-bottom: 1px solid #444;
+    color: #ffffff;
+    text-align: center;
+}
+
+.passes-table td:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding-right: 15px;
+}
+
+.passes-table tbody tr:nth-child(even) {
+    background: #292929;
+}
+
+.passes-table tbody tr:hover {
+    background: #3a3a3a;
+}
+
+
+/* ========================================= */
+/*          user table styling                */
+/* ========================================= */
+
+
+.users-table {
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 5px;
+    background-color: #292929;
     color: white;
 }
 
-.close {
-    float: right;
-    font-size: 24px;
+.users-table th {
+    font-weight: bold;
+    padding: 14px;
+    color: yellow;
+    font-size: 16px;
+}
+.users-table td {
+    padding: 12px;
+    font-size: 15px;
+}
+
+.users-table tr {
+    color: white;
+}
+.users-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important;
+}
+
+.users-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e !important; 
+}
+
+.users-table th:first-child {
     cursor: pointer;
 }
 
-/* ========== Responsive Design ========== */
-@media (max-width: 768px) {
-    .filter-container {
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    .pagination {
-        flex-wrap: wrap;
-    }
+.users-table th:nth-child(7),
+.users-table td:nth-child(7) { 
+    text-align: center;
 }
 
+.users-table td:nth-child(7) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px; 
+    padding-right: 15px;
+}
 
 /* ========================================= */
 /*      payments page styling                */
 /* ========================================= */
 
 
-.table-container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-}
-
 .payments-table {
     width: 100%;
     border-collapse: collapse;
     background: #333;
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
-    text-align: center; /* Ensures table content is aligned center */
-    /* Remove border and box-shadow */
+    text-align: center;
     border: none;
     box-shadow: none;
 }
@@ -768,17 +363,16 @@ body {
     font-size: 14px;
     border-bottom: 1px solid #444;
     color: #ffffff;
-    text-align: center; /* Center align all table data */
+    text-align: center;
 }
 
 .payments-table tbody tr {
     transition: background 0.3s ease-in-out;
 }
 
-/* First column (Action buttons) */
 .passes-table td:nth-child(1) {
     display: flex;
-    justify-content: center; /* Center the action buttons */
+    justify-content: center;
     gap: 5px;
     padding-right: 15px;
 }
@@ -791,78 +385,23 @@ body {
     background: #3a3a3a;
 }
 
-/* Status Badges */
-.status-badge {
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: white;
-    font-weight: bold;
-}
-
-.status-approved {
-    background-color: green;
-}
-
-.status-rejected {
-    background-color: red;
-}
-
-.status-pending {
-    background-color: gray;
-}
-
-/* Center the Action Column */
 .payments-table th:last-child,
 .payments-table td:last-child {
     text-align: center;
 }
 
-/* Align buttons inside the Action column */
 .payments-table td:last-child {
     display: flex;
     justify-content: center;
     gap: 5px;
 }
 
-/* ========== Pagination ========== */
-.pagination {
-    display: flex;
-    justify-content: flex-end; /* position of btn */
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.pagination-container {
-    overflow-x: auto;
-    padding: 10px 0;
-}
-
-.pagination button {
-    background: #333;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.pagination button.active {
-    background-color: yellow;
-    color: black;
-}
-
-/* Entries Info */
-.entries-info {
-    text-align: right;
-    font-size: 14px;
-    margin-top: 10px;
-}
 
 /* ========== Responsive Design ========== */
 @media (max-width: 768px) {
     .table-container {
-        padding: 10px; /* Reduces padding for smaller screens */
-        border-radius: 5px; /* Slightly smaller rounded corners */
+        padding: 5px;
+        border-radius: 5px;
     }
 
     .payments-table th, .payments-table td {
@@ -870,21 +409,22 @@ body {
         font-size: 12px;
     }
 
-    .filter-container {
-        flex-direction: column;
-        align-items: flex-start;
-    }
 
     #search-bar {
         width: 100%;
     }
     
-    .pagination {
-        flex-wrap: wrap;
-    }
 
     .top-bar {
         right: 10px; /* Reduce spacing for small screens */
         top: 10px;
+    }
+    .filter-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
     }
 }

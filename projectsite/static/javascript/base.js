@@ -1,66 +1,66 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    await loadSidebar();
-    setupSidebarToggle();
+    // await loadSidebar();
+    // setupSidebarToggle();
     setupSidebarHighlight();
     displayCurrentDate();
-    fixSidebarImagePaths();
+    // fixSidebarImagePaths();
 });
 
-// Get the user role (Can be dynamic based on auth logic)
-function getUserRole() {
-    return "admin"; // Change this for testing
-}
+// // Get the user role (Can be dynamic based on auth logic)
+// function getUserRole() {
+//     return "admin"; // Change this for testing
+// }
 
-// Get the correct sidebar path - SOMETHING IS WRONG
-function getSidebarPath(userRole) {
-    const currentPath = window.location.pathname;
-    const depth = currentPath.split("/").filter(Boolean).length - 2;
-    const basePath = "../".repeat(Math.max(depth, 0));
+// // Get the correct sidebar path - SOMETHING IS WRONG
+// function getSidebarPath(userRole) {
+//     const currentPath = window.location.pathname;
+//     const depth = currentPath.split("/").filter(Boolean).length - 2;
+//     const basePath = "../".repeat(Math.max(depth, 0));
     
-    return `${basePath}templates/includes/${userRole}_sidebar.html`;
-}
+//     return `${basePath}templates/includes/${userRole}_sidebar.html`;
+// }
 
-// Fix broken sidebar image paths
-function fixSidebarImagePaths() {
-    const images = document.querySelectorAll(".sidebar img[data-src]");
+// // Fix broken sidebar image paths
+// function fixSidebarImagePaths() {
+//     const images = document.querySelectorAll(".sidebar img[data-src]");
     
-    if (!images.length) return;
+//     if (!images.length) return;
 
-    const depth = window.location.pathname.split("/").length - 2;
-    const basePath = "../".repeat(Math.max(depth, 0)) + "static/images/";
+//     const depth = window.location.pathname.split("/").length - 2;
+//     const basePath = "../".repeat(Math.max(depth, 0)) + "static/images/";
 
-    images.forEach(img => {
-        img.src = basePath + img.dataset.src;
-        console.log(`Image fixed: ${img.src}`);
-    });
-}
+//     images.forEach(img => {
+//         img.src = basePath + img.dataset.src;
+//         console.log(`Image fixed: ${img.src}`);
+//     });
+// }
 
-// Load Sidebar Dynamically
-async function loadSidebar() {
-    const userRole = getUserRole();
-    const sidebarContainer = document.getElementById("sidebar-container");
+// // Load Sidebar Dynamically
+// async function loadSidebar() {
+//     const userRole = getUserRole();
+//     const sidebarContainer = document.getElementById("sidebar-container");
 
-    if (!sidebarContainer) {
-        console.error("Sidebar container not found!");
-        return;
-    }
+//     if (!sidebarContainer) {
+//         console.error("Sidebar container not found!");
+//         return;
+//     }
 
-    const sidebarPath = getSidebarPath(userRole);
-    console.log(`Fetching sidebar from: ${sidebarPath}`);
+//     const sidebarPath = getSidebarPath(userRole);
+//     console.log(`Fetching sidebar from: ${sidebarPath}`);
 
-    try {
-        const response = await fetch(sidebarPath);
-        if (!response.ok) throw new Error(`Failed to fetch sidebar: ${response.statusText}`);
+//     try {
+//         const response = await fetch(sidebarPath);
+//         if (!response.ok) throw new Error(`Failed to fetch sidebar: ${response.statusText}`);
 
-        sidebarContainer.innerHTML = await response.text();
-        console.log("Sidebar loaded successfully.");
+//         sidebarContainer.innerHTML = await response.text();
+//         console.log("Sidebar loaded successfully.");
 
-        fixSidebarImagePaths(); // Ensure images load correctly after sidebar loads
-    } catch (error) {
-        console.error(`❌ Error loading sidebar: ${error.message}`);
-        sidebarContainer.innerHTML = `<p>Error loading sidebar. (${error.message})</p>`;
-    }
-}
+//         fixSidebarImagePaths(); // Ensure images load correctly after sidebar loads
+//     } catch (error) {
+//         console.error(`❌ Error loading sidebar: ${error.message}`);
+//         sidebarContainer.innerHTML = `<p>Error loading sidebar. (${error.message})</p>`;
+//     }
+// }
 
 // 📌 Sidebar toggle functionality
 function setupSidebarToggle() {

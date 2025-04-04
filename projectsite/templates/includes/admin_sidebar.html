@@ -1,12 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Sidebar</title>
+    <title>{% block title %}Admin Sidebar{% endblock %}</title>
 
     <!-- Link to External CSS -->
-    <link rel="stylesheet" href="../../static/css/sidebar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
 
@@ -18,51 +21,65 @@
     <p>Main Menu</p>
     <ul>
         <li data-menu="dashboard">
-            <a href="../Admin Dashboard/Admin_Dashboard.html">
-                <img src="../../static/images/home.png" alt="house" width="30">
+            <a href="{% url 'admin_dashboard' %}">
+                <img src="{% static 'images/home.png' %}" alt="house" width="30">
                 <span>Dashboard</span>
             </a>
         </li>
         <li data-menu="manage-users">
-            <a href="../Admin Dashboard/Admin_Manage_User.html">
-                <img src="../../static/images/user.png" alt="user" width="30">
-                <span>Users</span>
+            <a href="{% url 'admin_manage_user' %}">
+                <img src="{% static 'images/user.png' %}" alt="user" width="30">
+                <span>Manage User</span>
             </a>
         </li>
-        <li data-menu="manage-passes">
-            <a href="../Admin Dashboard/Admin_Manage_Passes.html">
-                <img src="../../static/images/passes.png" alt="Passes" width="30">
-                <span> Passes</span>
+        <li data-menu="application">
+            <a href="#">
+                <img src="{% static 'images/application.png' %}" alt="application" width="30">
+                <span>Application</span>
             </a>
         </li>
         <li data-menu="manage-payments">
-            <a href="../Admin Dashboard/Admin_Manage.Payment.html">
-                <img src="../../static/images/payment.png" alt="Payments" width="30">
+            <a href="#">
+                <img src="{% static 'images/payment.png' %}" alt="Payments" width="30">
                 <span>Payments</span>
             </a>
         </li>
+        <li data-menu="manage-passes">
+            <a href="#">
+                <img src="{% static 'images/passes.png' %}" alt="Passes" width="30">
+                <span> Passes</span>
+            </a>
+        </li>
         <li data-menu="reports">
-            <a href="../Admin Dashboard/Admin_Reports.html">
-                <img src="../../static/images/report.png" alt="Report" width="30">
+            <a href="#">
+                <img src="{% static 'images/report.png' %}" alt="Report" width="30">
                 <span>Reports</span>
             </a>
         </li>
     </ul>
 
     <a href="#" id="logout">
-        <center><img src="../../static/images/power-off.png" alt="logout" width="25"></center>
+        <center><img src="{% static 'images/power-off.png' %}" alt="logout" width="25"></center>
         <span>Logout</span>
     </a>
 
     <!-- Profile Section -->
     <div class="profile">
-        <img src="../../static/images/profile-placeholder.png" alt="Profile Picture"> 
+        <img src="{% static 'images/profile-placeholder.png' %}" alt="Profile Picture"> 
         <div class="profile-info">
             <span class="name">Admin Name</span>
-            <span class="position">Cashier</span>
+            <span class="position">Admin</span>
         </div>
     </div>
 </div>
+
+<!-- Main content container -->
+<div class="main-content">
+    {% block content %}{% endblock %}
+</div>
+
+<script src="{% static 'javascript/base.js' %}"></script>
+{% block extra_js %}{% endblock %}
 
 </body>
 </html>
