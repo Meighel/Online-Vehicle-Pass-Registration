@@ -3,7 +3,7 @@ from django.urls import path, include
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
     default_dashboard, security_dashboard, 
-    cashier_dashboard, cashier_payments,
+    cashier_dashboard, cashier_payments, cashier_transaction,
     admin_dashboard, admin_manage_user, admin_manage_application, admin_manage_payments, admin_manage_passes, admin_report,
     home
 )
@@ -20,6 +20,7 @@ urlpatterns = [
     
     path("dashboard/cashier/", cashier_dashboard, name="cashier_dashboard"),
     path("dashboard/cashier/cashier_payments/", cashier_payments, name="cashier_payments"),
+    path("dashboard/cashier/cashier_transactions/", cashier_transaction, name="cashier_transactions"),
 
     
     

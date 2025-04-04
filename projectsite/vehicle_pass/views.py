@@ -63,6 +63,8 @@ def default_dashboard(request):
 def security_dashboard(request):
     return render(request, "Security Dashboard/Security_Dashboard.html")
 
+
+
 @login_required
 def cashier_dashboard(request):
     return render(request, "Cashier Dashboard/Cashier_Dashboard.html")
@@ -70,6 +72,12 @@ def cashier_dashboard(request):
 @login_required
 def cashier_payments(request):
     return render(request, "Cashier Dashboard/Cashier_Payment.html")
+
+@login_required
+def cashier_transaction(request):
+    return render(request, "Cashier Dashboard/Cashier_Transaction.html")
+
+
 
 @login_required
 def admin_dashboard(request):
