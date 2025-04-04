@@ -68,6 +68,10 @@ def cashier_dashboard(request):
     return render(request, "Cashier Dashboard/Cashier_Dashboard.html")
 
 @login_required
+def cashier_payments(request):
+    return render(request, "Cashier Dashboard/Cashier_Payment.html")
+
+@login_required
 def admin_dashboard(request):
     return render(request, "Admin Dashboard/Admin_Dashboard.html")
 

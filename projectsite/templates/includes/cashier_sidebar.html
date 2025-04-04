@@ -25,13 +25,13 @@
     <p>Main Menu</p>
     <ul>
         <li data-menu="dashboard">
-            <a href="#">
+            <a href="{% url 'cashier_dashboard' %}">
                 <img src="{% static 'images/home.png' %}" alt="Dashboard" width="30">
                 <span>Dashboard</span>
             </a>
         </li>
         <li data-menu="payments">
-            <a href="#">
+            <a href="{% url 'cashier_payments' %}">
                 <img src="{% static 'images/payment.png' %}" alt="Payment" width="30">
                 <span>Payment</span>
             </a>
