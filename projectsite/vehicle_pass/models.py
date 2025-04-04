@@ -4,6 +4,8 @@ from django.utils.timezone import now
 from datetime import timedelta
 from django.utils.crypto import get_random_string
 from django.contrib.auth.hashers import make_password, check_password
+import random 
+import string
 
 
 class BaseModel(models.Model):
@@ -137,7 +139,29 @@ class VehiclePass(BaseModel):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
 
     def __str__(self):
-        return f"{self.passNumber}"  
+        return f"{self.passNumber}"
+    
+
+    @staticmethod
+    def generate_pass_number():
+        last_pass = VehiclePass.objects.order_by('-id').first()
+        last_number = int(last_pass.passNumber[-5:]) if last_pass else 0
+        new_number = str(last_number + 1).zfill(5)
+        return f"VRPSS{new_number}"
+
+    @classmethod
+    def create_from_inspection(cls, inspection_report):
+        if inspection_report.remarks == "sticker_released" and inspection_report.is_approved:
+            vehicle = inspection_report.payment_number.registration.vehicle
+            
+            if not cls.objects.filter(vehicle=vehicle).exists():
+                return cls.objects.create(
+                    vehicle=vehicle,
+                    passNumber=cls.generate_pass_number(),
+                    passExpire=now().date() + timedelta(days=365),  # 1-year validity
+                    status="active"
+                )
+
 
 class PaymentTransaction(BaseModel):
     STATUS_CHOICES = [
@@ -192,6 +216,15 @@ class InspectionReport(BaseModel):
 
     def __str__(self):
         return f"Inspection {self.payment_number}"
+    
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        
+        # Check if this is an update and the necessary conditions are met
+        if not is_new and self.remarks == "sticker_released" and self.is_approved:
+            from .models import VehiclePass
+            VehiclePass.create_from_inspection(self)
 
 class Notification(BaseModel):
     NOTIFICATION_TYPES = [
