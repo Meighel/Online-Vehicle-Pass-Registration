@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
-from .forms import UserSignupForm
 # from .forms import UserRegistrationForm, UserProfileForm, SecurityProfileForm, CashierProfileForm, AdminProfileForm
 # from .forms import VehicleForm, RegistrationForm, RegistrationStatusForm, VehiclePassForm, PaymentTransactionForm
 # from .forms import InspectionReportForm, NotificationForm, AnnouncementForm
@@ -69,36 +68,19 @@ def cashier_dashboard(request):
 
 @login_required
 def admin_dashboard(request):
-    try:
-        admin_user = UserProfile.objects.get(id=request.user.id, role='admin')
-    except UserProfile.DoesNotExist:
-        admin_user = None  
-
-    context = {
-        'admin_name': f"{admin_user.firstname} {admin_user.lastname}" if admin_user else "Admin"
-    }
-    return render(request, "Admin Dashboard/Admin_Dashboard.html", context)
+    return render(request, "Admin Dashboard/Admin_Dashboard.html")
 
 @login_required
 def admin_manage_user(request):
     return render(request, "Admin Dashboard/Admin_Manage_User.html")
 
-def signup_view(request):
-    email = request.GET.get('email_value', '')
-    
-    if request.method == 'POST':
-        form = UserSignupForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "You have successfully signed up! Please log in.")
-            return redirect('login')
-        else:
-            messages.error(request, "There was an error with your signup. Please try again.")
-    else:
-        form = UserSignupForm(initial={'corporate_email': email})  
-    
-    # Pass the email_value directly to the template
-    return render(request, 'signup.html', {'form': form, 'email_value': email})
+@login_required
+def admin_manage_application(request):
+    return render(request, "Admin Dashboard/Admin_Application.html")
+
+@login_required
+def admin_manage_payments(request):
+    return render(request, "Admin Dashboard/Admin_Manage_Payment.html")
 
 # def register(request):
 #     if request.method == 'POST':

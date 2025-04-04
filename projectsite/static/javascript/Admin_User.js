@@ -99,7 +99,7 @@ $(document).ready(function () {
         // another page eto for admin to view the user details. pero hindi ko alam kong anong details yun. kung personal info
         // or registration details
         let userData = {
-            username: row.find("td:nth-child(2)").text().trim(),
+            corporateEmail: row.find("td:nth-child(1)").text().trim(),
             applicationId: row.find("td:nth-child(3)").text().trim(),
             account: row.find("td:nth-child(4)").text().trim(),
             date: row.find("td:nth-child(5)").text().trim(),
@@ -108,9 +108,6 @@ $(document).ready(function () {
 
         // Store data in sessionStorage
         sessionStorage.setItem("userDetails", JSON.stringify(userData));
-
-        // Redirect to details page
-        window.location.href = "user_details.html";
     });
 
     $(document).on("click", ".btn-approve", function () {

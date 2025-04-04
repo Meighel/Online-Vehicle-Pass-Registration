@@ -15,9 +15,7 @@
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
-    <a href="#">
-        <img src="{% static 'images/navbar-brand img.png' %}" class="img-fluid" style="width: 100px; margin-left: 20px;">
-    </a>
+    <a class="navbar-brand ms-4 fs-3 fw-bold text-warning brand-logo" href="#">OVR</a>
     <button class="toggle-btn" id="toggle-btn">☰</button>
 
     <p>Main Menu</p>
@@ -35,13 +33,13 @@
             </a>
         </li>
         <li data-menu="application">
-            <a href="#">
+            <a href="{% url 'admin_manage_application' %}">
                 <img src="{% static 'images/application.png' %}" alt="application" width="30">
                 <span>Application</span>
             </a>
         </li>
         <li data-menu="manage-payments">
-            <a href="#">
+            <a href="{% url 'admin_manage_payments' %}">
                 <img src="{% static 'images/payment.png' %}" alt="Payments" width="30">
                 <span>Payments</span>
             </a>
@@ -69,7 +67,7 @@
     <div class="profile">
         <img src="{% static 'images/profile-placeholder.png' %}" alt="Profile Picture"> 
         <div class="profile-info">
-            <span class="name">{{ admin_name }}</span>
+            <span class="name">Admin Name</span>
             <span class="position">Admin</span>
         </div>
     </div>
