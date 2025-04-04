@@ -11,6 +11,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .authentication import login_required
+from django.contrib.auth import logout
 
 def home(request):
     return render(request, 'index.html')
@@ -37,9 +38,8 @@ def login_view(request):
 
 
 def logout_view(request):
-    request.session.flush()  # Clear session
-    messages.success(request, "You have been logged out.")
-    return redirect("login")  # Redirect to login page
+    logout(request)
+    return redirect("login") 
 
 
 def redirect_user_dashboard(user):
@@ -74,13 +74,23 @@ def admin_dashboard(request):
 def admin_manage_user(request):
     return render(request, "Admin Dashboard/Admin_Manage_User.html")
 
-@login_required
-def admin_manage_application(request):
-    return render(request, "Admin Dashboard/Admin_Application.html")
 
-@login_required
-def admin_manage_payments(request):
-    return render(request, "Admin Dashboard/Admin_Manage_Payment.html")
+def signup_view(request):
+    email = request.GET.get('email_value', '')
+    
+    if request.method == 'POST':
+        form = UserSignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "You have successfully signed up! Please log in.")
+            return redirect('login')
+        else:
+            messages.error(request, "There was an error with your signup. Please try again.")
+    else:
+        form = UserSignupForm(initial={'corporate_email': email})  
+    
+    # Pass the email_value directly to the template
+    return render(request, 'signup.html', {'form': form, 'email_value': email})
 
 # def register(request):
 #     if request.method == 'POST':
