@@ -101,9 +101,8 @@ body {
 
 .status-rejected {
     background-color: red;
+
 }
-
-
 
 .status-pending {
     background-color: gray;
@@ -229,6 +228,57 @@ body {
 }
 
 /* ========================================= */
+/*         application page styling          */
+/* ========================================= */
+
+.application-table {
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 5px;
+    background-color: #292929;
+    color: white;
+    padding-top: 30px;
+}
+
+.application-table th {
+    font-weight: bold;
+    padding: 14px;
+    color: yellow;
+    font-size: 16px;
+}
+.application-table td {
+    padding: 12px;
+    font-size: 15px;
+}
+
+.application-table tr {
+    color: white;
+}
+.application-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important;
+}
+
+.application-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e !important; 
+}
+
+.application-table th:first-child {
+    cursor: pointer;
+}
+
+.application-table th:nth-child(7),
+.application-table td:nth-child(7) { 
+    text-align: center;
+}
+
+.application-table td:nth-child(7) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px; 
+    padding-right: 15px;
+}
+
+/* ========================================= */
 /*         passes page styling                */
 /* ========================================= */
 
@@ -338,62 +388,49 @@ body {
 
 .payments-table {
     width: 100%;
-    border-collapse: collapse;
-    background: #333;
+    border-collapse: separate;
     border-radius: 5px;
-    overflow: hidden;
-    text-align: center;
-    border: none;
-    box-shadow: none;
-}
-
-.payments-table thead {
-    background: #444;
+    background-color: #292929;
+    color: white;
+    padding-top: 30px;
 }
 
 .payments-table th {
+    font-weight: bold;
     padding: 14px;
-    text-align: center; 
     color: yellow;
     font-size: 16px;
 }
-
 .payments-table td {
-    padding: 14px;
-    font-size: 14px;
-    border-bottom: 1px solid #444;
-    color: #ffffff;
+    padding: 12px;
+    font-size: 15px;
+}
+
+.payments-table tr {
+    color: white;
+}
+.payments-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important;
+}
+
+.payments-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e !important; 
+}
+
+.payments-table th:first-child {
+    cursor: pointer;
+}
+
+.payments-table th:nth-child(7),
+.payments-table td:nth-child(7) { 
     text-align: center;
 }
 
-.payments-table tbody tr {
-    transition: background 0.3s ease-in-out;
-}
-
-.passes-table td:nth-child(1) {
+.payments-table td:nth-child(7) {
     display: flex;
-    justify-content: center;
-    gap: 5px;
+    justify-content: flex-end;
+    gap: 5px; 
     padding-right: 15px;
-}
-
-.passes-table tbody tr:nth-child(even) {
-    background: #292929;
-}
-
-.passes-table tbody tr:hover {
-    background: #3a3a3a;
-}
-
-.payments-table th:last-child,
-.payments-table td:last-child {
-    text-align: center;
-}
-
-.payments-table td:last-child {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
 }
 
 

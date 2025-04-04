@@ -42,14 +42,16 @@
 
         <hr>
         <small><span id="date"></span></small>
+        <br>
 
 
         <div class="filter-container">
-            <input type="text" id="search-bar" placeholder="🔍 Search">
-            <div class="position-absolute end-0 bottom-10 p-3">
+            <input class="position-absolute end-0 bottom-10 form-control w-20 me-5" type="text" id="search-bar" placeholder="🔍 Search">
+            <div class="position-absolute start-2 bottom-10 p-3">
                 <a href="#" class="btn btn-success btn-rounded">Add New User</a>
             </div>
         </div>
+        <br>
 
         <section class="table-container">
             <table class="users-table">
@@ -88,9 +90,89 @@
                             <button class="btn btn-danger">Delete</button>
                         </td>
                     </tr>
+                    <tr>
+                        <td>202280293@psu.palawan.edu.ph</td>
+                        <td>Magdayao</td>
+                        <td>Frances</td>
+                        <td>V.</td>
+                        <td>Cashier</td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-success">Update</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>202280271@psu.palawan.edu.ph</td>
+                        <td>Padon</td>
+                        <td>Meighel Nicolle</td>
+                        <td>M.</td>
+                        <td>Admin</td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-success">Accept</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>202280293@psu.palawan.edu.ph</td>
+                        <td>Magdayao</td>
+                        <td>Frances</td>
+                        <td>V.</td>
+                        <td>Cashier</td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-success">Update</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>202280271@psu.palawan.edu.ph</td>
+                        <td>Padon</td>
+                        <td>Meighel Nicolle</td>
+                        <td>M.</td>
+                        <td>Admin</td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-success">Accept</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>202280293@psu.palawan.edu.ph</td>
+                        <td>Magdayao</td>
+                        <td>Frances</td>
+                        <td>V.</td>
+                        <td>Cashier</td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-success">Update</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>202280271@psu.palawan.edu.ph</td>
+                        <td>Padon</td>
+                        <td>Meighel Nicolle</td>
+                        <td>M.</td>
+                        <td>Admin</td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-success">Accept</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </section>
+
+        <!-- Entries Info -->
+        <div class="entries-info">Showing 0 entries</div>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <div class="pagination" id="pagination"></div>
+        </div>
     </div>
 </div>
 {% endblock %}
