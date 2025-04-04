@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
+from .forms import UserSignupForm
 # from .forms import UserRegistrationForm, UserProfileForm, SecurityProfileForm, CashierProfileForm, AdminProfileForm
 # from .forms import VehicleForm, RegistrationForm, RegistrationStatusForm, VehiclePassForm, PaymentTransactionForm
 # from .forms import InspectionReportForm, NotificationForm, AnnouncementForm
