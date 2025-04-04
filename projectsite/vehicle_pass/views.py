@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
-from .forms import UserSignupForm
+from .forms import UserSignupForm, AdminUserForm
 # from .forms import UserRegistrationForm, UserProfileForm, SecurityProfileForm, CashierProfileForm, AdminProfileForm
 # from .forms import VehicleForm, RegistrationForm, RegistrationStatusForm, VehiclePassForm, PaymentTransactionForm
 # from .forms import InspectionReportForm, NotificationForm, AnnouncementForm
@@ -135,11 +135,39 @@ def signup_view(request):
 
 #     return render(request, 'register.html', {'user_form': user_form, 'profile_form': profile_form})
 
-# class UserPageView(ListView):
-#     model = UserProfile
-#     context_object_name = "user"
-#     template_name = "user.html"
 
+#### ADMIN  PAGE ####
+
+###### Dashboard
+
+###### Manage Users
+class AdminViewUser(ListView):
+    model = UserProfile
+    context_object_name = "admin_dashboard"
+    template_name = 'Admin Dashboard/Admin_Dashboard.html'
+
+class AdminCreateUser(CreateView):
+    model = UserProfile
+    form_class = AdminUserForm
+    template_name = "Forms/forms_1.html"
+    success_url  = reverse_lazy("admin_create_user")
+
+class AdminUpdateUser(UpdateView):
+    model = UserProfile
+    form_class = AdminUserForm
+    template_name = "Forms/forms_1.html"
+    success_url  = reverse_lazy("admin_update_user")
+
+class AdminUpdateUser(DeleteView):
+    model = UserProfile
+    template_name = ""
+    success_url  = reverse_lazy("admin_delete_user")
+
+###### Payments
+
+###### Passes
+
+###### Reports
 
 
 # class SecurityPageView(ListView):

@@ -1,5 +1,6 @@
 from django import forms
-from .models import UserProfile
+from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
+from .models import Vehicle, VehiclePass, InspectionReport
 from django.contrib.auth.hashers import make_password
 
 class UserSignupForm(forms.ModelForm):
@@ -44,10 +45,25 @@ class UserSignupForm(forms.ModelForm):
 #             raise forms.ValidationError("This email is already registered.")
 #         return email
 
-# class UserProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = UserProfile
-#         fields = '__all__'
+class AdminUserForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
+
+class AdminSecurityForm(forms.ModelForm):
+    class Meta:
+        model = SecurityProfile
+        fields = '__all__'
+
+class AdminCashierForm(forms.ModelForm):
+    class Meta:
+        model = CashierProfile
+        fields = '__all__'
+
+class AdminAdminForm(forms.ModelForm):
+    class Meta:
+        model = AdminProfile
+        fields = '__all__'
 
 # class SecurityProfileForm(forms.ModelForm):
 #     class Meta:

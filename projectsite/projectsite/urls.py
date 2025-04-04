@@ -17,7 +17,17 @@ urlpatterns = [
     path("dashboard/security/", security_dashboard, name="security_dashboard"),
     path("dashboard/cashier/", cashier_dashboard, name="cashier_dashboard"),
     path("dashboard/admin/", admin_dashboard, name="admin_dashboard"),
+
+    #### admin manage users####
     path("dashboard/admin/manage_users/", admin_manage_user, name="admin_manage_user"),
+    path("dashboard/admin/manage_users/add", admin_manage_user, name="admin_create_user"),
+    path("dashboard/admin/manage_users/<pk>/edit", admin_manage_user, name="admin_update_user"),
+    path("dashboard/admin/manage_users/<pk>/delete", admin_manage_user, name="admin_delete_user"),
+
+
+
     path("dashboaard/admin/manage_application/", admin_manage_application, name="admin_manage_application"),
-    path("dashboard/admin/manage_payments/", admin_manage_payments, name="admin_manage_payments")
+    path("dashboard/admin/manage_payments/", admin_manage_payments, name="admin_manage_payments"),
+
+
 ]
