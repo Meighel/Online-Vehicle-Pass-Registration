@@ -59,9 +59,32 @@ def redirect_user_dashboard(user):
 def default_dashboard(request):
     return render(request, "User Dashboard/User_Dashboard.html")
 
+
+
+
+# Security Page Vies
 @login_required
 def security_dashboard(request):
     return render(request, "Security Dashboard/Security_Dashboard.html")
+
+@login_required
+def security_manage_application(request):
+    return render(request, "Security Dashboard/Security_Application.html")
+
+
+@login_required
+def security_manage_inspection(request):
+    return render(request, "Security Dashboard/Security_Inspection.html")
+
+@login_required
+def security_manage_stickers(request):
+    return render(request, "Security Dashboard/Security_Release_Stickers.html")
+
+@login_required
+def security_report(request):
+    return render(request, "Security Dashboard/Security_History.html")
+
+
 
 
 # Cashier Page View 

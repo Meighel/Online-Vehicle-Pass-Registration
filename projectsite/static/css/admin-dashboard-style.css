@@ -243,6 +243,7 @@ body {
     padding: 14px;
     color: yellow;
     font-size: 16px;
+    text-align: center;
 }
 .application-table td {
     padding: 12px;
@@ -282,49 +283,50 @@ body {
 
 .passes-table {
     width: 100%;
-    border-collapse: collapse;
-    background: #333;
+    border-collapse: separate;
     border-radius: 5px;
-    overflow: hidden;
-    text-align: center;
-}
-
-.passes-table thead {
-    background: #444;
+    background-color: #292929;
+    color: white;
+    padding-top: 30px;
 }
 
 .passes-table th {
+    font-weight: bold;
     padding: 14px;
-    text-align: center; 
     color: yellow;
     font-size: 16px;
-}
-
-.passes-table tbody tr {
-    transition: background 0.3s ease-in-out;
-}
-
-.passes-table td {
-    padding: 14px;
-    font-size: 14px;
-    border-bottom: 1px solid #444;
-    color: #ffffff;
     text-align: center;
 }
+.passes-table td {
+    padding: 12px;
+    font-size: 15px;
+}
 
-.passes-table td:nth-child(1) {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    padding-right: 15px;
+.passes-table tr {
+    color: white;
+}
+.passes-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important;
 }
 
 .passes-table tbody tr:nth-child(even) {
-    background: #292929;
+    background-color: #1e1e1e !important; 
 }
 
-.passes-table tbody tr:hover {
-    background: #3a3a3a;
+.passes-table th:first-child {
+    cursor: pointer;
+}
+
+.passes-table th:nth-child(7),
+.passes-table td:nth-child(7) { 
+    text-align: center;
+}
+
+.passes-table td:nth-child(7) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px; 
+    padding-right: 15px;
 }
 
 
