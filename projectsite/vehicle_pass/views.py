@@ -69,9 +69,11 @@ def security_dashboard(request):
 def cashier_dashboard(request):
     return render(request, "Cashier Dashboard/Cashier_Dashboard.html")
 
-@login_required
-def cashier_payments(request):
-    return render(request, "Cashier Dashboard/Cashier_Payment.html")
+class cashierViewPayment(ListView):
+    model = PaymentTransaction
+    template_name = "Cashier Dashboard/Cashier_Payment.html"
+    context_object_name = 'payment_list'
+    paginate_by = 10
 
 @login_required
 def cashier_transaction(request):
@@ -123,6 +125,9 @@ def signup_view(request):
     
     # Pass the email_value directly to the template
     return render(request, 'signup.html', {'form': form, 'email_value': email})
+
+#CASHIER 
+
 
 # def register(request):
 #     if request.method == 'POST':

@@ -58,72 +58,21 @@
                         <th>Username</th>
                         <th>Corporate Email</th>
                         <th>Status</th>
-                        <th>Paid Date</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                {% for payment in payment_list %}
                     <tr>
-                        <td>2025-01-001</td>
-                        <td>DELA CRUZ, JUAN</td>
-                        <td>20XX8XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>On Inspection</td>
+                        <td>{{ payment.id }}</td>
+                        <td>{{ payment.registration.user.lastname }} , {{ payment.registration.user.firstname }}</td>
+                        <td>{{ payment.registration.user.corporate_email }}</td>
+                        <td><span class="status-badge status-pending">{{ payment.status }}</span></td>
                         <td>
                             <button class="btn btn-primary update-button">Update</button>
                         </td>
                     </tr>
-                    <tr>
-                        <td>2025-01-002</td>
-                        <td>GARCIA, MARIA</td>
-                        <td>20XX9XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-approved">Approved</span></td>
-                        <td>Completed</td>
-                        <td>
-                            <button class="btn btn-primary update-button">Update</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2025-01-003</td>
-                        <td>SANTOS, PEDRO</td>
-                        <td>20XX7XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-rejected">Rejected</span></td>
-                        <td>Incomplete Docs</td>
-                        <td>
-                            <button class="btn btn-primary update-button">Update</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2025-01-004</td>
-                        <td>REYES, ANA</td>
-                        <td>20XX6XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>On Inspection</td>
-                        <td>
-                            <button class="btn btn-primary update-button">Update</button>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2025-01-005</td>
-                        <td>LOPEZ, MIGUEL</td>
-                        <td>20XX5XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>On Inspection</td>
-                        <td>
-                            <button class="btn btn-primary update-button">Update</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2025-01-006</td>
-                        <td>TORRES, LUIS</td>
-                        <td>20XX4XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-rejected">Rejected</span></td>
-                        <td>Invalid ID</td>
-                        <td>
-                            <button class="btn btn-primary update-button">Update</button>
-                        </td>
-                    </tr>          
+                {% endfor %}
                 </tbody>
             </table>
         </section>
