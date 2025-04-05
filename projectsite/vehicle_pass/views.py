@@ -64,7 +64,7 @@ def security_dashboard(request):
     return render(request, "Security Dashboard/Security_Dashboard.html")
 
 
-
+# Cashier Page View 
 @login_required
 def cashier_dashboard(request):
     return render(request, "Cashier Dashboard/Cashier_Dashboard.html")
@@ -77,8 +77,12 @@ def cashier_payments(request):
 def cashier_transaction(request):
     return render(request, "Cashier Dashboard/Cashier_Transaction.html")
 
+@login_required
+def cashier_report(request):
+    return render(request, "Cashier Dashboard/Cashier_Reports.html")
 
 
+# Admin Page View 
 @login_required
 def admin_dashboard(request):
     return render(request, "Admin Dashboard/Admin_Dashboard.html")
