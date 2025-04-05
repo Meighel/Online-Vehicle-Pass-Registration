@@ -62,6 +62,8 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'vehicle_pass.context_processors.admin_user_context',
+                'vehicle_pass.context_processors.cashier_user_context',
+                'vehicle_pass.context_processors.default_user_context',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
