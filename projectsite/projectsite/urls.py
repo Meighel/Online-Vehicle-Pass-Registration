@@ -34,7 +34,18 @@ urlpatterns = [
     path("dashboaard/admin/manage_application/<pk>/delete", AdminDeleteApplication.as_view(), name="admin_delete_application"),
     #### admin payment
     path("dashboard/admin/manage_payments/", AdminViewPayment.as_view(), name="admin_manage_payments"),
-    path("dashboard/admin/manage_payments/", AdminCreatePayment.as_view(), name="admin_create_payments"),
-    path("dashboard/admin/manage_payments/", AdminUpdatePayment.as_view(), name="admin_update_payments"),
-    path("dashboard/admin/manage_payments/", AdminDeletePayment.as_view(), name="admin_delete_payments"),
+    path("dashboard/admin/manage_payments/add", AdminCreatePayment.as_view(), name="admin_create_payments"),
+    path("dashboard/admin/manage_payments/<pk>/edit", AdminUpdatePayment.as_view(), name="admin_update_payments"),
+    path("dashboard/admin/manage_payments/<pk>/delete", AdminDeletePayment.as_view(), name="admin_delete_payments"),
+    #### admin passes
+    path("dashboard/admin/manage_pass/", AdminViewPayment.as_view(), name="admin_manage_passes"),
+    path("dashboard/admin/manage_pass/add", AdminCreatePayment.as_view(), name="admin_create_passes"),
+    path("dashboard/admin/manage_pass/<pk>/edit", AdminUpdatePayment.as_view(), name="admin_update_passes"),
+    path("dashboard/admin/manage_pass/<pk>/delete", AdminDeletePayment.as_view(), name="admin_delete_passes"),
+    #### admin reports
+    path("dashboard/admin/manage_report/", AdminViewPayment.as_view(), name="admin_manage_reports"),
+    path("dashboard/admin/manage_report/add", AdminCreatePayment.as_view(), name="admin_create_reports"),
+    path("dashboard/admin/manage_report/<pk>/edit", AdminUpdatePayment.as_view(), name="admin_update_reports"),
+    path("dashboard/admin/manage_report/<pk>/delete", AdminDeletePayment.as_view(), name="admin_delete_reports"),
+
 ]

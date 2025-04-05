@@ -108,7 +108,7 @@ def signup_view(request):
 class AdminViewUser(CustomLoginRequiredMixin, ListView):
     model = UserProfile
     context_object_name = "admin_manage_user"
-    template_name = 'Admin Dashboard/Admin_Dashboard.html'
+    template_name = 'Admin Dashboard/Admin_Manage_User.html'
     paginate_by = 3
 
 class AdminCreateUser(CustomLoginRequiredMixin, CreateView):
@@ -123,7 +123,7 @@ class AdminUpdateUser(CustomLoginRequiredMixin, UpdateView):
     template_name = "Forms/forms_1.html" #placeholder lang baka need pa ng specific update form 
     success_url  = reverse_lazy("")
 
-class AdminDeleteUser(LoginRequiredMixin, DeleteView):
+class AdminDeleteUser(CustomLoginRequiredMixin, DeleteView):
     model = UserProfile
     template_name = "" ##walang template para sa deletion
     success_url  = reverse_lazy("")
@@ -134,19 +134,19 @@ class AdminViewApplication(CustomLoginRequiredMixin, ListView):
     context_object_name = "admin_manage_application"
     template_name = 'Admin Dashboard/Admin_Application.html'
 
-class AdminCreateApplication(LoginRequiredMixin, CreateView):
+class AdminCreateApplication(CustomLoginRequiredMixin, CreateView):
     model = Registration
     form_class = AdminRegistrationForm
     template_name = "" #application form 
     success_url  = reverse_lazy("")
 
-class AdminUpdateApplication(LoginRequiredMixin, UpdateView):
+class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     model = Registration
     form_class = AdminRegistrationForm
     template_name = "" #application form 
     success_url  = reverse_lazy("")
 
-class AdminDeleteApplication(LoginRequiredMixin, DeleteView):
+class AdminDeleteApplication(CustomLoginRequiredMixin, DeleteView):
     model = Registration
     template_name = "" #application delete form
     success_url  = reverse_lazy("")
@@ -157,19 +157,19 @@ class AdminViewPayment(CustomLoginRequiredMixin, ListView):
     context_object_name = "admin_manage_payments"
     template_name = 'Admin Dashboard/Admin_Manage_Payment.html'
 
-class AdminCreatePayment(LoginRequiredMixin, CreateView):
+class AdminCreatePayment(CustomLoginRequiredMixin, CreateView):
     model = PaymentTransaction
     form_class = AdminPaymentForm
     template_name = "" #payment form
     success_url  = reverse_lazy("")
 
-class AdminUpdatePayment(LoginRequiredMixin, UpdateView):
+class AdminUpdatePayment(CustomLoginRequiredMixin, UpdateView):
     model = PaymentTransaction
     form_class = AdminPaymentForm
     template_name = "" # payment form 
     success_url  = reverse_lazy("")
 
-class AdminDeletePayment(LoginRequiredMixin,DeleteView):
+class AdminDeletePayment(CustomLoginRequiredMixin,DeleteView):
     models = PaymentTransaction
     template_name = "" #payment delete form
     success_url  = reverse_lazy("")
@@ -177,30 +177,30 @@ class AdminDeletePayment(LoginRequiredMixin,DeleteView):
 ###### Passes
 class AdminViewPasses(CustomLoginRequiredMixin, ListView):
     model = VehiclePass
-    context_object_name = "admin_dashboard"
+    context_object_name = "admin_manage_passes"
     template_name = 'Admin Dashboard/Admin_Manage_Passes.html'
 
-class AdminCreatePasses(LoginRequiredMixin, CreateView):
+class AdminCreatePasses(CustomLoginRequiredMixin, CreateView):
     model = VehiclePass
     form_class = AdminPassForm
     template_name = "" #passes forms 
     success_url  = reverse_lazy("")
 
-class AdminUpdatePasses(LoginRequiredMixin, UpdateView):
+class AdminUpdatePasses(CustomLoginRequiredMixin, UpdateView):
     model = VehiclePass
     form_class = AdminPassForm
     template_name = "" # passes forms
     success_url = reverse_lazy("")
 
-class AdminDeletePasses(LoginRequiredMixin, DeleteView):
+class AdminDeletePasses(CustomLoginRequiredMixin, DeleteView):
     model = VehiclePass
     template_name = "" #passes delete form
     success_url  = reverse_lazy("")
 ###### Reports
 class AdminViewReport(CustomLoginRequiredMixin, ListView):
     model = InspectionReport
-    context_object_name = "admin_dashboard"
-    template_name = 'Admin Dashboard/Admin_Application.html'
+    context_object_name = "admin_manage_reports"
+    template_name = 'Admin Dashboard/Admin_Reports.html'
 
 class AdminCreateReport(CustomLoginRequiredMixin, CreateView):
     model = InspectionReport
@@ -208,13 +208,13 @@ class AdminCreateReport(CustomLoginRequiredMixin, CreateView):
     template_name = "" #report forms
     success_url  = reverse_lazy("")
 
-class AdminUpdateReport(LoginRequiredMixin, UpdateView):
+class AdminUpdateReport(CustomLoginRequiredMixin, UpdateView):
     model = InspectionReport
     form_class = AdminReportForm
     template_name = ""#template form
     success_url  = reverse_lazy("")
 
-class AdminDeleteReport(LoginRequiredMixin, DeleteView):
+class AdminDeleteReport(CustomLoginRequiredMixin, DeleteView):
     model = InspectionReport
     template_name = "" #report delete form
     success_url  = reverse_lazy("")
