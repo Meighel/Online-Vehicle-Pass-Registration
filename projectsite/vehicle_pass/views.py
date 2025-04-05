@@ -13,6 +13,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .authentication import login_required
 from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 def home(request):
     return render(request, 'index.html')
@@ -139,35 +140,55 @@ def signup_view(request):
 #### ADMIN  PAGE ####
 
 ###### Dashboard
+## charts
 
 ###### Manage Users
-class AdminViewUser(ListView):
+class AdminViewUser(LoginRequiredMixin, ListView):
     model = UserProfile
     context_object_name = "admin_dashboard"
     template_name = 'Admin Dashboard/Admin_Dashboard.html'
+    paginate_by = 3
 
-class AdminCreateUser(CreateView):
+class AdminCreateUser(LoginRequiredMixin, CreateView):
     model = UserProfile
     form_class = AdminUserForm
-    template_name = "Forms/forms_1.html"
-    success_url  = reverse_lazy("admin_create_user")
+    template_name = "Forms/forms_1.html" 
+    success_url  = reverse_lazy("")
 
-class AdminUpdateUser(UpdateView):
+class AdminUpdateUser(LoginRequiredMixin, UpdateView):
     model = UserProfile
     form_class = AdminUserForm
-    template_name = "Forms/forms_1.html"
-    success_url  = reverse_lazy("admin_update_user")
+    template_name = "Forms/forms_1.html" #placeholder lang baka need pa ng specific update form 
+    success_url  = reverse_lazy("")
 
-class AdminUpdateUser(DeleteView):
+class AdminDeleteUser(LoginRequiredMixin, DeleteView):
     model = UserProfile
-    template_name = ""
-    success_url  = reverse_lazy("admin_delete_user")
+    template_name = "" ##walang template para sa deletion
+    success_url  = reverse_lazy("")
 
-###### Payments
+###### Application
+class AdminViewApplication(LoginRequiredMixin, ListView):
+    model = Registration
+    context_object_name = "admin_manage_application"
+    template_name = 'Admin Dashboard/Admin_Application.html'
+
+###### Payment
+class AdminViewPayment(LoginRequiredMixin, ListView):
+    model = PaymentTransaction
+    context_object_name = "admin_manage_payments"
+    template_name = 'Admin Dashboard/Admin_Manage_Payment.html'
 
 ###### Passes
+class AdminViewPasses(LoginRequiredMixin, ListView):
+    model = VehiclePass
+    context_object_name = "admin_dashboard"
+    template_name = 'Admin Dashboard/Admin_Manage_Passes.html'
 
 ###### Reports
+class AdminViewReport(ListView):
+    model = InspectionReport
+    context_object_name = "admin_dashboard"
+    template_name = 'Admin Dashboard/Admin_Application.html'
 
 
 # class SecurityPageView(ListView):

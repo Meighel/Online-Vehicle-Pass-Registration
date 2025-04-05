@@ -7,6 +7,8 @@ from vehicle_pass.views import (
     home
 )
 
+from vehicle_pass.views import AdminCreateUser, AdminUpdateUser, AdminDeleteUser, AdminViewUser
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
@@ -20,13 +22,16 @@ urlpatterns = [
 
     #### admin manage users####
     path("dashboard/admin/manage_users/", admin_manage_user, name="admin_manage_user"),
-    path("dashboard/admin/manage_users/add", admin_manage_user, name="admin_create_user"),
-    path("dashboard/admin/manage_users/<pk>/edit", admin_manage_user, name="admin_update_user"),
-    path("dashboard/admin/manage_users/<pk>/delete", admin_manage_user, name="admin_delete_user"),
+    path("dashboard/admin/manage_users/add", AdminCreateUser.as_view(), name="admin_create_user"),
+    path("dashboard/admin/manage_users/<pk>/edit", AdminUpdateUser.as_view(), name="admin_update_user"),
+    path("dashboard/admin/manage_users/<pk>/delete", AdminDeleteUser.as_view(), name="admin_delete_user"),
 
-
-
+    #### admin application
     path("dashboaard/admin/manage_application/", admin_manage_application, name="admin_manage_application"),
+    path("dashboaard/admin/manage_application/add", admin_manage_application, name="admin_create_application"),
+    path("dashboaard/admin/manage_application/<pk>/edit", admin_manage_application, name="admin_update_application"),
+    path("dashboaard/admin/manage_application/<pk>/delete", admin_manage_application, name="admin_delete_application"),
+    #### admin payment
     path("dashboard/admin/manage_payments/", admin_manage_payments, name="admin_manage_payments"),
 
 
