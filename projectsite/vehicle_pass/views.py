@@ -1,10 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
-from .forms import UserSignupForm, AdminUserForm
-# from .forms import UserRegistrationForm, UserProfileForm, SecurityProfileForm, CashierProfileForm, AdminProfileForm
-# from .forms import VehicleForm, RegistrationForm, RegistrationStatusForm, VehiclePassForm, PaymentTransactionForm
-# from .forms import InspectionReportForm, NotificationForm, AnnouncementForm
+from .forms import UserSignupForm, AdminUserForm, AdminPaymentForm, AdminRegistrationForm, AdminPassForm, AdminReportForm
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
 from .models import Vehicle, Registration, VehiclePass, PaymentTransaction
 from .models import InspectionReport, Notification, Announcement
@@ -102,41 +99,6 @@ def signup_view(request):
     # Pass the email_value directly to the template
     return render(request, 'signup.html', {'form': form, 'email_value': email})
 
-# def register(request):
-#     if request.method == 'POST':
-#         user_form = UserRegistrationForm(request.POST)
-#         if user_form.is_valid():
-#             user = user_form.save(commit=False)
-#             role = user_form.cleaned_data['role']
-#             user.save()
-
-#             # Create role-specific profile
-#             if role == 'user':
-#                 profile_form = UserProfileForm(request.POST)
-#             elif role == 'security':
-#                 profile_form = SecurityProfileForm(request.POST)
-#             elif role == 'cashier':
-#                 profile_form = CashierProfileForm(request.POST)
-#             elif role == 'admin':
-#                 profile_form = AdminProfileForm(request.POST)
-#             else:
-#                 profile_form = None
-
-#             if profile_form and profile_form.is_valid():
-#                 profile = profile_form.save(commit=False)
-#                 profile.user = user
-#                 profile.save()
-
-#             messages.success(request, 'Registration successful!')
-#             return redirect('login')
-
-#     else:
-#         user_form = UserRegistrationForm()
-#         profile_form = None  # Will be initialized based on role
-
-#     return render(request, 'register.html', {'user_form': user_form, 'profile_form': profile_form})
-
-
 #### ADMIN  PAGE ####
 
 ###### Dashboard
@@ -172,11 +134,45 @@ class AdminViewApplication(LoginRequiredMixin, ListView):
     context_object_name = "admin_manage_application"
     template_name = 'Admin Dashboard/Admin_Application.html'
 
+class AdminCreateApplication(LoginRequiredMixin, CreateView):
+    model = Registration
+    form_class = AdminRegistrationForm
+    template_name = "" #application form 
+    success_url  = reverse_lazy("")
+
+class AdminUpdateApplication(LoginRequiredMixin, UpdateView):
+    model = Registration
+    form_class = AdminRegistrationForm
+    template_name = "" #application form 
+    success_url  = reverse_lazy("")
+
+class AdminDeleteApplication(LoginRequiredMixin, DeleteView):
+    model = Registration
+    template_name = "" #application delete form
+    success_url  = reverse_lazy("")
+
 ###### Payment
 class AdminViewPayment(LoginRequiredMixin, ListView):
     model = PaymentTransaction
     context_object_name = "admin_manage_payments"
     template_name = 'Admin Dashboard/Admin_Manage_Payment.html'
+
+class AdminCreatePayment(LoginRequiredMixin, CreateView):
+    model = PaymentTransaction
+    form_class = AdminPaymentForm
+    template_name = "" #payment form
+    success_url  = reverse_lazy("")
+
+class AdminUpdatePayment(LoginRequiredMixin, UpdateView):
+    model = PaymentTransaction
+    form_class = AdminPaymentForm
+    template_name = "" # payment form 
+    success_url  = reverse_lazy("")
+
+class AdminDeletePayment(LoginRequiredMixin,DeleteView):
+    models = PaymentTransaction
+    template_name = "" #payment delete form
+    success_url  = reverse_lazy("")
 
 ###### Passes
 class AdminViewPasses(LoginRequiredMixin, ListView):
@@ -184,11 +180,44 @@ class AdminViewPasses(LoginRequiredMixin, ListView):
     context_object_name = "admin_dashboard"
     template_name = 'Admin Dashboard/Admin_Manage_Passes.html'
 
+class AdminCreatePasses(LoginRequiredMixin, CreateView):
+    model = VehiclePass
+    form_class = AdminPassForm
+    template_name = "" #passes forms 
+    success_url  = reverse_lazy("")
+
+class AdminUpdatePasses(LoginRequiredMixin, UpdateView):
+    model = VehiclePass
+    form_class = AdminPassForm
+    template_name = "" # passes forms
+    success_url = reverse_lazy("")
+
+class AdminDeletePasses(LoginRequiredMixin, DeleteView):
+    model = VehiclePass
+    template_name = "" #passes delete form
+    success_url  = reverse_lazy("")
 ###### Reports
 class AdminViewReport(ListView):
     model = InspectionReport
     context_object_name = "admin_dashboard"
     template_name = 'Admin Dashboard/Admin_Application.html'
+
+class AdminCreateReport(LoginRequiredMixin, CreateView):
+    model = InspectionReport
+    form_class = AdminReportForm
+    template_name = "" #report forms
+    success_url  = reverse_lazy("")
+
+class AdminUpdateReport(LoginRequiredMixin, UpdateView):
+    model = InspectionReport
+    form_class = AdminReportForm
+    template_name = ""#template form
+    success_url  = reverse_lazy("")
+
+class AdminDeleteReport(LoginRequiredMixin, DeleteView):
+    model = InspectionReport
+    template_name = "" #report delete form
+    success_url  = reverse_lazy("")
 
 
 # class SecurityPageView(ListView):

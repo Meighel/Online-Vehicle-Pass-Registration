@@ -1,6 +1,6 @@
 from django import forms
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
-from .models import Vehicle, VehiclePass, InspectionReport
+from .models import Vehicle, VehiclePass, InspectionReport, Registration, PaymentTransaction
 from django.contrib.auth.hashers import make_password
 
 class UserSignupForm(forms.ModelForm):
@@ -65,15 +65,25 @@ class AdminAdminForm(forms.ModelForm):
         model = AdminProfile
         fields = '__all__'
 
-# class SecurityProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = SecurityProfile
-#         fields = '__all__'
+class AdminRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = Registration
+        fields = '__all__'
 
-# class CashierProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = CashierProfile
-#         fields = '__all__'
+class AdminPaymentForm(forms.ModelForm):
+    class Meta:
+        model = PaymentTransaction
+        fields = '__all__'
+
+class AdminPassForm(forms.ModelForm):
+    class Meta:
+        model = VehiclePass
+        fields = '__all__'
+
+class AdminReportForm(forms.ModelForm):
+    class Meta:
+        model = InspectionReport
+        fields = '__all__'
 
 # class AdminProfileForm(forms.ModelForm):
 #     class Meta:
