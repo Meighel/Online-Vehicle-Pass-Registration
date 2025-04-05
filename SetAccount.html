@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Account Settings</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .toggle-yellow:checked {
+      background-color: #facc15;
+      border-color: #facc15;
+    }
+    .save-btn {
+      width: 120px; 
+      height: 40px;
+      background-color: #facc15; 
+      color: black; 
+      border-radius: 9999px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen w-screen">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 p-5 flex flex-col justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-yellow-400">VR</h1>
+        <nav class="mt-6">
+          <ul class="space-y-3">
+            <a href="AdminDash.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🏠</span><span>Dashboard</span>
+              </li>
+            </a>
+            <a href="ApplyPass.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">📝</span><span>Apply for Pass</span>
+              </li>
+            </a>
+            <a href="Tracking.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🚗</span><span>Pass Status Tracking</span>
+              </li>
+            </a>
+            <a href="Notification.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🔔</span><span>Notification & Alerts</span>
+              </li>
+            </a>
+            <!-- Active button removed yellow -->
+            <a href="Settings.html">
+              <li class="bg-yellow-400 text-black p-3 rounded flex items-center space-x-2">
+                <span class="text-xl">⚙️</span><span>Settings</span>
+              </li>
+            </a>
+          </ul>
+        </nav>
+      </div>
+      <div class="text-left">
+        <img src="mark.jpg" class="rounded-full w-16 h-16 border-4 border-gray-700" alt="User">
+        <p class="text-sm mt-2" id="displayName">User Name</p>
+        <p class="text-xs text-gray-400" id="displayUsername">@Username</p>
+        <button class="mt-4 bg-red-600 p-2 w-full rounded flex items-center justify-center space-x-2">
+          <span class="text-xl">↩️</span><span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Panel -->
+    <div class="flex-1 p-6 overflow-y-auto">
+      <div class="flex justify-between items-center">
+        <h1 class="text-5xl font-bold text-yellow-400">Account Settings</h1>
+        <div class="relative w-1/3">
+          <input type="text" class="w-full bg-gray-800 text-white px-4 py-2 rounded-lg pl-10" placeholder="Search a Setting">
+          <span class="absolute left-3 top-2.5 text-yellow-400">🔍</span>
+        </div>
+      </div>
+
+      <div class="flex mt-6">
+        <!-- Sub Settings Menu -->
+        <div class="w-1/5 bg-gray-800 p-4 rounded-lg">
+          <ul class="space-y-2">
+            <a href="Settings.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Profile</li></a>
+            <li class="bg-gray-700 p-3 rounded">Account</li>
+            <a href="SetSecurity.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Security</li></a>
+            <a href="SetNotification.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Notification</li></a>
+            <a href="SetHelp.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Help & Support</li></a>
+          </ul>
+        </div>
+
+        <!-- Account Settings Panel -->
+        <div class="flex-1 bg-gray-900 p-6 rounded-lg ml-6 space-y-6">
+          <div class="flex items-center space-x-4">
+            <div class="w-3/4">
+              <label class="block mb-2 text-sm text-gray-400">Email Address</label>
+              <input type="email" id="email" class="w-full p-3 bg-gray-700 text-white rounded" required>
+            </div>
+            <button class="save-btn" onclick="saveChanges()">Save Changes</button>
+          </div>
+
+          <!-- Password Section -->
+          <div>
+            <label class="block mb-2 text-sm text-gray-400">Password</label>
+            <button onclick="togglePasswordPanel()" class="bg-yellow-500 text-black px-4 py-2 rounded">Change Password</button>
+            <div id="passwordPanel" class="mt-4 hidden">
+              <input type="password" id="oldPassword" placeholder="Old Password" class="w-full mb-2 p-2 bg-gray-700 text-white rounded">
+              <input type="password" id="newPassword" placeholder="New Password" class="w-full mb-2 p-2 bg-gray-700 text-white rounded">
+              <a href="#" class="text-blue-400 text-sm">Forgot Password?</a>
+            </div>
+          </div>
+
+          <!-- Country Selection -->
+          <div>
+            <label class="block mb-2 text-sm text-gray-400">Country</label>
+            <select id="country" class="w-full p-3 bg-gray-700 text-white rounded">
+              <option>Philippines</option>
+              <option>United States</option>
+              <option>United Kingdom</option>
+              <option>Canada</option>
+              <option>Australia</option>
+              <option>Japan</option>
+              <option>South Korea</option>
+              <option>China</option>
+              <option>Germany</option>
+              <option>India</option>
+              <option>Brazil</option>
+              <option>France</option>
+              <option>Italy</option>
+              <option>Russia</option>
+              <option>Spain</option>
+              <option>Others...</option>
+            </select>
+          </div>
+
+          <!-- Authenticator App -->
+          <div>
+            <label class="block mb-2 text-sm text-gray-400">Authenticator App</label>
+            <p class="text-xs text-gray-400 mb-2">Once you Login OVR, we will send you a notification email</p>
+            <label class="inline-flex items-center">
+              <input type="checkbox" id="authToggle" class="form-checkbox h-5 w-5 toggle-yellow">
+              <span class="ml-2">Enable Authenticator</span>
+            </label>
+          </div>
+
+          <!-- Remove Account -->
+          <div>
+            <label class="block mb-2 text-sm text-red-500">Remove Account</label>
+            <div class="flex gap-4">
+              <button class="bg-gray-600 text-white px-4 py-2 rounded">Disable Account</button>
+              <button class="bg-red-600 text-white px-4 py-2 rounded">Delete Account</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function togglePasswordPanel() {
+      const panel = document.getElementById("passwordPanel");
+      panel.classList.toggle("hidden");
+    }
+
+    function saveChanges() {
+      const email = document.getElementById("email").value;
+      const oldPassword = document.getElementById("oldPassword") ? document.getElementById("oldPassword").value : '';
+      const newPassword = document.getElementById("newPassword") ? document.getElementById("newPassword").value : '';
+
+      // Save email address
+      if (email) {
+        localStorage.setItem("accountEmail", email);
+      }
+
+      // Save password changes 
+      if (oldPassword && newPassword) {
+        localStorage.setItem("accountPassword", newPassword);
+      }
+
+      alert("✅ Changes Saved!");
+    }
+
+    window.onload = function () {
+      const name = localStorage.getItem("profileName");
+      const user = localStorage.getItem("username");
+      const email = localStorage.getItem("accountEmail");
+
+      if (name) document.getElementById("displayName").innerText = name;
+      if (user) document.getElementById("displayUsername").innerText = user;
+      if (email) document.getElementById("email").value = email;
+    };
+  </script>
+</body>
+</html>
