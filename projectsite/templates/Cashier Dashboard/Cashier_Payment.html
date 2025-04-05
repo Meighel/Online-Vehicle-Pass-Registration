@@ -54,7 +54,7 @@
                 <label for="end-date" class="form-label">End Date:</label>
                 <input type="date" id="end-date" class="form-control">
             </div>
-            <input class="position-absolute end-0 bottom-10 form-control w-20 me-5 mb-5" type="text" id="search-bar" placeholder="🔍 Search">
+            <input class="position-absolute end-0 bottom-5 form-control w-20 me-5 mb-5" type="text" id="search-bar" placeholder="🔍 Search">
         </div>
 
 
@@ -68,45 +68,21 @@
                         <th>Username</th>
                         <th>Corporate Email</th>
                         <th>Status</th>
-                        <th>Remarks</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                {% for payment in payment_list %}
                     <tr>
-                        <td>02/24/2025</td>
-                        <td>1</td>
-                        <td>DELA CRUZ, JUAN</td>
-                        <td>20XX8XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>On Inspection</td>
+                        <td>{{ payment.id }}</td>
+                        <td>{{ payment.registration.user.lastname }} , {{ payment.registration.user.firstname }}</td>
+                        <td>{{ payment.registration.user.corporate_email }}</td>
+                        <td><span class="status-badge status-pending">{{ payment.status }}</span></td>
                         <td>
                             <button class="btn btn-primary update-button">Update</button>
                         </td>
                     </tr>
-                    <tr>
-                        <td>02/23/2025</td>
-                        <td>2</td>
-                        <td>SANTOS, PEDRO</td>
-                        <td>20XX8XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>On Inspection</td>
-                        <td>
-                            <button class="btn btn-primary update-button">Update</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>02/22/2025</td>
-                        <td>3</td>
-                        <td>CRUZ, ELLA</td>
-                        <td>20XX8XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>On Inspection</td>
-                        <td>
-                            <button class="btn btn-primary update-button">Update</button>
-                        </td>
-                    </tr>
-                    <tr>   
+                {% endfor %}
                 </tbody>
             </table>
         </section>
