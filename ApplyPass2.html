@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apply for Pass (2/3)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      background: black;
+      padding: 30px;
+      border-radius: 12px;
+      position: relative;
+    }
+    h2 {
+      text-align: left;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"] {
+      width: 100%;
+      max-width: 250px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 25px;
+      background: white;
+      color: black;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .aligned-group {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .aligned-group .form-group {
+      flex: 1;
+    }
+    .radio-group {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .radio-group input[type="radio"] {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid gray;
+      transform: rotate(45deg);
+      background: transparent;
+      cursor: pointer;
+    }
+    .radio-group input[type="radio"]:checked {
+      background: yellow;
+    }
+    .btn, .back-btn {
+      background: yellow;
+      color: black;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      width: 120px;
+      text-align: center;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .back-btn {
+      background: gray;
+      position: absolute;
+      bottom: 20px;
+      right: 160px;
+    }
+    .btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+    }
+    .welcome {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 14px;
+    }
+    .btn:hover {
+      box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.8);
+      transition: box-shadow 0.3s ease-in-out;
+    }
+    .owner-details {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .btn:disabled {
+      background: gray;
+      cursor: not-allowed;
+    }
+  </style>
+  <script>
+    function toggleOwnerDetails() {
+      const ownerDetailsSection = document.getElementById('owner-details');
+      const isOwner = document.querySelector('input[name="owner"]:checked').value;
+
+      if (isOwner === 'no') {
+        ownerDetailsSection.style.display = 'block';
+      } else {
+        ownerDetailsSection.style.display = 'none';
+      }
+    }
+
+    function validateForm() {
+      const ownerRadio = document.querySelector('input[name="owner"]:checked');
+      const ownerDetailsSection = document.getElementById('owner-details');
+      const nextButton = document.querySelector('.btn');
+
+      let isValid = true;
+
+      if (ownerRadio && ownerRadio.value === 'no') {
+        const requiredFields = ownerDetailsSection.querySelectorAll('input[required]');
+        requiredFields.forEach(input => {
+          if (!input.value) {
+            isValid = false;
+          }
+        });
+      }
+      
+      nextButton.disabled = !isValid;
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="welcome">Welcome, User_1!</div>
+    <h2>Registration for Vehicle Pass (2/3)</h2>
+
+    <div class="form-group">
+      <label>Are you the owner of this vehicle?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="owner" value="yes" onclick="toggleOwnerDetails(); validateForm();"> Yes, I am the owner of the vehicle</label>
+        <label><input type="radio" name="owner" value="no" onclick="toggleOwnerDetails(); validateForm();"> No, I am registering on behalf of the owner</label>
+      </div>
+    </div>
+
+    <div id="owner-details" class="owner-details">
+      <h3>If you choose "No", please provide the owner's details below:</h3>
+      <div class="aligned-group">
+        <div class="form-group">
+          <label>Owner's First Name</label>
+          <input type="text" placeholder="Enter First Name" required>
+        </div>
+        <div class="form-group">
+          <label>Owner's Middle Name</label>
+          <input type="text" placeholder="Enter Middle Name" required>
+        </div>
+        <div class="form-group">
+          <label>Owner's Last Name</label>
+          <input type="text" placeholder="Enter Last Name" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Owner's Contact Number</label>
+        <input type="tel" placeholder="Enter Contact Number" required>
+      </div>
+    </div>
+
+    <a href="ApplyPass.html">
+      <button class="back-btn" type="button">Back</button>
+    </a>
+
+    <a href="ApplyPass3.html">
+      <button class="btn" type="button" disabled>Next</button>
+    </a>
+  </div>
+
+  <script>
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => input.addEventListener('input', validateForm));
+  </script>
+</body>
+</html>
