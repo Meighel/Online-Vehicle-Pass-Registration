@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notification Settings</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    input:checked ~ .dot {
+      transform: translateX(100%);
+      background-color: #facc15;
+    }
+    input:checked ~ .track {
+      background-color: #facc15;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      position: relative;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    .container header {
+      background-color: #808080;
+      padding: 20px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: white;
+    }
+    .message {
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      text-align: left;
+      color: black;
+    }
+    .message ul {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+    .warning {
+      font-size: 18px;
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .btn {
+      background: yellow;
+      color: black;
+      padding: 12px 25px;
+      border: none;
+      cursor: pointer;
+      width: 180px;
+      text-align: center;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: box-shadow 0.3s ease-in-out;
+    }
+    .btn:hover {
+      box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.8);
+    }
+    .circles {
+      display: flex;
+      gap: 10px;
+    }
+    .circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .green {
+      background-color: green;
+    }
+    .yellow {
+      background-color: yellow;
+    }
+    .red {
+      background-color: red;
+    }
+    .assistance {
+      font-size: 18px;
+      color: black;
+      margin-top: 20px;
+    }
+    .next-btn {
+      background: #4CAF50;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      cursor: pointer;
+      width: 180px;
+      text-align: center;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: box-shadow 0.3s ease-in-out;
+      margin-top: 30px;
+    }
+    .next-btn:hover {
+      box-shadow: 0 0 20px 5px rgba(0, 255, 0, 0.8);
+    }
+    .slide {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-900 p-5 flex flex-col justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-yellow-400">VR</h1>
+        <nav class="mt-6">
+          <ul class="space-y-3">
+            <a href="AdminDash.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🏠</span><span>Dashboard</span>
+              </li>
+            </a>
+            <a href="ApplyPass.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">📝</span><span>Apply for Pass</span>
+              </li>
+            </a>
+            <a href="Tracking.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🚗</span><span>Pass Status Tracking</span>
+              </li>
+            </a>
+            <a href="Notification.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🔔</span><span>Notification & Alerts</span>
+              </li>
+            </a>
+            <a href="Settings.html">
+              <li class="bg-yellow-400 text-black p-3 rounded flex items-center space-x-2">
+                <span class="text-xl">⚙️</span><span>Settings</span>
+              </li>
+            </a>
+          </ul>
+        </nav>
+      </div>
+      <div class="text-left">
+        <img src="mark.jpg" class="rounded-full w-16 h-16 border-4 border-gray-700" alt="User">
+        <p class="text-sm mt-2" id="displayName">User Name</p>
+        <p class="text-xs text-gray-400" id="displayUsername">@Username</p>
+        <button class="mt-4 bg-red-600 p-2 w-full rounded flex items-center justify-center space-x-2">
+          <span class="text-xl">↩️</span><span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="flex-1 p-6 overflow-y-auto">
+      <div class="flex justify-between items-center">
+        <h1 class="text-5xl font-bold text-yellow-400">Help & Support</h1>
+      </div>
+
+      <div class="flex mt-6">
+        <div class="w-1/5 bg-gray-800 p-4 rounded-lg">
+          <ul class="space-y-2">
+            <a href="Settings.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Profile</li></a>
+            <a href="SetAccount.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Account</li></a>
+            <a href="SetSecurity.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Security</li></a>
+            <a href="SetNotification.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Notification</li></a>
+            <a href="SetHelp.html"><li class="bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Help & Support</li></a>
+          </ul>
+        </div>
+
+        <div class="flex-1 bg-gray-800 p-6 rounded-lg">
+          <div class="container">
+            <header>
+              <h2>PFAQs, Guidelines, and Contact Information</h2>
+              <div class="circles">
+                <div class="circle green"></div>
+                <div class="circle yellow"></div>
+                <div class="circle red"></div>
+              </div>
+            </header>
+            <div class="message slide active" id="slide1">
+              <p>
+                Vehicle Registration
+              </p>
+              <ul>
+                <li><strong>Who can register a vehicle?</strong></li>
+                <ul>
+                  <li>Student, Faculty, and Staff with a valid university ID.</li>
+                </ul>
+                
+                <li><strong>What are the documents needed for registration of a vehicle?</strong></li>
+                <ul>
+                  <li>Authorization letter (for those who do not own the vehicle or if it is under the name of their parents)</li>
+                  <li>Photocopy of driver’s license</li>
+                  <li>Photocopy of Official Receipt (OR)/Certificate of Registration (CR)</li>
+                  <li>Photocopy of student’s Certificate of Registration (COR)</li>
+                  <li>Photocopy of validated student ID</li>
+                </ul>
+                
+                <li><strong>How do I register my vehicle?</strong></li>
+                <ul>
+                  <li>Sign in to our website. (URL)</li>
+                  <li>Navigate to Vehicle Registration.</li>
+                  <li>Fill in the details needed (name, vehicle type, vehicle model, license plate number, etc.)</li>
+                  <li>Upload the required documents.</li>
+                  <li>Click Submit and wait for approval.</li>
+                </ul>
+                
+                <li><strong>How long does approval take?</strong></li>
+                <ul>
+                  <li>The approval will take 1-4 business days. You will receive an update in your email.</li>
+                </ul>
+              </ul>
+
+              <p class="warning">⚠️ Failure to pay within the given timeframe will result in your slot being invalidated.</p>
+            </div>
+
+            <div class="message slide" id="slide2">
+              <p><strong>Payment Process</strong></p>
+              <ul>
+                <li><strong>How do I pay the vehicle registration fee?</strong></li>
+                <ul>
+                  <li>After filling the details needed, proceed to the Payment.</li>
+                  <li>Choose your preferred payment method:</li>
+                  <ul>
+                    <li>Face-to-face payment (University Cashier)</li>
+                    <li>E-wallet (GCash, PayMaya, etc.)</li>
+                  </ul>
+                </ul>
+              </ul>
+
+              <p><strong>Vehicle Pass Distribution</strong></p>
+              <ul>
+                <li><strong>How do I get my vehicle pass sticker?</strong></li>
+                <ul>
+                  <li>Once your application is approved you can get your sticker at our university security personnel office.</li>
+                  <li>You just need to present your receipt to the office.</li>
+                </ul>
+              </ul>
+
+              <p><strong>Need Assistance? Contact Us</strong></p>
+              <ul>
+                <li>Email:</li>
+                <li>Phone:</li>
+                <li>Office Hours:</li>
+              </ul>
+            </div>
+            
+            <p class="assistance">For assistance, please contact [support/contact details].</p>
+            
+            <a href="AdminDash.html">
+              <button class="btn">Go to Home</button>
+            </a>
+            
+            <button class="next-btn" onclick="nextSlide()">Next ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+
+    function nextSlide() {
+      document.getElementById('slide' + currentSlide).classList.remove('active');
+
+      currentSlide++;
+      if (currentSlide > 2) currentSlide = 1; // Loop back to the first slide
+      document.getElementById('slide' + currentSlide).classList.add('active');
+    }
+  </script>
+</body>
+</html>
