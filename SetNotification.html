@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notification Settings</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    input:checked ~ .dot {
+      transform: translateX(100%);
+      background-color: #facc15; 
+    }
+    input:checked ~ .track {
+      background-color: #facc15;
+    }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen w-screen">
+  <div class="flex min-h-screen">
+
+    <aside class="w-64 bg-gray-900 p-5 flex flex-col justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-yellow-400">VR</h1>
+        <nav class="mt-6">
+          <ul class="space-y-3">
+            <a href="AdminDash.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🏠</span><span>Dashboard</span>
+              </li>
+            </a>
+            <a href="ApplyPass.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">📝</span><span>Apply for Pass</span>
+              </li>
+            </a>
+            <a href="Tracking.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🚗</span><span>Pass Status Tracking</span>
+              </li>
+            </a>
+            <a href="Notification.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🔔</span><span>Notification & Alerts</span>
+              </li>
+            </a>
+            <a href="Settings.html">
+              <li class="bg-yellow-400 text-black p-3 rounded flex items-center space-x-2">
+                <span class="text-xl">⚙️</span><span>Settings</span>
+              </li>
+            </a>
+          </ul>
+        </nav>
+      </div>
+      <div class="text-left">
+        <img src="mark.jpg" class="rounded-full w-16 h-16 border-4 border-gray-700" alt="User">
+        <p class="text-sm mt-2" id="displayName">User Name</p>
+        <p class="text-xs text-gray-400" id="displayUsername">@Username</p>
+        <button class="mt-4 bg-red-600 p-2 w-full rounded flex items-center justify-center space-x-2">
+          <span class="text-xl">↩️</span><span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="flex-1 p-6 overflow-y-auto">
+      <div class="flex justify-between items-center">
+        <h1 class="text-5xl font-bold text-yellow-400">Notification Settings</h1>
+      </div>
+
+      <div class="flex mt-6">
+        <div class="w-1/5 bg-gray-800 p-4 rounded-lg">
+          <ul class="space-y-2">
+            <a href="Settings.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Profile</li></a>
+            <a href="SetAccount.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Account</li></a>
+            <a href="SetSecurity.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Security</li></a>
+            <a href="SetNotification.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Notification</li></a>
+            <a href="SetHelp.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Help & Support</li></a>
+          </ul>
+        </div>
+
+        <div class="flex-1 bg-gray-900 p-6 rounded-lg ml-6 space-y-6">
+          <div class="bg-gray-800 p-4 rounded mb-4 flex justify-between items-center">
+            <div>
+              <h2 class="font-semibold text-lg">Pop-up Notifications</h2>
+              <p class="text-sm text-gray-400">Real-time updates while working on the system</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer rounded-full track transition-all duration-300"></div>
+              <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md dot transition-all duration-300"></div>
+            </label>
+          </div>
+
+          <div class="bg-gray-800 p-4 rounded mb-4 flex justify-between items-center">
+            <div>
+              <h2 class="font-semibold text-lg">Turn on Security Alerts</h2>
+              <p class="text-sm text-gray-400">Receive alerts for suspicious activities, failed login attempts, or unauthorized access</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer rounded-full track transition-all duration-300"></div>
+              <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md dot transition-all duration-300"></div>
+            </label>
+          </div>
+
+          <div class="bg-gray-800 p-4 rounded mb-4 flex justify-between items-center">
+            <div>
+              <h2 class="font-semibold text-lg">Turn on Payment Status Notifications</h2>
+              <p class="text-sm text-gray-400">Notified about your payment status</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer rounded-full track transition-all duration-300"></div>
+              <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md dot transition-all duration-300"></div>
+            </label>
+          </div>
+
+          <div class="bg-gray-800 p-4 rounded mb-4 flex justify-between items-center">
+            <div>
+              <h2 class="font-semibold text-lg">Turn on Document Verification Reminders</h2>
+              <p class="text-sm text-gray-400">Notified when submitted documents are verified</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer">
+              <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none peer rounded-full track transition-all duration-300"></div>
+              <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md dot transition-all duration-300"></div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
