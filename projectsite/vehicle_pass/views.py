@@ -8,7 +8,7 @@ from .models import InspectionReport, Notification, Announcement
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .authentication import login_required
+from .authentication import login_required, CustomLoginRequiredMixin
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -69,17 +69,17 @@ def cashier_dashboard(request):
 def admin_dashboard(request):
     return render(request, "Admin Dashboard/Admin_Dashboard.html")
 
-@login_required
-def admin_manage_user(request):
-    return render(request, "Admin Dashboard/Admin_Manage_User.html")
+# @login_required
+# def admin_manage_user(request):
+#     return render(request, "Admin Dashboard/Admin_Manage_User.html") 
 
-@login_required
-def admin_manage_application(request):
-    return render(request, "Admin Dashboard/Admin_Application.html")
+# @login_required
+# def admin_manage_application(request):
+#     return render(request, "Admin Dashboard/Admin_Application.html")
 
-@login_required
-def admin_manage_payments(request):
-    return render(request, "Admin Dashboard/Admin_Manage_Payment.html")
+# @login_required
+# def admin_manage_payments(request):
+#     return render(request, "Admin Dashboard/Admin_Manage_Payment.html")
 
 
 def signup_view(request):
@@ -105,19 +105,19 @@ def signup_view(request):
 ## charts
 
 ###### Manage Users
-class AdminViewUser(LoginRequiredMixin, ListView):
+class AdminViewUser(CustomLoginRequiredMixin, ListView):
     model = UserProfile
-    context_object_name = "admin_dashboard"
+    context_object_name = "admin_manage_user"
     template_name = 'Admin Dashboard/Admin_Dashboard.html'
     paginate_by = 3
 
-class AdminCreateUser(LoginRequiredMixin, CreateView):
+class AdminCreateUser(CustomLoginRequiredMixin, CreateView):
     model = UserProfile
     form_class = AdminUserForm
     template_name = "Forms/forms_1.html" 
     success_url  = reverse_lazy("")
 
-class AdminUpdateUser(LoginRequiredMixin, UpdateView):
+class AdminUpdateUser(CustomLoginRequiredMixin, UpdateView):
     model = UserProfile
     form_class = AdminUserForm
     template_name = "Forms/forms_1.html" #placeholder lang baka need pa ng specific update form 
@@ -129,7 +129,7 @@ class AdminDeleteUser(LoginRequiredMixin, DeleteView):
     success_url  = reverse_lazy("")
 
 ###### Application
-class AdminViewApplication(LoginRequiredMixin, ListView):
+class AdminViewApplication(CustomLoginRequiredMixin, ListView):
     model = Registration
     context_object_name = "admin_manage_application"
     template_name = 'Admin Dashboard/Admin_Application.html'
@@ -152,7 +152,7 @@ class AdminDeleteApplication(LoginRequiredMixin, DeleteView):
     success_url  = reverse_lazy("")
 
 ###### Payment
-class AdminViewPayment(LoginRequiredMixin, ListView):
+class AdminViewPayment(CustomLoginRequiredMixin, ListView):
     model = PaymentTransaction
     context_object_name = "admin_manage_payments"
     template_name = 'Admin Dashboard/Admin_Manage_Payment.html'
@@ -175,7 +175,7 @@ class AdminDeletePayment(LoginRequiredMixin,DeleteView):
     success_url  = reverse_lazy("")
 
 ###### Passes
-class AdminViewPasses(LoginRequiredMixin, ListView):
+class AdminViewPasses(CustomLoginRequiredMixin, ListView):
     model = VehiclePass
     context_object_name = "admin_dashboard"
     template_name = 'Admin Dashboard/Admin_Manage_Passes.html'
@@ -197,12 +197,12 @@ class AdminDeletePasses(LoginRequiredMixin, DeleteView):
     template_name = "" #passes delete form
     success_url  = reverse_lazy("")
 ###### Reports
-class AdminViewReport(ListView):
+class AdminViewReport(CustomLoginRequiredMixin, ListView):
     model = InspectionReport
     context_object_name = "admin_dashboard"
     template_name = 'Admin Dashboard/Admin_Application.html'
 
-class AdminCreateReport(LoginRequiredMixin, CreateView):
+class AdminCreateReport(CustomLoginRequiredMixin, CreateView):
     model = InspectionReport
     form_class = AdminReportForm
     template_name = "" #report forms
