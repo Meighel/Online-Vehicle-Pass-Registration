@@ -92,9 +92,12 @@ def security_report(request):
 def cashier_dashboard(request):
     return render(request, "Cashier Dashboard/Cashier_Dashboard.html")
 
-@login_required
-def cashier_payments(request):
-    return render(request, "Cashier Dashboard/Cashier_Payment.html")
+
+class cashierViewPayment(ListView):
+    model = PaymentTransaction
+    template_name = "Cashier Dashboard/Cashier_Payment.html"
+    context_object_name = 'payment_list'
+    paginate_by = 10
 
 @login_required
 def cashier_transaction(request):
