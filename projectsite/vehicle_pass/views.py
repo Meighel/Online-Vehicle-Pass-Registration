@@ -63,6 +63,12 @@ def redirect_user_dashboard(user):
 def default_dashboard(request):
     return render(request, "User Dashboard/User_Dashboard.html")
 
+# Admin Page View 
+@login_required
+def admin_dashboard(request):
+    return render(request, "Admin Dashboard/Admin_Dashboard.html")
+
+
 class AdminViewUser(CustomLoginRequiredMixin, ListView):
     model = UserProfile
     context_object_name = "users"
@@ -72,18 +78,18 @@ class AdminViewUser(CustomLoginRequiredMixin, ListView):
 class AdminCreateUser(CustomLoginRequiredMixin, CreateView):
     model = UserProfile
     form_class = UserProfileForm
-    template_name = "Admin Dashboard/Admin CRUD/Admin_Create_User.html" 
+    template_name = "Admin Dashboard/Admin User CRUD/Admin_Create_User.html" 
     success_url  = reverse_lazy("admin_manage_user")
     
 class AdminUpdateUser(CustomLoginRequiredMixin, UpdateView):
     model = UserProfile
     form_class = UserProfileForm
-    template_name = "Admin Dashboard/Admin CRUD/Admin_Update_User.html" #placeholder lang baka need pa ng specific update form 
+    template_name = "Admin Dashboard/Admin User CRUD/Admin_Update_User.html" #placeholder lang baka need pa ng specific update form 
     success_url  = reverse_lazy("admin_manage_user")
     
 class AdminDeleteUser(CustomLoginRequiredMixin, DeleteView):
     model = UserProfile
-    template_name = "Admin Dashboard/Admin CRUD/Admin_Delete_User.html"
+    template_name = "Admin Dashboard/Admin User CRUD/Admin_Delete_User.html"
     success_url = reverse_lazy('admin_manage_user')
 
     def form_valid(self, form):
@@ -92,8 +98,48 @@ class AdminDeleteUser(CustomLoginRequiredMixin, DeleteView):
 
 class AdminViewSpecificUser(CustomLoginRequiredMixin, DetailView):
     model = UserProfile
-    template_name = 'Admin Dashboard/Admin CRUD/Admin_View_Specific_User.html'
+    template_name = 'Admin Dashboard/Admin User CRUD/Admin_View_Specific_User.html'
     context_object_name = 'user'
+    
+
+
+@login_required
+def admin_manage_application(request):
+    return render(request, "Admin Dashboard/Admin_Application.html")
+
+
+# CRUD AND VIEW OF TRANSACTION AND PAYMENT
+class adminViewPayment(ListView):
+    model = PaymentTransaction
+    template_name = "Admin Dashboard/Admin_Manage_Payment.html"
+    context_object_name = 'payment_list'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return PaymentTransaction.objects.filter(status='pending')
+    
+class adminViewTransaction(ListView):
+    model = PaymentTransaction
+    template_name = "Admin Dashboard/Admin_Transaction.html"
+    context_object_name = 'transaction_list'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return PaymentTransaction.objects.exclude(status='pending')
+    
+class adminUpdatePayment(UpdateView):
+    model = PaymentTransaction
+    form_class = PaymentTransactionForm
+    template_name ="Admin Dashboard/Admin_Payment_Update.html"
+    success_url = reverse_lazy("admin_payments")
+
+@login_required
+def admin_manage_passes(request):
+    return render (request, "Admin Dashboard/Admin_Manage_Passes.html")
+
+@login_required
+def admin_report(request):
+    return render (request, "Admin Dashboard/Admin_Reports.html")
 
 
 # Security Page Vies
@@ -161,36 +207,7 @@ def cashier_report(request):
     return render(request, "Cashier Dashboard/Cashier_Reports.html")
 
 
-# Admin Page View 
-@login_required
-def admin_dashboard(request):
-    return render(request, "Admin Dashboard/Admin_Dashboard.html")
 
-@login_required
-def admin_manage_user(request):
-    return render(request, "Admin Dashboard/Admin_Manage_User.html")
-
-@login_required
-def admin_manage_application(request):
-    return render(request, "Admin Dashboard/Admin_Application.html")
-
-class adminViewPayment(ListView):
-    model = PaymentTransaction
-    template_name = "Admin Dashboard/Admin_Manage_Payment.html"
-    context_object_name = 'payment_list'
-    paginate_by = 10
-    
-@login_required
-def admin_transaction(request):
-    return render(request, "Admin Dashboard/Admin_Transaction.html")
-
-@login_required
-def admin_manage_passes(request):
-    return render (request, "Admin Dashboard/Admin_Manage_Passes.html")
-
-@login_required
-def admin_report(request):
-    return render (request, "Admin Dashboard/Admin_Reports.html")
 
 def signup_view(request):
     email = request.GET.get('email_value', '')

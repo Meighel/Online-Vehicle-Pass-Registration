@@ -64,20 +64,25 @@
             <table class="transaction-table">
                 <thead>
                     <tr>
-                        <th>Date Proccess</th>
+                        <th>Date</th>
                         <th>Username</th>
                         <th>Status</th>
                         <th>Processed By</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <td>02/15/2025</td>       
-                    <td>DELA CRUZ, SAMANTHA</td> 
-                    <td><button class="status-badge status-paid">Approved</button></td>
-                    <td>Cashier</td>
+                    {% for transaction in transaction_list %}
+                        <tr>
+                            <td>{{ transaction.date_processed }}</td>
+                            <td>{{ transaction.registration.user.lastname }} , {{ transaction.registration.user.firstname }}</td>
+                            <td><button class="btn btn-success btn-sm">{{ transaction.status }}</button></td>
+                            <td>{{ transaction.cashier.user.firstname }} {{ transaction.cashier.user.lastname }}</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </section>
+
 
         <!-- Entries Info -->
         <div class="entries-info">Showing 0 entries</div>
