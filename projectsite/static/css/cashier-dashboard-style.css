@@ -26,6 +26,10 @@ body {
     width: calc(100% - 250px);
 }
 
+.bell {
+    margin-right: 30px;
+}
+
 .title {
     margin: 0; 
     font-size: 30px; 
