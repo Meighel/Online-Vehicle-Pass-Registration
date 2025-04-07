@@ -1,0 +1,183 @@
+{% extends "includes/security_sidebar.html" %}
+{% load static %}
+
+{% block title %}
+        Manage Application
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/security-dashboard-style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.png' %}">
+    <style>
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 120px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="main-content flex-grow-1 ms-uto">
+    <div class="container-fluid py-1">
+        <!-- Title & Top Bar -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+            <h2 class="title mb-3 mb-md-0">Manage Application</h2>
+            <div class="d-flex align-items-center gap-3">
+                <!-- Notification Bell -->
+                <a href="Announcements.html" class="text-decoration-none text-light position-absolute">
+                    <img src="{% static 'images/notification.png' %}" alt="Notifications" width="30" height="30">
+                    <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
+                </a>
+            </div>
+        </div>
+
+        <hr>
+        <small><span id="date"></span></small>
+        <br>
+
+
+        <div class="filter-container">
+            <div class="mb-3">
+                <label for="start-date" class="form-label">Start Date:</label>
+                <input type="date" id="start-date" class="form-control">
+            </div>
+            
+            <div class="mb-3">
+                <label for="end-date" class="form-label">End Date:</label>
+                <input type="date" id="end-date" class="form-control">
+            </div>
+            
+            <input class="position-absolute end-0 bottom-10 form-control w-20 me-5 mb-auto" type="text" id="search-bar" placeholder="🔍 Search">
+        </div>
+
+        <section class="table-container">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Application ID</th>
+                        <th>Account</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>DELA CRUZ, SAMANTHA</td>
+                        <td>1</td>
+                        <td>User</td>
+                        <td>02/24/2005</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-info">Update</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DELA CRUZ, SAMANTHA</td>
+                        <td>1</td>
+                        <td>User</td>
+                        <td>02/24/2005</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-info">Update</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DELA CRUZ, SAMANTHA</td>
+                        <td>1</td>
+                        <td>User</td>
+                        <td>02/24/2005</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-info">Update</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DELA CRUZ, SAMANTHA</td>
+                        <td>1</td>
+                        <td>User</td>
+                        <td>02/24/2005</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-info">Update</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DELA CRUZ, SAMANTHA</td>
+                        <td>1</td>
+                        <td>User</td>
+                        <td>02/24/2005</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-info">Update</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DELA CRUZ, SAMANTHA</td>
+                        <td>1</td>
+                        <td>User</td>
+                        <td>02/24/2005</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-info">Update</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DELA CRUZ, SAMANTHA</td>
+                        <td>1</td>
+                        <td>User</td>
+                        <td>02/24/2005</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-info">Update</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>DELA CRUZ, SAMANTHA</td>
+                        <td>1</td>
+                        <td>User</td>
+                        <td>02/24/2005</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <button class="btn btn-view">View</button>
+                            <button class="btn btn-info">Update</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <!-- Entries Info -->
+        <div class="entries-info">Showing 0 entries</div>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'javascript/base.js' %}"></script>
+    <script src="{% static 'javascript/Admin_User.js' %}"></script>
+{% endblock %}

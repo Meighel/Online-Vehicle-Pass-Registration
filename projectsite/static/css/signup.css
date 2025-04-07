@@ -5,27 +5,11 @@ body {
     align-items: center;
     height: 100vh;
 }
-
-.center-container {
-    min-height: 100vh; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.form-container {
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: white;
-}
-
-.login-box {
+.signup-box {
     background-color: #000;
     color: #FFD700;
     padding: 30px;
-     border-radius: 20px;
+    border-radius: 20px;
     box-shadow: 0 0 10px #FFD700;
     text-align: center;
     width: 320px;
@@ -41,7 +25,7 @@ body {
 .form-control::placeholder {
     color: #bbb;
 }
-.btn-login {
+.btn-signup {
     background-color: #FFD700;
     color: black;
     border-radius: 30px;
@@ -51,6 +35,6 @@ body {
     border: none;
     box-shadow: 0 0 5px #FFD700;
 }
-.btn-login:hover {
+.btn-signup:hover {
     background-color: #e6c200;
 }

@@ -26,10 +26,6 @@ body {
     width: calc(100% - 250px);
 }
 
-.bell {
-    margin-right: 30px;
-}
-
 .title {
     margin: 0; 
     font-size: 30px; 
@@ -61,7 +57,7 @@ body {
 .search-btn {
     background: #ffe600 !important;
     border: none;
-    padding: 5px 10px;
+    padding: 5px 12px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
@@ -99,7 +95,7 @@ body {
     font-weight: bold;
 }
 
-.status-paid {
+.status-approved {
     background-color: green;
 }
 
@@ -218,8 +214,6 @@ body {
 }
 
 
-
-
 /* ========== Admin Search Bar ========== */
 .dashboard .btn {
     color: white;
@@ -231,118 +225,14 @@ body {
 
 }
 
-/* ========================================= */
-/*      payments page styling                */
-/* ========================================= */
-
-
-.payments-table {
-    width: 100%;
-    border-collapse: separate;
-    border-radius: 5px;
-    background-color: #292929;
-    color: white;
-    padding-top: 5px;
-}
-
-.payments-table th {
-    font-weight: bold;
-    padding: 14px;
-    color: yellow;
-    font-size: 16px;
-    text-align: center;
-}
-.payments-table td {
-    padding: 12px;
-    font-size: 15px;
-}
-
-.payments-table tr {
-    color: white;
-}
-.payments-table tbody tr:nth-child(odd) {
-    background-color: #1e1e1e !important;
-}
-
-.payments-table tbody tr:nth-child(even) {
-    background-color: #1e1e1e !important; 
-}
-
-.payments-table th:first-child {
-    cursor: pointer;
-}
-
-.payments-table th:nth-child(7),
-.payments-table td:nth-child(7) { 
-    text-align: center;
-}
-
-.payments-table td:nth-child(7) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 5px; 
-    padding-right: 15px;
-}
-
-/* ========================================= */
-/*         transaction page styling          */
-/* ========================================= */
-
-.transaction-table {
-    width: 100%;
-    border-collapse: separate;
-    border-radius: 5px;
-    background-color: #292929;
-    color: white;
-    padding-top: 30px;
-}
-
-.transaction-table th {
-    font-weight: bold;
-    padding: 14px;
-    color: yellow;
-    font-size: 16px;
-    text-align: center;
-}
-.transaction-table td {
-    padding: 12px;
-    font-size: 15px;
-}
-
-.transaction-table tr {
-    color: white;
-}
-.transaction-table tbody tr:nth-child(odd) {
-    background-color: #1e1e1e !important;
-}
-
-.transaction-table tbody tr:nth-child(even) {
-    background-color: #1e1e1e !important; 
-}
-
-.transaction-table th:first-child {
-    cursor: pointer;
-}
-
-.transaction-table th:nth-child(7),
-.transaction-table td:nth-child(7) { 
-    text-align: center;
-}
-
-.transaction-table td:nth-child(7) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 5px; 
-    padding-right: 15px;
-}
 
 
 /* ========================================= */
-/*          reports table styling                */
+/*          user table styling                */
 /* ========================================= */
 
-/* 
-.reports-table {
+
+.users-table {
     width: 100%;
     border-collapse: separate;
     border-radius: 5px;
@@ -350,152 +240,257 @@ body {
     color: white;
 }
 
-.reports-table th {
+.users-table th {
     font-weight: bold;
     padding: 14px;
     color: yellow;
     font-size: 16px;
-    text-align: center;
 }
-.reports-table td {
+.users-table td {
     padding: 12px;
     font-size: 15px;
 }
 
-.reports-table tr {
+.users-table tr {
     color: white;
 }
-.reports-table tbody tr:nth-child(odd) {
+.users-table tbody tr:nth-child(odd) {
     background-color: #1e1e1e !important;
 }
 
-.reports-table tbody tr:nth-child(even) {
+.users-table tbody tr:nth-child(even) {
     background-color: #1e1e1e !important; 
 }
 
-.reports-table th:first-child {
+.users-table th:first-child {
     cursor: pointer;
 }
 
-.reports-table th:nth-child(7),
-.reports-table td:nth-child(7) { 
+.users-table th:nth-child(7),
+.users-table td:nth-child(7) { 
     text-align: center;
 }
 
-.reports-table td:nth-child(7) {
+.users-table td:nth-child(7) {
     display: flex;
     justify-content: flex-end;
     gap: 5px; 
     padding-right: 15px;
-} */
+}
+
+/* ========================================= */
+/*         inspection page styling          */
+/* ========================================= */
+
+.inspection-table {
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 5px;
+    background-color: #292929;
+    color: white;
+    padding-top: 10px;
+}
+
+.inspection-table th {
+    font-weight: bold;
+    padding: 14px;
+    color: yellow;
+    font-size: 16px;
+}
+.inspection-table td {
+    padding: 12px;
+    font-size: 15px;
+}
+
+.inspection-table tr {
+    color: white;
+}
+.inspection-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important;
+}
+
+.inspection-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e !important; 
+}
+
+.inspection-table th:first-child {
+    cursor: pointer;
+}
+
+.inspection-table th:nth-child(7),
+.inspection-table td:nth-child(7) { 
+    text-align: center;
+}
+
+.inspection-table td:nth-child(7) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px; 
+    padding-right: 15px;
+}
+
+/* ========================================= */
+/*      release page styling                */
+/* ========================================= */
 
 
+.release-table {
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 5px;
+    background-color: #292929;
+    color: white;
+    padding-top: 10px;
+}
+
+.release-table th {
+    font-weight: bold;
+    padding: 14px;
+    color: yellow;
+    font-size: 16px;
+}
+.release-table td {
+    padding: 12px;
+    font-size: 15px;
+}
+
+.release-table tr {
+    color: white;
+}
+.release-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important;
+}
+
+.release-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e !important; 
+}
+
+.release-table th:first-child {
+    cursor: pointer;
+}
+
+.release-table th:nth-child(7),
+.release-table td:nth-child(7) { 
+    text-align: center;
+}
+
+.release-table td:nth-child(7) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px; 
+    padding-right: 15px;
+}
 
 
-@media (max-width: 768px) {
-    body {
-        flex-direction: column;
-    }
-
+/* ========== Responsive Layout ========== */
+@media (max-width: 1024px) {
     .content {
         width: 100%;
         padding: 15px;
+        margin-left: 0;
     }
 
     .title {
-        font-size: 22px;
+        font-size: 24px;
         flex-direction: column;
         align-items: flex-start;
-        gap: 5px;
     }
 
-    .search-container,
     .filter-container {
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%;
-    }
-
-    #search-bar {
-        width: 100%;
-        height: 35px;
-    }
-
-    .search-btn {
-        width: 100%;
-        margin-top: 5px;
-    }
-
-    .top-bar {
-        right: 10px;
-        top: 10px;
-    }
-
-    .icon-btn {
-        padding: 6px;
-        font-size: 12px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
     }
 
     .pagination {
         justify-content: center;
         flex-wrap: wrap;
-        gap: 5px;
     }
 
     .entries-info {
         text-align: center;
-        width: 100%;
     }
+}
 
-    .table-container,
-    .payments-table,
-    .transaction-table {
-        overflow-x: auto;
-        display: block;
-    }
-
-    .payments-table thead,
-    .transaction-table thead {
+@media (max-width: 768px) {
+    .sidebar {
         display: none;
     }
 
-    .payments-table tbody td,
-    .transaction-table tbody td {
-        display: block;
-        text-align: right;
-        position: relative;
-        padding-left: 50%;
+    .content {
+        width: 100%;
+        margin-left: 0 !important;
+    }
+    .title {
+        font-size: 20px;
+        padding: 10px 0;
     }
 
-    .payments-table tbody td::before,
-    .transaction-table tbody td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 10px;
-        width: 45%;
-        white-space: nowrap;
-        font-weight: bold;
-        text-align: left;
-        color: yellow;
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 8px;
     }
 
-    .payments-table td,
-    .transaction-table td {
-        font-size: 13px;
+    #search-bar {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .search-btn {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .users-table td,
+    .users-table th,
+    .inspection-table td,
+    .inspection-table th,
+    .release-table td,
+    .release-table th {
+        font-size: 12px;
         padding: 8px;
+    }
+
+    .users-table td:nth-child(7),
+    .inspection-table td:nth-child(7),
+    .release-table td:nth-child(7) {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 18px;
+    }
+
+    .status-badge {
+        font-size: 12px;
+        padding: 3px 6px;
     }
 
     .btn-view,
     .btn-approve,
     .btn-reject,
     .btn-delete {
-        width: 100%;
-        margin-top: 5px;
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    .pagination button {
+        padding: 6px 10px;
+        font-size: 12px;
     }
 
     .dashboard .btn {
-        flex-direction: column;
-        align-items: stretch;
+        font-size: 13px;
+    }
+
+    img {
         width: 100%;
+        height: auto;
+        display: block;
     }
 }

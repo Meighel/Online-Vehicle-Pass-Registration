@@ -1,12 +1,12 @@
-{% extends "includes/admin_sidebar.html" %}
+{% extends "includes/security_sidebar.html" %}
 {% load static %}
 
 {% block title %}
-    Manage Application
+        Inspection Reports
 {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/admin-dashboard-style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/security-dashboard-style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
     <style>
@@ -24,7 +24,7 @@
     <div class="container-fluid py-1">
         <!-- Title & Top Bar -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-            <h2 class="title mb-3 mb-md-0">Manage Application</h2>
+            <h2 class="title mb-3 mb-md-0">Inspection Reports</h2>
             <div class="d-flex align-items-center gap-3">
                 <!-- Notification Bell -->
                 <a href="Announcements.html" class="text-decoration-none text-light position-absolute">
@@ -54,31 +54,63 @@
         </div>
 
         <section class="table-container">
-            <table class="users-table">
+            <table class="inspection-table">
                 <thead>
                     <tr>
-                        <th>Username</th>
-                        <th>Application ID</th>
-                        <th>Plate Number</th>
+                        <th>Payment Number</th>
+                        <th>Processed by</th>
                         <th>Date</th>
-                        <th>Status</th>
+                        <th>Remarks</th>
+                        <th>Additional Notes</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>PLT 1234</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>00001RCP</td>
+                        <td>Cashier Name</td>
+                        <td>02/26/2025</td>
+                        <td>Under Review</td>
+                        <td>Pending final inspection</td>
                         <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-info">Update</button>
-                            <button class="btn btn-danger">Delete</button>
+                            <button class="btn btn-success">Approved</button>
+                            <button class="btn btn-danger">Reject</button>
                         </td>
                     </tr>
-                </tbody>
+                    <tr>
+                        <td>00002RCP</td>
+                        <td>Jane Smith</td>
+                        <td>03/05/2025</td>
+                        <td>Under Review</td>
+                        <td>Pending final inspection</td>
+                        <td>
+                            <button class="btn btn-success">Approved</button>
+                            <button class="btn btn-danger">Reject</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>00001RCP</td>
+                        <td>Cashier Name</td>
+                        <td>02/26/2025</td>
+                        <td>Under Review</td>
+                        <td>Pending final inspection</td>
+                        <td>
+                            <button class="btn btn-success">Approved</button>
+                            <button class="btn btn-danger">Reject</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>00002RCP</td>
+                        <td>Jane Smith</td>
+                        <td>03/05/2025</td>
+                        <td>Under Review</td>
+                        <td>Pending final inspection</td>
+                        <td>
+                            <button class="btn btn-success">Approved</button>
+                            <button class="btn btn-danger">Reject</button>
+                        </td>
+                    </tr>
+                </tbody>                
             </table>
         </section>
         
@@ -95,5 +127,4 @@
 
 {% block extra_js %}
     <script src="{% static 'javascript/base.js' %}"></script>
-    <script src="{% static 'javascript/Admin_Application.js' %}"></script>
 {% endblock %}

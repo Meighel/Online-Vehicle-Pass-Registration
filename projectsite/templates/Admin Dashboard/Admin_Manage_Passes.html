@@ -38,6 +38,7 @@
         <br>
 
 
+
         <div class="filter-container">
             <div class="mb-3">
                 <label for="start-date" class="form-label">Start Date:</label>
@@ -49,7 +50,7 @@
                 <input type="date" id="end-date" class="form-control">
             </div>
             
-            <input class="position-absolute end-0 bottom-10 form-control w-20 me-5" type="text" id="search-bar" placeholder="🔍 Search">
+            <input class="position-absolute end-0 bottom-10 form-control w-20 me-5 mb-auto" type="text" id="search-bar" placeholder="🔍 Search">
         </div>
 
                 <!-- Passes Table -->
@@ -57,29 +58,28 @@
                     <table class="passes-table">
                         <thead>
                             <tr>
+                                <th>College</th>
+                                <th>Department</th>
+                                <th>Program</th>
                                 <th>Username</th>
                                 <th>Application ID</th>
                                 <th>Plate Number</th>
                                 <th>Type</th>
-                                <th>Account</th>
-                                <th>Department</th>
                                 <th>Date Applied</th>
-                                <th>Action</th>
+                                <th>Renewal Date</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
+                                <td>College of Science</td>
+                                <td>Depertment of Computer Science</td>
+                                <td>Bachelor of Science in Computer Science</td>
                                 <td>SWIFT, TAYLOR ALLISON</td>
-                                <td>2025-0-001</td>
+                                <td>1</td>
                                 <td>9199-VG</td>
                                 <td>Motorcycle</td>
-                                <td>Student</td>
-                                <td>College of Sciences</td>
                                 <td>02/15/2025</td>
-                                <td>
-                                    <button class="btn btn-approve">Approve</button>
-                                    <button class="btn btn-reject">Reject</button>
-                                </td>
+                                <td>02/15/2026</td>
                             </tr>
                             <!-- More rows as needed -->
                         </tbody>                
@@ -99,5 +99,5 @@
 
 {% block extra_js %}
     <script src="{% static 'javascript/base.js' %}"></script>
-    <script src="{% static 'javascript/Admin_User.js' %}"></script>
+    <script src="{% static 'javascript/Admin_Passes.js' %}"></script>
 {% endblock %}

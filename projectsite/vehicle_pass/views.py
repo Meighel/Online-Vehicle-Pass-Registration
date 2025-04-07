@@ -59,14 +59,55 @@ def redirect_user_dashboard(user):
 def default_dashboard(request):
     return render(request, "User Dashboard/User_Dashboard.html")
 
+
+
+
+# Security Page Vies
 @login_required
 def security_dashboard(request):
     return render(request, "Security Dashboard/Security_Dashboard.html")
 
 @login_required
+def security_manage_application(request):
+    return render(request, "Security Dashboard/Security_Application.html")
+
+
+@login_required
+def security_manage_inspection(request):
+    return render(request, "Security Dashboard/Security_Inspection.html")
+
+@login_required
+def security_manage_stickers(request):
+    return render(request, "Security Dashboard/Security_Release_Stickers.html")
+
+@login_required
+def security_report(request):
+    return render(request, "Security Dashboard/Security_History.html")
+
+
+
+
+# Cashier Page View 
+@login_required
 def cashier_dashboard(request):
     return render(request, "Cashier Dashboard/Cashier_Dashboard.html")
 
+
+class cashierViewPayment(ListView):
+    model = PaymentTransaction
+    template_name = "Cashier Dashboard/Cashier_Payment.html"
+    context_object_name = 'payment_list'
+    paginate_by = 10
+
+@login_required
+def cashier_transaction(request):
+    return render(request, "Cashier Dashboard/Cashier_Transaction.html")
+
+@login_required
+def cashier_report(request):
+    return render(request, "Cashier Dashboard/Cashier_Reports.html")
+
+# Admin Page View 
 @login_required
 def admin_dashboard(request):
     return render(request, "Admin Dashboard/Admin_Dashboard.html")
@@ -79,9 +120,15 @@ def admin_manage_user(request):
 def admin_manage_application(request):
     return render(request, "Admin Dashboard/Admin_Application.html")
 
+class adminViewPayment(ListView):
+    model = PaymentTransaction
+    template_name = "Admin Dashboard/Admin_Manage_Payment.html"
+    context_object_name = 'payment_list'
+    paginate_by = 10
+    
 @login_required
-def admin_manage_payments(request):
-    return render(request, "Admin Dashboard/Admin_Manage_Payment.html")
+def admin_transaction(request):
+    return render(request, "Admin Dashboard/Admin_Transaction.html")
 
 @login_required
 def admin_manage_passes(request):

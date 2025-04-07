@@ -1,135 +1,182 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashier Dashboard</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../static/css/cashier-dashboard-style.css">
-    <link rel="stylesheet" href="../../static/css/sidebar.css"> <!--THIS-->
-</head>
-<body>
+{% extends 'includes/cashier_sidebar.html' %}
+{% load static %}
 
-    <div class="d-flex">
-        <!-- Sidebar -->
-        <div id="sidebar-container"></div>
-        <!-- Main Content -->
-        <main class="content p-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <h2>DASHBOARD</h2>
-                <div class="top-bar">
-                    <div class="position-relative me-3">
-                        <!-- Notification Bell -->
-                        <a href="Announcements.html" class="text-decoration-none text-light">
-                            <img src="../../static/images/notification.png" alt="Notifications" width="30" height="30">
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
-                        </a>
-                    </div>
-                    <!-- Search Bar -->
-                    <div class="search-container">
-                        <input type="text" placeholder="Search..." id="search-bar">
-                        <button class="search-btn">🔍</button> <!-- Added search button -->
-                    </div>
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/cashier-dashboard-style.css' %}">
+<link rel="icon" href="{% static 'images/favicon.png' %}">
+<style>
+    /* Ensure main content shifts to the right of sidebar */
+    .dashboard-wrapper {
+        display: flex;
+    }
+    .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        margin-left: 120px;
+    }
+    /* Ensure cards and table have proper spacing */
+    .dashboard-card {
+        min-height: 140px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper d-flex flex-wrap">
+    <div class="main-content flex-grow-1 p-3">
+        <div class="container-fluid">
+            <!-- Top Bar -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+                <h2 class="title mb-3 mb-md-0">Dashboard</h2>
+                <div class="d-flex align-items-center gap-3">
+                    <a href="#" class="position-relative">
+                        <img src="{% static 'images/notification.png' %}" width="30" height="30">
+                        {% if new_notifications %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
+                        {% endif %}
+                    </a>
+                    <form class="d-flex" method="get" action="#">
+                        <input type="text" name="q" class="form-control" placeholder="Search...">
+                        <button class="btn btn-outline-secondary ms-1" type="submit">🔍</button>
+                    </form>
                 </div>
             </div>
+
             <hr>
-            <small><span id="date"></span></small>
-            </br>
-            <br>
-            
-            <div class="row">
-                <!-- New Applications -->
-                <div class="col-md-6">
-                    <a href="Cashier_Payment.html" class="card stat-card bg-danger text-white text-decoration-none">
+            <p><small><span id="date">{{ current_date }}</span></small></p>
+
+            <!-- Cards Row -->
+            <div class="row g-4">
+                <!-- Student Accounts Card -->
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card shadow-sm border-0 h-100">
                         <div class="card-body">
-                            <h5>New Applications</h5>
-                            <h2>24</h2>
-                            <p>+2.5% than usual</p>
+                            <h6 class="text-muted fw-semibold mb-1">
+                                <a href="#" class="text-decoration-none text-dark">Students Accounts</a>
+                            </h6>
+                            <h4 class="fw-bold">{{ total_accounts }}</h4>
+                            <p class="text-success small mb-0">
+                                <i class="bi bi-arrow-up-right-circle-fill me-1"></i>
+                                +{{ account_growth_percent }}% than usual
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Pending Payments -->
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <a href="#" class="card text-white bg-info h-100 text-decoration-none border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="fw-semibold mb-1">New Pending Payments</h6>
+                            <h2 class="fw-bold">{{ pending_payments }}</h2>
+                            <p class="small mb-0">as of today</p>
                         </div>
                     </a>
                 </div>
 
-                <!-- Paid Clients -->
-                <div class="col-md-6">
-                    <a href="Cashier_Transaction.html" class="card stat-card bg-success text-white text-decoration-none">
+                <!-- Paid Clients Card -->
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <a href="#" class="card text-white bg-secondary h-100 text-decoration-none border-0 shadow-sm">
                         <div class="card-body">
-                            <h5>Total Paid Clients</h5>
-                            <h2>16</h2>
-                            <p>as of today</p>
+                            <h6 class="fw-semibold mb-1">Total Paid Clients</h6>
+                            <h2 class="fw-bold">{{ paid_clients }}</h2>
+                            <p class="small mb-0">as of today</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- New Pending Payments -->
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <a href="#" class="card text-white bg-success h-100 text-decoration-none border-0 shadow-sm">
+                        <div class="card-body">
+                            <h6 class="fw-semibold mb-1">New Pending Payments</h6>
+                            <h2 class="fw-bold">{{ pending_payments }}</h2>
+                            <p class="small mb-0">as of today</p>
                         </div>
                     </a>
                 </div>
             </div>
 
-            <!-- Announcements -->
-            <a href="Announcements.html" class="text-decoration-none">
-                <div class="card mt-3 announcements">
+            <!-- Announcements  THIS WILL BE AUTOMATICALLY UPDATE IN THE BACKEND-->
+            <!-- {% if announcements %}
+                <div class="card mt-4">
                     <div class="card-header bg-warning">📢 Announcements and Recent Updates!</div>
-                    <div class="card-body text-dark">
-                        <p><strong>Security Dept:</strong> Temporary suspension of vehicle pass due to weather.</p>
-                        <p><strong>Admin:</strong> Online payment option coming in v3.0.</p>
+                    <div class="card-body">
+                        {% for announcement in announcements %}
+                            <p><strong>{{ announcement.department }}:</strong> {{ announcement.message }}</p>
+                        {% endfor %}
                     </div>
                 </div>
-            </a>
+            {% endif %} -->
 
-            <!-- Recent Applications & Graph Section -->
-            <div class="row mt-4">
-                <!-- Recent Applications -->
-                <div class="col-md-12">
-                    <div class="card recent-applications">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <span>Recent Applications</span>
-                            <a href="Cashier_Payment.html" class="btn btn-success btn-sm">Open</a>
-                        </div>
-                        <div class="card-body">
-                            <input type="text" id="searchInput" class="form-control search-bar" placeholder="Search...">
-                            <ul class="list-group mt-3" id="userList">
-                                <li class="list-group-item d-flex justify-content-between align-items-center user-item">
-                                    <span class="user-info">
-                                        <span class="badge bg-warning text-dark">KC</span>
-                                        KEN CINCO - 202280328@psu.palawan.edu.ph
-                                    </span>
-                                    <div>
-                                        <button class="btn btn-outline-success btn-sm">✅ Approve</button>
-                                        <button class="btn btn-outline-danger btn-sm">❌ Reject</button>
-                                        <button class="btn btn-outline-secondary btn-sm">⏳ Cancel</button>
-                                    </div>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center user-item">
-                                    <span class="user-info">
-                                        <span class="badge bg-danger">TB</span>
-                                        TRISTAN BALICE - 202090014@psu.palawan.edu.ph
-                                    </span>
-                                    <div>
-                                        <button class="btn btn-outline-success btn-sm">✅ Approve</button>
-                                        <button class="btn btn-outline-danger btn-sm">❌ Reject</button>
-                                        <button class="btn btn-outline-secondary btn-sm">⏳ Cancel</button>
-                                    </div>
-                                </li>
-                            </ul>
-                            <p id="noResults" class="text-center text-muted mt-3" style="display: none;">No results found</p>
-                        </div>
-                    </div>
+            <!-- Recent Applications -->
+            <div class="card mt-4">
+                <div class="card-header d-flex justify-content-between">
+                    <span>Recent Applications</span>
+                    <a href="#" class="btn btn-success btn-sm">Open</a>
                 </div>
-                <!-- Monthly Trend Graph -->
-                <div class="col-md-12">
-                    <a href="Reports.html" class="text-decoration-none">
-                        <div class="card graph-container">
-                            <div class="card-header bg-primary text-white">
-                                📈 Monthly Trend of Paid Clients: Tracking Growth Over Time
-                            </div>
-                            <div class="card-body">
-                                <canvas id="trendChart"></canvas>
-                            </div>
-                        </div>
-                    </a>
+                <div class="card-body">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search...">
+                    <ul class="list-group mt-3" id="userList">
+                        {% for app in recent_applications %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>
+                                    <span class="badge bg-{{ app.badge_color }}">{{ app.initials }}</span>
+                                    {{ app.name }} - {{ app.email }}
+                                </span>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-success btn-sm">Approve</button>
+                                    <button class="btn btn-outline-danger btn-sm">Reject</button>
+                                    <button class="btn btn-outline-info btn-sm">On Processed</button>
+                                </div>
+                            </li>
+                        {% empty %}
+                            <p id="noResults" class="text-center text-muted mt-3">No recent applications</p>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
-        </main>
-    </div>
 
-    <script src="../../static/javascript/base.js"></script>  <!--THIS-->
-    <script src="../../static/javascript/Cashier_Dashboard.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</body>
-</html>
+            <!-- Graph Section -->
+            <div class="card mt-4">
+                <div class="card-header bg-primary text-white">
+                    📈 Monthly Trend of Paid Clients
+                </div>
+                <div class="card-body">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<!-- Scripts -->
+<script src="{% static 'javascript/base.js' %}"></script>
+<script src="{% static 'javascript/Cashier_Dashboard.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- <script>
+    const trendChart = document.getElementById('trendChart').getContext('2d');
+    const chart = new Chart(trendChart, {
+        type: 'line',
+        data: {
+            labels: {{ chart_labels|safe }},
+            datasets: [{
+                label: 'Paid Clients',
+                data: {{ chart_data|safe }},
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1,
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+</script>  -->
+{% endblock %} 

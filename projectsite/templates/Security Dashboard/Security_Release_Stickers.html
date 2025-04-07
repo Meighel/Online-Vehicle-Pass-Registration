@@ -1,12 +1,12 @@
-{% extends "includes/cashier_sidebar.html" %}
+{% extends "includes/security_sidebar.html" %}
 {% load static %}
 
 {% block title %}
-    Transaction
+        Release Stickers
 {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/cashier-dashboard-style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/security-dashboard-style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
     <style>
@@ -16,10 +16,6 @@
             padding: 20px;
             margin-left: 120px;
         }
-        /* Ensure cards and table have proper spacing */
-        .dashboard-card {
-            min-height: 140px;
-        }
     </style>
 {% endblock %}
 
@@ -28,7 +24,7 @@
     <div class="container-fluid py-1">
         <!-- Title & Top Bar -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-            <h2 class="title mb-3 mb-md-0">Transaction</h2>
+            <h2 class="title mb-3 mb-md-0">Releas Stickers</h2>
             <div class="d-flex align-items-center gap-3">
                 <!-- Notification Bell -->
                 <a href="Announcements.html" class="text-decoration-none text-light position-absolute">
@@ -40,7 +36,6 @@
 
         <hr>
         <small><span id="date"></span></small>
-        <br>
         <br>
 
 
@@ -55,31 +50,36 @@
                 <input type="date" id="end-date" class="form-control">
             </div>
             
-            <input class="position-absolute end-0 bottom-10 form-control w-20 me-5 mb-5" type="text" id="search-bar" placeholder="🔍 Search">
+            <input class="position-absolute end-0 bottom-10 form-control w-20 me-5 mb-auto" type="text" id="search-bar" placeholder="🔍 Search">
         </div>
 
-
-        <!-- Payments Record Table -->
         <section class="table-container">
-            <table class="transaction-table">
+            <table class="release-table">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Username</th>
+                        <th>Vehicle Pass Number</th>
+                        <th>Expiration Date</th>
                         <th>Status</th>
-                        <th>Remarks</th>
-                        <th>Processed By</th>
+                        <th>Owner</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <td>02/15/2025</td>       
-                    <td>DELA CRUZ, SAMANTHA</td> 
-                    <td><button class="btn btn-success btn-sm">Approved</button></td>                    <td>Complete Application</td>
-                    <td>Cashier</td>
-                </tbody>
+                    <tr>
+                        <td>VP1234567</td>
+                        <td>05/15/2025</td>
+                        <td>Active</td>
+                        <td>John Doe</td>
+                    </tr>
+                    <tr>
+                        <td>VP7654321</td>
+                        <td>08/20/2025</td>
+                        <td>Expired</td>
+                        <td>Jane Smith</td>
+                    </tr>
+                </tbody>          
             </table>
         </section>
-
+        
         <!-- Entries Info -->
         <div class="entries-info">Showing 0 entries</div>
 
@@ -93,5 +93,4 @@
 
 {% block extra_js %}
     <script src="{% static 'javascript/base.js' %}"></script>
-    <script src="{% static 'javascript/Cashier_Payment.js' %}"></script>
 {% endblock %}

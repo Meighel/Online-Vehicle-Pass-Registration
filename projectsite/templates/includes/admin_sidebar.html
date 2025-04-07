@@ -41,20 +41,26 @@
             </a>
         </li>
         <li data-menu="manage-payments">
-            <a href="{% url 'admin_manage_payments' %}">
+            <a href="{% url 'admin_payments' %}">
                 <img src="{% static 'images/payment.png' %}" alt="Payments" width="30">
                 <span>Payments</span>
             </a>
         </li>
+        <li data-menu="transactions">
+            <a href="{% url 'admin_transaction' %}">
+                <img src="{% static 'images/transaction.png' %}" alt="Transactions" width="30">
+                <span>Transaction</span>
+            </a>
+        </li>
         <li data-menu="manage-passes">
             <a href="{% url 'admin_manage_passes' %}">
-                <img src="{% static 'images/passes.png' %}" alt="Passes" width="30">
-                <span> Passes</span>
+                <img src="{% static 'images/passes.png' %}" alt="Status" width="30">
+                <span> Release Stickers </span>
             </a>
         </li>
         <li data-menu="reports">
             <a href="{% url 'admin_report' %}">
-                <img src="{% static 'images/report.png' %}" alt="Report" width="30">
+                <img src="{% static 'images/statistics.png' %}" alt="Report" width="30">
                 <span>Reports</span>
             </a>
         </li>
