@@ -85,11 +85,7 @@ class AdminCreateUser(CustomLoginRequiredMixin, CreateView):
 class AdminUpdateUser(CustomLoginRequiredMixin, UpdateView):
     model = UserProfile
     form_class = UserProfileForm
-<<<<<<< Updated upstream
-    template_name = "Admin Dashboard/Admin User CRUD/Admin_Update_User.html" #placeholder lang baka need pa ng specific update form 
-=======
     template_name = "Admin Dashboard/Admin User CRUD/Admin_Update_User.html"
->>>>>>> Stashed changes
     success_url  = reverse_lazy("admin_manage_user")
     
 class AdminDeleteUser(CustomLoginRequiredMixin, DeleteView):

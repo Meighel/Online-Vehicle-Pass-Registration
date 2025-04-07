@@ -1,5 +1,4 @@
 from django.contrib import admin
-from . import views
 from django.urls import path, include
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
@@ -22,7 +21,6 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"), 
     
     path("dashboard/user/", default_dashboard, name="default_dashboard"),
-    path("dashboard/user/form-1/", views.form1_view, name='form1'),
     
     
     path("dashboard/security/", security_dashboard, name="security_dashboard"),
@@ -49,17 +47,15 @@ urlpatterns = [
     path("dashboard/admin/manage_users/delete/<pk>/", AdminDeleteUser.as_view(), name="admin_delete_user"),
     path("dashboard/admin/manage_users/", AdminViewUser.as_view(), name="admin_manage_user"),
 
-<<<<<<< Updated upstream
     #ADMIN PAYMENT CRUD
     path("dashboard/admin/admin_payments/", adminViewPayment.as_view(), name="admin_payments"),
     path("dashboard/admin/admin_payments/<pk>/", adminUpdatePayment.as_view(), name="admin_update_payment"), 
     path("dashboard/admin/admin_transaction/", adminViewTransaction.as_view(), name="admin_transaction"),
-=======
+
     #ADMIN APPLICATION CRUD
     path("dashboard/admin/manage_application/<pk>/", AdminUpdateApplication.as_view(), name="admin_update_application"),
     path("dashboard/admin/manage_application/view/<pk>", AdminViewSpecificApplication.as_view(), name="admin_view_specific_application"),    
     path("dashboard/admin/manage_application/", AdminViewApplication.as_view(), name="admin_manage_application"),
->>>>>>> Stashed changes
     
     
     path("dashboaard/admin/manage_application/", admin_manage_application, name="admin_manage_application"),
