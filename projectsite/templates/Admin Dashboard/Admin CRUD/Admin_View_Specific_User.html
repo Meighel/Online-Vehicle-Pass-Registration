@@ -1,0 +1,60 @@
+{% load static %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<body class="bg-dark">
+    <div class="container mt-5">
+        <div class="card shadow p-4" style="background-color: #1e1e1e; border: 1px solid #333; color: #fff;">
+          <h3 class="mb-4 text-center" style="color: #fff; border-bottom: 2px solid #FFD700; padding-bottom: 10px;">User Profile Details</h3>
+          
+          <div class="row">
+            <div class="col-md-6">
+              <div class="list-group">
+                <div class="list-group-item bg-dark border-secondary mb-2" style="background-color: #333 !important; border-color: #444 !important;">
+                  <strong style="color: #FFD700;">First Name:</strong> <span class="float-end text-white">{{ user.firstname }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2" style="background-color: #333 !important; border-color: #444 !important;">
+                  <strong style="color: #FFD700;">Middle Name:</strong> <span class="float-end text-white">{{ user.middle_name|default:"-" }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2" style="background-color: #333 !important; border-color: #444 !important;">
+                  <strong style="color: #FFD700;">Last Name:</strong> <span class="float-end text-white">{{ user.lastname }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2" style="background-color: #333 !important; border-color: #444 !important;">
+                  <strong style="color: #FFD700;">Suffix:</strong> <span class="float-end text-white">{{ user.suffix|default:"-" }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2" style="background-color: #333 !important; border-color: #444 !important;">
+                  <strong style="color: #FFD700;">Corporate Email:</strong> <span class="float-end text-white">{{ user.corporate_email }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2" style="background-color: #333 !important; border-color: #444 !important;">
+                  <strong style="color: #FFD700;">Role:</strong> <span class="float-end text-white">{{ user.role|title }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div class="list-group">
+                <div class="list-group-item bg-dark border-secondary mb-2" style="background-color: #333 !important; border-color: #444 !important;">
+                  <strong style="color: #FFD700;">Driver's License #:</strong> <span class="float-end text-white">{{ user.dl_number|default:"-" }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2" style="background-color: #333 !important; border-color: #444 !important;">
+                  <strong style="color: #FFD700;">College:</strong> <span class="float-end text-white">{{ user.college|default:"-" }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2" style="background-color: #333 !important; border-color: #444 !important;">
+                  <strong style="color: #FFD700;">Program:</strong> <span class="float-end text-white">{{ user.program|default:"-" }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2" style="background-color: #333 !important; border-color: #444 !important;">
+                  <strong style="color: #FFD700;">Department:</strong> <span class="float-end text-white">{{ user.department|default:"-" }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2" style="background-color: #333 !important; border-color: #444 !important;">
+                  <strong style="color: #FFD700;">Address:</strong> <span class="float-end text-white">{{ user.address|default:"-" }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="text-center mt-4">
+            <a href="{% url 'admin_manage_user' %}" class="btn btn-primary" style="background-color: #FFD700; color: #000; border: none; border-radius: 20px; padding: 0.5rem 1.5rem; font-weight: bold;">Back to Dashboard</a>
+          </div>
+        </div>
+      </div>
+</body>
+{% endblock %}

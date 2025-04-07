@@ -12,6 +12,7 @@ from .models import Vehicle, Registration, VehiclePass, PaymentTransaction
 from .models import InspectionReport, Notification, Announcement
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 from .authentication import login_required
 from django.contrib.auth import logout
@@ -88,6 +89,12 @@ class AdminDeleteUser(CustomLoginRequiredMixin, DeleteView):
     def form_valid(self, form):
         messages.success(self.request, 'Deleted successfully. ')
         return super().form_valid(form)
+
+class AdminViewSpecificUser(CustomLoginRequiredMixin, DetailView):
+    model = UserProfile
+    template_name = 'Admin Dashboard/Admin CRUD/Admin_View_Specific_User.html'
+    context_object_name = 'user'
+
 
 # Security Page Vies
 @login_required

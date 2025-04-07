@@ -73,9 +73,15 @@
                         <td>{{ user.address }}</td>
                         <td>{{ user.role }}</td>
                         <td>
+<<<<<<< Updated upstream
                             <button class="btn btn-view">View</button>
                             <a href="{% url 'admin_update_user' user.pk %}" class="btn btn-success">Update</a>
                             <a href="{% url 'admin_delete_user' user.pk %}" class="btn btn-danger">Delete</a>
+=======
+                            <a href="{% url 'admin_view_specific_user' user.pk %}" class="btn btn-primary">View</a>
+                            <a href="{% url 'admin_update_user' user.pk %}" class="btn btn-primary">Update</a>
+                            <button class="btn btn-danger">Delete</button>
+>>>>>>> Stashed changes
                         </td>
                     </tr>
                     {% empty %}
