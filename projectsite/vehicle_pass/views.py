@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
-from .forms import (UserSignupForm, UserProfileForm,
+from .forms import (UserSignupForm, UserProfileForm, 
                     PaymentTransactionForm,
 )
 # from .forms import UserRegistrationForm, UserProfileForm, SecurityProfileForm, CashierProfileForm, AdminProfileForm
@@ -72,6 +72,12 @@ class AdminCreateUser(CustomLoginRequiredMixin, CreateView):
     model = UserProfile
     form_class = UserProfileForm
     template_name = "Admin Dashboard/Admin CRUD/Admin_Create_User.html" 
+    success_url  = reverse_lazy("admin_manage_user")
+    
+class AdminUpdateUser(CustomLoginRequiredMixin, UpdateView):
+    model = UserProfile
+    form_class = UserProfileForm
+    template_name = "Admin Dashboard/Admin CRUD/Admin_Update_User.html" #placeholder lang baka need pa ng specific update form 
     success_url  = reverse_lazy("admin_manage_user")
 
 # Security Page Vies

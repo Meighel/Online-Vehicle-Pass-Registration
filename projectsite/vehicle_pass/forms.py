@@ -30,7 +30,8 @@ class UserSignupForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = '__all__'
+        fields = '__all__' 
+
 
 class PaymentTransactionForm(forms.ModelForm):
     class Meta:

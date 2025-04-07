@@ -74,7 +74,7 @@
                         <td>{{ user.role }}</td>
                         <td>
                             <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Update</button>
+                            <a href="{% url 'admin_update_user' user.pk %}" class="btn btn-primary">Update</a>
                             <button class="btn btn-danger">Delete</button>
                         </td>
                     </tr>
