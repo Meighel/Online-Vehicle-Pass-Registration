@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
-from .forms import (UserSignupForm,
+from .forms import (UserSignupForm, UserProfileForm,
                     PaymentTransactionForm,
 )
 # from .forms import UserRegistrationForm, UserProfileForm, SecurityProfileForm, CashierProfileForm, AdminProfileForm
@@ -15,6 +15,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .authentication import login_required
 from django.contrib.auth import logout
+from .authentication import login_required, CustomLoginRequiredMixin
 
 def home(request):
     return render(request, 'index.html')
@@ -61,6 +62,17 @@ def redirect_user_dashboard(user):
 def default_dashboard(request):
     return render(request, "User Dashboard/User_Dashboard.html")
 
+class AdminViewUser(CustomLoginRequiredMixin, ListView):
+    model = UserProfile
+    context_object_name = "users"
+    template_name = 'Admin Dashboard/Admin_Manage_User.html'
+    paginate_by = 5
+
+class AdminCreateUser(CustomLoginRequiredMixin, CreateView):
+    model = UserProfile
+    form_class = UserProfileForm
+    template_name = "Admin Dashboard/Admin_Create_User" 
+    success_url  = reverse_lazy("admin_manage_user")
 
 
 

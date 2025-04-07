@@ -66,39 +66,25 @@
                     </tr>
                 </thead>
                 <tbody>
+                {% for user in users %}
                     <tr>
-                        <td>202280293@psu.palawan.edu.ph</td>
-                        <td>Magdayao, Frances Bea V. </td>
-                        <td>Birignan</td>
-                        <td>Cashier</td>
+                        <td>{{ user.corporate_email }}</td>
+                        <td>{{ user.lastname }}, {{ user.firstname }} {{ user.middle_name|slice:":1" }}.</td>
+                        <td>{{ user.address }}</td>
+                        <td>{{ user.role }}</td>
                         <td>
                             <button class="btn btn-view">View</button>
                             <button class="btn btn-success">Update</button>
                             <button class="btn btn-danger">Delete</button>
                         </td>
                     </tr>
+                    {% empty %}
                     <tr>
-                        <td>202280271@psu.palawan.edu.ph</td>
-                        <td>Padon, Meighel Nicolle M.</td>
-                        <td>Encantadio</td>
-                        <td>Admin</td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
+                      <td colspan="5" style="text-align: center">
+                        <p class="text-sm font-weight-bold mb-0">No Records Found</p>
+                      </td>
                     </tr>
-                    <tr>
-                        <td>202280279@psu.palawan.edu.ph</td>
-                        <td>Cicno, Ken C.</td>
-                        <td>Hagorn</td>
-                        <td>Security</td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </section>

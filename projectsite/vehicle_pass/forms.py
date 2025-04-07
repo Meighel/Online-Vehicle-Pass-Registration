@@ -27,10 +27,16 @@ class UserSignupForm(forms.ModelForm):
             user.save()
         return user
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
+
 class PaymentTransactionForm(forms.ModelForm):
     class Meta:
         model = PaymentTransaction
         fields = ['status']
+
 
 # # from django.contrib.auth.forms import UserCreationForm
 # from .models import (UserProfile, SecurityProfile, CashierProfile, 
