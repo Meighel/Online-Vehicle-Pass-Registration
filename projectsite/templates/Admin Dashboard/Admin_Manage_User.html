@@ -49,7 +49,7 @@
         <div class="filter-container">
             <input class="position-absolute end-0 bottom-10 form-control w-20 me-5" type="text" id="search-bar" placeholder="🔍 Search">
             <div class="position-absolute start-2 bottom-10 p-3">
-                <a href="#" class="btn btn-success btn-rounded">Add New User</a>
+                <a href="{% url 'admin_create_user' %}" class="btn btn-success">Add New User</a>
             </div>
         </div>
         <br>
@@ -88,14 +88,7 @@
                 </tbody>
             </table>
         </section>
-
-        <!-- Entries Info -->
-        <div class="entries-info">Showing 0 entries</div>
-
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <div class="pagination" id="pagination"></div>
-        </div>
+        {% include 'includes/pagination.html' %}
     </div>
 </div>
 {% endblock %}

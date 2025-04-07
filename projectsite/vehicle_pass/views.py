@@ -71,10 +71,8 @@ class AdminViewUser(CustomLoginRequiredMixin, ListView):
 class AdminCreateUser(CustomLoginRequiredMixin, CreateView):
     model = UserProfile
     form_class = UserProfileForm
-    template_name = "Admin Dashboard/Admin_Create_User" 
+    template_name = "Admin Dashboard/Admin CRUD/Admin_Create_User.html" 
     success_url  = reverse_lazy("admin_manage_user")
-
-
 
 # Security Page Vies
 @login_required

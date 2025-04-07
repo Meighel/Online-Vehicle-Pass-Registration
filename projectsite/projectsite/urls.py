@@ -5,7 +5,7 @@ from vehicle_pass.views import (
     default_dashboard, 
     security_dashboard, security_manage_application, security_manage_inspection, security_manage_stickers, security_report,
     cashier_dashboard, cashierViewPayment, cashierUpdatePayment, cashierViewTransaction, cashier_report,
-    admin_dashboard, AdminViewUser, adminViewPayment, admin_transaction, admin_manage_application, admin_manage_passes, admin_report,
+    admin_dashboard, AdminViewUser, AdminCreateUser, adminViewPayment, admin_transaction, admin_manage_application, admin_manage_passes, admin_report,
     home
 )
 
@@ -33,7 +33,10 @@ urlpatterns = [
 
     
     path("dashboard/admin/", admin_dashboard, name="admin_dashboard"),
+    #ADMIN USER CRUD
     path("dashboard/admin/manage_users/", AdminViewUser.as_view(), name="admin_manage_user"),
+    path("dashboard/admin/manage_users/add/", AdminCreateUser.as_view(), name="admin_create_user"),
+
     path("dashboaard/admin/manage_application/", admin_manage_application, name="admin_manage_application"),
     path("dashboard/admin/manage_payments/", adminViewPayment.as_view(), name="admin_payments"),
     path("dashboard/admin/manage_transactions/", admin_transaction, name="admin_transaction"),
