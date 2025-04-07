@@ -1,3 +1,4 @@
+/* ========== General Reset & Global Styles ========== */
 * {
     margin: 0;
     padding: 0;
@@ -5,349 +6,234 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
     background-color: black !important;
-    color: white;
+    color: white !important;
+    display: flex;
     transition: all 0.3s ease;
 }
 
-/* Main Content */
-.content {
-    margin-left: 270px;
-    width: calc(100% - 270px);
-    background-color: #000000;
-    padding: 20px;
-}
-
-.content p {
-    color: rgb(103, 100, 100) !important;
-}
-
-.d-flex {
+/* ========== Dashboard Layout ========== */
+.dashboard-wrapper {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 10px; 
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 120px;
 }
 
 .title {
+    font-size: 30px !important;
+    font-weight: bold;
+    color: yellow;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    padding: 5px 10px;
 }
 
-.title h2 {
-    margin: 0; 
-    font-size: 30px; 
-    font-weight: bold;
-    color: yellow;
-}
-
+/* ========== Header Bar ========== */
 #date {
     font-size: 12px;
     color: rgb(213, 213, 213);
-    margin: 0;
-    display: flex;
-    align-items: center; 
-}
-.icons-container {
-    display: flex;
-    gap: 15px;
-    opacity: 1;
-    visibility: visible !important;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    margin-bottom: 5px;
 }
 
-.top-bar {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.top-bar a {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.top-bar a .badge {
-    font-size: 12px;
-    padding: 5px 5px;
-}
-
-.search-container {
+.search-container, .filter-container {
     display: flex;
     align-items: center;
     gap: 5px;
+    padding-left: 10px;
 }
 
 #search-bar {
-    padding: 8px 12px;
-    border: 1px solid yellow;
+    width: 275px;
+    height: 40px;
+    padding: 8px;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 14px;
     outline: none;
-    background: #242424;
-    color: white;
-    width: 250px;
-    transition: border 0.3s ease;
 }
 
-#search-bar:focus {
-    border-color: orange;
-}
-
-.search-btn {
-    background: yellow;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 5px;
+.search-btn, .dashboard .btn {
+    height: 40px;
+    font-size: 14px;
     cursor: pointer;
+    border-radius: 5px;
+    padding: 5px 12px;
+    border: none;
+    background-color: #ffe600;
+    color: black;
 }
 
-/* Profile Section */
-.card.profile-card {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    gap: 20px;
-    background: linear-gradient(145deg, #1e1e1e, #2b2b2b);
-    border: 1px solid yellow;
-    border-radius: 16px;
-    box-shadow: 0 8px 16px rgba(255, 215, 0, 0.2);
+.search-btn:hover {
+    background-color: #ffe100;
 }
 
-.profile-card .rounded-circle {
-    width: 120px;
-    height: 120px;
-    border: 4px solid yellow;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.profile-card img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-}
-
-.profile-card .profile-info {
-    flex-grow: 1;
+/* ========== Card and Badge Styling ========== */
+.card {
+    background-color: #1e1e1e;
+    border: none;
     color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
-.profile-card .profile-info p {
-    margin: 5px 0;
-}
-
-.profile-card .profile-info .fs-5 {
+.card-title {
+    color: yellow;
     font-weight: bold;
-    font-size: 24px;
 }
 
-/* Status of Application & Quick Access */
-/* Status of Application & Quick Access */
-.status-card,
-.quick-access-card {
-    height: 100%; /* Ensures both cards take the full height */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 6px 12px rgba(255, 99, 71, 0.3);
-    transition: transform 0.3s ease;
+.badge.bg-approved {
+    background-color: green;
 }
 
-.status-card:hover,
-.quick-access-card:hover {
-    transform: translateY(-5px);
+.badge.bg-rejected {
+    background-color: red;
 }
 
-.status-card {
-    background: linear-gradient(145deg, #dc3545, #ff8c00);
+.badge.bg-pending {
+    background-color: gray;
+}
+
+/* ========== Tables Styling (Generic Template) ========== */
+table {
+    width: 100%;
+    border-collapse: separate;
+    background-color: #292929;
     color: white;
-    border: none;
+    border-radius: 5px;
 }
 
-.quick-access-card {
-    background: linear-gradient(145deg, #00b4d8, #48cae4);
-    color: white;
-    border: none;
-}
-
-/* Application History */
-.table-responsive {
-    overflow-x: auto;
-}
-
-.table th,
-.table td {
+th, td {
+    padding: 12px;
+    font-size: 15px;
     text-align: center;
 }
 
-.table-dark {
-    background: #121212;
+thead th {
+    color: yellow;
+    font-weight: bold;
+    font-size: 16px;
 }
 
-.table-hover tbody tr:hover {
-    background: #1f1f1f;
+tbody tr:nth-child(odd),
+tbody tr:nth-child(even) {
+    background-color: #1e1e1e !important;
 }
 
-.text-success {
-    color: #28a745;
+/* ========== Button Variants ========== */
+.btn-view {
+    background-color: #007bff !important;
+    color: white;
+}
+.btn-view:hover {
+    background-color: #0056b3;
 }
 
-.text-warning {
-    color: #ffc107;
+.btn-approve {
+    background-color: #28a745 !important;
+    color: white;
+}
+.btn-approve:hover {
+    background-color: #218838;
 }
 
-/* Responsiveness */
-@media (max-width: 992px) {
-    .content {
+.btn-reject {
+    background-color: #dc3545 !important;
+    color: white;
+}
+.btn-reject:hover {
+    background-color: #c82333;
+}
+
+.btn-delete {
+    background-color: #6c757d !important;
+    color: white;
+}
+.btn-delete:hover {
+    background-color: #5a6268;
+}
+
+/* ========== Pagination & Info ========== */
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background-color: yellow;
+    color: black;
+}
+
+.entries-info {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 1024px) {
+    .main-content {
         margin-left: 0;
-        width: 100%;
+        padding: 15px;
     }
 
-    .title h2 {
-        font-size: 24px;
+    .title {
+        font-size: 26px;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-    #search-bar {
-        width: 180px;
+    .search-container, .filter-container {
+        flex-wrap: wrap;
     }
 }
 
 @media (max-width: 768px) {
-    .content {
-        margin-left: 0;
+    .sidebar {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+    }
+
+    .title {
+        font-size: 22px;
+    }
+
+    th, td {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    #search-bar, .search-btn {
         width: 100%;
+        font-size: 13px;
     }
 
-    .search-container {
-        flex-direction: column;
+    .pagination {
+        justify-content: center;
+        flex-wrap: wrap;
     }
 
-    #search-bar {
-        width: 100%;
-    }
-
-    .title h2 {
-        font-size: 20px;
-    }
-
-    .quick-access-card {
-        text-align: center;
-    }
-
-    .status-card {
-        text-align: center;
-    }
-    .profile-card {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .profile-card .rounded-circle {
-        width: 100px;
-        height: 100px;
+    .pagination button {
+        padding: 6px 10px;
+        font-size: 12px;
     }
 }
 
-/* ========================================= */
-/*         Pass Status MAIN CONTENT          */
-/* ========================================= */
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: black; 
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-  }
-  .container {
-    width: 90%;
-    max-width: 1000px;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    position: relative;
-    text-align: center;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  }
-  .container header {
-    background-color: #808080; 
-    padding: 20px;
-    border-radius: 12px 12px 0 0;
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-  }
-  h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: white; 
-  }
-  .message {
-    font-size: 16px;
-    line-height: 1.8;
-    margin-bottom: 30px;
-    text-align: left;
-    color: black; 
-  }
-  .message ul {
-    list-style-type: disc;
-    padding-left: 20px;
-  }
-  .warning {
-    font-size: 18px;
-    color: red;
-    font-weight: bold;
-    margin-top: 20px;
-  }
-  .btn {
-    background: yellow;
-    color: black;
-    padding: 12px 25px;
-    border: none;
-    cursor: pointer;
-    width: 180px;
-    text-align: center;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: bold;
-    transition: box-shadow 0.3s ease-in-out;
-  }
-  .btn:hover {
-    box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.8);
-  }
-  .circles {
-    display: flex;
-    gap: 10px;
-  }
-  .circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  .green {
-    background-color: green;
-  }
-  .yellow {
-    background-color: yellow;
-  }
-  .red {
-    background-color: red;
-  }
-  .assistance {
-    font-size: 18px;
-    color: black;
-    margin-top: 20px;
-  }
+/* End of Dashboard CSS */

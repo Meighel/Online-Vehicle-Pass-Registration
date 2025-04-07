@@ -21,25 +21,25 @@
     <p>Main Menu</p>
     <ul>
         <li data-menu="dashboard" {% if request.path == dashboard_url %}class="active"{% endif %}>
-            <a href="{% url 'user_dashboard' %}">
+            <a href="{% url 'default_dashboard' %}">
                 <img src="{% static 'images/home.png' %}" alt="Dashboard" width="30">
                 <span>Dashboard</span>
             </a>
         </li>
         <li data-menu="payment" {% if request.path == application_url %}class="active"{% endif %}>
-            <a href="{% url 'user_application' %}">
+            <a href="#">
                 <img src="{% static 'images/application.png' %}" alt="Application" width="30">
                 <span>Application</span>
             </a>
         </li>
         <li data-menu="transactions" {% if request.path == pass_status_url %}class="active"{% endif %}>
-            <a href="{% url 'user_pass_status' %}">
+            <a href="#">
                 <img src="{% static 'images/passes.png' %}" alt="Status" width="30">
                 <span>Status</span>
             </a>
         </li>
         <li data-menu="settings" {% if request.path == settings_url %}class="active"{% endif %}>
-            <a href="{% url 'user_settings' %}">
+            <a href="#">
                 <img src="{% static 'images/settings.png' %}" alt="Settings" width="25">
                 <span>Settings</span>
             </a>

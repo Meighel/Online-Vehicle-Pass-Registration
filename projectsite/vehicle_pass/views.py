@@ -46,7 +46,6 @@ def logout_view(request):
     logout(request)
     return redirect("login") 
 
-
 def redirect_user_dashboard(user):
     """Redirects the user based on their role."""
     if SecurityProfile.objects.filter(user=user).exists():
@@ -57,6 +56,10 @@ def redirect_user_dashboard(user):
         return redirect("admin_dashboard")
     
     return redirect("default_dashboard")
+
+@login_required
+def form1_view(request):
+    return render(request, 'Forms/form1.html')
 
 
 @login_required
@@ -135,7 +138,13 @@ class adminUpdatePayment(UpdateView):
 
 @login_required
 def admin_manage_passes(request):
-    return render (request, "Admin Dashboard/Admin_Manage_Passes.html")
+    # Fetch all vehicle passes and related data
+    vehicle_passes = VehiclePass.objects.select_related('vehicle__owner').all()
+
+    context = {
+        'vehicle_passes': vehicle_passes,
+    }
+    return render(request, "Admin Dashboard/Admin_Manage_Passes.html", context)
 
 @login_required
 def admin_report(request):

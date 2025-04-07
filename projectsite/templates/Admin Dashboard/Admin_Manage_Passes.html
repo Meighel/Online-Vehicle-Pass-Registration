@@ -58,11 +58,11 @@
                     <table class="passes-table">
                         <thead>
                             <tr>
+                                <th>Application ID</th>
+                                <th>Username</th>
                                 <th>College</th>
                                 <th>Department</th>
                                 <th>Program</th>
-                                <th>Username</th>
-                                <th>Application ID</th>
                                 <th>Plate Number</th>
                                 <th>Type</th>
                                 <th>Date Applied</th>
@@ -70,19 +70,24 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for pass in vehicle_passes %}
                             <tr>
-                                <td>College of Science</td>
-                                <td>Depertment of Computer Science</td>
-                                <td>Bachelor of Science in Computer Science</td>
-                                <td>SWIFT, TAYLOR ALLISON</td>
-                                <td>1</td>
-                                <td>9199-VG</td>
-                                <td>Motorcycle</td>
-                                <td>02/15/2025</td>
-                                <td>02/15/2026</td>
+                                <td>{{ pass.vehicle.owner.id }}</td>
+                                <td>{{ pass.vehicle.owner.firstname|upper }}, {{ pass.vehicle.owner.lastname|upper }}</td>
+                                <td>{{ pass.vehicle.owner.college }}</td>
+                                <td>{{ pass.vehicle.owner.department }}</td>
+                                <td>{{ pass.vehicle.owner.program }}</td>
+                                <td>{{ pass.vehicle.plateNumber }}</td>
+                                <td>{{ pass.vehicle.type }}</td>
+                                <td>{{ pass.vehicle.created_at|date:"m/d/Y" }}</td>
+                                <td>{{ pass.passExpire|date:"m/d/Y" }}</td>
                             </tr>
-                            <!-- More rows as needed -->
-                        </tbody>                
+                            {% empty %}
+                            <tr>
+                                <td colspan="9" class="text-center">No passes found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>               
                     </table>
                 </section>
         

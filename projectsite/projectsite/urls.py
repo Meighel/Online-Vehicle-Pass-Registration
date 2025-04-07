@@ -1,4 +1,5 @@
 from django.contrib import admin
+from . import views
 from django.urls import path, include
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
@@ -17,7 +18,9 @@ urlpatterns = [
     path("login/", login_view, name="login"),
     path('signup/', signup_view, name="signup"),
     path("logout/", logout_view, name="logout"), 
+    
     path("dashboard/user/", default_dashboard, name="default_dashboard"),
+    path("dashboard/user/form-1/", views.form1_view, name='form1'),
     
     
     path("dashboard/security/", security_dashboard, name="security_dashboard"),
