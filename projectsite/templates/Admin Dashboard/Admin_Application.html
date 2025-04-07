@@ -20,6 +20,13 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- Debug info -->
+{% if applications %}
+    Debug: Found {{ registration|length }} record(s)
+{% else %}
+    Debug: Registration variable is empty or not defined
+{% endif %}
 <div class="main-content flex-grow-1 ms-uto">
     <div class="container-fluid py-1">
         <!-- Title & Top Bar -->
@@ -66,28 +73,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>PLT 1234</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-info">Update</button>
-                            <button class="btn btn-danger">Delete</button>
+                    {% for applicant in applications %}
+                        <tr>
+                            <td>{{ applicant.user.lastname }}, {{ applicant.user.firstname }} {{ applicant.user.middlename|default_if_none:""|slice:":1"}}</td>
+                            <td>{{ applicant.registrationNumber }}</td>
+                            <td>{{ applicant.vehicle.plateNumber }}</td>
+                            <td>{{ applicant.created_at|date:"F d, Y" }}</td>
+                            <td>{{ applicant.status }}</td>
+                            <td>
+                                <a href="{% url 'admin_view_specific_application' applicant.pk %}" class="btn btn-primary">View</a>
+                                <a href="{% url 'admin_update_application' applicant.pk %}" class="btn btn-primary">Update</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                        <td colspan="6" style="text-align: center">
+                            <p class="text-sm font-weight-bold mb-0">No Records Found</p>
                         </td>
-                    </tr>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </section>
-        
-        <!-- Entries Info -->
-        <div class="entries-info">Showing 0 entries</div>
-
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <div class="pagination" id="pagination"></div>
+        <div class="pagination">
+            {% include 'includes/pagination.html' %}
         </div>
     </div>
 </div>

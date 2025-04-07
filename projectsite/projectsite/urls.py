@@ -8,7 +8,9 @@ from vehicle_pass.views import (
     cashier_dashboard, cashierViewPayment, cashierUpdatePayment, cashierViewTransaction, cashier_report,
     admin_dashboard, AdminViewUser, AdminCreateUser, AdminUpdateUser, AdminDeleteUser, AdminViewSpecificUser,
     adminViewPayment, adminUpdatePayment, adminViewTransaction,
+    AdminViewApplication, AdminViewSpecificApplication, AdminUpdateApplication,
     admin_manage_application, admin_manage_passes, admin_report,
+    admin_transaction,
     home
 )
 
@@ -47,10 +49,17 @@ urlpatterns = [
     path("dashboard/admin/manage_users/delete/<pk>/", AdminDeleteUser.as_view(), name="admin_delete_user"),
     path("dashboard/admin/manage_users/", AdminViewUser.as_view(), name="admin_manage_user"),
 
+<<<<<<< Updated upstream
     #ADMIN PAYMENT CRUD
     path("dashboard/admin/admin_payments/", adminViewPayment.as_view(), name="admin_payments"),
     path("dashboard/admin/admin_payments/<pk>/", adminUpdatePayment.as_view(), name="admin_update_payment"), 
     path("dashboard/admin/admin_transaction/", adminViewTransaction.as_view(), name="admin_transaction"),
+=======
+    #ADMIN APPLICATION CRUD
+    path("dashboard/admin/manage_application/<pk>/", AdminUpdateApplication.as_view(), name="admin_update_application"),
+    path("dashboard/admin/manage_application/view/<pk>", AdminViewSpecificApplication.as_view(), name="admin_view_specific_application"),    
+    path("dashboard/admin/manage_application/", AdminViewApplication.as_view(), name="admin_manage_application"),
+>>>>>>> Stashed changes
     
     
     path("dashboaard/admin/manage_application/", admin_manage_application, name="admin_manage_application"),

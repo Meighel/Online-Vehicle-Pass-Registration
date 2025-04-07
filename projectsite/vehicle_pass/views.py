@@ -3,10 +3,8 @@ from django.contrib import messages
 from django.http import HttpResponse
 from .forms import (UserSignupForm, UserProfileForm, 
                     PaymentTransactionForm,
+                    ApplicationForm,
 )
-# from .forms import UserRegistrationForm, UserProfileForm, SecurityProfileForm, CashierProfileForm, AdminProfileForm
-# from .forms import VehicleForm, RegistrationForm, RegistrationStatusForm, VehiclePassForm, PaymentTransactionForm
-# from .forms import InspectionReportForm, NotificationForm, AnnouncementForm
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
 from .models import Vehicle, Registration, VehiclePass, PaymentTransaction
 from .models import InspectionReport, Notification, Announcement
@@ -87,7 +85,11 @@ class AdminCreateUser(CustomLoginRequiredMixin, CreateView):
 class AdminUpdateUser(CustomLoginRequiredMixin, UpdateView):
     model = UserProfile
     form_class = UserProfileForm
+<<<<<<< Updated upstream
     template_name = "Admin Dashboard/Admin User CRUD/Admin_Update_User.html" #placeholder lang baka need pa ng specific update form 
+=======
+    template_name = "Admin Dashboard/Admin User CRUD/Admin_Update_User.html"
+>>>>>>> Stashed changes
     success_url  = reverse_lazy("admin_manage_user")
     
 class AdminDeleteUser(CustomLoginRequiredMixin, DeleteView):
@@ -149,6 +151,24 @@ def admin_manage_passes(request):
 @login_required
 def admin_report(request):
     return render (request, "Admin Dashboard/Admin_Reports.html")
+
+class AdminViewApplication(CustomLoginRequiredMixin, ListView):
+    model = Registration
+    template_name = 'Admin Dashboard/Admin_Application.html'
+    context_object_name = 'applications'
+    paginate_by = 5
+
+class AdminViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
+    model = Registration
+    template_name = 'Admin Dashboard/Admin Application CRUD/Admin_View_Specific_Application.html'
+    context_object_name = 'applications'
+
+
+class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
+    model = Registration
+    form_class = ApplicationForm
+    template_name = 'Admin Dashboard/Admin Application CRUD/Admin_Update_Application.html'
+    success_url = reverse_lazy('admin_manage_application')
 
 
 # Security Page Vies
