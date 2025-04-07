@@ -257,3 +257,97 @@ body {
         height: 100px;
     }
 }
+
+/* ========================================= */
+/*         Pass Status MAIN CONTENT          */
+/* ========================================= */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: black; 
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+  .container {
+    width: 90%;
+    max-width: 1000px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  .container header {
+    background-color: #808080; 
+    padding: 20px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+  }
+  h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: white; 
+  }
+  .message {
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    text-align: left;
+    color: black; 
+  }
+  .message ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  .warning {
+    font-size: 18px;
+    color: red;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  .btn {
+    background: yellow;
+    color: black;
+    padding: 12px 25px;
+    border: none;
+    cursor: pointer;
+    width: 180px;
+    text-align: center;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  .btn:hover {
+    box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.8);
+  }
+  .circles {
+    display: flex;
+    gap: 10px;
+  }
+  .circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  .green {
+    background-color: green;
+  }
+  .yellow {
+    background-color: yellow;
+  }
+  .red {
+    background-color: red;
+  }
+  .assistance {
+    font-size: 18px;
+    color: black;
+    margin-top: 20px;
+  }
