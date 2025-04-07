@@ -79,6 +79,15 @@ class AdminUpdateUser(CustomLoginRequiredMixin, UpdateView):
     form_class = UserProfileForm
     template_name = "Admin Dashboard/Admin CRUD/Admin_Update_User.html" #placeholder lang baka need pa ng specific update form 
     success_url  = reverse_lazy("admin_manage_user")
+    
+class AdminDeleteUser(CustomLoginRequiredMixin, DeleteView):
+    model = UserProfile
+    template_name = "Admin Dashboard/Admin CRUD/Admin_Delete_User.html"
+    success_url = reverse_lazy('admin_manage_user')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Deleted successfully. ')
+        return super().form_valid(form)
 
 # Security Page Vies
 @login_required
