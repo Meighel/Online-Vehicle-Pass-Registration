@@ -54,8 +54,6 @@
             <table class="payments-table">
                 <thead>
                     <tr>
-                        <th>Due Date</th>
-                        <th>Receipt Number</th>
                         <th>Application ID</th>
                         <th>Username</th>
                         <th>Corporate Email</th>
@@ -66,31 +64,13 @@
                 <tbody>
                 {% for payment in payment_list %}
                     <tr>
-                        <td data-label="Due Date">{{ payment.due_date|date:"Y-m-d" }}</td>
-                        <td data-label="Receipt Number">
-                            {{ payment.receipt_number|default:"N/A" }}
+                        <td>{{ payment.id }}</td>
+                        <td>{{ payment.registration.user.lastname }} , {{ payment.registration.user.firstname }}</td>
+                        <td>{{ payment.registration.user.corporate_email }}</td>
+                        <td><span class="status-badge status-pending">{{ payment.status }}</span></td>
+                        <td>
+                            <a href="{% url 'cashier_update_payment' payment.pk %}" class="btn btn-primary">Update</a>
                         </td>
-                        <td data-label="Application ID">
-                            {{ payment.registration.registrationNumber }}
-                        </td>
-                        <td data-label="Username">
-                            {{ payment.registration.user.lastname }}, {{ payment.registration.user.firstname }}
-                        </td>
-                        <td data-label="Corporate Email">
-                            {{ payment.registration.user.corporate_email }}
-                        </td>
-                        <td data-label="Status">
-                            <span class="status-badge status-paid status-{{ payment.status|lower }}">
-                                {{ payment.status|capfirst }}
-                            </span>
-                        </td>
-                        <td data-label="Action">
-                            <button class="btn btn-primary update-button" data-id="{{ payment.id }}">Update</button>
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="7" style="text-align: center;">No payment records found.</td>
                     </tr>
                 {% endfor %}
                 </tbody>

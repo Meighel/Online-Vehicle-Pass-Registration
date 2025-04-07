@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
-from .forms import UserSignupForm
+from .forms import (UserSignupForm,
+                    PaymentTransactionForm,
+)
 # from .forms import UserRegistrationForm, UserProfileForm, SecurityProfileForm, CashierProfileForm, AdminProfileForm
 # from .forms import VehicleForm, RegistrationForm, RegistrationStatusForm, VehiclePassForm, PaymentTransactionForm
 # from .forms import InspectionReportForm, NotificationForm, AnnouncementForm
@@ -99,6 +101,25 @@ class cashierViewPayment(ListView):
     context_object_name = 'payment_list'
     paginate_by = 10
 
+    def get_queryset(self):
+        return PaymentTransaction.objects.filter(status='pending')
+    
+class cashierViewTransaction(ListView):
+    model = PaymentTransaction
+    template_name = "Cashier Dashboard/Cashier_Transaction.html"
+    context_object_name = 'transaction_list'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return PaymentTransaction.objects.exclude(status='pending')
+
+
+class cashierUpdatePayment(UpdateView):
+    model = PaymentTransaction
+    form_class = PaymentTransactionForm
+    template_name ="Cashier Dashboard/Cashier_Payment_Update.html"
+    success_url = reverse_lazy("cashier_payments")
+
 @login_required
 def cashier_transaction(request):
     return render(request, "Cashier Dashboard/Cashier_Transaction.html")
@@ -106,6 +127,7 @@ def cashier_transaction(request):
 @login_required
 def cashier_report(request):
     return render(request, "Cashier Dashboard/Cashier_Reports.html")
+
 
 # Admin Page View 
 @login_required

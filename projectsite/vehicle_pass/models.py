@@ -4,6 +4,8 @@ from django.utils.timezone import now
 from datetime import timedelta
 from django.utils.crypto import get_random_string
 from django.contrib.auth.hashers import make_password, check_password
+from django.utils import timezone
+import pytz
 import random 
 import string
 
@@ -178,11 +180,20 @@ class PaymentTransaction(BaseModel):
     date_processed = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
+        # Automatically set due_date when status is pending and due_date is not provided
         if self.status == "pending" and not self.due_date:
-            self.due_date = now() + timedelta(days=7) 
+            self.due_date = timezone.now() + timedelta(days=7)
 
+        # Check if the object already exists (for updates)
+        if self.pk is not None:
+            original = PaymentTransaction.objects.get(pk=self.pk)
+            if original.status != self.status:  # If status has changed
+                self.date_processed = timezone.now().astimezone(pytz.timezone('Asia/Manila'))
+
+        # Save the instance
         super().save(*args, **kwargs)
 
+        # Create an inspection report when the status is "paid" (if not already exists)
         if self.status == "paid":
             from .models import InspectionReport  
 
@@ -191,13 +202,14 @@ class PaymentTransaction(BaseModel):
             if not inspection_exists:  
                 InspectionReport.objects.create(
                     payment_number=self, 
-                    security = None,
+                    security=None,
                     remarks="to_be_inspected",  
                     is_approved=False
                 )
 
     def __str__(self):
         return self.receipt_number if self.receipt_number else f"Registration {self.registration.registrationNumber}"
+
  
 class InspectionReport(BaseModel):
     REMARK_CHOICES = [

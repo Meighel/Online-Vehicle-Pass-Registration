@@ -1,5 +1,7 @@
 from django import forms
-from .models import UserProfile
+from .models import (UserProfile,
+                     PaymentTransaction,
+)
 from django.contrib.auth.hashers import make_password
 
 class UserSignupForm(forms.ModelForm):
@@ -24,7 +26,11 @@ class UserSignupForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-    
+
+class PaymentTransactionForm(forms.ModelForm):
+    class Meta:
+        model = PaymentTransaction
+        fields = ['status']
 
 # # from django.contrib.auth.forms import UserCreationForm
 # from .models import (UserProfile, SecurityProfile, CashierProfile, 

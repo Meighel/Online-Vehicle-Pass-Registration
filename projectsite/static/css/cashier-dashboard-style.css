@@ -99,7 +99,7 @@ body {
     font-weight: bold;
 }
 
-.status-paid {
+.status-approved {
     background-color: green;
 }
 
@@ -111,6 +111,20 @@ body {
 .status-pending {
     background-color: gray;
 }
+
+.status-paid {
+    background-color: green;
+}
+
+.status-unpaid {
+    background-color: yellow;
+}
+
+
+.status-void {
+    background-color: brown;
+}
+
 
 .filter-container {
     display: flex;

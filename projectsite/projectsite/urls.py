@@ -4,8 +4,8 @@ from vehicle_pass.views import (
     login_view, logout_view, signup_view,
     default_dashboard, 
     security_dashboard, security_manage_application, security_manage_inspection, security_manage_stickers, security_report,
-    cashier_dashboard, cashierViewPayment, cashier_transaction, cashier_report,
-    admin_dashboard, admin_manage_user, admin_manage_application, adminViewPayment, admin_manage_passes, admin_report, admin_transaction,
+    cashier_dashboard, cashierViewPayment, cashierUpdatePayment, cashierViewTransaction, cashier_report,
+    admin_dashboard, adminViewPayment, admin_transaction, admin_manage_user, admin_manage_application, admin_manage_passes, admin_report,
     home
 )
 
@@ -17,6 +17,7 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"), 
     path("dashboard/user/", default_dashboard, name="default_dashboard"),
     
+    
     path("dashboard/security/", security_dashboard, name="security_dashboard"),
     path("dashboard/security/manage_application/", security_manage_application, name="security_manage_application"),
     path("dashboard/security/manage_inspection/", security_manage_inspection, name="security_manage_inspection"),
@@ -25,11 +26,11 @@ urlpatterns = [
     
     
     path("dashboard/cashier/", cashier_dashboard, name="cashier_dashboard"),
-    path("dashboard/cashier/cashier_payments/", cashierViewPayment.as_view(), name="cashier_payments"),    
-    path("dashboard/cashier/cashier_transactions/", cashier_transaction, name="cashier_transactions"),
+    path("dashboard/cashier/cashier_payments/", cashierViewPayment.as_view(), name="cashier_payments"),
+    path("dashboard/cashier/cashier_payments/<pk>/", cashierUpdatePayment.as_view(), name="cashier_update_payment"),  
+    path("dashboard/cashier/cashier_transactions/", cashierViewTransaction.as_view(), name="cashier_transactions"),
     path("dashboard/cashier/cashier_reports/", cashier_report, name="cashier_reports"),
 
-    
     
     path("dashboard/admin/", admin_dashboard, name="admin_dashboard"),
     path("dashboard/admin/manage_users/", admin_manage_user, name="admin_manage_user"),
