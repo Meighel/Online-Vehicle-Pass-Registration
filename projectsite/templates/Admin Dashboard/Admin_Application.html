@@ -20,13 +20,6 @@
 {% endblock %}
 
 {% block content %}
-
-<!-- Debug info -->
-{% if applications %}
-    Debug: Found {{ registration|length }} record(s)
-{% else %}
-    Debug: Registration variable is empty or not defined
-{% endif %}
 <div class="main-content flex-grow-1 ms-uto">
     <div class="container-fluid py-1">
         <!-- Title & Top Bar -->
@@ -44,7 +37,6 @@
         <hr>
         <small><span id="date"></span></small>
         <br>
-
 
         <div class="filter-container">
             <div class="mb-3">
@@ -80,6 +72,7 @@
                             <td>{{ applicant.vehicle.plateNumber }}</td>
                             <td>{{ applicant.created_at|date:"F d, Y" }}</td>
                             <td>{{ applicant.status }}</td>
+                            
                             <td>
                                 <a href="{% url 'admin_view_specific_application' applicant.pk %}" class="btn btn-primary">View</a>
                                 <a href="{% url 'admin_update_application' applicant.pk %}" class="btn btn-primary">Update</a>

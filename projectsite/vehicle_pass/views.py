@@ -154,6 +154,15 @@ class AdminViewApplication(CustomLoginRequiredMixin, ListView):
     context_object_name = 'applications'
     paginate_by = 5
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        applications = context['applications']
+        print(f"Applications count: {len(applications)}")
+        if applications:
+            print(f"First application: {applications[0]}")
+        return context
+
+
 class AdminViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
     model = Registration
     template_name = 'Admin Dashboard/Admin Application CRUD/Admin_View_Specific_Application.html'

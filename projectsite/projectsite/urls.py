@@ -7,9 +7,10 @@ from vehicle_pass.views import (
     cashier_dashboard, cashierViewPayment, cashierUpdatePayment, cashierViewTransaction, cashier_report,
     admin_dashboard, AdminViewUser, AdminCreateUser, AdminUpdateUser, AdminDeleteUser, AdminViewSpecificUser,
     adminViewPayment, adminUpdatePayment, adminViewTransaction,
+    #AdminViewApplication''', 
     AdminViewApplication, AdminViewSpecificApplication, AdminUpdateApplication,
     admin_manage_application, admin_manage_passes, admin_report,
-    admin_transaction,
+    # admin_transaction,
     home
 )
 
@@ -57,8 +58,6 @@ urlpatterns = [
     path("dashboard/admin/manage_application/view/<pk>", AdminViewSpecificApplication.as_view(), name="admin_view_specific_application"),    
     path("dashboard/admin/manage_application/", AdminViewApplication.as_view(), name="admin_manage_application"),
     
-    
-    path("dashboaard/admin/manage_application/", admin_manage_application, name="admin_manage_application"),
     path("dashboard/admin/manage_passes/", admin_manage_passes, name="admin_manage_passes"),
     path("dashboard/admin/manage_report/", admin_report, name="admin_report"),
 ]

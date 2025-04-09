@@ -116,6 +116,9 @@ class Registration(BaseModel):
     files = models.URLField(max_length=250)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
 
+    def __str__(self):
+        return f"Registration {self.registrationNumber} for {self.user.lastname}, {self.user.firstname}"
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs) 
 
