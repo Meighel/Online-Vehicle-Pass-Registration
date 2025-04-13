@@ -10,7 +10,8 @@ from vehicle_pass.views import (
     #AdminViewApplication''', 
     AdminViewApplication, AdminViewSpecificApplication, AdminUpdateApplication,
     admin_manage_application, admin_manage_passes, admin_report,
-    # admin_transaction,
+    # admin_transaction, 
+    form1_view,
     home
 )
 
@@ -39,7 +40,7 @@ urlpatterns = [
 
     
     path("dashboard/admin/", admin_dashboard, name="admin_dashboard"),
-    
+    path('form1/', form1_view, name='form1'),
     
     #ADMIN USER CRUD
     path("dashboard/admin/manage_users/add/", AdminCreateUser.as_view(), name="admin_create_user"),
