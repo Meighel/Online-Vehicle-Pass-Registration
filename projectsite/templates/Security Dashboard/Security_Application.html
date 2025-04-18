@@ -59,109 +59,23 @@
                     <tr>
                         <th>Username</th>
                         <th>Application ID</th>
-                        <th>Account</th>
                         <th>Date</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                {% for applicant in applications %}
                     <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>{{ applicant.user.lastname }}, {{ applicant.user.firstname }} {{ applicant.user.middlename|default_if_none:""|slice:":1"}}</td>
+                        <td>{{ applicant.registrationNumber }}</td>
+                        <td>{{ applicant.created_at|date:"F d, Y" }}</td>
+                        <td>{{ applicant.status }}</td>
                         <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-info">Update</button>
-                            <button class="btn btn-danger">Delete</button>
+                            <a href="{% url 'security_view_specific_application' applicant.pk %}" class="btn btn-primary">View</a>
+                            <a href="{% url 'security_update_application' applicant.pk %}" class="btn btn-primary">Update</a>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-info">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-info">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-info">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-info">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-info">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-info">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-info">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
+                {% endfor %} 
                 </tbody>
             </table>
         </section>

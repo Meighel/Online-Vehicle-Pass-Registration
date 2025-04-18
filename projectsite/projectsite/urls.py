@@ -3,7 +3,7 @@ from django.urls import path, include
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
     default_dashboard, 
-    security_dashboard, security_manage_application, security_manage_inspection, security_manage_stickers, security_report,
+    security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, SecurityUpdateApplication, security_manage_inspection, security_manage_stickers, security_report,
     cashier_dashboard, cashierViewPayment, cashierUpdatePayment, cashierViewTransaction, cashier_report,
     admin_dashboard, AdminViewUser, AdminCreateUser, AdminUpdateUser, AdminDeleteUser, AdminViewSpecificUser,
     adminViewPayment, adminUpdatePayment, adminViewTransaction,
@@ -26,7 +26,9 @@ urlpatterns = [
     
     
     path("dashboard/security/", security_dashboard, name="security_dashboard"),
-    path("dashboard/security/manage_application/", security_manage_application, name="security_manage_application"),
+    path("dashboard/security/manage_application/", SecurityViewApplication.as_view(), name="security_manage_application"),
+    path("dashboard/security/manage_application/<pk>/", SecurityUpdateApplication.as_view(), name="security_update_application"),
+    path("dashboard/security/manage_application/view/<pk>", SecurityViewSpecificApplication.as_view(), name="security_view_specific_application"),
     path("dashboard/security/manage_inspection/", security_manage_inspection, name="security_manage_inspection"),
     path("dashboard/security/manage_stickers", security_manage_stickers, name="security_manage_stickers"),
     path("dashboard/security/manage_report/", security_report, name="security_report"),
