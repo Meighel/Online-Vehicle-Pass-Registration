@@ -4,253 +4,98 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Apply for Pass</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: black;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-    .container {
-      width: 90%;
-      max-width: 1000px;
-      background: black;
-      padding: 30px;
-      border-radius: 12px;
-      position: relative;
-    }
-    h2 {
-      text-align: left;
-      font-size: 22px;
-      margin-bottom: 20px;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-    .form-group input[type="text"],
-    .form-group input[type="email"] {
-      width: 100%;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 25px;
-      background: white;
-      color: black;
-      font-size: 14px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .name-group {
-      display: flex;
-      gap: 30px;
-    }
-    .name-group .form-group {
-      flex: 1;
-    }
-    .aligned-group {
-      display: flex;
-      gap: 30px;
-    }
-    .aligned-group .form-group {
-      flex: 1;
-    }
-    .radio-group {
-      display: flex;
-      gap: 80px;
-      align-items: center;
-      flex: 1;
-    }
-    .radio-group label {
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-      gap: 8px;
-      cursor: pointer;
-    }
-    .radio-group input[type="radio"] {
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      border: 2px solid gray;
-      transform: rotate(45deg);
-      background: transparent;
-      cursor: pointer;
-    }
-    .radio-group input[type="radio"]:checked {
-      background: yellow;
-    }
-    .btn, .back-btn {
-      background: yellow;
-      color: black;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      width: 120px;
-      text-align: center;
-      border-radius: 25px;
-      font-size: 14px;
-      font-weight: bold;
-    }
-    .back-btn {
-      background: gray;
-      position: absolute;
-      bottom: 20px; 
-      right: 160px;
-    }
-    .btn {
-      position: absolute;
-      bottom: 20px; 
-      right: 20px;
-    }
-    .welcome {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 14px;
-    }
-
-    .btn:hover {
-      box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.8);
-      transition: box-shadow 0.1s ease-in-out;
-    }
-
-    .btn:disabled {
-      background: gray;
-      cursor: not-allowed;
-    }
-  </style>
+  <link rel="stylesheet" href="../../static/css/forms_style.css">
+  <script src="../../static/javascript/forms.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <div class="welcome">Welcome, User_1!</div>
-    <h2>Registration for Vehicle Pass (1/3)</h2>
+    <div class="welcome form1-welcome">Welcome, User_1!</div>
+    <h2 class="form1-h2">Registration for Vehicle Pass (1/3)</h2>
     
     <form id="vehicle-form">
-      <div class="name-group">
-        <div class="form-group">
+      <div class="form1-name-group">
+        <div class="form-group form1-form-group">
           <label>First Name</label>
           <input type="text" class="form-control" placeholder="Enter First Name" required>
         </div>
         
-        <div class="form-group">
+        <div class="form-group form1-form-group">
           <label>Middle Name</label>
           <input type="text" class="form-control" placeholder="Enter Middle Name">
         </div>
         
-        <div class="form-group">
+        <div class="form-group form1-form-group">
           <label>Last Name</label>
           <input type="text" class="form-control" placeholder="Enter Last Name" required>
         </div>
       </div>
 
-      <div class="aligned-group">
-        <div class="form-group">
+      <div class="form1-aligned-group">
+        <div class="form-group form1-form-group">
           <label>Corporate Email</label>
           <input type="email" placeholder="Enter Corporate Email" required>
         </div>
 
-        <div class="form-group">
+        <div class="form-group form1-form-group">
           <label>School Role:</label>
-          <div class="radio-group">
+          <div class="form1-radio-group">
             <label><input type="radio" name="role" required> Student</label>
             <label><input type="radio" name="role" required> Faculty</label>
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group form1-form-group">
           <label>Driver License's Number</label>
           <input type="text" placeholder="Enter Driver License Number" required>
         </div>
       </div>
 
-      <h2>Vehicle Details</h2>
+      <h2 class="form1-h2">Vehicle Details</h2>
 
-      <div class="aligned-group">
-        <div class="form-group">
+      <div class="form1-aligned-group">
+        <div class="form-group form1-form-group">
           <label>Type:</label>
-          <div class="radio-group">
+          <div class="form1-radio-group">
             <label><input type="radio" name="type" required> Car</label>
             <label><input type="radio" name="type" required> Motorbike</label>
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group form1-form-group">
           <label>Model</label>
           <input type="text" placeholder="Enter Vehicle Model" required>
         </div>
 
-        <div class="form-group">
+        <div class="form-group form1-form-group">
           <label>Plate Number</label>
           <input type="text" placeholder="Enter Plate Number" required>
         </div>
       </div>
 
-      <div class="aligned-group">
-        <div class="form-group">
+      <div class="form1-aligned-group">
+        <div class="form-group form1-form-group">
           <label>Chassis Number</label>
           <input type="text" placeholder="Enter Chassis Number" required>
         </div>
 
-        <div class="form-group">
+        <div class="form-group form1-form-group">
           <label>OR Number</label>
           <input type="text" placeholder="Enter OR Number" required>
         </div>
 
-        <div class="form-group">
+        <div class="form-group form1-form-group">
           <label>CR Number</label>
           <input type="text" placeholder="Enter CR Number" required>
         </div>
       </div>
 
       <a href="../User Dashboard/User_Dashboard.html">
-        <button type="button" class="back-btn">Back</button>
+        <button type="button" class="back-btn form1-back-btn">Back</button>
       </a>
       <a href="../Forms/forms_2.html">
-        <button type="button" class="btn" id="next-btn" disabled>Next</button>
+        <button type="button" class="btn form1-btn" id="form1-next-btn" disabled>Next</button>
       </a>
     </form>
   </div>
-
-  <script>
-    const form = document.getElementById("vehicle-form");
-    const nextButton = document.getElementById("next-btn");
-
-    form.addEventListener("input", function() {
-      const requiredFields = form.querySelectorAll("input[required]");
-      let allFilled = true;
-
-      requiredFields.forEach(input => {
-        if (input.name !== 'middleName' && !input.value) {
-          allFilled = false;
-        }
-      });
-
-      nextButton.disabled = !allFilled;
-    });
-
-    form.addEventListener("submit", function(event) {
-      const requiredFields = form.querySelectorAll("input[required]");
-      let allFilled = true;
-
-      requiredFields.forEach(input => {
-        if (!input.value) {
-          allFilled = false;
-        }
-      });
-
-      if (!allFilled) {
-        event.preventDefault(); 
-        alert("Please fill in all required fields before proceeding.");
-      }
-    });
-  </script>
 </body>
 </html>

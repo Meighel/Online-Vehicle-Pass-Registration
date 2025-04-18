@@ -6,29 +6,13 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/user-dashboard-style.css' %}">
 <link rel="icon" href="{% static 'images/favicon.png' %}">
-<style>
-    /* Ensure main content shifts to the right of sidebar */
-    .dashboard-wrapper {
-        display: flex;
-    }
-    .main-content {
-        flex-grow: 1;
-        padding: 20px;
-        margin-left: 120px;
-    }
-    /* Ensure cards and table have proper spacing */
-    .dashboard-card {
-        min-height: 140px;
-    }
-</style>
 {% endblock %}
 
 {% block content %}
-<div class="dashboard-wrapper d-flex">
+<div class="dashboard-wrapper">
     <!-- Main Content -->
-        <!-- Main Content -->
-    <div class="main-content flex-grow-1 ms-uto">
-        <div class="container-fluid py-1">
+    <div class="main-content">
+        <div class="container-fluid py-3">
             <!-- Title & Top Bar -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
                 <h2 class="title mb-3 mb-md-0">Dashboard</h2>
@@ -39,19 +23,19 @@
                         <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
                     </a>
                     <!-- Search Bar -->
-                    <div class="dashboard d-flex">
-                        <input type="text" class="form-control" placeholder="Search..." id="search-bar" width="30" height="30">
-                        <button class="btn btn-outline-secondary ms-1">🔍</button>
+                    <div class="dashboard-search d-flex">
+                        <input type="text" class="form-control" placeholder="Search..." id="search-bar">
+                        <button class="btn search-btn ms-2">🔍</button>
                     </div>
                 </div>
             </div>
 
-            <hr>
-            <small><span id="date"></span></small>
+            <hr class="border-secondary">
+            <small><span id="date" class="text-light"></span></small>
 
             <!-- Profile Card -->
-            <div class="card profile-card p-4 d-flex flex-row align-items-center mt-3 shadow-sm">
-                <div class="rounded-circle overflow-hidden border border-dark" style="width: 100px; height: 100px;">
+            <div class="card profile-card p-4 d-flex flex-row align-items-center mt-4 shadow-sm">
+                <div class="rounded-circle overflow-hidden border border-light" style="width: 100px; height: 100px;">
                     <img src="{% static 'images/student.png' %}" class="w-100 h-100 object-fit-cover" alt="User">
                 </div>
                 <div class="profile-info ms-4">
@@ -62,20 +46,20 @@
             </div>
 
             <!-- Status & Quick Access -->
-            <div class="row mt-4">
+            <div class="row mt-4 g-4">
                 <div class="col-md-6">
-                    <div class="card status-card border-danger shadow-sm">
+                    <div class="card status-card h-100 border-danger shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title d-flex align-items-center">
                                 <span class="text-danger fs-3">🚗</span>
                                 <span class="ms-2">Application Status</span>
                             </h5>
-                            <div class="bg-gradient text-dark p-3 rounded mt-2">
+                            <div class="status-box p-3 rounded mt-3">
                                 <p class="fs-4 fw-bold">
                                     {{ registration.status|default:"No Application Found" }}
                                 </p>
                             </div>
-                            <p class="text-muted small mt-2">
+                            <p class="text-muted small mt-3">
                                 Date Applied: {{ registration.created_at|date:"F j, Y" }}
                             </p>
                         </div>
@@ -83,13 +67,13 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div class="card quick-access-card border-info shadow-sm">
+                    <div class="card quick-access-card h-100 border-info shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title d-flex align-items-center">
                                 Quick Access <span class="ms-2">📝</span>
                             </h5>
-                            <p>Apply for a new vehicle pass easily.</p>
-                            <a href="{% url 'form1' %}" class="btn btn-info">Apply Now</a>
+                            <p class="mt-3">Apply for a new vehicle pass easily.</p>
+                            <a href="{% url 'form1' %}" class="btn btn-apply mt-2">Apply Now</a>
                         </div>
                     </div>
                 </div>
@@ -97,13 +81,13 @@
 
             <!-- Application History -->
             <div class="card mt-4 border-secondary shadow-sm">
-                <div class="card-header">
+                <div class="card-header bg-dark">
                     <h5 class="mb-0">Application History</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover table-borderless align-middle text-center">
-                            <thead class="table-secondary text-dark">
+                        <table class="table table-hover align-middle text-center">
+                            <thead>
                                 <tr>
                                     <th>Application No.</th>
                                     <th>Vehicle Type</th>
@@ -132,7 +116,7 @@
                                     </tr>
                                     {% endfor %}
                                 {% else %}
-                                    <tr><td colspan="4">No history found.</td></tr>
+                                    <tr><td colspan="4" class="text-center py-3">No history found.</td></tr>
                                 {% endif %}
                             </tbody>
                         </table>
@@ -143,8 +127,6 @@
         </div> <!-- End Container -->
     </div> <!-- End Main Content -->
 </div> <!-- End Dashboard Wrapper -->
-
-
 {% endblock %}
 
 {% block extra_js %}

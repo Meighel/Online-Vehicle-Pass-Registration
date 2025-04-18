@@ -4,120 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Apply for Pass (3/3)</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: black;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-    .container {
-      width: 90%;
-      max-width: 1000px;
-      background: black;
-      padding: 30px;
-      border-radius: 12px;
-      position: relative;
-    }
-    h2 {
-      text-align: left;
-      font-size: 28px;
-      margin-bottom: 20px;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 16px;
-      margin-bottom: 5px;
-    }
-    .form-group input[type="text"],
-    .form-group input[type="url"] {
-      width: 100%;
-      max-width: 250px;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 25px;
-      background: white;
-      color: black;
-      font-size: 16px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .note {
-      font-size: 18px;
-      line-height: 1.8;
-      margin-bottom: 30px;
-    }
-    .note ul {
-      font-size: 18px;
-      margin-left: 20px;
-    }
-    .document-container {
-      background-color: #333;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 30px;
-    }
-    .btn, .back-btn {
-      background: yellow;
-      color: black;
-      padding: 12px 25px;
-      border: none;
-      cursor: pointer;
-      width: 140px;
-      text-align: center;
-      border-radius: 25px;
-      font-size: 16px;
-      font-weight: bold;
-    }
-    .back-btn {
-      background: gray;
-      position: absolute;
-      bottom: 20px;
-      right: 180px; /* Adjusted the right value for a larger gap */
-    }
-    .btn {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-    }
-    .welcome {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 16px;
-    }
-    .btn:hover {
-      box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.8);
-      transition: box-shadow 0.3s ease-in-out;
-    }
-
-    .btn:disabled {
-      background: gray;
-      cursor: not-allowed;
-    }
-  </style>
-  <script>
-    function validateForm() {
-      const googleFolderLink = document.querySelector('input[type="url"]');
-      const nextButton = document.querySelector('.btn');
-      
-      nextButton.disabled = !googleFolderLink.value;
-    }
-  </script>
+  <link rel="stylesheet" href="../../static/css/forms_style.css">
+  <script src="../../static/javascript/forms.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <div class="welcome">Welcome, User_1!</div>
-    <h2>Registration for Vehicle Pass (3/3)</h2>
+    <div class="welcome form3-welcome">Welcome, User_1!</div>
+    <h2 class="form3-h2">Registration for Vehicle Pass (3/3)</h2>
 
-    <div class="note">
+    <div class="form3-note">
       <p><strong>Please upload the required documents in a Google Drive folder and follow these instructions:</strong></p>
       <ul>
         <li>Name the folder clearly and use the correct file formats (JPG or PNG only).</li>
@@ -126,9 +21,9 @@
       </ul>
 
       <p><strong>Documents Needed:</strong></p>
-      <div class="document-container">
+      <div class="form3-document-container">
         <ul>
-          <li>Driver’s License or Student Permit<br>File name example: Drivers_License.jpg or Student_Permit.png</li>
+          <li>Driver's License or Student Permit<br>File name example: Drivers_License.jpg or Student_Permit.png</li>
           <li>Official Receipt (OR) and Certificate of Registration (CR)<br>File name example: OR.jpg and CR.png</li>
           <li>Certificate of Purchase/Ownership or Deed of Sale<br>File name example: COPO.jpg or DOS.png</li>
           <li>ID in this institution<br>File name example: ID.png</li>
@@ -137,26 +32,26 @@
       </div>
 
       <p><strong>Additional Documents (if the vehicle is not yours):</strong></p>
-      <div class="document-container">
+      <div class="form3-document-container">
         <ul>
-          <li>Owner’s Valid ID<br>File name example: ValidID.jpg</li>
+          <li>Owner's Valid ID<br>File name example: ValidID.jpg</li>
           <li>Authorization Letter from the Owner<br>File name example: Letter.jpg</li>
         </ul>
       </div>
 
       <p><strong>Share Google Folder Link:</strong></p>
-      <div class="form-group">
+      <div class="form-group form3-form-group">
         <label>Google Folder Link</label>
-        <input type="url" placeholder="Paste Google Drive Folder Link Here" oninput="validateForm()">
+        <input type="url" placeholder="Paste Google Drive Folder Link Here">
       </div>
     </div>
 
     <a href="../Forms/forms_2.html">
-      <button class="back-btn" type="button">Back</button>
+      <button class="back-btn form3-back-btn" type="button">Back</button>
     </a>
 
     <a href="../User Dashboard/User_Pass_Status.html">
-      <button class="btn" type="button" disabled>Next</button>
+      <button class="btn form3-btn" type="button" disabled>Next</button>
     </a>
   </div>
 </body>
