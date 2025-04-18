@@ -64,29 +64,18 @@
                     </tr>
                 </thead>
                 <tbody>
+                {% for sticker in stickers %}
                     <tr>
-                        <td>VP1234567</td>
-                        <td>05/15/2025</td>
-                        <td>Active</td>
-                        <td>John Doe</td>
+                        <td>{{ sticker.passNumber }}</td>
+                        <td>{{ sticker.passExpire }}</td>
+                        <td>{{ sticker.status }}</td>
+                        <td>{{ sticker.vehicle.owner.firstname }} {{ sticker.vehicle.owner.middle_name|default_if_none:""|slice:":1"}} {{ sticker.vehicle.owner.lastname }} </td>
                     </tr>
-                    <tr>
-                        <td>VP7654321</td>
-                        <td>08/20/2025</td>
-                        <td>Expired</td>
-                        <td>Jane Smith</td>
-                    </tr>
+                {% endfor %}
                 </tbody>          
             </table>
         </section>
-        
-        <!-- Entries Info -->
-        <div class="entries-info">Showing 0 entries</div>
-
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <div class="pagination" id="pagination"></div>
-        </div>
+        {% include 'includes/pagination.html' %}
     </div>
 </div>
 {% endblock %}

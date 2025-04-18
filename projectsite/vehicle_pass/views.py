@@ -312,9 +312,11 @@ def handle_inspection_action(request):
     
     return redirect('security_manage_inspection') 
 
-@login_required
-def security_manage_stickers(request):
-    return render(request, "Security Dashboard/Security_Release_Stickers.html")
+class SecurityViewStickers(CustomLoginRequiredMixin, ListView):
+    model = VehiclePass
+    template_name = 'Security Dashboard/Security_Release_Stickers.html'
+    context_object_name = 'stickers'
+    paginate_by = 5
 
 @login_required
 def security_report(request):
