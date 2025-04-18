@@ -2,9 +2,15 @@ from django.contrib import admin
 from django.urls import path, include
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
+<<<<<<< Updated upstream
     #form1_view,
     default_dashboard, user_pass_status, user_application,
     security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, SecurityUpdateApplication, security_manage_inspection, security_manage_stickers, security_report,
+=======
+    default_dashboard, 
+    security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, SecurityUpdateApplication, SecurityViewInspectionReports, security_manage_stickers, security_report,
+    handle_inspection_action,
+>>>>>>> Stashed changes
     cashier_dashboard, cashierViewPayment, cashierUpdatePayment, cashierViewTransaction, cashier_report,
     admin_dashboard, AdminViewUser, AdminCreateUser, AdminUpdateUser, AdminDeleteUser, AdminViewSpecificUser,
     adminViewPayment, adminUpdatePayment, adminViewTransaction,
@@ -33,7 +39,8 @@ urlpatterns = [
     path("dashboard/security/manage_application/", SecurityViewApplication.as_view(), name="security_manage_application"),
     path("dashboard/security/manage_application/<pk>/", SecurityUpdateApplication.as_view(), name="security_update_application"),
     path("dashboard/security/manage_application/view/<pk>", SecurityViewSpecificApplication.as_view(), name="security_view_specific_application"),
-    path("dashboard/security/manage_inspection/", security_manage_inspection, name="security_manage_inspection"),
+    path("dashboard/security/manage_inspection/", SecurityViewInspectionReports.as_view(), name="security_manage_inspection"),
+    path("dashboard/security/manage_inspection/action/", handle_inspection_action, name='inspection_action'),
     path("dashboard/security/manage_stickers", security_manage_stickers, name="security_manage_stickers"),
     path("dashboard/security/manage_report/", security_report, name="security_report"),
     

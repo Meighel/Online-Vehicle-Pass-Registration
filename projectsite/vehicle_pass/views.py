@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 from django.http import HttpResponse
 from .forms import (UserSignupForm, UserProfileForm, 
                     PaymentTransactionForm,
                     ApplicationForm,
+                    InspectionApprovalForm,
 )
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
 from .models import Vehicle, Registration, VehiclePass, PaymentTransaction
@@ -275,6 +277,40 @@ class SecurityUpdateApplication(CustomLoginRequiredMixin, UpdateView):
 @login_required
 def security_manage_inspection(request):
     return render(request, "Security Dashboard/Security_Inspection.html")
+
+class SecurityViewInspectionReports(CustomLoginRequiredMixin, ListView):
+    model = InspectionReport
+    template_name = 'Security Dashboard/Security_Inspection.html'
+    context_object_name = 'inspections'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return InspectionReport.objects.exclude(remarks='sticker_released')
+
+def handle_inspection_action(request):
+    if request.method == "POST":
+        form = InspectionApprovalForm(request.POST)
+        if form.is_valid():
+            action = form.cleaned_data['action']
+            inspection_id = form.cleaned_data['inspection_id']
+            notes = form.cleaned_data['additional_notes']
+
+            inspection = get_object_or_404(InspectionReport, id=inspection_id)
+            inspection.additional_notes = notes
+
+            if action == 'approve':
+                inspection.is_approved = True
+                inspection.remarks = 'sticker released'
+            elif action == 'reject':
+                inspection.is_approved = False
+                inspection.remarks = 'application declined'
+
+            inspection.save()
+            messages.success(request, f"Inspection {action}d successfully.")
+        else:
+            messages.error(request, "There was an error processing your request.")
+    
+    return redirect('security_manage_inspection') 
 
 @login_required
 def security_manage_stickers(request):

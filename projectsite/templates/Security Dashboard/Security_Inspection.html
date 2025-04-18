@@ -7,6 +7,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/security-dashboard-style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
     <style>
@@ -66,65 +67,53 @@
                     </tr>
                 </thead>
                 <tbody>
+                {% for applicant in inspections %}
                     <tr>
-                        <td>00001RCP</td>
-                        <td>Cashier Name</td>
-                        <td>02/26/2025</td>
-                        <td>Under Review</td>
-                        <td>Pending final inspection</td>
+                        <td>{{ applicant.payment_number }}</td>
+                        <td>{{ applicant.security.user.firstname }} {{ applicant.security.user.lastname }} {{ applicant.security.user.middlename |default_if_none:"" }}</td>
+                        <td>{{ applicant.inspection_date }}</td>
+                        <td>{{ applicant.remarks }}</td>
+                        <td>{{ applicant.additional_notes }}</td>
                         <td>
-                            <button class="btn btn-success">Approved</button>
-                            <button class="btn btn-danger">Reject</button>
+                            <!-- Trigger approve -->
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal" data-id="{{ inspection.id }}">Approve</button>
+
+                            <!-- Trigger reject -->
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal" data-id="{{ inspection.id }}">Reject</button>
                         </td>
                     </tr>
-                    <tr>
-                        <td>00002RCP</td>
-                        <td>Jane Smith</td>
-                        <td>03/05/2025</td>
-                        <td>Under Review</td>
-                        <td>Pending final inspection</td>
-                        <td>
-                            <button class="btn btn-success">Approved</button>
-                            <button class="btn btn-danger">Reject</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>00001RCP</td>
-                        <td>Cashier Name</td>
-                        <td>02/26/2025</td>
-                        <td>Under Review</td>
-                        <td>Pending final inspection</td>
-                        <td>
-                            <button class="btn btn-success">Approved</button>
-                            <button class="btn btn-danger">Reject</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>00002RCP</td>
-                        <td>Jane Smith</td>
-                        <td>03/05/2025</td>
-                        <td>Under Review</td>
-                        <td>Pending final inspection</td>
-                        <td>
-                            <button class="btn btn-success">Approved</button>
-                            <button class="btn btn-danger">Reject</button>
-                        </td>
-                    </tr>
+                {% endfor %}
                 </tbody>                
             </table>
         </section>
-        
-        <!-- Entries Info -->
-        <div class="entries-info">Showing 0 entries</div>
-
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <div class="pagination" id="pagination"></div>
-        </div>
+        {% include 'includes/pagination.html' %}
+        {% include 'includes/security_modal.html' %}
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Approve Modal
+        var approveModal = document.getElementById('approveModal');
+        approveModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var inspectionId = button.getAttribute('data-id');
+            var inputField = approveModal.querySelector('#approveInspectionId');
+            inputField.value = inspectionId;
+        });
+    
+        // Reject Modal
+        var rejectModal = document.getElementById('rejectModal');
+        rejectModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var inspectionId = button.getAttribute('data-id');
+            var inputField = rejectModal.querySelector('#rejectInspectionId');
+            inputField.value = inspectionId;
+        });
+    });
+    </script>    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'javascript/base.js' %}"></script>
 {% endblock %}

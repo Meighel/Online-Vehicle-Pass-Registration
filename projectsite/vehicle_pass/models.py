@@ -216,10 +216,10 @@ class PaymentTransaction(BaseModel):
  
 class InspectionReport(BaseModel):
     REMARK_CHOICES = [
-        ('to_be_inspected', 'To Be Inspected'),
-        ('sticker_released', 'Sticker Released'),
-        ('application_declined', 'Application Declined'),
-        ('request_refund', 'To Request Refund'),
+        ('to be inspected', 'To Be Inspected'),
+        ('sticker released', 'Sticker Released'),
+        ('application declined', 'Application Declined'),
+        ('request refund', 'To Request Refund'),
     ]
 
     payment_number = models.ForeignKey(PaymentTransaction, on_delete=models.CASCADE)
@@ -234,6 +234,10 @@ class InspectionReport(BaseModel):
     
     def save(self, *args, **kwargs):
         is_new = self.pk is None
+
+        if self.is_approved:
+            self.remarks = 'sticker_released'
+
         super().save(*args, **kwargs)
         
         # Check if this is an update and the necessary conditions are met
