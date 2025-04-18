@@ -85,13 +85,13 @@
         </div>
       </div>
 
-      <a href="{% url 'default_dashboard' %}">
-        <button class="back-btn form2-back-btn" type="button">Back</button>
-      </a>
-  
-      <a href="{% url 'vehicle_registration_step_2' %}">
-        <button class="btn form2-btn" type="button" id="next-btn" >Next</button>
-      </a>
+      <div class="form-navigation">
+        <a href="{% url 'default_dashboard' %}">
+          <button class="back-btn form2-back-btn" type="button">Back</button>
+        </a>
+      
+        <button class="btn form2-btn" type="submit" id="form1-next-btn" >Next</button>
+      </div>
     </form>
   </div>
 </body>

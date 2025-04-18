@@ -62,11 +62,14 @@ class VehicleRegistrationStep1Form(forms.Form):
     cr_number = forms.CharField(max_length=100, label='CR Number')
 
 class VehicleRegistrationStep2Form(forms.Form):
-    owner = forms.ChoiceField(choices=[('yes', 'Yes'), ('no', 'No')], label="Are you the owner of this vehicle?")
-    owner_first_name = forms.CharField(max_length=100, required=False, label="Owner's First Name")
-    owner_middle_name = forms.CharField(max_length=100, required=False, label="Owner's Middle Name")
-    owner_last_name = forms.CharField(max_length=100, required=False, label="Owner's Last Name")
-    owner_contact_number = forms.CharField(max_length=15, required=False, label="Owner's Contact Number")
+    owner = forms.ChoiceField(choices=[('yes', 'Yes, I am the owner of the vehicle'), 
+                                       ('no', 'No, I am registering on behalf of the owner')], 
+                              label='Are you the owner of this vehicle?')
+    # Owner details if "no" is selected
+    owner_first_name = forms.CharField(max_length=100, required=False, label='Owner\'s First Name')
+    owner_middle_name = forms.CharField(max_length=100, required=False, label='Owner\'s Middle Name')
+    owner_last_name = forms.CharField(max_length=100, required=False, label='Owner\'s Last Name')
+    owner_contact_number = forms.CharField(max_length=15, required=False, label='Owner\'s Contact Number')
 
 class VehicleRegistrationStep3Form(forms.Form):
     google_drive_link = forms.URLField(label='Google Folder Link')
