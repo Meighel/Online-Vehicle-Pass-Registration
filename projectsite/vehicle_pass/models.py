@@ -80,14 +80,23 @@ class AdminProfile(BaseModel):
     def __str__(self):
         return f"Admin: {self.user.firstname} {self.user.lastname} ({self.admin_id})"
 
+class Owner(BaseModel):
+    owner_firstname = models.CharField(max_length=50)
+    owner_middlename = models.CharField(max_length=25)
+    owner_lastname = models.CharField(max_length=25)
+    owner_suffix = models.CharField(max_length=5, null=True, blank=True)
+    relationship_to_owner = models.CharField(max_length=25)
+
 class Vehicle(BaseModel):
-    owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    self_ownership = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
+    legal_owner = models.ForeignKey(Owner, on_delete=models.CASCADE, null=True, blank=True)
     plateNumber = models.CharField(max_length=10, unique=True)
     type = models.CharField(max_length=20)
     model = models.CharField(max_length=20)
     color = models.CharField(max_length=20)
     chassisNumber = models.CharField(max_length=17)
     OR_Number = models.CharField(max_length=15)
+    CR_Number = models.CharField(max_length=9)
 
     def __str__(self):
         return f"{self.plateNumber}"  
@@ -99,6 +108,9 @@ class Vehicle(BaseModel):
     def save(self, *args, **kwargs):
         self.full_clean() 
         super().save(*args, **kwargs)
+
+
+
 
 class Registration(BaseModel):
     STATUS_CHOICES = [
@@ -178,6 +190,7 @@ class PaymentTransaction(BaseModel):
     registration = models.ForeignKey(Registration, on_delete=models.CASCADE)
     receipt_number = models.CharField(max_length=20, unique=True, null=True)
     cashier = models.ForeignKey(CashierProfile, on_delete=models.CASCADE, null=True)
+    admin = models.ForeignKey(AdminProfile, on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
     due_date = models.DateTimeField(blank=True, null=True) 
     date_processed = models.DateTimeField(auto_now_add=True)
