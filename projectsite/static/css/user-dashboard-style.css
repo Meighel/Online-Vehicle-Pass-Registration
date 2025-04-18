@@ -23,7 +23,7 @@ body {
 .main-content {
     flex-grow: 1;
     padding: 25px;
-    margin-left: 130px; /* Match your sidebar width */
+    margin-left: 120px; /* Match your sidebar width */
     width: calc(100% - 250px);
     overflow-x: hidden;
 }
@@ -192,6 +192,109 @@ body {
     background-color: #252525;
 }
 
+/* ========== Payment Page Styles ========== */
+.payment-container {
+    width: 90%;
+    max-width: 800px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    margin: 40px auto;
+}
+
+.payment-header {
+    background-color: #808080;
+    padding: 20px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: -30px -30px 20px -30px;
+}
+
+.payment-header h2 {
+    font-size: 24px;
+    color: white;
+    margin: 0;
+}
+
+.circles {
+    display: flex;
+    gap: 10px;
+}
+
+.circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.green { 
+    background-color: green; 
+}
+
+.yellow { 
+    background-color: yellow; 
+}
+
+.red { 
+    background-color: red; 
+}
+
+.payment-message {
+    color: black;
+    text-align: left;
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.payment-message ul {
+    padding-left: 20px;
+    list-style: disc;
+}
+
+.warning {
+    font-weight: bold;
+    color: red;
+    margin-top: 20px;
+}
+
+.assistance {
+    margin-top: 20px;
+    color: #333;
+}
+
+.assistance a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.assistance a:hover {
+    text-decoration: underline;
+}
+
+.btn-home {
+    background: #ffe600;
+    color: black;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: box-shadow 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn-home:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
+}
+
 /* ========== Responsive Design ========== */
 @media (max-width: 1199px) {
     .main-content {
@@ -205,6 +308,10 @@ body {
         margin-left: 200px;
         width: calc(100% - 200px);
         padding: 20px;
+    }
+    
+    .payment-container {
+        width: 95%;
     }
 }
 
@@ -232,6 +339,16 @@ body {
         margin-top: 15px;
         margin-left: 0 !important;
     }
+    
+    .payment-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .circles {
+        justify-content: center;
+    }
 }
 
 @media (max-width: 575px) {
@@ -246,5 +363,14 @@ body {
     
     .title {
         font-size: 22px !important;
+    }
+    
+    .payment-container {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .payment-message {
+        font-size: 14px;
     }
 }

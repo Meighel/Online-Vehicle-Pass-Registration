@@ -81,6 +81,14 @@ def form1_view(request):
 def default_dashboard(request):
     return render(request, "User Dashboard/User_Dashboard.html")
 
+@login_required
+def user_application(request):
+    return render(request, "User Dashboard/User_Application.html")
+
+@login_required
+def user_pass_status(request):
+    return render(request, "User Dashboard/User_Pass_Status.html")
+
 # Admin Page View 
 @login_required
 def admin_dashboard(request):

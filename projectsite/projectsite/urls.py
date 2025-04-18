@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
-    default_dashboard, 
+    #form1_view,
+    default_dashboard, user_pass_status, user_application,
     security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, SecurityUpdateApplication, security_manage_inspection, security_manage_stickers, security_report,
     cashier_dashboard, cashierViewPayment, cashierUpdatePayment, cashierViewTransaction, cashier_report,
     admin_dashboard, AdminViewUser, AdminCreateUser, AdminUpdateUser, AdminDeleteUser, AdminViewSpecificUser,
@@ -23,6 +24,9 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"), 
     
     path("dashboard/user/", default_dashboard, name="default_dashboard"),
+    path("dashboard/user/application/", user_application, name="user_application"),
+    #path("dashboard/user/application/form1", form1_view, name="form1"),
+    path("dashboard/user/pass_status/", user_pass_status, name="user_pass_status"),
     
     
     path("dashboard/security/", security_dashboard, name="security_dashboard"),

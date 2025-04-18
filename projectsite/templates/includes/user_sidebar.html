@@ -27,15 +27,15 @@
             </a>
         </li>
         <li data-menu="payment" {% if request.path == application_url %}class="active"{% endif %}>
-            <a href="#">
+            <a href="{% url 'user_application' %}">
                 <img src="{% static 'images/application.png' %}" alt="Application" width="30">
                 <span>Application</span>
             </a>
         </li>
-        <li data-menu="transactions" {% if request.path == pass_status_url %}class="active"{% endif %}>
-            <a href="#">
+        <li data-menu="status" {% if request.path == pass_status_url %}class="active"{% endif %}>
+            <a href="{% url 'user_pass_status' %}">
                 <img src="{% static 'images/passes.png' %}" alt="Status" width="30">
-                <span>Status</span>
+                <span>Pass Status</span>
             </a>
         </li>
         <li data-menu="settings" {% if request.path == settings_url %}class="active"{% endif %}>
