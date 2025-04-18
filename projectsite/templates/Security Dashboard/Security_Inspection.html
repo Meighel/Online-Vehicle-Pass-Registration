@@ -76,10 +76,10 @@
                         <td>{{ applicant.additional_notes }}</td>
                         <td>
                             <!-- Trigger approve -->
-                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal" data-id="{{ inspection.id }}">Approve</button>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal" data-id="{{ applicant.id }}">Approve</button>
 
                             <!-- Trigger reject -->
-                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal" data-id="{{ inspection.id }}">Reject</button>
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal" data-id="{{ applicant.id }}">Reject</button>
                         </td>
                     </tr>
                 {% endfor %}

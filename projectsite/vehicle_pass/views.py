@@ -289,28 +289,32 @@ class SecurityViewInspectionReports(CustomLoginRequiredMixin, ListView):
 
 def handle_inspection_action(request):
     if request.method == "POST":
-        form = InspectionApprovalForm(request.POST)
-        if form.is_valid():
-            action = form.cleaned_data['action']
-            inspection_id = form.cleaned_data['inspection_id']
-            notes = form.cleaned_data['additional_notes']
-
-            inspection = get_object_or_404(InspectionReport, id=inspection_id)
-            inspection.additional_notes = notes
-
-            if action == 'approve':
-                inspection.is_approved = True
-                inspection.remarks = 'sticker released'
-            elif action == 'reject':
-                inspection.is_approved = False
-                inspection.remarks = 'application declined'
-
-            inspection.save()
-            messages.success(request, f"Inspection {action}d successfully.")
+        inspection_id = request.POST.get('inspection_id')
+        action = request.POST.get('action')
+        additional_notes = request.POST.get('additional_notes', '')
+        
+        if inspection_id and action:
+            try:
+                inspection = InspectionReport.objects.get(id=inspection_id)
+                inspection.additional_notes = additional_notes
+                
+                if action == 'approve':
+                    inspection.is_approved = True
+                    inspection.remarks = 'sticker_released'
+                elif action == 'reject':
+                    inspection.is_approved = False
+                    inspection.remarks = 'application_declined'
+                    
+                inspection.save()
+                messages.success(request, f"Inspection {action}d successfully.")
+            except InspectionReport.DoesNotExist:
+                messages.error(request, "Inspection record not found.")
+            except Exception as e:
+                messages.error(request, f"Error: {str(e)}")
         else:
-            messages.error(request, "There was an error processing your request.")
+            messages.error(request, "Missing required parameters.")
     
-    return redirect('security_manage_inspection') 
+    return redirect('security_manage_inspection')
 
 class SecurityViewStickers(CustomLoginRequiredMixin, ListView):
     model = VehiclePass

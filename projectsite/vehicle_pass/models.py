@@ -216,10 +216,10 @@ class PaymentTransaction(BaseModel):
  
 class InspectionReport(BaseModel):
     REMARK_CHOICES = [
-        ('to be inspected', 'To Be Inspected'),
-        ('sticker released', 'Sticker Released'),
-        ('application declined', 'Application Declined'),
-        ('request refund', 'To Request Refund'),
+        ('to_be_inspected', 'To Be Inspected'),
+        ('sticker_released', 'Sticker Released'),
+        ('application_declined', 'Application Declined'),
+        ('request_refund', 'To Request Refund'),
     ]
 
     payment_number = models.ForeignKey(PaymentTransaction, on_delete=models.CASCADE)
