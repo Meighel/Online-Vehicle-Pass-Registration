@@ -2,6 +2,7 @@ from django import forms
 from .models import (UserProfile,
                      PaymentTransaction,
                      Registration,
+                     Vehicle,
                      InspectionReport,
 )
 from django.contrib.auth.hashers import make_password
@@ -44,6 +45,32 @@ class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Registration
         fields = ['status']
+        
+
+class VehicleRegistrationStep1Form(forms.Form):
+    first_name = forms.CharField(max_length=100, label='First Name')
+    middle_name = forms.CharField(max_length=100, required=False, label='Middle Name')
+    last_name = forms.CharField(max_length=100, label='Last Name')
+    corporate_email = forms.EmailField(label='Corporate Email')
+    role = forms.ChoiceField(choices=[('student', 'Student'), ('faculty', 'Faculty')], label='School Role')
+    driver_license_number = forms.CharField(max_length=100, label="Driver's License Number")
+    vehicle_type = forms.ChoiceField(choices=[('car', 'Car'), ('motorbike', 'Motorbike')], label='Vehicle Type')
+    model = forms.CharField(max_length=100, label='Vehicle Model')
+    plate_number = forms.CharField(max_length=100, label='Plate Number')
+    chassis_number = forms.CharField(max_length=100, label='Chassis Number')
+    or_number = forms.CharField(max_length=100, label='OR Number')
+    cr_number = forms.CharField(max_length=100, label='CR Number')
+
+class VehicleRegistrationStep2Form(forms.Form):
+    owner = forms.ChoiceField(choices=[('yes', 'Yes'), ('no', 'No')], label="Are you the owner of this vehicle?")
+    owner_first_name = forms.CharField(max_length=100, required=False, label="Owner's First Name")
+    owner_middle_name = forms.CharField(max_length=100, required=False, label="Owner's Middle Name")
+    owner_last_name = forms.CharField(max_length=100, required=False, label="Owner's Last Name")
+    owner_contact_number = forms.CharField(max_length=15, required=False, label="Owner's Contact Number")
+
+class VehicleRegistrationStep3Form(forms.Form):
+    google_drive_link = forms.URLField(label='Google Folder Link')
+
 
 class InspectionApprovalForm(forms.ModelForm):
     class Meta:

@@ -1,9 +1,11 @@
 from django.contrib import admin
 from django.urls import path, include
+from vehicle_pass import views
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
     #form1_view,
     default_dashboard, user_pass_status, user_application,
+    vehicle_registration_step_1, vehicle_registration_step_2, vehicle_registration_step_3, 
     security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, SecurityViewStickers, 
     SecurityUpdateApplication, SecurityViewInspectionReports, security_report,
     handle_inspection_action,
@@ -15,9 +17,9 @@ from vehicle_pass.views import (
     AdminViewApplication, AdminViewSpecificApplication, AdminUpdateApplication,
     admin_manage_application, admin_manage_passes, admin_report,
     # admin_transaction, 
-    form1_view,
     home
 )
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +30,9 @@ urlpatterns = [
     
     path("dashboard/user/", default_dashboard, name="default_dashboard"),
     path("dashboard/user/application/", user_application, name="user_application"),
-    #path("dashboard/user/application/form1", form1_view, name="form1"),
+    path("dashboard/user/application/step-1/", views.vehicle_registration_step_1, name="vehicle_registration_step_1"),
+    path("dashboard/user/application/step-2/", views.vehicle_registration_step_2, name="vehicle_registration_step_2"),
+    path("dashboard/user/application/step-3/", views.vehicle_registration_step_3, name="vehicle_registration_step_3"),
     path("dashboard/user/pass_status/", user_pass_status, name="user_pass_status"),
     
     
@@ -50,7 +54,7 @@ urlpatterns = [
 
     
     path("dashboard/admin/", admin_dashboard, name="admin_dashboard"),
-    path('form1/', form1_view, name='form1'),
+    
     
     #ADMIN USER CRUD
     path("dashboard/admin/manage_users/add/", AdminCreateUser.as_view(), name="admin_create_user"),
@@ -70,5 +74,8 @@ urlpatterns = [
     path("dashboard/admin/manage_application/", AdminViewApplication.as_view(), name="admin_manage_application"),
     
     path("dashboard/admin/manage_passes/", admin_manage_passes, name="admin_manage_passes"),
-    path("dashboard/admin/manage_report/", admin_report, name="admin_report"),
+    path("dashboard/admin/manage_report/", admin_report, name="admin_report"), path("dashboard/user/application/step-1/", views.vehicle_registration_step_1, name="vehicle_registration_step_1"),
+    path("dashboard/user/application/step-2/", views.vehicle_registration_step_2, name="vehicle_registration_step_2"),
+    path("dashboard/user/application/step-3/", views.vehicle_registration_step_3, name="vehicle_registration_step_3"),
+    path("dashboard/user/application/complete/", views.registration_complete, name="registration_complete"),
 ]

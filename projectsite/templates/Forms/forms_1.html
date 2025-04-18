@@ -1,99 +1,96 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Apply for Pass</title>
-  <link rel="stylesheet" href="../../static/css/forms_style.css">
-  <script src="../../static/javascript/forms.js" defer></script>
+  <link rel="stylesheet" href="{% static 'css/forms_style.css' %}">
+  <script src="{% static 'javascript/forms.js' %}" defer></script>
 </head>
 <body>
   <div class="container">
-    <div class="welcome form1-welcome">Welcome, User_1!</div>
+    <div class="welcome form3-welcome">Welcome, {{ user.username }}!</div>
     <h2 class="form1-h2">Registration for Vehicle Pass (1/3)</h2>
-    
-    <form id="vehicle-form">
+
+    <form method="POST">
+      {% csrf_token %}
+      
       <div class="form1-name-group">
         <div class="form-group form1-form-group">
-          <label>First Name</label>
-          <input type="text" class="form-control" placeholder="Enter First Name" required>
+          <label for="{{ form.first_name.id_for_label }}">First Name</label>
+          {{ form.first_name }} <!-- Render the field -->
         </div>
-        
+
         <div class="form-group form1-form-group">
-          <label>Middle Name</label>
-          <input type="text" class="form-control" placeholder="Enter Middle Name">
+          <label for="{{ form.middle_name.id_for_label }}">Middle Name</label>
+          {{ form.middle_name }}
         </div>
-        
+
         <div class="form-group form1-form-group">
-          <label>Last Name</label>
-          <input type="text" class="form-control" placeholder="Enter Last Name" required>
+          <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+          {{ form.last_name }}
         </div>
       </div>
 
       <div class="form1-aligned-group">
         <div class="form-group form1-form-group">
-          <label>Corporate Email</label>
-          <input type="email" placeholder="Enter Corporate Email" required>
+          <label for="{{ form.corporate_email.id_for_label }}">Corporate Email</label>
+          {{ form.corporate_email }}
         </div>
 
         <div class="form-group form1-form-group">
-          <label>School Role:</label>
-          <div class="form1-radio-group">
-            <label><input type="radio" name="role" required> Student</label>
-            <label><input type="radio" name="role" required> Faculty</label>
-          </div>
+          <label for="{{ form.role.id_for_label }}">School Role:</label>
+          {{ form.role }}
         </div>
 
         <div class="form-group form1-form-group">
-          <label>Driver License's Number</label>
-          <input type="text" placeholder="Enter Driver License Number" required>
-        </div>
-      </div>
-
-      <h2 class="form1-h2">Vehicle Details</h2>
-
-      <div class="form1-aligned-group">
-        <div class="form-group form1-form-group">
-          <label>Type:</label>
-          <div class="form1-radio-group">
-            <label><input type="radio" name="type" required> Car</label>
-            <label><input type="radio" name="type" required> Motorbike</label>
-          </div>
-        </div>
-
-        <div class="form-group form1-form-group">
-          <label>Model</label>
-          <input type="text" placeholder="Enter Vehicle Model" required>
-        </div>
-
-        <div class="form-group form1-form-group">
-          <label>Plate Number</label>
-          <input type="text" placeholder="Enter Plate Number" required>
+          <label for="{{ form.driver_license_number.id_for_label }}">Driver License's Number</label>
+          {{ form.driver_license_number }}
         </div>
       </div>
 
       <div class="form1-aligned-group">
         <div class="form-group form1-form-group">
-          <label>Chassis Number</label>
-          <input type="text" placeholder="Enter Chassis Number" required>
+          <label for="{{ form.vehicle_type.id_for_label }}">Vehicle Type:</label>
+          {{ form.vehicle_type }}
         </div>
 
         <div class="form-group form1-form-group">
-          <label>OR Number</label>
-          <input type="text" placeholder="Enter OR Number" required>
+          <label for="{{ form.model.id_for_label }}">Model</label>
+          {{ form.model }}
         </div>
 
         <div class="form-group form1-form-group">
-          <label>CR Number</label>
-          <input type="text" placeholder="Enter CR Number" required>
+          <label for="{{ form.plate_number.id_for_label }}">Plate Number</label>
+          {{ form.plate_number }}
         </div>
       </div>
 
-      <a href="../User Dashboard/User_Dashboard.html">
-        <button type="button" class="back-btn form1-back-btn">Back</button>
+      <div class="form1-aligned-group">
+        <div class="form-group form1-form-group">
+          <label for="{{ form.chassis_number.id_for_label }}">Chassis Number</label>
+          {{ form.chassis_number }}
+        </div>
+
+        <div class="form-group form1-form-group">
+          <label for="{{ form.or_number.id_for_label }}">OR Number</label>
+          {{ form.or_number }}
+        </div>
+
+        <div class="form-group form1-form-group">
+          <label for="{{ form.cr_number.id_for_label }}">CR Number</label>
+          {{ form.cr_number }}
+        </div>
+      </div>
+
+      <a href="{% url 'default_dashboard' %}">
+        <button class="back-btn form2-back-btn" type="button">Back</button>
       </a>
-      <a href="../Forms/forms_2.html">
-        <button type="button" class="btn form1-btn" id="form1-next-btn" disabled>Next</button>
+  
+      <a href="{% url 'vehicle_registration_step_2' %}">
+        <button class="btn form2-btn" type="button" id="next-btn" >Next</button>
       </a>
     </form>
   </div>

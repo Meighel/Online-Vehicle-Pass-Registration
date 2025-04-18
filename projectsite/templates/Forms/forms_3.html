@@ -1,15 +1,18 @@
+{% load static %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Apply for Pass (3/3)</title>
-  <link rel="stylesheet" href="../../static/css/forms_style.css">
-  <script src="../../static/javascript/forms.js" defer></script>
+  <link rel="stylesheet" href="{% static 'css/forms_style.css' %}">
+  <script src="{% static 'javascript/forms.js' %}" defer></script>
 </head>
 <body>
   <div class="container">
-    <div class="welcome form3-welcome">Welcome, User_1!</div>
+    <div class="welcome form3-welcome">Welcome, {{ user.username }}!</div>
     <h2 class="form3-h2">Registration for Vehicle Pass (3/3)</h2>
 
     <div class="form3-note">
@@ -40,19 +43,23 @@
       </div>
 
       <p><strong>Share Google Folder Link:</strong></p>
-      <div class="form-group form3-form-group">
-        <label>Google Folder Link</label>
-        <input type="url" placeholder="Paste Google Drive Folder Link Here">
-      </div>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group form3-form-group">
+          {{ form.google_folder_link }}
+        </div>
+
+        <div class="form-navigation">
+          <a href="{% url 'vehicle_registration_step_2' %}">
+            <button class="back-btn form3-back-btn" type="button">Back</button>
+          </a>
+
+          <a href="{% url 'user_pass_status' %}">
+            <button class="btn form2-btn" type="button" id="next-btn" >Next</button>
+          </a>
+        </div>
+      </form>
     </div>
-
-    <a href="../Forms/forms_2.html">
-      <button class="back-btn form3-back-btn" type="button">Back</button>
-    </a>
-
-    <a href="../User Dashboard/User_Pass_Status.html">
-      <button class="btn form3-btn" type="button" disabled>Next</button>
-    </a>
   </div>
 </body>
 </html>

@@ -1,55 +1,61 @@
+{%  load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Apply for Pass (2/3)</title>
-  <link rel="stylesheet" href="../../static/css/forms_style.css">
-  <script src="../../static/javascript/forms.js" defer></script>
+  <link rel="stylesheet" href="{% static 'css/forms_style.css' %}">
+  <script src="{% static 'javascript/forms.js' %}" defer></script>
 </head>
 <body>
   <div class="container">
-    <div class="welcome form2-welcome">Welcome, User_1!</div>
+    <div class="welcome form3-welcome">Welcome, {{ user.username }}!</div>
     <h2 class="form2-h2">Registration for Vehicle Pass (2/3)</h2>
 
-    <div class="form-group form2-form-group">
-      <label>Are you the owner of this vehicle?</label>
-      <div class="form2-radio-group">
-        <label><input type="radio" name="owner" value="yes"> Yes, I am the owner of the vehicle</label>
-        <label><input type="radio" name="owner" value="no"> No, I am registering on behalf of the owner</label>
-      </div>
-    </div>
-
-    <div id="owner-details" class="form2-owner-details">
-      <h3>If you choose "No", please provide the owner's details below:</h3>
-      <div class="form2-aligned-group">
-        <div class="form-group form2-form-group">
-          <label>Owner's First Name</label>
-          <input type="text" placeholder="Enter First Name" required>
-        </div>
-        <div class="form-group form2-form-group">
-          <label>Owner's Middle Name</label>
-          <input type="text" placeholder="Enter Middle Name" required>
-        </div>
-        <div class="form-group form2-form-group">
-          <label>Owner's Last Name</label>
-          <input type="text" placeholder="Enter Last Name" required>
-        </div>
-      </div>
-
+    <form method="POST">
+      {% csrf_token %}
+      
       <div class="form-group form2-form-group">
-        <label>Owner's Contact Number</label>
-        <input type="tel" placeholder="Enter Contact Number" required>
+        <label for="{{ form.owner.id_for_label }}">Are you the owner of this vehicle?</label>
+        {{ form.owner }}
       </div>
-    </div>
 
-    <a href="../Forms/forms_1.html">
-      <button class="back-btn form2-back-btn" type="button">Back</button>
-    </a>
+      <div id="owner-details" class="form2-owner-details">
+        {% if form.owner.value == 'no' %}
+          <div class="form2-aligned-group">
+            <div class="form-group form2-form-group">
+              <label for="{{ form.owner_first_name.id_for_label }}">Owner's First Name</label>
+              {{ form.owner_first_name }}
+            </div>
+            <div class="form-group form2-form-group">
+              <label for="{{ form.owner_middle_name.id_for_label }}">Owner's Middle Name</label>
+              {{ form.owner_middle_name }}
+            </div>
+            <div class="form-group form2-form-group">
+              <label for="{{ form.owner_last_name.id_for_label }}">Owner's Last Name</label>
+              {{ form.owner_last_name }}
+            </div>
+          </div>
 
-    <a href="../Forms/forms_3.html">
-      <button class="btn form2-btn" type="button" disabled>Next</button>
-    </a>
+          <div class="form-group form2-form-group">
+            <label for="{{ form.owner_contact_number.id_for_label }}">Owner's Contact Number</label>
+            {{ form.owner_contact_number }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="form-navigation">
+        <a href="{% url 'vehicle_registration_step_1' %}">
+          <button class="back-btn form3-back-btn" type="button">Back</button>
+        </a>
+
+        <a href="{% url 'vehicle_registration_step_3' %}">
+          <button class="btn form2-btn" type="button" id="next-btn" >Next</button>
+        </a>
+      </div>
+    </form>
   </div>
 </body>
 </html>

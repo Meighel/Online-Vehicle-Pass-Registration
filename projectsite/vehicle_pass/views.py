@@ -6,6 +6,7 @@ from .forms import (UserSignupForm, UserProfileForm,
                     PaymentTransactionForm,
                     ApplicationForm,
                     InspectionApprovalForm,
+                    VehicleRegistrationStep1Form, VehicleRegistrationStep2Form, VehicleRegistrationStep3Form,
 )
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
 from .models import Vehicle, Registration, VehiclePass, PaymentTransaction
@@ -74,10 +75,6 @@ def redirect_user_dashboard(user):
     
     return redirect("default_dashboard")
 
-@login_required
-def form1_view(request):
-    return render(request, 'Forms/form1.html')
-
 
 @login_required
 def default_dashboard(request):
@@ -86,6 +83,45 @@ def default_dashboard(request):
 @login_required
 def user_application(request):
     return render(request, "User Dashboard/User_Application.html")
+
+def vehicle_registration_step_1(request):
+    if request.method == 'POST':
+        form = VehicleRegistrationStep1Form(request.POST)
+        if form.is_valid():
+            # Handle form data here or store it in the session
+            request.session['step1_data'] = form.cleaned_data
+            return redirect('vehicle_registration_step_2')
+    else:
+        form = VehicleRegistrationStep1Form()
+
+    return render(request, 'forms/forms_1.html', {'form': form})
+
+def vehicle_registration_step_2(request):
+    if request.method == 'POST':
+        form = VehicleRegistrationStep2Form(request.POST)
+        if form.is_valid():
+            # Handle form data here or store it in the session
+            request.session['step2_data'] = form.cleaned_data
+            return redirect('vehicle_registration_step_3')
+    else:
+        form = VehicleRegistrationStep2Form()
+
+    return render(request, 'forms/forms_2.html', {'form': form})
+
+def vehicle_registration_step_3(request):
+    if request.method == 'POST':
+        form = VehicleRegistrationStep3Form(request.POST)
+        if form.is_valid():
+            # Handle form data here or store it in the session
+            request.session['step3_data'] = form.cleaned_data
+            return redirect('user_pass_status')
+    else:
+        form = VehicleRegistrationStep3Form()
+
+    return render(request, 'forms/forms_3.html', {'form': form})
+
+def registration_complete(request):
+    return render(request, 'User Dasgboard/User_Pass_Status')
 
 @login_required
 def user_pass_status(request):
