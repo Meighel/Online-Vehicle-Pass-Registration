@@ -5,7 +5,7 @@ from vehicle_pass.views import (
     login_view, logout_view, signup_view,
     #form1_view,
     default_dashboard, user_pass_status, user_application,
-    vehicle_registration_step_1, vehicle_registration_step_2, vehicle_registration_step_3, 
+    vehicle_registration_step1, vehicle_registration_step2, vehicle_registration_step3, 
     security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, SecurityViewStickers, 
     SecurityUpdateApplication, SecurityViewInspectionReports, security_report,
     handle_inspection_action,
@@ -30,9 +30,9 @@ urlpatterns = [
     
     path("dashboard/user/", default_dashboard, name="default_dashboard"),
     path("dashboard/user/application/", user_application, name="user_application"),
-    path("dashboard/user/application/step-1/", views.vehicle_registration_step_1, name="vehicle_registration_step_1"),
-    path("dashboard/user/application/step-2/", views.vehicle_registration_step_2, name="vehicle_registration_step_2"),
-    path("dashboard/user/application/step-3/", views.vehicle_registration_step_3, name="vehicle_registration_step_3"),
+    path("dashboard/user/application/step-1/", vehicle_registration_step1, name="vehicle_registration_step_1"),
+    path("dashboard/user/application/step-2/", vehicle_registration_step2, name="vehicle_registration_step_2"),
+    path("dashboard/user/application/step-3/", vehicle_registration_step3, name="vehicle_registration_step_3"),
     path("dashboard/user/pass_status/", user_pass_status, name="user_pass_status"),
     
     

@@ -84,44 +84,64 @@ def default_dashboard(request):
 def user_application(request):
     return render(request, "User Dashboard/User_Application.html")
 
-def vehicle_registration_step_1(request):
+def vehicle_registration_step1(request):
     if request.method == 'POST':
         form = VehicleRegistrationStep1Form(request.POST)
         if form.is_valid():
-            # Handle form data here or store it in the session
-            request.session['step1_data'] = form.cleaned_data
-            return redirect('vehicle_registration_step_2')
+            user, vehicle = form.save()
+            # Store IDs in session
+            request.session['user_id'] = user.id
+            request.session['vehicle_id'] = vehicle.id
+            return redirect('registration_step2')
     else:
         form = VehicleRegistrationStep1Form()
+    
+    return render(request, 'registration_step1.html', {'form': form})
 
-    return render(request, 'forms/forms_1.html', {'form': form})
-
-def vehicle_registration_step_2(request):
+def vehicle_registration_step2(request):
+    # Get stored objects from step 1
+    try:
+        user = UserProfile.objects.get(id=request.session.get('user_id'))
+        vehicle = Vehicle.objects.get(id=request.session.get('vehicle_id'))
+    except (UserProfile.DoesNotExist, Vehicle.DoesNotExist):
+        return redirect('registration_step1')
+    
     if request.method == 'POST':
         form = VehicleRegistrationStep2Form(request.POST)
         if form.is_valid():
-            # Handle form data here or store it in the session
-            request.session['step2_data'] = form.cleaned_data
-            return redirect('vehicle_registration_step_3')
+            form.save(user=user, vehicle=vehicle)
+            return redirect('registration_step3')
     else:
         form = VehicleRegistrationStep2Form()
+    
+    return render(request, 'registration_step2.html', {'form': form})
 
-    return render(request, 'forms/forms_2.html', {'form': form})
-
-def vehicle_registration_step_3(request):
+def vehicle_registration_step3(request):
+    # Get stored objects from previous steps
+    try:
+        user = UserProfile.objects.get(id=request.session.get('user_id'))
+        vehicle = Vehicle.objects.get(id=request.session.get('vehicle_id'))
+    except (UserProfile.DoesNotExist, Vehicle.DoesNotExist):
+        return redirect('registration_step1')
+    
     if request.method == 'POST':
         form = VehicleRegistrationStep3Form(request.POST)
         if form.is_valid():
-            # Handle form data here or store it in the session
-            request.session['step3_data'] = form.cleaned_data
-            return redirect('user_pass_status')
+            registration = form.save(user=user, vehicle=vehicle)
+            # Clear session data
+            if 'user_id' in request.session:
+                del request.session['user_id']
+            if 'vehicle_id' in request.session:
+                del request.session['vehicle_id']
+            
+            return redirect('registration_complete', registration_id=registration.registrationNumber)
     else:
         form = VehicleRegistrationStep3Form()
-
-    return render(request, 'forms/forms_3.html', {'form': form})
+    
+    return render(request, 'registration_step3.html', {'form': form})
 
 def registration_complete(request):
-    return render(request, 'User Dasgboard/User_Pass_Status')
+    return render(request, 'User Dashboard/User_Pass_Status')
 
 @login_required
 def user_pass_status(request):
