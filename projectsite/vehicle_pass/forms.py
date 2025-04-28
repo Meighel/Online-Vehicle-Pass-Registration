@@ -4,6 +4,7 @@ from .models import (UserProfile,
                      Registration,
                      Vehicle,
                      InspectionReport,
+                     CashierProfile,
 )
 from django.contrib.auth.hashers import make_password
 
@@ -39,7 +40,37 @@ class UserProfileForm(forms.ModelForm):
 class PaymentTransactionForm(forms.ModelForm):
     class Meta:
         model = PaymentTransaction
-        fields = ['status']
+        fields = ['status', 'cashier']
+        labels = {
+            'cashier': 'Cashier'  # Explicit label to control display
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if self.user:
+            try:
+                # Get UserProfile instance
+                if isinstance(self.user, str):
+                    user_profile = UserProfile.objects.get(id=self.user)
+                else:
+                    user_profile = self.user
+                
+                # Get cashier profile
+                cashier_profile = CashierProfile.objects.get(user=user_profile)
+                
+                # Set the initial value for the cashier field
+                self.fields['cashier'].initial = cashier_profile
+                
+                # Important: Make it read-only but VISIBLE (not hidden)
+                self.fields['cashier'].disabled = True
+                
+            except CashierProfile.DoesNotExist:
+                self.fields['cashier'].initial = None
+
+
+
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
