@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     UserProfile, SecurityProfile, CashierProfile, AdminProfile,
-    Vehicle, Registration, VehiclePass,
+    Vehicle, Registration, VehiclePass, Owner,
     PaymentTransaction, InspectionReport, Notification, Announcement
 )
 
@@ -67,8 +67,8 @@ class AdminProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Vehicle)
 class VehicleAdmin(admin.ModelAdmin):
-    list_display = ('owner', 'plateNumber', 'type', 'model', 'color')
-    search_fields = ('plateNumber', 'owner__firstname', 'owner__lastname')
+    list_display = ('self_ownership', 'legal_owner', 'plateNumber', 'type', 'model', 'color')
+    search_fields = ('plateNumber', 'self_ownership__firstname', 'self_ownership__lastname','legal_owner__owner_firstname', 'legal_owner__owner_lastname',)
     list_filter = ('color', 'model', 'type')
 
 
@@ -77,6 +77,14 @@ class RegistrationAdmin(admin.ModelAdmin):
     list_display = ('registrationNumber', 'user', 'vehicle', 'status', 'files')
     search_fields = ('registrationNumber', 'user__firstname', 'user__lastname')
     list_filter = ('status', 'user__department')
+
+
+@admin.register(Owner)
+class OwnerAdmin(admin.ModelAdmin):
+    list_display = ('owner_firstname', 'owner_middlename', 'owner_lastname', 'owner_suffix', 'relationship_to_owner')
+    search_fields = ('owner_firstname', 'owner_middlename', 'owner_lastname', 'relationship_to_owner')
+    list_filter = ('owner_firstname', 'owner_lastname', 'relationship_to_owner')
+                     
 
 
 @admin.register(VehiclePass)

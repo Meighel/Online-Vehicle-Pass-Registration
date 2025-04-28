@@ -200,7 +200,7 @@ class adminUpdatePayment(UpdateView):
 @login_required
 def admin_manage_passes(request):
     # Fetch all vehicle passes and related data
-    vehicle_passes = VehiclePass.objects.select_related('vehicle__owner').all()
+    vehicle_passes = VehiclePass.objects.select_related('vehicle__self_ownership').all()
 
     context = {
         'vehicle_passes': vehicle_passes,
@@ -249,7 +249,7 @@ class cashierViewPayment(CustomLoginRequiredMixin, ListView):
     model = PaymentTransaction
     template_name = "Cashier Dashboard/Cashier_Payment.html"
     context_object_name = 'payment_list'
-    paginate_by = 10
+    paginate_by = 5
 
     def get_queryset(self):
         return PaymentTransaction.objects.filter(status='pending')
@@ -259,10 +259,16 @@ class cashierViewTransaction(CustomLoginRequiredMixin, ListView):
     model = PaymentTransaction
     template_name = "Cashier Dashboard/Cashier_Transaction.html"
     context_object_name = 'transaction_list'
-    paginate_by = 10
+    paginate_by = 5
 
     def get_queryset(self):
         return PaymentTransaction.objects.exclude(status='pending')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = PaymentTransactionForm(user=self.request.user)
+        return context
+
 
 
 class cashierUpdatePayment(CustomLoginRequiredMixin, UpdateView):

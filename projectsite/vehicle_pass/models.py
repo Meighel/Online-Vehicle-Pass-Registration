@@ -2,12 +2,9 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.timezone import now
 from datetime import timedelta
-from django.utils.crypto import get_random_string
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils import timezone
 import pytz
-import random 
-import string
 
 
 class BaseModel(models.Model):
@@ -82,10 +79,16 @@ class AdminProfile(BaseModel):
 
 class Owner(BaseModel):
     owner_firstname = models.CharField(max_length=50)
-    owner_middlename = models.CharField(max_length=25)
+    owner_middlename = models.CharField(max_length=25, null=True)
     owner_lastname = models.CharField(max_length=25)
     owner_suffix = models.CharField(max_length=5, null=True, blank=True)
     relationship_to_owner = models.CharField(max_length=25)
+
+    def __str__(self):
+        full_name = f"{self.owner_firstname} {self.owner_middlename or ''} {self.owner_lastname}"
+        if self.owner_suffix:
+            full_name += f", {self.owner_suffix}"
+        return full_name.strip()
 
 class Vehicle(BaseModel):
     self_ownership = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
@@ -102,8 +105,8 @@ class Vehicle(BaseModel):
         return f"{self.plateNumber}"  
     
     def clean(self):
-        if Vehicle.objects.filter(owner=self.owner).count() >= 2:
-            raise ValidationError({'owner': 'You can only register up to two vehicles.'})
+        if Vehicle.objects.filter(self_ownership=self.self_ownership).count() >= 2:
+            raise ValidationError({'self_ownership': 'You can only register up to two vehicles.'})
 
     def save(self, *args, **kwargs):
         self.full_clean() 

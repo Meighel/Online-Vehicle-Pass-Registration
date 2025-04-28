@@ -64,6 +64,7 @@
                                 <th>Department</th>
                                 <th>Program</th>
                                 <th>Plate Number</th>
+                                <th>Owner of the Vehicle</th>
                                 <th>Type</th>
                                 <th>Date Applied</th>
                                 <th>Renewal Date</th>
@@ -72,12 +73,13 @@
                         <tbody>
                             {% for pass in vehicle_passes %}
                             <tr>
-                                <td>{{ pass.vehicle.owner.id }}</td>
-                                <td>{{ pass.vehicle.owner.firstname|upper }}, {{ pass.vehicle.owner.lastname|upper }}</td>
-                                <td>{{ pass.vehicle.owner.college }}</td>
-                                <td>{{ pass.vehicle.owner.department }}</td>
-                                <td>{{ pass.vehicle.owner.program }}</td>
+                                <td>{{ pass.vehicle.self_ownership.id }}</td>
+                                <td>{{ pass.vehicle.self_ownership.firstname|upper }}, {{ pass.vehicle.owner.lastname|upper }}</td>
+                                <td>{{ pass.vehicle.self_ownership.college }}</td>
+                                <td>{{ pass.vehicle.self_ownership.department }}</td>
+                                <td>{{ pass.vehicle.self_ownership.program }}</td>
                                 <td>{{ pass.vehicle.plateNumber }}</td>
+                                <td>{{ pass.vehicle.legal_owner.owner_firstname|upper }}, {{ pass.vehicle.legal_owner.owner_lastname|upper }}</td>
                                 <td>{{ pass.vehicle.type }}</td>
                                 <td>{{ pass.vehicle.created_at|date:"m/d/Y" }}</td>
                                 <td>{{ pass.passExpire|date:"m/d/Y" }}</td>

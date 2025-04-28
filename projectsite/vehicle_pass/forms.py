@@ -4,6 +4,7 @@ from .models import (UserProfile,
                      Registration,
                      Vehicle,
                      InspectionReport,
+                     CashierProfile,
 )
 from django.contrib.auth.hashers import make_password
 
@@ -39,7 +40,22 @@ class UserProfileForm(forms.ModelForm):
 class PaymentTransactionForm(forms.ModelForm):
     class Meta:
         model = PaymentTransaction
-        fields = ['status']
+        fields = ['status', 'cashier']  # 'cashier' will be auto-filled
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Automatically assign the logged-in cashier to the cashier field
+        if 'user' in kwargs:
+            user = kwargs['user']
+            try:
+                # If the user has a related CashierProfile, automatically set it
+                cashier_profile = CashierProfile.objects.get(user=user)
+                self.fields['cashier'].initial = cashier_profile  # Set the initial value
+            except CashierProfile.DoesNotExist:
+                # Handle the case where the user is not a cashier
+                self.fields['cashier'].initial = None
+        # Make the cashier field non-editable
+        self.fields['cashier'].widget.attrs['readonly'] = True
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
