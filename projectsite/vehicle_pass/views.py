@@ -10,7 +10,7 @@ from .forms import (UserSignupForm, UserProfileForm,
 )
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
 from .models import Vehicle, Registration, VehiclePass, PaymentTransaction
-from .models import InspectionReport, Notification, Announcement
+from .models import InspectionReport, Notification, Announcement, Owner
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
@@ -106,41 +106,144 @@ def default_dashboard(request):
 def user_application(request):
     return render(request, "User Dashboard/User_Application.html")
 
+@login_required
 def vehicle_registration_step_1(request):
+    user_id = request.session.get("user_id")
+    user = UserProfile.objects.get(id=user_id)
+    
     if request.method == 'POST':
         form = VehicleRegistrationStep1Form(request.POST)
         if form.is_valid():
-            # Handle form data here or store it in the session
-            request.session['step1_data'] = form.cleaned_data
+            # Store data in session for later use
+            step1_data = form.cleaned_data
+            request.session['step1_data'] = {
+                'first_name': step1_data['first_name'],
+                'middle_name': step1_data['middle_name'],
+                'last_name': step1_data['last_name'],
+                'corporate_email': step1_data['corporate_email'],
+                'role': step1_data['role'],
+                'driver_license_number': step1_data['driver_license_number'],
+                'vehicle_type': step1_data['vehicle_type'],
+                'model': step1_data['model'],
+                'plate_number': step1_data['plate_number'],
+                'chassis_number': step1_data['chassis_number'],
+                'or_number': step1_data['or_number'],
+                'cr_number': step1_data['cr_number']
+            }
             return redirect('vehicle_registration_step_2')
     else:
-        form = VehicleRegistrationStep1Form()
+        # Pre-fill form with user data if available
+        initial_data = {
+            'first_name': user.firstname,
+            'middle_name': user.middle_name,
+            'last_name': user.lastname,
+            'corporate_email': user.corporate_email,
+            'role': user.role,
+            'driver_license_number': user.dl_number
+        }
+        form = VehicleRegistrationStep1Form(initial=initial_data)
 
-    return render(request, 'forms/forms_1.html', {'form': form})
+    context = {
+        'form': form,
+        'user': user
+    }
+    return render(request, 'forms/forms_1.html', context)
 
+@login_required
 def vehicle_registration_step_2(request):
+    user_id = request.session.get("user_id")
+    user = UserProfile.objects.get(id=user_id)
+    
     if request.method == 'POST':
         form = VehicleRegistrationStep2Form(request.POST)
         if form.is_valid():
-            # Handle form data here or store it in the session
-            request.session['step2_data'] = form.cleaned_data
+            # Store owner data in session
+            step2_data = form.cleaned_data
+            request.session['step2_data'] = {
+                'is_owner': step2_data['owner'] == 'yes',
+                'owner_first_name': step2_data.get('owner_first_name', ''),
+                'owner_middle_name': step2_data.get('owner_middle_name', ''),
+                'owner_last_name': step2_data.get('owner_last_name', ''),
+                'owner_contact_number': step2_data.get('owner_contact_number', '')
+            }
             return redirect('vehicle_registration_step_3')
     else:
         form = VehicleRegistrationStep2Form()
 
-    return render(request, 'forms/forms_2.html', {'form': form})
+    context = {
+        'form': form,
+        'user': user
+    }
+    return render(request, 'forms/forms_2.html', context)
 
+@login_required
 def vehicle_registration_step_3(request):
+    user_id = request.session.get("user_id")
+    user = UserProfile.objects.get(id=user_id)
+    
     if request.method == 'POST':
         form = VehicleRegistrationStep3Form(request.POST)
         if form.is_valid():
-            # Handle form data here or store it in the session
-            request.session['step3_data'] = form.cleaned_data
-            return redirect('user_pass_status')
+            google_folder_link = form.cleaned_data['google_drive_link']
+            
+            try:
+                # Get data from previous steps
+                step1_data = request.session.get('step1_data', {})
+                step2_data = request.session.get('step2_data', {})
+                
+                # Save to database
+                # 1. First determine if we need to create an Owner object
+                owner = None
+                if not step2_data.get('is_owner', True):
+                    # Create owner object
+                    owner = Owner.objects.create(
+                        owner_firstname=step2_data['owner_first_name'],
+                        owner_middlename=step2_data['owner_middle_name'],
+                        owner_lastname=step2_data['owner_last_name'],
+                        owner_contact_number=step2_data['owner_contact_number'],
+                        relationship_to_owner="User Relationship"  
+                    )
+                
+                # 2. Create Vehicle object
+                vehicle = Vehicle.objects.create(
+                    self_ownership=user if step2_data.get('is_owner', True) else None,
+                    legal_owner=None if step2_data.get('is_owner', True) else owner,
+                    plateNumber=step1_data['plate_number'],
+                    type=step1_data['vehicle_type'],
+                    model=step1_data['model'],
+                    color="Not Specified",  # You might want to add this to your form
+                    chassisNumber=step1_data['chassis_number'],
+                    OR_Number=step1_data['or_number'],
+                    CR_Number=step1_data['cr_number']
+                )
+                
+                # 3. Create Registration object
+                registration = Registration.objects.create(
+                    user=user,
+                    vehicle=vehicle,
+                    files=google_folder_link,
+                    status='pending'
+                )
+                
+                # Clear session data
+                for key in ['step1_data', 'step2_data']:
+                    if key in request.session:
+                        del request.session[key]
+                
+                messages.success(request, "Vehicle registration submitted successfully!")
+                return redirect('user_pass_status')
+                
+            except Exception as e:
+                messages.error(request, f"Error saving registration: {str(e)}")
+                
     else:
         form = VehicleRegistrationStep3Form()
 
-    return render(request, 'forms/forms_3.html', {'form': form})
+    context = {
+        'form': form,
+        'user': user
+    }
+    return render(request, 'forms/forms_3.html', context)
 
 def registration_complete(request):
     return render(request, 'User Dasgboard/User_Pass_Status')

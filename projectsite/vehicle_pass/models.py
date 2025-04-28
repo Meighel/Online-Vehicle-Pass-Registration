@@ -82,6 +82,7 @@ class Owner(BaseModel):
     owner_middlename = models.CharField(max_length=25, null=True)
     owner_lastname = models.CharField(max_length=25)
     owner_suffix = models.CharField(max_length=5, null=True, blank=True)
+    owner_contact_number = models.CharField(max_length=13, null=True, blank=True)
     relationship_to_owner = models.CharField(max_length=25)
 
     def __str__(self):

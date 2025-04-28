@@ -1,6 +1,8 @@
 from django.shortcuts import redirect
+from functools import wraps
 
 def login_required(view_func):
+    @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if "user_id" not in request.session:
             return redirect("/login")  # Redirect to login if not authenticated

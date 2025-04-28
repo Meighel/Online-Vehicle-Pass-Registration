@@ -81,8 +81,8 @@ class RegistrationAdmin(admin.ModelAdmin):
 
 @admin.register(Owner)
 class OwnerAdmin(admin.ModelAdmin):
-    list_display = ('owner_firstname', 'owner_middlename', 'owner_lastname', 'owner_suffix', 'relationship_to_owner')
-    search_fields = ('owner_firstname', 'owner_middlename', 'owner_lastname', 'relationship_to_owner')
+    list_display = ('owner_firstname', 'owner_middlename', 'owner_lastname', 'owner_suffix', 'owner_contact_number', 'relationship_to_owner')
+    search_fields = ('owner_firstname', 'owner_middlename', 'owner_lastname','owner_contact_number', 'relationship_to_owner')
     list_filter = ('owner_firstname', 'owner_lastname', 'relationship_to_owner')
                      
 
