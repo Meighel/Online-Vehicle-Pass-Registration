@@ -40,22 +40,37 @@ class UserProfileForm(forms.ModelForm):
 class PaymentTransactionForm(forms.ModelForm):
     class Meta:
         model = PaymentTransaction
-        fields = ['status', 'cashier']  # 'cashier' will be auto-filled
+        fields = ['status', 'cashier']
+        labels = {
+            'cashier': 'Cashier'  # Explicit label to control display
+        }
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        # Automatically assign the logged-in cashier to the cashier field
-        if 'user' in kwargs:
-            user = kwargs['user']
+
+        if self.user:
             try:
-                # If the user has a related CashierProfile, automatically set it
-                cashier_profile = CashierProfile.objects.get(user=user)
-                self.fields['cashier'].initial = cashier_profile  # Set the initial value
+                # Get UserProfile instance
+                if isinstance(self.user, str):
+                    user_profile = UserProfile.objects.get(id=self.user)
+                else:
+                    user_profile = self.user
+                
+                # Get cashier profile
+                cashier_profile = CashierProfile.objects.get(user=user_profile)
+                
+                # Set the initial value for the cashier field
+                self.fields['cashier'].initial = cashier_profile
+                
+                # Important: Make it read-only but VISIBLE (not hidden)
+                self.fields['cashier'].disabled = True
+                
             except CashierProfile.DoesNotExist:
-                # Handle the case where the user is not a cashier
                 self.fields['cashier'].initial = None
-        # Make the cashier field non-editable
-        self.fields['cashier'].widget.attrs['readonly'] = True
+
+
+
 
 class ApplicationForm(forms.ModelForm):
     class Meta:

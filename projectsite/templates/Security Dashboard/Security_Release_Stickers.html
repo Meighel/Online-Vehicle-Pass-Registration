@@ -60,18 +60,28 @@
                         <th>Vehicle Pass Number</th>
                         <th>Expiration Date</th>
                         <th>Status</th>
-                        <th>Owner</th>
+                        <th>Vehicle Owner</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for sticker in stickers %}
-                    <tr>
-                        <td>{{ sticker.passNumber }}</td>
-                        <td>{{ sticker.passExpire }}</td>
-                        <td>{{ sticker.status }}</td>
-                        <td>{{ sticker.vehicle.owner.firstname }} {{ sticker.vehicle.owner.middle_name|default_if_none:""|slice:":1"}} {{ sticker.vehicle.owner.lastname }} </td>
-                    </tr>
-                {% endfor %}
+                  <tr>
+                    <td>{{ sticker.passNumber }}</td>
+                    <td>{{ sticker.passExpire }}</td>
+                    <td>{{ sticker.status }}</td>
+                    <td>
+                        {% if sticker.vehicle.self_ownership %}
+                            {{ sticker.vehicle.self_ownership.firstname }} 
+                            {% if sticker.vehicle.self_ownership.middle_name %}{{ sticker.vehicle.self_ownership.middle_name|slice:":1" }}. {% endif %}
+                            {{ sticker.vehicle.self_ownership.lastname }}
+                        {% elif sticker.vehicle.legal_owner %}
+                            {{ sticker.vehicle.legal_owner.owner_firstname }} 
+                            {% if sticker.vehicle.legal_owner.owner_middlename %}{{ sticker.vehicle.legal_owner.owner_middlename|slice:":1" }}. {% endif %}
+                            {{ sticker.vehicle.legal_owner.owner_lastname }}
+                        {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
                 </tbody>          
             </table>
         </section>

@@ -266,9 +266,18 @@ class cashierViewTransaction(CustomLoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = PaymentTransactionForm(user=self.request.user)
+        
+        # Get the user ID from the session
+        user_id = self.request.session.get('user_id')
+        
+        # Get the actual UserProfile instance
+        if user_id:
+            user_profile = UserProfile.objects.get(id=user_id)
+            context['form'] = PaymentTransactionForm(user=user_profile)
+        else:
+            context['form'] = PaymentTransactionForm()
+        
         return context
-
 
 
 class cashierUpdatePayment(CustomLoginRequiredMixin, UpdateView):
