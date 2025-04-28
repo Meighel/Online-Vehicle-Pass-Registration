@@ -78,7 +78,29 @@ def redirect_user_dashboard(user):
 
 @login_required
 def default_dashboard(request):
-    return render(request, "User Dashboard/User_Dashboard.html")
+    user_id = request.session.get("user_id")
+    
+    try:
+        profile = UserProfile.objects.get(id=user_id)
+    except UserProfile.DoesNotExist:
+        profile = None
+    
+    # Get the latest registration
+    try:
+        registration = Registration.objects.filter(user=profile).latest('created_at')
+    except Registration.DoesNotExist:
+        registration = None
+    
+    # Get application history
+    history = Registration.objects.filter(user=profile).order_by('-created_at')
+    
+    context = {
+        'profile': profile,
+        'registration': registration,
+        'history': history,
+    }
+    
+    return render(request, "User Dashboard/User_Dashboard.html", context)
 
 @login_required
 def user_application(request):
