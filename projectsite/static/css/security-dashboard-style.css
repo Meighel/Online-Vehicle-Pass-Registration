@@ -1,0 +1,496 @@
+/* Reset Default Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Set the entire page to have a black background */
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+    display: flex;
+    background-color: black !important;
+    color: white !important; 
+    transition: all 0.3s ease;
+}
+
+
+/* ========================================= */
+/*         Dashboard MAIN CONTENT            */
+/* ========================================= */
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    width: calc(100% - 250px);
+}
+
+.title {
+    margin: 0; 
+    font-size: 30px; 
+    display: flex;
+    align-items: center; 
+    font-weight: bold;
+    color: yellow;
+    justify-content: space-between;
+    padding: 5px 10px; 
+}
+
+
+#date {
+    font-size: 12px;
+    color: rgb(213, 213, 213);
+    margin: 0;
+    display: flex;
+    align-items: center; 
+    margin-bottom: 5px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    gap: 5px;
+}
+
+.search-btn {
+    background: #ffe600 !important;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-btn:hover {
+    background: #ffe100;
+}
+
+
+.top-bar:hover .icons-container {
+    opacity: 1;
+    visibility: visible;
+}
+
+.icon-btn {
+    background: none;
+    border: 2px solid rgb(90, 90, 90);
+    border-radius: 5px;
+    font-size: 10px;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.icon-btn:hover {
+    color: #f2e570;
+    border-color: #f2e570;
+}
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.status-approved {
+    background-color: green;
+}
+
+.status-rejected {
+    background-color: red;
+
+}
+
+.status-pending {
+    background-color: gray;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+#search-bar {
+    width: 275px;
+    height: 40px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 0px;
+}
+
+.search-btn {
+    width: 50px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+/* ========== Pagination ========== */
+.pagination {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination-container {
+    overflow-x: auto;
+    padding: 10px 0;
+}
+
+.pagination button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background-color: yellow;
+    color: black;
+}
+
+/* ========== Entries Info ========== */
+.entries-info {
+    text-align: right;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* ========== Button ========== */
+.btn-view {
+    background-color: #007bff !important; 
+    color: white;
+}
+.btn-view:hover {
+    background-color: #0056b3;
+}
+
+.btn-approve {
+    background-color: #28a745 !important; 
+    color: white;
+}
+.btn-approve:hover {
+    background-color: #218838;
+}
+
+.btn-reject {
+    background-color: #dc3545 !important; 
+    color: white;
+}
+.btn-reject:hover {
+    background-color: #c82333;
+}
+
+.btn-delete {
+    background-color: #6c757d !important;
+    color: white;
+}
+.btn-delete:hover {
+    background-color: #5a6268;
+}
+
+
+.table-container {
+    background: white;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+
+/* ========== Admin Search Bar ========== */
+.dashboard .btn {
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    height: 40px;
+
+}
+
+
+
+/* ========================================= */
+/*          user table styling                */
+/* ========================================= */
+
+
+.users-table {
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 5px;
+    background-color: #292929;
+    color: white;
+}
+
+.users-table th {
+    font-weight: bold;
+    padding: 14px;
+    color: yellow;
+    font-size: 16px;
+}
+.users-table td {
+    padding: 12px;
+    font-size: 15px;
+}
+
+.users-table tr {
+    color: white;
+}
+.users-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important;
+}
+
+.users-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e !important; 
+}
+
+.users-table th:first-child {
+    cursor: pointer;
+}
+
+.users-table th:nth-child(7),
+.users-table td:nth-child(7) { 
+    text-align: center;
+}
+
+.users-table td:nth-child(7) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px; 
+    padding-right: 15px;
+}
+
+/* ========================================= */
+/*         inspection page styling          */
+/* ========================================= */
+
+.inspection-table {
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 5px;
+    background-color: #292929;
+    color: white;
+    padding-top: 10px;
+}
+
+.inspection-table th {
+    font-weight: bold;
+    padding: 14px;
+    color: yellow;
+    font-size: 16px;
+}
+.inspection-table td {
+    padding: 12px;
+    font-size: 15px;
+}
+
+.inspection-table tr {
+    color: white;
+}
+.inspection-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important;
+}
+
+.inspection-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e !important; 
+}
+
+.inspection-table th:first-child {
+    cursor: pointer;
+}
+
+.inspection-table th:nth-child(7),
+.inspection-table td:nth-child(7) { 
+    text-align: center;
+}
+
+.inspection-table td:nth-child(7) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px; 
+    padding-right: 15px;
+}
+
+/* ========================================= */
+/*      release page styling                */
+/* ========================================= */
+
+
+.release-table {
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 5px;
+    background-color: #292929;
+    color: white;
+    padding-top: 10px;
+}
+
+.release-table th {
+    font-weight: bold;
+    padding: 14px;
+    color: yellow;
+    font-size: 16px;
+}
+.release-table td {
+    padding: 12px;
+    font-size: 15px;
+}
+
+.release-table tr {
+    color: white;
+}
+.release-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important;
+}
+
+.release-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e !important; 
+}
+
+.release-table th:first-child {
+    cursor: pointer;
+}
+
+.release-table th:nth-child(7),
+.release-table td:nth-child(7) { 
+    text-align: center;
+}
+
+.release-table td:nth-child(7) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px; 
+    padding-right: 15px;
+}
+
+
+/* ========== Responsive Layout ========== */
+@media (max-width: 1024px) {
+    .content {
+        width: 100%;
+        padding: 15px;
+        margin-left: 0;
+    }
+
+    .title {
+        font-size: 24px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-container {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .pagination {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .entries-info {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .content {
+        width: 100%;
+        margin-left: 0 !important;
+    }
+    .title {
+        font-size: 20px;
+        padding: 10px 0;
+    }
+
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 8px;
+    }
+
+    #search-bar {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .search-btn {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .users-table td,
+    .users-table th,
+    .inspection-table td,
+    .inspection-table th,
+    .release-table td,
+    .release-table th {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .users-table td:nth-child(7),
+    .inspection-table td:nth-child(7),
+    .release-table td:nth-child(7) {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 18px;
+    }
+
+    .status-badge {
+        font-size: 12px;
+        padding: 3px 6px;
+    }
+
+    .btn-view,
+    .btn-approve,
+    .btn-reject,
+    .btn-delete {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    .pagination button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .dashboard .btn {
+        font-size: 13px;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+}

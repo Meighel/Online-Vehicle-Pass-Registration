@@ -28,7 +28,7 @@ body {
 
 .title {
     margin: 0; 
-    font-size: 50px; 
+    font-size: 30px; 
     display: flex;
     align-items: center; 
     font-weight: bold;
@@ -95,7 +95,7 @@ body {
     font-weight: bold;
 }
 
-.status-approved {
+.status-paid {
     background-color: green;
 }
 
@@ -214,8 +214,6 @@ body {
 }
 
 
-
-
 /* ========== Admin Search Bar ========== */
 .dashboard .btn {
     color: white;
@@ -284,49 +282,49 @@ body {
 
 .passes-table {
     width: 100%;
-    border-collapse: collapse;
-    background: #333;
+    border-collapse: separate;
     border-radius: 5px;
-    overflow: hidden;
-    text-align: center;
-}
-
-.passes-table thead {
-    background: #444;
+    background-color: #292929;
+    color: white;
+    padding-top: 30px;
 }
 
 .passes-table th {
+    font-weight: bold;
     padding: 14px;
-    text-align: center; 
     color: yellow;
     font-size: 16px;
 }
-
-.passes-table tbody tr {
-    transition: background 0.3s ease-in-out;
-}
-
 .passes-table td {
-    padding: 14px;
-    font-size: 14px;
-    border-bottom: 1px solid #444;
-    color: #ffffff;
-    text-align: center;
+    padding: 12px;
+    font-size: 15px;
 }
 
-.passes-table td:nth-child(1) {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    padding-right: 15px;
+.passes-table tr {
+    color: white;
+}
+.passes-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important;
 }
 
 .passes-table tbody tr:nth-child(even) {
-    background: #292929;
+    background-color: #1e1e1e !important; 
 }
 
-.passes-table tbody tr:hover {
-    background: #3a3a3a;
+.passes-table th:first-child {
+    cursor: pointer;
+}
+
+.passes-table th:nth-child(7),
+.passes-table td:nth-child(7) { 
+    text-align: center;
+}
+
+.passes-table td:nth-child(7) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px; 
+    padding-right: 15px;
 }
 
 
@@ -433,35 +431,211 @@ body {
     padding-right: 15px;
 }
 
+/* ========================================= */
+/*         transaction page styling          */
+/* ========================================= */
 
-/* ========== Responsive Design ========== */
+.transaction-table {
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 5px;
+    background-color: #292929;
+    color: white;
+    padding-top: 30px;
+}
+
+.transaction-table th {
+    font-weight: bold;
+    padding: 14px;
+    color: yellow;
+    font-size: 16px;
+}
+.transaction-table td {
+    padding: 12px;
+    font-size: 15px;
+}
+
+.transaction-table tr {
+    color: white;
+}
+.transaction-table tbody tr:nth-child(odd) {
+    background-color: #1e1e1e !important;
+}
+
+.transaction-table tbody tr:nth-child(even) {
+    background-color: #1e1e1e !important; 
+}
+
+.transaction-table th:first-child {
+    cursor: pointer;
+}
+
+.transaction-table th:nth-child(7),
+.transaction-table td:nth-child(7) { 
+    text-align: center;
+}
+
+.transaction-table td:nth-child(7) {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px; 
+    padding-right: 15px;
+}
+
+
+/* ========== Responsive Design Enhancements ========== */
+
+/* Tablets and small desktops */
+@media (max-width: 1024px) {
+    .content {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .title {
+        font-size: 26px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-container {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .entries-info {
+        text-align: center;
+    }
+
+    .search-container {
+        flex-wrap: wrap;
+    }
+}
+
+/* Tablets & landscape phones */
 @media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .content {
+        width: 100%;
+        margin-left: 0 !important;
+    }
+
+    .title {
+        font-size: 22px;
+        padding: 10px 0;
+    }
+
     .table-container {
-        padding: 5px;
-        border-radius: 5px;
+        padding: 8px;
     }
 
-    .payments-table th, .payments-table td {
-        padding: 10px;
-        font-size: 12px;
+    .application-table th,
+    .application-table td,
+    .passes-table th,
+    .passes-table td,
+    .users-table th,
+    .users-table td,
+    .payments-table th,
+    .payments-table td {
+        padding: 8px;
+        font-size: 13px;
     }
-
 
     #search-bar {
         width: 100%;
+        height: 36px;
+        font-size: 13px;
     }
-    
 
-    .top-bar {
-        right: 10px; /* Reduce spacing for small screens */
-        top: 10px;
+    .search-btn {
+        width: 100%;
+        height: 36px;
+        font-size: 13px;
     }
-    .filter-container {
+
+    .filter-container,
+    .search-container {
         flex-direction: column;
-        gap: 5px;
+        align-items: stretch;
+    }
+
+    .btn-view,
+    .btn-approve,
+    .btn-reject,
+    .btn-delete {
+        padding: 6px 10px;
+        font-size: 13px;
+        width: 100%;
     }
 
     .pagination {
+        justify-content: center;
         flex-wrap: wrap;
+    }
+
+    .pagination button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .users-table td:nth-child(7),
+    .application-table td:nth-child(7),
+    .passes-table td:nth-child(7),
+    .payments-table td:nth-child(7) {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    .title {
+        font-size: 18px;
+    }
+
+    .status-badge {
+        font-size: 11px;
+        padding: 3px 6px;
+    }
+
+    .icon-btn {
+        font-size: 9px;
+        padding: 4px;
+    }
+
+    .btn-view,
+    .btn-approve,
+    .btn-reject,
+    .btn-delete {
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+
+    .pagination button {
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+
+    .dashboard .btn {
+        font-size: 12px;
+    }
+
+    .application-table td,
+    .passes-table td,
+    .users-table td,
+    .payments-table td {
+        font-size: 12px;
+    }
+
+    .application-table th,
+    .passes-table th,
+    .users-table th,
+    .payments-table th {
+        font-size: 13px;
     }
 }

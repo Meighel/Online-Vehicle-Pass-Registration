@@ -8,6 +8,7 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/admin-dashboard-style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.png' %}">
     <style>
         /* Ensure main content shifts to the right of sidebar */
         .dashboard-wrapper {
@@ -48,7 +49,7 @@
         <div class="filter-container">
             <input class="position-absolute end-0 bottom-10 form-control w-20 me-5" type="text" id="search-bar" placeholder="🔍 Search">
             <div class="position-absolute start-2 bottom-10 p-3">
-                <a href="#" class="btn btn-success btn-rounded">Add New User</a>
+                <a href="{% url 'admin_create_user' %}" class="btn btn-success">Add New User</a>
             </div>
         </div>
         <br>
@@ -58,121 +59,36 @@
                 <thead>
                     <tr>
                         <th>Corporate Email</th>
-                        <th>Last Name</th>
-                        <th>First Name</th>
-                        <th>Middle Initial</th>
+                        <th>Full Name</th>
+                        <th>Address</th>
                         <th>Role</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                {% for user in users %}
                     <tr>
-                        <td>202280293@psu.palawan.edu.ph</td>
-                        <td>Magdayao</td>
-                        <td>Frances</td>
-                        <td>V.</td>
-                        <td>Cashier</td>
+                        <td>{{ user.corporate_email }}</td>
+                        <td>{{ user.lastname }}, {{ user.firstname }} {{ user.middle_name|slice:":1" }}.</td>
+                        <td>{{ user.address }}</td>
+                        <td>{{ user.role }}</td>
                         <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Update</button>
+                            <a href="{% url 'admin_view_specific_user' user.pk %}" class="btn btn-info">View</a>
+                            <a href="{% url 'admin_update_user' user.pk %}" class="btn btn-success">Update</a>
                             <button class="btn btn-danger">Delete</button>
                         </td>
                     </tr>
+                    {% empty %}
                     <tr>
-                        <td>202280271@psu.palawan.edu.ph</td>
-                        <td>Padon</td>
-                        <td>Meighel Nicolle</td>
-                        <td>M.</td>
-                        <td>Admin</td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Accept</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
+                      <td colspan="5" style="text-align: center">
+                        <p class="text-sm font-weight-bold mb-0">No Records Found</p>
+                      </td>
                     </tr>
-                    <tr>
-                        <td>202280293@psu.palawan.edu.ph</td>
-                        <td>Magdayao</td>
-                        <td>Frances</td>
-                        <td>V.</td>
-                        <td>Cashier</td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>202280271@psu.palawan.edu.ph</td>
-                        <td>Padon</td>
-                        <td>Meighel Nicolle</td>
-                        <td>M.</td>
-                        <td>Admin</td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Accept</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>202280293@psu.palawan.edu.ph</td>
-                        <td>Magdayao</td>
-                        <td>Frances</td>
-                        <td>V.</td>
-                        <td>Cashier</td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>202280271@psu.palawan.edu.ph</td>
-                        <td>Padon</td>
-                        <td>Meighel Nicolle</td>
-                        <td>M.</td>
-                        <td>Admin</td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Accept</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>202280293@psu.palawan.edu.ph</td>
-                        <td>Magdayao</td>
-                        <td>Frances</td>
-                        <td>V.</td>
-                        <td>Cashier</td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Update</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>202280271@psu.palawan.edu.ph</td>
-                        <td>Padon</td>
-                        <td>Meighel Nicolle</td>
-                        <td>M.</td>
-                        <td>Admin</td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Accept</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </section>
-
-        <!-- Entries Info -->
-        <div class="entries-info">Showing 0 entries</div>
-
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <div class="pagination" id="pagination"></div>
-        </div>
+        {% include 'includes/pagination.html' %}
     </div>
 </div>
 {% endblock %}

@@ -8,6 +8,7 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/admin-dashboard-style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.png' %}">
     <style>
 
         .main-content {
@@ -37,11 +38,19 @@
         <small><span id="date"></span></small>
         <br>
 
-
         <div class="filter-container">
-            <input class="position-absolute end-0 bottom-10 form-control w-20 me-5" type="text" id="search-bar" placeholder="🔍 Search">
+            <div class="mb-3">
+                <label for="start-date" class="form-label">Start Date:</label>
+                <input type="date" id="start-date" class="form-control">
+            </div>
+            
+            <div class="mb-3">
+                <label for="end-date" class="form-label">End Date:</label>
+                <input type="date" id="end-date" class="form-control">
+            </div>
+            
+            <input class="position-absolute end-0 bottom-10 form-control w-20 me-5 mb-auto" type="text" id="search-bar" placeholder="🔍 Search">
         </div>
-        <br>
 
         <section class="table-container">
             <table class="users-table">
@@ -49,133 +58,42 @@
                     <tr>
                         <th>Username</th>
                         <th>Application ID</th>
-                        <th>Account</th>
+                        <th>Plate Number</th>
                         <th>Date</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Approve</button>
-                            <button class="btn btn-warning">Reject</button>
-                            <button class="btn btn-danger">Delete</button>
+                    {% for applicant in applications %}
+                        <tr>
+                            <td>{{ applicant.user.lastname }}, {{ applicant.user.firstname }} {{ applicant.user.middlename|default_if_none:""|slice:":1"}}</td>
+                            <td>{{ applicant.registrationNumber }}</td>
+                            <td>{{ applicant.vehicle.plateNumber }}</td>
+                            <td>{{ applicant.created_at|date:"F d, Y" }}</td>
+                            <td>{{ applicant.status }}</td>
+                            
+                            <td>
+                                <a href="{% url 'admin_view_specific_application' applicant.pk %}" class="btn btn-primary">View</a>
+                                <a href="{% url 'admin_update_application' applicant.pk %}" class="btn btn-primary">Update</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                        <td colspan="6" style="text-align: center">
+                            <p class="text-sm font-weight-bold mb-0">No Records Found</p>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Approve</button>
-                            <button class="btn btn-warning">Reject</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Approve</button>
-                            <button class="btn btn-warning">Reject</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Approve</button>
-                            <button class="btn btn-warning">Reject</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Approve</button>
-                            <button class="btn btn-warning">Reject</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Approve</button>
-                            <button class="btn btn-warning">Reject</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Approve</button>
-                            <button class="btn btn-warning">Reject</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>DELA CRUZ, SAMANTHA</td>
-                        <td>1</td>
-                        <td>User</td>
-                        <td>02/24/2005</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>
-                            <button class="btn btn-view">View</button>
-                            <button class="btn btn-success">Approve</button>
-                            <button class="btn btn-warning">Reject</button>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </section>
-        
-        <!-- Entries Info -->
-        <div class="entries-info">Showing 0 entries</div>
-
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <div class="pagination" id="pagination"></div>
-        </div>
+        {% include 'includes/pagination.html' %}
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
     <script src="{% static 'javascript/base.js' %}"></script>
-    <script src="{% static 'javascript/Admin_User.js' %}"></script>
+    <script src="{% static 'javascript/Admin_Application.js' %}"></script>
 {% endblock %}

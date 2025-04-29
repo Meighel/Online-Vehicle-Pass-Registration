@@ -1,6 +1,16 @@
 from django import forms
+<<<<<<< HEAD
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
 from .models import Vehicle, VehiclePass, InspectionReport, Registration, PaymentTransaction
+=======
+from .models import (UserProfile,
+                     PaymentTransaction,
+                     Registration,
+                     Vehicle,
+                     InspectionReport,
+                     CashierProfile,
+)
+>>>>>>> ec30462a99f86741fe8ee4b84dd0f360fc231039
 from django.contrib.auth.hashers import make_password
 
 class UserSignupForm(forms.ModelForm):
@@ -25,26 +35,26 @@ class UserSignupForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-    
 
-# # from django.contrib.auth.forms import UserCreationForm
-# from .models import (UserProfile, SecurityProfile, CashierProfile, 
-#                      AdminProfile, Vehicle, Registration, VehiclePass,
-#                      PaymentTransaction, InspectionReport, Notification, Announcement)
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = '__all__' 
 
-# class UserRegistrationForm(UserCreationForm):
-#     role = forms.ChoiceField(choices=CustomUser.role_choices, required=True)
 
-#     class Meta:
-#         model = CustomUser
-#         fields = ['corporate_email', 'password1', 'password2', 'role']
+class PaymentTransactionForm(forms.ModelForm):
+    class Meta:
+        model = PaymentTransaction
+        fields = ['status', 'cashier']
+        labels = {
+            'cashier': 'Cashier'  # Explicit label to control display
+        }
 
-#     def clean_corporate_email(self):
-#         email = self.cleaned_data.get('corporate_email')
-#         if CustomUser.objects.filter(corporate_email=email).exists():
-#             raise forms.ValidationError("This email is already registered.")
-#         return email
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
 
+<<<<<<< HEAD
 class AdminUserForm(forms.ModelForm):
     class Meta:
         model = UserProfile
@@ -84,50 +94,66 @@ class AdminReportForm(forms.ModelForm):
     class Meta:
         model = InspectionReport
         fields = '__all__'
+=======
+        if self.user:
+            try:
+                # Get UserProfile instance
+                if isinstance(self.user, str):
+                    user_profile = UserProfile.objects.get(id=self.user)
+                else:
+                    user_profile = self.user
+                
+                # Get cashier profile
+                cashier_profile = CashierProfile.objects.get(user=user_profile)
+                
+                # Set the initial value for the cashier field
+                self.fields['cashier'].initial = cashier_profile
+                
+                # Important: Make it read-only but VISIBLE (not hidden)
+                self.fields['cashier'].disabled = True
+                
+            except CashierProfile.DoesNotExist:
+                self.fields['cashier'].initial = None
 
-# class AdminProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = AdminProfile
-#         fields = '__all__'
 
-# class VehicleForm(forms.ModelForm):
-#     class Meta:
-#         model = Vehicle
-#         fields = '__all__'
+>>>>>>> ec30462a99f86741fe8ee4b84dd0f360fc231039
 
-#     def clean(self):
-#         cleaned_data = super().clean()
-#         owner = cleaned_data.get('owner')
-#         if owner and Vehicle.objects.filter(owner=owner).count() >= 2:
-#             raise forms.ValidationError('You can only register up to two vehicles.')
-#         return cleaned_data
 
-# class RegistrationForm(forms.ModelForm):
-#     class Meta:
-#         model = Registration
-#         fields = '__all__'
+class ApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Registration
+        fields = ['status']
+        
 
-# class VehiclePassForm(forms.ModelForm):
-#     class Meta:
-#         model = VehiclePass
-#         fields = '__all__'
+class VehicleRegistrationStep1Form(forms.Form):
+    first_name = forms.CharField(max_length=100, label='First Name')
+    middle_name = forms.CharField(max_length=100, required=False, label='Middle Name')
+    last_name = forms.CharField(max_length=100, label='Last Name')
+    corporate_email = forms.EmailField(label='Corporate Email')
+    role = forms.ChoiceField(choices=[('student', 'Student'), ('faculty', 'Faculty')], label='School Role')
+    driver_license_number = forms.CharField(max_length=100, label="Driver's License Number")
+    vehicle_type = forms.ChoiceField(choices=[('car', 'Car'), ('motorbike', 'Motorbike')], label='Vehicle Type')
+    model = forms.CharField(max_length=100, label='Vehicle Model')
+    plate_number = forms.CharField(max_length=100, label='Plate Number')
+    chassis_number = forms.CharField(max_length=100, label='Chassis Number')
+    or_number = forms.CharField(max_length=100, label='OR Number')
+    cr_number = forms.CharField(max_length=100, label='CR Number')
 
-# class PaymentTransactionForm(forms.ModelForm):
-#     class Meta:
-#         model = PaymentTransaction
-#         fields = '__all__'
+class VehicleRegistrationStep2Form(forms.Form):
+    owner = forms.ChoiceField(choices=[('yes', 'Yes, I am the owner of the vehicle'), 
+                                       ('no', 'No, I am registering on behalf of the owner')], 
+                              label='Are you the owner of this vehicle?')
+    # Owner details if "no" is selected
+    owner_first_name = forms.CharField(max_length=100, required=False, label='Owner\'s First Name')
+    owner_middle_name = forms.CharField(max_length=100, required=False, label='Owner\'s Middle Name')
+    owner_last_name = forms.CharField(max_length=100, required=False, label='Owner\'s Last Name')
+    owner_contact_number = forms.CharField(max_length=15, required=False, label='Owner\'s Contact Number')
 
-# class InspectionReportForm(forms.ModelForm):
-#     class Meta:
-#         model = InspectionReport
-#         fields = '__all__'
+class VehicleRegistrationStep3Form(forms.Form):
+    google_drive_link = forms.URLField(label='Google Folder Link')
 
-# class NotificationForm(forms.ModelForm):
-#     class Meta:
-#         model = Notification
-#         fields = '__all__'
 
-# class AnnouncementForm(forms.ModelForm):
-#     class Meta:
-#         model = Announcement
-#         fields = '__all__'
+class InspectionApprovalForm(forms.ModelForm):
+    class Meta:
+        model = InspectionReport
+        fields = ['remarks', 'additional_notes', 'is_approved']

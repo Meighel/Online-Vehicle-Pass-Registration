@@ -1,0 +1,35 @@
+{% load static %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="icon" href="{% static 'images/favicon.png' %}">
+<body class="bg-dark">
+    <div class="container mt-5">
+        <div class="card shadow p-4" style="background-color: #1e1e1e; border: 1px solid #333; color: #fff;">
+            <h3 class="mb-4 text-center" style="color: #fff; border-bottom: 2px solid #FFD700; padding-bottom: 10px;">Registration Details</h3>
+
+            <div class="list-group">
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Application ID:</strong> 
+                    <span class="float-end text-white">{{ registration.registrationNumber }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Plate Number:</strong> 
+                    <span class="float-end text-white">{{ registration.vehicle.plateNumber }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Date Submitted:</strong> 
+                    <span class="float-end text-white">{{ registration.created_at|date:"F d, Y" }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Status:</strong> 
+                    <span class="float-end text-white">{{ registration.status|title }}</span>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{% url 'security_manage_application' %}" class="btn btn-primary" style="background-color: #FFD700; color: #000; border: none; border-radius: 20px; padding: 0.5rem 1.5rem; font-weight: bold;">Back to Applications</a>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

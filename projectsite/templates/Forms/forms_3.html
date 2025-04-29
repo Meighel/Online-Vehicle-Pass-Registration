@@ -1,0 +1,63 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apply for Pass (3/3)</title>
+  <link rel="stylesheet" href="{% static 'css/forms_style.css' %}">
+  <script src="{% static 'javascript/forms.js' %}" defer></script>
+</head>
+<body>
+  <div class="container">
+    <div class="welcome form3-welcome">Welcome, {{ user.username }}!</div>
+    <h2 class="form3-h2">Registration for Vehicle Pass (3/3)</h2>
+
+    <div class="form3-note">
+      <p><strong>Please upload the required documents in a Google Drive folder and follow these instructions:</strong></p>
+      <ul>
+        <li>Name the folder clearly and use the correct file formats (JPG or PNG only).</li>
+        <li>Ensure the documents are clear, readable, and scanned or captured properly.</li>
+        <li>Set the folder to Public View before submitting.</li>
+      </ul>
+
+      <p><strong>Documents Needed:</strong></p>
+      <div class="form3-document-container">
+        <ul>
+          <li>Driver's License or Student Permit<br>File name example: Drivers_License.jpg or Student_Permit.png</li>
+          <li>Official Receipt (OR) and Certificate of Registration (CR)<br>File name example: OR.jpg and CR.png</li>
+          <li>Certificate of Purchase/Ownership or Deed of Sale<br>File name example: COPO.jpg or DOS.png</li>
+          <li>ID in this institution<br>File name example: ID.png</li>
+          <li>Photos of the Vehicle (all sides)<br>File name example: vehicle1.jpg, vehicle2.jpg, etc.</li>
+        </ul>
+      </div>
+
+      <p><strong>Additional Documents (if the vehicle is not yours):</strong></p>
+      <div class="form3-document-container">
+        <ul>
+          <li>Owner's Valid ID<br>File name example: ValidID.jpg</li>
+          <li>Authorization Letter from the Owner<br>File name example: Letter.jpg</li>
+        </ul>
+      </div>
+
+      <p><strong>Share Google Folder Link:</strong></p>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group form3-form-group">
+          {{ form.google_drive_link }}
+        </div>
+
+        <div class="form-navigation">
+          <a href="{% url 'vehicle_registration_step_2' %}">
+            <button class="back-btn form3-back-btn" type="button">Back</button>
+          </a>
+        
+          <button class="btn form2-btn" type="submit" id="form3-next-btn" >Submit</button>
+        </div>        
+      </form>
+    </div>
+  </div>
+</body>
+</html>

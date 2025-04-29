@@ -2,17 +2,15 @@
 {% load static %}
 
 {% block title %}
-    Manage User
+    Manage Payment
 {% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/admin-dashboard-style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.png' %}">
     <style>
-        /* Ensure main content shifts to the right of sidebar */
-        .dashboard-wrapper {
-            display: flex;
-        }
+
         .main-content {
             flex-grow: 1;
             padding: 20px;
@@ -60,146 +58,32 @@
                         <th>Username</th>
                         <th>Corporate Email</th>
                         <th>Status</th>
-                        <th>Paid Date</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+                {% for payment in payment_list %}
                     <tr>
-                        <td>2025-01-001</td>
-                        <td>DELA CRUZ, JUAN</td>
-                        <td>20XX8XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>N/A</td>
+                        <td>{{ payment.id }}</td>
+                        <td>{{ payment.registration.user.lastname }} , {{ payment.registration.user.firstname }}</td>
+                        <td>{{ payment.registration.user.corporate_email }}</td>
+                        <td><span class="status-badge status-pending">{{ payment.status }}</span></td>
                         <td>
-                            <button class="btn btn-primary update-button"
-                                data-id="2025-01-001"
-                                data-username="DELA CRUZ, JUAN"
-                                data-email="20XX8XXXX@psu.palawan.edu.ph"
-                                data-status="Pending"
-                                data-date="N/A">
-                                Update
-                            </button>
+                            <a href="{% url 'admin_update_payment' payment.pk %}" class="btn btn-primary">Update</a>
                         </td>
                     </tr>
-                    <tr>
-                        <td>2025-01-002</td>
-                        <td>GARCIA, MARIA</td>
-                        <td>20XX9XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-approved">Approved</span></td>
-                        <td>Completed</td>
-                        <td>
-                            <button class="btn btn-primary update-button"
-                                data-id="2025-01-002"
-                                data-username="GARCIA, MARIA"
-                                data-email="20XX9XXXX@psu.palawan.edu.ph"
-                                data-status="Approved"
-                                data-date="Completed">
-                                Update
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2025-01-003</td>
-                        <td>SANTOS, PEDRO</td>
-                        <td>20XX7XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-rejected">Rejected</span></td>
-                        <td>Incomplete Docs</td>
-                        <td>
-                            <button class="btn btn-primary update-button"
-                                data-id="2025-01-003"
-                                data-username="SANTOS, PEDRO"
-                                data-email="20XX7XXXX@psu.palawan.edu.ph"
-                                data-status="Rejected"
-                                data-date="Incomplete Docs">
-                                Update
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2025-01-004</td>
-                        <td>REYES, ANA</td>
-                        <td>20XX6XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td>N/A</td>
-                        <td>
-                            <button class="btn btn-primary update-button"
-                                data-id="2025-01-004"
-                                data-username="REYES, ANA"
-                                data-email="20XX6XXXX@psu.palawan.edu.ph"
-                                data-status="Pending"
-                                data-date="N/A">
-                                Update
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2025-01-005</td>
-                        <td>LOPEZ, MIGUEL</td>
-                        <td>20XX5XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-approved">Approved</span></td>
-                        <td>Verified</td>
-                        <td>
-                            <button class="btn btn-primary update-button"
-                                data-id="2025-01-005"
-                                data-username="LOPEZ, MIGUEL"
-                                data-email="20XX5XXXX@psu.palawan.edu.ph"
-                                data-status="Approved"
-                                data-date="Verified">
-                                Update
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2025-01-006</td>
-                        <td>TORRES, LUIS</td>
-                        <td>20XX4XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-rejected">Rejected</span></td>
-                        <td>Invalid ID</td>
-                        <td>
-                            <button class="btn btn-primary update-button"
-                                data-id="2025-01-006"
-                                data-username="TORRES, LUIS"
-                                data-email="20XX4XXXX@psu.palawan.edu.ph"
-                                data-status="Rejected"
-                                data-date="Invalid ID">
-                                Update
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2025-01-007</td>
-                        <td>RAMOS, CARLA</td>
-                        <td>20XX3XXXX@psu.palawan.edu.ph</td>
-                        <td><span class="status-badge status-approved">Approved</span></td>
-                        <td>Submitted</td>
-                        <td>
-                            <button class="btn btn-primary update-button"
-                                data-id="2025-01-007"
-                                data-username="RAMOS, CARLA"
-                                data-email="20XX3XXXX@psu.palawan.edu.ph"
-                                data-status="Approved"
-                                data-date="Submitted">
-                                Update
-                            </button>
-                        </td>
-                    </tr>                
+                {% endfor %}
                 </tbody>
             </table>
         </section>
 
-        <!-- Entries Info -->
-        <div class="entries-info">Showing 0 entries</div>
-
         <!-- Pagination -->
-        <div class="pagination-container">
-            <div class="pagination" id="pagination"></div>
-        </div>
+        {% include 'includes/pagination.html' %}
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
     <script src="{% static 'javascript/base.js' %}"></script>
-    <script src="{% static 'javascript/Admin_User.js' %}"></script>
+    <script src="{% static 'javascript/Admin_Payment.js' %}"></script>
 {% endblock %}
