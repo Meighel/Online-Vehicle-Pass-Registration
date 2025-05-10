@@ -1,4 +1,8 @@
 from django import forms
+<<<<<<< HEAD
+from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
+from .models import Vehicle, VehiclePass, InspectionReport, Registration, PaymentTransaction
+=======
 from .models import (UserProfile,
                      PaymentTransaction,
                      Registration,
@@ -6,6 +10,7 @@ from .models import (UserProfile,
                      InspectionReport,
                      CashierProfile,
 )
+>>>>>>> ec30462a99f86741fe8ee4b84dd0f360fc231039
 from django.contrib.auth.hashers import make_password
 
 class UserSignupForm(forms.ModelForm):
@@ -49,6 +54,47 @@ class PaymentTransactionForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
+<<<<<<< HEAD
+class AdminUserForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
+
+class AdminSecurityForm(forms.ModelForm):
+    class Meta:
+        model = SecurityProfile
+        fields = '__all__'
+
+class AdminCashierForm(forms.ModelForm):
+    class Meta:
+        model = CashierProfile
+        fields = '__all__'
+
+class AdminAdminForm(forms.ModelForm):
+    class Meta:
+        model = AdminProfile
+        fields = '__all__'
+
+class AdminRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = Registration
+        fields = '__all__'
+
+class AdminPaymentForm(forms.ModelForm):
+    class Meta:
+        model = PaymentTransaction
+        fields = '__all__'
+
+class AdminPassForm(forms.ModelForm):
+    class Meta:
+        model = VehiclePass
+        fields = '__all__'
+
+class AdminReportForm(forms.ModelForm):
+    class Meta:
+        model = InspectionReport
+        fields = '__all__'
+=======
         if self.user:
             try:
                 # Get UserProfile instance
@@ -70,6 +116,7 @@ class PaymentTransactionForm(forms.ModelForm):
                 self.fields['cashier'].initial = None
 
 
+>>>>>>> ec30462a99f86741fe8ee4b84dd0f360fc231039
 
 
 class ApplicationForm(forms.ModelForm):

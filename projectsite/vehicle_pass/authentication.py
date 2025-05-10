@@ -20,4 +20,8 @@ class CustomLoginRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
         if not request.session.get("user_id"): #overrides the django dispatch
             return redirect("login")  #redirect to login if no active on session
+<<<<<<< HEAD
         return super().dispatch(request, *args, **kwargs)
+=======
+        return super().dispatch(request, *args, **kwargs)
+>>>>>>> ec30462a99f86741fe8ee4b84dd0f360fc231039
