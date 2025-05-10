@@ -202,7 +202,7 @@ class PaymentTransaction(BaseModel):
     def save(self, *args, **kwargs):
         # Automatically set due_date when status is pending and due_date is not provided
         if self.status == "pending" and not self.due_date:
-            self.due_date = timezone.now() + timedelta(days=7)
+            self.due_date = timezone.now() + timedelta(days=3)
 
         # Check if the object already exists (for updates)
         if self.pk is not None:
