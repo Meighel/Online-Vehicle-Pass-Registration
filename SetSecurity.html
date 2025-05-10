@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Security Settings</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .toggle-yellow:checked {
+      background-color: #facc15;
+      border-color: #facc15;
+    }
+    .save-btn {
+      width: 120px;
+      height: 40px;
+      background-color: #facc15;
+      color: black;
+      border-radius: 9999px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen w-screen">
+  <div class="flex min-h-screen">
+    <aside class="w-64 bg-gray-900 p-5 flex flex-col justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-yellow-400">VR</h1>
+        <nav class="mt-6">
+          <ul class="space-y-3">
+            <a href="AdminDash.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🏠</span><span>Dashboard</span>
+              </li>
+            </a>
+            <a href="ApplyPass.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">📝</span><span>Apply for Pass</span>
+              </li>
+            </a>
+            <a href="Tracking.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🚗</span><span>Pass Status Tracking</span>
+              </li>
+            </a>
+            <a href="Notification.html">
+              <li class="p-3 hover:bg-gray-700 rounded flex items-center space-x-2 cursor-pointer">
+                <span class="text-xl">🔔</span><span>Notification & Alerts</span>
+              </li>
+            </a>
+            <a href="Settings.html">
+              <li class="bg-yellow-400 text-black p-3 rounded flex items-center space-x-2">
+                <span class="text-xl">⚙️</span><span>Settings</span>
+              </li>
+            </a>
+          </ul>
+        </nav>
+      </div>
+      <div class="text-left">
+        <img src="mark.jpg" class="rounded-full w-16 h-16 border-4 border-gray-700" alt="User">
+        <p class="text-sm mt-2" id="displayName">User Name</p>
+        <p class="text-xs text-gray-400" id="displayUsername">@Username</p>
+        <button class="mt-4 bg-red-600 p-2 w-full rounded flex items-center justify-center space-x-2">
+          <span class="text-xl">↩️</span><span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="flex-1 p-6 overflow-y-auto">
+      <div class="flex justify-between items-center">
+        <h1 class="text-5xl font-bold text-yellow-400">Security Settings</h1>
+      </div>
+
+      <div class="flex mt-6">
+        <div class="w-1/5 bg-gray-800 p-4 rounded-lg">
+          <ul class="space-y-2">
+            <a href="Settings.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Profile</li></a>
+            <a href="SetAccount.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Account</li></a>
+            <a href="SetSecurity.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Security</li></a>
+            <a href="SetNotification.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Notification</li></a>
+            <a href="SetHelp.html"><li class="hover:bg-gray-700 p-3 rounded cursor-pointer hover:text-green-400">Help & Support</li></a>
+          </ul>
+        </div>
+
+        <div class="flex-1 bg-gray-900 p-6 rounded-lg ml-6 space-y-6">
+
+          <div class="bg-gray-800 p-4 rounded text-center">
+            <p class="mb-4 text-green-400 font-semibold">Your account is <span class="text-yellow-400">80%</span> secure.</p>
+            <div class="w-40 h-40 mx-auto">
+              <canvas id="securityChart"></canvas>
+            </div>
+            <div class="flex justify-center mt-4 space-x-2">
+              <button class="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-400">Dismiss</button>
+              <button class="bg-yellow-400 text-black px-4 py-2 rounded hover:bg-yellow-300">Review Security</button>
+            </div>
+          </div>
+
+          <div class="bg-gray-800 p-4 rounded">
+            <p class="mb-1 text-sm text-gray-400">Set a password to protect your account</p>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center space-x-2">
+                <span class="text-green-400">✅ Verified</span>
+              </div>
+              <button class="text-yellow-400 hover:underline">Edit</button>
+            </div>
+          </div>
+
+          <div class="bg-gray-800 p-4 rounded">
+            <label class="block mb-2 text-sm text-gray-400">Two-step verification</label>
+            <p class="text-xs text-gray-400 mb-2">We recommend requiring a verification code in addition to your password.</p>
+            <label class="inline-flex items-center">
+              <input type="checkbox" id="twoFactorAuth" class="form-checkbox h-5 w-5 toggle-yellow">
+              <span class="ml-2">Enable 2FA</span>
+            </label>
+          </div>
+
+<div class="bg-gray-800 p-4 rounded">
+  <label class="block mb-2 text-sm text-gray-400">Browser and Devices</label>
+  <p class="text-xs text-gray-400 mb-4">These browsers and devices are currently signed in to your account. Remove any unauthorized devices.</p>
+  <ul class="space-y-4">
+    <li class="flex justify-between items-start">
+      <div>
+        <span class="font-medium">Chrome</span>
+        <p class="text-xs text-gray-400">Location: New York, USA</p>
+      </div>
+      <button class="text-red-500 hover:underline">Remove</button>
+    </li>
+    <li class="flex justify-between items-start">
+      <div>
+        <span class="font-medium">Microsoft Edge</span>
+        <p class="text-xs text-gray-400">Location: London, UK</p>
+      </div>
+      <button class="text-red-500 hover:underline">Remove</button>
+    </li>
+    <li class="flex justify-between items-start">
+      <div>
+        <span class="font-medium">Brave on macOS</span>
+        <p class="text-xs text-gray-400">Location: Tokyo, Japan</p>
+      </div>
+      <button class="text-red-500 hover:underline">Remove</button>
+    </li>
+  </ul>
+</div>
+
+
+<script>
+  const ctx = document.getElementById('securityChart').getContext('2d');
+  const percentageDisplay = document.querySelector('.text-green-400 span');
+
+  let baseSecure = 80;
+  let chart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Secure', 'Remaining'],
+      datasets: [{
+        data: [baseSecure, 100 - baseSecure],
+        backgroundColor: ['#facc15', '#4b5563'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      cutout: '70%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              return `${context.label}: ${context.parsed}%`;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  const twoFactorToggle = document.getElementById('twoFactorAuth');
+
+  twoFactorToggle.addEventListener('change', function () {
+    let secureValue = baseSecure + (this.checked ? 10 : 0);
+    chart.data.datasets[0].data = [secureValue, 100 - secureValue];
+    chart.update();
+
+    percentageDisplay.textContent = `${secureValue}%`;
+  });
+
+  window.onload = function () {
+    const name = localStorage.getItem("profileName");
+    const user = localStorage.getItem("username");
+
+    if (name) document.getElementById("displayName").innerText = name;
+    if (user) document.getElementById("displayUsername").innerText = user;
+  };
+</script>
+
+
+  </script>
+</body>
+</html>

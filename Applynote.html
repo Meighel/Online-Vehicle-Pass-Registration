@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment Required Before Proceeding</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: black; 
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      position: relative;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    .container header {
+      background-color: #808080; 
+      padding: 20px;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      justify-content: space-between; 
+      align-items: center;
+    }
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: white; 
+    }
+    .message {
+      font-size: 16px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      text-align: left;
+      color: black; 
+    }
+    .message ul {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+    .warning {
+      font-size: 18px;
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .btn {
+      background: yellow;
+      color: black;
+      padding: 12px 25px;
+      border: none;
+      cursor: pointer;
+      width: 180px;
+      text-align: center;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: box-shadow 0.3s ease-in-out;
+    }
+    .btn:hover {
+      box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.8);
+    }
+    .circles {
+      display: flex;
+      gap: 10px;
+    }
+    .circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .green {
+      background-color: green;
+    }
+    .yellow {
+      background-color: yellow;
+    }
+    .red {
+      background-color: red;
+    }
+    .assistance {
+      font-size: 18px;
+      color: black;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h2>Payment Required Before Proceeding</h2>
+      <div class="circles">
+        <div class="circle green"></div>
+        <div class="circle yellow"></div>
+        <div class="circle red"></div>
+      </div>
+    </header>
+    <div class="message">
+      <p>You have chosen to pay the registration fee in person. Please note:</p>
+      <ul>
+        <li>Payment must be made within 3 working days from this notice.</li>
+        <li>Payments are accepted only on working days and during office hours.</li>
+        <li>After your payment is verified, you will receive an email with the next steps to complete your registration.</li>
+      </ul>
+      <p class="warning">⚠️ Failure to pay within the given timeframe will result in your slot being invalidated.</p>
+    </div>
+    
+    <p class="assistance">For assistance, please contact [support/contact details].</p>
+    
+    <a href="AdminDash.html">
+      <button class="btn">Go to Home</button>
+    </a>
+  </div>
+</body>
+</html>
