@@ -15,21 +15,23 @@ body {
 }
 
 /* ========== Dashboard Layout ========== */
-.dashboard-wrapper {
-    display: flex;
+  .dashboard-wrapper {
     width: 100%;
+    max-width: 1500px;  /* Adjust based on screen size preference */
+    margin: 0 auto;
+
 }
 
 .main-content {
     flex-grow: 1;
     padding: 25px;
     margin-left: 120px; /* Match your sidebar width */
-    width: calc(100% - 250px);
+    width: calc(100% - 110x);
     overflow-x: hidden;
 }
 
 .title {
-    font-size: 28px !important;
+    font-size: 35px !important;
     font-weight: bold;
     color: #ffe600;
     margin-bottom: 15px;
@@ -124,8 +126,12 @@ body {
 }
 
 .status-box {
-    background-color: #2a2a2a;
+    background-color: #dc3545;
     border-radius: 6px;
+}
+
+.status-card text {
+    color: white;
 }
 
 /* Quick Access Card */
@@ -298,15 +304,15 @@ body {
 /* ========== Responsive Design ========== */
 @media (max-width: 1199px) {
     .main-content {
-        margin-left: 220px;
-        width: calc(100% - 220px);
+        margin-left: 110px;
+        width: calc(100% - 110px);
     }
 }
 
 @media (max-width: 991px) {
     .main-content {
-        margin-left: 200px;
-        width: calc(100% - 200px);
+        margin-left: 110px;
+        width: calc(100% - 110px);
         padding: 20px;
     }
     

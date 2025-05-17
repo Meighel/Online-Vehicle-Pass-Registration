@@ -15,8 +15,9 @@
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
-    <a class="navbar-brand ms-4 fs-3 fw-bold text-warning brand-logo" href="{% url 'home' %}">OVR</a>
-
+    <a href="#">
+        <img src="{% static 'images/navbar-brand img.png' %}" class="img-fluid" style="width: 100px; margin-left: 20px;">
+    </a>
     <p>Main Menu</p>
     <ul>
         <li data-menu="dashboard" {% if request.path == dashboard_url %}class="active"{% endif %}>

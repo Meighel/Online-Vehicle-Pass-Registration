@@ -5,15 +5,34 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/user-dashboard-style.css' %}">
+<link rel="icon" href="{% static 'images/favicon.png' %}">
 {% endblock %}
 
 {% block content %}
-  <div class="dashboard-wrapper">
-    <div class="main-content">
-      <div class="payment-container">
-        <div class="payment-header">
+<div class="main-content flex-grow-1 ms-uto">
+  <div class="container py-1">
+    <!-- Title & Top Bar -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+      <h2 class="title mb-3 mb-md-0">Pass Status</h2>
+      <div class="d-flex align-items-center gap-3">
+        <!-- Notification Bell -->
+        <a href="Announcements.html" class="text-decoration-none text-light position-relative">
+          <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
+          <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
+        </a>
+      </div>
+    </div>
+
+    <hr>
+    <small><span id="date"></span></small>
+    <br>
+
+    <!-- Dashboard Wrapper -->
+    <div class="dashboard-wrapper mx-auto" style="max-width: 1000px;">
+      <div class="payment-container p-4 bg-white shadow rounded">
+        <div class="payment-header mb-3">
           <h2>Payment Required Before Proceeding</h2>
-          <div class="circles">
+          <div class="circles d-flex gap-2 mt-2">
             <div class="circle green"></div>
             <div class="circle yellow"></div>
             <div class="circle red"></div>
@@ -26,13 +45,15 @@
             <li>Payments are accepted only on working days and during office hours.</li>
             <li>After your payment is verified, you will receive an email with the next steps to complete your registration.</li>
           </ul>
-          <p class="warning">⚠️ Failure to pay within the given timeframe will result in your slot being invalidated.</p>
+          <p class="warning text-danger fw-bold">
+            ⚠️ Failure to pay within the given timeframe will result in your slot being invalidated.
+          </p>
         </div>
-
-        <p class="assistance">
-          For assistance, please contact <a href="mailto:support@example.com">support@example.com</a>.
+        <p class="assistance mt-3">
+          For assistance, please contact <a href="veripassofficial@gmail.com">veripassofficial@gmail.com</a>.
         </p>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
