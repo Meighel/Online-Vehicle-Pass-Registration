@@ -27,10 +27,10 @@ from vehicle_pass.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
-    path('faq/', settings_faq, name='faq'),
     path("login/", login_view, name="login"),
     path('signup/', signup_view, name="signup"),
     path("logout/", logout_view, name="logout"),
+    path('faq/', settings_faq, name='faq'),
     path('forgot-password/', views.forgot_password, name='forgot_password'),
     path('verify-reset-code/', views.verify_reset_code, name='verify_reset_code'),
     path('reset-password/', views.reset_password, name='reset_password'),
