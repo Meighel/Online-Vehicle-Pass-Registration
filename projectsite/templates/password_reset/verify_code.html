@@ -1,0 +1,49 @@
+{% block title %}Verify Reset Code{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Verify Reset Code</h4>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <p>We've sent a 4-digit verification code to <strong>{{ email }}</strong>.</p>
+                    <p>Enter the code below to continue.</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="code">4-Digit Code</label>
+                            <div class="otp-input-container d-flex justify-content-between">
+                                <input type="text" class="form-control text-center" id="code" name="code" 
+                                       maxlength="4" pattern="[0-9]{4}" required 
+                                       style="letter-spacing: 0.5em; font-size: 1.5em;">
+                            </div>
+                            <small class="form-text text-muted">
+                                This code will expire in 10 minutes.
+                            </small>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Verify Code</button>
+                    </form>
+                    
+                    <div class="mt-3">
+                        <a href="{% url 'forgot_password' %}">Try a different email</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
