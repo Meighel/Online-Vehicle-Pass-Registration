@@ -10,7 +10,7 @@ from .forms import (UserSignupForm, UserProfileForm,
 )
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
 from .models import Vehicle, Registration, VehiclePass, PaymentTransaction
-from .models import InspectionReport, Notification, Announcement, Owner
+from .models import InspectionReport, Notification, Announcement, Owner, PasswordResetCode
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
@@ -18,6 +18,14 @@ from django.urls import reverse_lazy
 from .authentication import login_required
 from django.contrib.auth import logout
 from .authentication import login_required, CustomLoginRequiredMixin
+from django.core.mail import send_mail
+from django.conf import settings
+from django.http import JsonResponse
+from django.urls import reverse
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_http_methods
+from datetime import timedelta 
 
 def home(request):
     return render(request, 'index.html')
@@ -75,6 +83,148 @@ def redirect_user_dashboard(user):
     
     return redirect("default_dashboard")
 
+@csrf_protect
+@require_http_methods(["GET", "POST"])
+def forgot_password(request):
+    """
+    View to handle the first step of password reset process.
+    User enters their email address to receive a reset code.
+    """
+    if request.method == "POST":
+        email = request.POST.get('email')
+        
+        try:
+            user = UserProfile.objects.get(corporate_email=email)
+            
+            # Invalidate any existing unused codes for this user
+            PasswordResetCode.objects.filter(
+                user=user, 
+                is_used=False
+            ).update(is_used=True)
+            
+            # Generate a new code
+            code = PasswordResetCode.generate_code()
+            reset_code = PasswordResetCode.objects.create(user=user, code=code)
+            
+            # Send email with the code
+            send_reset_code_email(user, code)
+            
+            # Redirect to the verification page
+            return redirect(reverse('verify_reset_code') + f'?email={email}')
+            
+        except UserProfile.DoesNotExist:
+            messages.error(request, "No account found with that email address.")
+    
+    return render(request, 'password_reset/forgot_password.html')
+
+@csrf_protect
+@require_http_methods(["GET", "POST"])
+def verify_reset_code(request):
+    """
+    View to verify the reset code entered by the user.
+    """
+    email = request.GET.get('email')
+    if not email:
+        return redirect('forgot_password')
+    
+    if request.method == "POST":
+        code = request.POST.get('code')
+        
+        try:
+            user = UserProfile.objects.get(corporate_email=email)
+            reset_code = PasswordResetCode.objects.filter(
+                user=user,
+                code=code,
+                is_used=False,
+                expires_at__gt=timezone.now()
+            ).first()
+            
+            if reset_code:
+                # Mark the code as used
+                reset_code.is_used = True
+                reset_code.save()
+                
+                # Redirect to password reset page
+                return redirect(reverse('reset_password') + f'?email={email}&code={code}')
+            else:
+                messages.error(request, "Invalid or expired code. Please try again.")
+        
+        except UserProfile.DoesNotExist:
+            messages.error(request, "No account found with that email address.")
+    
+    return render(request, 'password_reset/verify_code.html', {'email': email})
+
+@csrf_protect
+@require_http_methods(["GET", "POST"])
+def reset_password(request):
+    """
+    View to handle the actual password reset after code verification.
+    """
+    email = request.GET.get('email')
+    code = request.GET.get('code')
+    
+    if not email or not code:
+        return redirect('forgot_password')
+    
+    if request.method == "POST":
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return render(request, 'password_reset/reset_password.html')
+        
+        try:
+            user = UserProfile.objects.get(corporate_email=email)
+            
+            # Verify a reset code existed and was used
+            reset_code_exists = PasswordResetCode.objects.filter(
+                user=user,
+                code=code,
+                is_used=True,
+                expires_at__gt=timezone.now() - timedelta(minutes=15)  # Give a bit of buffer time
+            ).exists()
+            
+            if reset_code_exists:
+                # Update the password
+                user.password = password  # Your save method will hash it
+                user.save()
+                
+                messages.success(request, "Password has been reset successfully. You can now login with your new password.")
+                return redirect('login')  # Redirect to login page
+            else:
+                messages.error(request, "Invalid reset request. Please restart the password reset process.")
+                return redirect('forgot_password')
+                
+        except UserProfile.DoesNotExist:
+            messages.error(request, "No account found with that email address.")
+            return redirect('forgot_password')
+    
+    return render(request, 'password_reset/reset_password.html')
+
+def send_reset_code_email(user, code):
+    """
+    Helper function to send the reset code via email.
+    """
+    subject = "Password Reset Code"
+    message = f"""
+    Hello {user.firstname},
+    
+    You requested a password reset for your account.
+    
+    Your password reset code is: {code}
+    
+    This code will expire in 10 minutes.
+    
+    If you did not request this password reset, please ignore this email.
+    
+    Regards,
+    From Veripass Official
+    """
+    from_email = settings.DEFAULT_FROM_EMAIL
+    recipient_list = [user.corporate_email]
+    
+    send_mail(subject, message, from_email, recipient_list)
 
 @login_required
 def default_dashboard(request):

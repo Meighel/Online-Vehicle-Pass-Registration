@@ -5,6 +5,9 @@ from datetime import timedelta
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils import timezone
 import pytz
+import random
+import string
+from datetime import timedelta
 
 
 class BaseModel(models.Model):
@@ -76,6 +79,30 @@ class AdminProfile(BaseModel):
 
     def __str__(self):
         return f"Admin: {self.user.firstname} {self.user.lastname} ({self.admin_id})"
+
+class PasswordResetCode(BaseModel):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    code = models.CharField(max_length=4)
+    expires_at = models.DateTimeField()
+    is_used = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"Reset code for {self.user.corporate_email}"
+    
+    def save(self, *args, **kwargs):
+        # Set expiration time to 10 minutes from now if it's a new object
+        if not self.pk:
+            self.expires_at = timezone.now() + timedelta(minutes=10)
+        super().save(*args, **kwargs)
+    
+    @classmethod
+    def generate_code(cls):
+        """Generate a random 4-digit code"""
+        return ''.join(random.choices(string.digits, k=4))
+    
+    def is_valid(self):
+        """Check if the code is still valid (not expired and not used)"""
+        return not self.is_used and timezone.now() < self.expires_at
 
 class Owner(BaseModel):
     owner_firstname = models.CharField(max_length=50)

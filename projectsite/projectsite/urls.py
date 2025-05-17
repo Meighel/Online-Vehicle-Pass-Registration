@@ -26,7 +26,10 @@ urlpatterns = [
     path('', home, name='home'),
     path("login/", login_view, name="login"),
     path('signup/', signup_view, name="signup"),
-    path("logout/", logout_view, name="logout"), 
+    path("logout/", logout_view, name="logout"),
+    path('forgot-password/', views.forgot_password, name='forgot_password'),
+    path('verify-reset-code/', views.verify_reset_code, name='verify_reset_code'),
+    path('reset-password/', views.reset_password, name='reset_password'),
     
     path("dashboard/user/", default_dashboard, name="default_dashboard"),
     path("dashboard/user/application/", user_application, name="user_application"),
