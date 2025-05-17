@@ -26,7 +26,6 @@
 {% block content %}
 <div class="dashboard-wrapper d-flex">
     <!-- Main Content -->
-        <!-- Main Content -->
     <div class="main-content flex-grow-1 ms-uto">
         <div class="container-fluid py-1">
             <!-- Title & Top Bar -->
@@ -35,19 +34,15 @@
                 <div class="d-flex align-items-center gap-3">
                     <!-- Notification Bell -->
                     <a href="Announcements.html" class="text-decoration-none text-light position-relative">
-                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="30" height="30">
+                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
                         <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
                     </a>
-                    <!-- Search Bar -->
-                    <div class="dashboard d-flex">
-                        <input type="text" class="form-control" placeholder="Search..." id="search-bar" width="30" height="30">
-                        <button class="btn btn-outline-secondary ms-1">🔍</button>
-                    </div>
                 </div>
             </div>
 
             <hr>
             <small><span id="date"></span></small>
+            
 
             <!-- Statistic Boxes -->
             <div class="row g-4 mt-3">
