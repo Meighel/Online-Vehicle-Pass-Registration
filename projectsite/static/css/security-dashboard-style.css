@@ -19,6 +19,7 @@ body {
 /*         Dashboard MAIN CONTENT            */
 /* ========================================= */
 
+
 .content {
     flex-grow: 1;
     padding: 20px;
@@ -28,7 +29,7 @@ body {
 
 .title {
     margin: 0; 
-    font-size: 30px; 
+    font-size: 35px; 
     display: flex;
     align-items: center; 
     font-weight: bold;
@@ -46,27 +47,6 @@ body {
     align-items: center; 
     margin-bottom: 5px;
 }
-
-.search-container {
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
-    gap: 5px;
-}
-
-.search-btn {
-    background: #ffe600 !important;
-    border: none;
-    padding: 5px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.search-btn:hover {
-    background: #ffe100;
-}
-
 
 .top-bar:hover .icons-container {
     opacity: 1;
