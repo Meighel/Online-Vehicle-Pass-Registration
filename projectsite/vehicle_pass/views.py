@@ -655,3 +655,8 @@ class SecurityViewStickers(CustomLoginRequiredMixin, ListView):
 @login_required
 def security_report(request):
     return render(request, "Security Dashboard/Security_History.html")
+
+
+@login_required
+def settings_faq(request):
+    return render(request, "Settings/FAQ.html")

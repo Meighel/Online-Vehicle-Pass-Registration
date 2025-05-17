@@ -17,6 +17,9 @@ from vehicle_pass.views import (
     AdminViewApplication, AdminViewSpecificApplication, AdminUpdateApplication,
     admin_manage_application, admin_manage_passes, admin_report,
     # admin_transaction, 
+    
+    #settings_view
+    settings_faq,
     home
 )
 
@@ -24,6 +27,7 @@ from vehicle_pass.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
+    path('faq/', settings_faq, name='faq'),
     path("login/", login_view, name="login"),
     path('signup/', signup_view, name="signup"),
     path("logout/", logout_view, name="logout"),
@@ -82,4 +86,5 @@ urlpatterns = [
     path("dashboard/user/application/step-2/", views.vehicle_registration_step_2, name="vehicle_registration_step_2"),
     path("dashboard/user/application/step-3/", views.vehicle_registration_step_3, name="vehicle_registration_step_3"),
     path("dashboard/user/application/complete/", views.registration_complete, name="registration_complete"),
+    
 ]
