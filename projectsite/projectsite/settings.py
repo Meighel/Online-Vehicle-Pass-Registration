@@ -145,5 +145,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'veripassofficial@gmail.com'
-EMAIL_HOST_PASSWORD = 'mdrbcsiffehvsuec'
+EMAIL_HOST_PASSWORD = 'mdrbvsiffehvsuec'
 DEFAULT_FROM_EMAIL = 'veripassofficial@gmail.com'
