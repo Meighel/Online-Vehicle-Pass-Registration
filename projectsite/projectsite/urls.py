@@ -19,7 +19,7 @@ from vehicle_pass.views import (
     # admin_transaction, 
     
     #settings_view
-    settings_faq,
+    faq, about_us, contact_us,  # Add your views here
     home
 )
 
@@ -30,7 +30,9 @@ urlpatterns = [
     path("login/", login_view, name="login"),
     path('signup/', signup_view, name="signup"),
     path("logout/", logout_view, name="logout"),
-    path('faq/', settings_faq, name='faq'),
+    path('faq/', faq, name='faq'),
+    path('about/', about_us, name='about'),
+    path('contact/', contact_us, name='contact'),
     path('forgot-password/', views.forgot_password, name='forgot_password'),
     path('verify-reset-code/', views.verify_reset_code, name='verify_reset_code'),
     path('reset-password/', views.reset_password, name='reset_password'),

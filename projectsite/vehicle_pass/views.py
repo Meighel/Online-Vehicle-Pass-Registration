@@ -657,6 +657,11 @@ def security_report(request):
     return render(request, "Security Dashboard/Security_History.html")
 
 
-@login_required
-def settings_faq(request):
+def faq(request):
     return render(request, "Settings/FAQ.html")
+
+def contact_us(request):
+    return render(request, "Settings/ContactUs.html")
+
+def about_us(request):
+    return render(request, "Settings/AboutUs.html")
