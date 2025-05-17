@@ -57,23 +57,13 @@ function setupSidebarHighlight() {
     });
 }
 
-// ✅ Update Date in Real-Time
-function updateDate() {
-    const dateElement = document.getElementById("real-time-date");
-    if (!dateElement) return;
-
-    const now = new Date();
-    const options = {
-        weekday: "long",
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true
-    };
-    dateElement.textContent = now.toLocaleString("en-US", options);
-}
+// Display current date
+document.addEventListener('DOMContentLoaded', function() {
+    const dateElement = document.getElementById('date');
+    const today = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    dateElement.textContent = today.toLocaleDateString('en-US', options);
+});
 
 // ✅ Load Chart (if applicable)
 document.addEventListener("DOMContentLoaded", function () {

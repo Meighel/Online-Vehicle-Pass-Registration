@@ -13,6 +13,10 @@
   <div class="container">
     <h2 class="form2-h2">Registration for Vehicle Pass (2/3)</h2>
 
+    <div class="progress-container">
+      <div class="progress-bar" style="width: 66%;"></div> <!-- Adjust width for each step -->
+    </div>
+
     <form method="POST">
       {% csrf_token %}
       
@@ -23,6 +27,10 @@
 
       <div id="owner-details" class="form2-owner-details" style="display: none;">
         <div class="form2-aligned-group">
+          <div class="form-group form2-form-group">
+            <label for="{{ form.relationship_to_owner.id_for_label }}">Relationship to Owner</label>
+            {{ form.relationship_to_owner }}
+          </div> 
           <div class="form-group form2-form-group">
             <label for="{{ form.owner_first_name.id_for_label }}">Owner's First Name</label>
             {{ form.owner_first_name }}
@@ -53,27 +61,5 @@
     </form>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Get the owner select element
-      const ownerSelect = document.getElementById('{{ form.owner.id_for_label }}');
-      const ownerDetails = document.getElementById('owner-details');
-      
-      // Function to toggle owner details visibility
-      function toggleOwnerDetails() {
-        if (ownerSelect.value === 'no') {
-          ownerDetails.style.display = 'block';
-        } else {
-          ownerDetails.style.display = 'none';
-        }
-      }
-      
-      // Add event listener for changes
-      ownerSelect.addEventListener('change', toggleOwnerDetails);
-      
-      // Run the function once on page load to set initial state
-      toggleOwnerDetails();
-    });
-  </script>
 </body>
 </html>

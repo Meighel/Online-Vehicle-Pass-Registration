@@ -13,6 +13,10 @@
   <div class="container">
     <h2 class="form1-h2">Registration for Vehicle Pass (1/3)</h2>
 
+    <div class="progress-container">
+      <div class="progress-bar" style="width: 33%;"></div> <!-- Adjust width for each step -->
+    </div>
+
     <form method="POST">
       {% csrf_token %}
       
@@ -44,6 +48,11 @@
           {{ form.role }}
         </div>
 
+          <div class="form-group form1-form-group">
+            <label for="{{ form.college_or_workplace.id_for_label }}">College/Workplace</label>
+            {{ form.college_or_workplace }}
+          </div>
+
         <div class="form-group form1-form-group">
           <label for="{{ form.driver_license_number.id_for_label }}">Driver License's Number</label>
           {{ form.driver_license_number }}
@@ -55,6 +64,11 @@
           <label for="{{ form.vehicle_type.id_for_label }}">Vehicle Type:</label>
           {{ form.vehicle_type }}
         </div>
+                
+        <div class="form-group form1-form-group">
+          <label for="{{ form.vehicle_color.id_for_label }}">Vehicle Color</label>
+          {{ form.vehicle_color }}
+        </div>
 
         <div class="form-group form1-form-group">
           <label for="{{ form.model.id_for_label }}">Model</label>
@@ -65,9 +79,11 @@
           <label for="{{ form.plate_number.id_for_label }}">Plate Number</label>
           {{ form.plate_number }}
         </div>
+  
       </div>
 
       <div class="form1-aligned-group">
+        <!-- Keep existing fields -->
         <div class="form-group form1-form-group">
           <label for="{{ form.chassis_number.id_for_label }}">Chassis Number</label>
           {{ form.chassis_number }}

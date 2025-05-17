@@ -39,18 +39,33 @@ function validateForm1() {
   }
   
   // Form 2 Owner Toggle
-  function toggleOwnerDetails() {
-    const ownerDetailsSection = document.getElementById('owner-details');
-    const ownerRadio = document.querySelector('input[name="owner"]:checked');
-    
-    if (!ownerDetailsSection || !ownerRadio) return; // Exit if elements don't exist
-    
-    if (ownerRadio.value === 'no') {
-      ownerDetailsSection.style.display = 'block';
+document.addEventListener('DOMContentLoaded', () => {
+  const ownerDetails = document.getElementById('owner-details');
+  const ownerRadios = document.querySelectorAll('input[name="owner"]');
+
+  if (!ownerDetails || ownerRadios.length === 0) return;
+
+  const toggleOwnerFields = () => {
+    const selected = document.querySelector('input[name="owner"]:checked');
+    if (selected && selected.value === 'no') {
+      ownerDetails.style.display = 'block';
     } else {
-      ownerDetailsSection.style.display = 'none';
+      ownerDetails.style.display = 'none';
+      // Optional: clear hidden inputs
+      ownerDetails.querySelectorAll('input').forEach(input => {
+        input.value = '';
+      });
     }
-  }
+  };
+
+  // Attach event listeners
+  ownerRadios.forEach(radio => {
+    radio.addEventListener('change', toggleOwnerFields);
+  });
+
+  // Initial run
+  toggleOwnerFields();
+});
   
   // Form 2 Validation
   function validateForm2() {
@@ -117,4 +132,13 @@ function validateForm1() {
     if (form3Input) {
       form3Input.addEventListener('input', validateForm3);
     }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const path = window.location.pathname;
+    const progress = document.querySelector('.progress-bar');
+
+    if (path.includes('step_1')) progress.style.width = '33%';
+    else if (path.includes('step_2')) progress.style.width = '66%';
+    else if (path.includes('step_3')) progress.style.width = '100%';
   });

@@ -20,25 +20,25 @@
     </a>
     <p>Main Menu</p>
     <ul>
-        <li data-menu="dashboard" {% if request.path == dashboard_url %}class="active"{% endif %}>
+        <li data-menu="userdashboard">
             <a href="{% url 'default_dashboard' %}">
                 <img src="{% static 'images/home.png' %}" alt="Dashboard" width="30">
                 <span>Dashboard</span>
             </a>
         </li>
-        <li data-menu="payment" {% if request.path == application_url %}class="active"{% endif %}>
+        <li data-menu="userapplication">
             <a href="{% url 'user_application' %}">
                 <img src="{% static 'images/application.png' %}" alt="Application" width="30">
                 <span>Application</span>
             </a>
         </li>
-        <li data-menu="status" {% if request.path == pass_status_url %}class="active"{% endif %}>
+        <li data-menu="userpassstatus">
             <a href="{% url 'user_pass_status' %}">
                 <img src="{% static 'images/passes.png' %}" alt="Status" width="30">
                 <span>Pass Status</span>
             </a>
         </li>
-        <li data-menu="settings" {% if request.path == settings_url %}class="active"{% endif %}>
+        <li data-menu="usersettings">
             <a href="{% url 'user_settings' %}">
                 <img src="{% static 'images/settings.png' %}" alt="Settings" width="25">
                 <span>Settings</span>
@@ -70,6 +70,5 @@
 
 {% block extra_js %}
 <script src="{% static 'javascript/base.js' %}"></script>
-
 {% endblock %}
 </html>
