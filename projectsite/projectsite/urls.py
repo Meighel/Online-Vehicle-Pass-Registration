@@ -4,7 +4,7 @@ from vehicle_pass import views
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
     #form1_view,
-    default_dashboard, user_pass_status, user_application,
+    default_dashboard, user_pass_status, user_application, user_settings, 
     vehicle_registration_step_1, vehicle_registration_step_2, vehicle_registration_step_3, 
     security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, SecurityViewStickers, 
     SecurityUpdateApplication, SecurityViewInspectionReports, security_report,
@@ -34,6 +34,7 @@ urlpatterns = [
     path("dashboard/user/application/step-2/", views.vehicle_registration_step_2, name="vehicle_registration_step_2"),
     path("dashboard/user/application/step-3/", views.vehicle_registration_step_3, name="vehicle_registration_step_3"),
     path("dashboard/user/pass_status/", user_pass_status, name="user_pass_status"),
+    path("dashboard/user/settings/", user_settings, name="user_settings"),
     
     
     path("dashboard/security/", security_dashboard, name="security_dashboard"),

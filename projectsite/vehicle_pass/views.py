@@ -252,6 +252,10 @@ def registration_complete(request):
 def user_pass_status(request):
     return render(request, "User Dashboard/User_Pass_Status.html")
 
+@login_required
+def user_settings(request):
+    return render(request, "User Dashboard/User_Settings.html")
+
 # Admin Page View 
 @login_required
 def admin_dashboard(request):

@@ -16,7 +16,6 @@
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <a class="navbar-brand ms-4 fs-3 fw-bold text-warning brand-logo" href="{% url 'home' %}">OVR</a>
-    <button class="toggle-btn" id="toggle-btn">☰</button>
 
     <p>Main Menu</p>
     <ul>
@@ -39,7 +38,7 @@
             </a>
         </li>
         <li data-menu="settings" {% if request.path == settings_url %}class="active"{% endif %}>
-            <a href="#">
+            <a href="{% url 'user_settings' %}">
                 <img src="{% static 'images/settings.png' %}" alt="Settings" width="25">
                 <span>Settings</span>
             </a>
