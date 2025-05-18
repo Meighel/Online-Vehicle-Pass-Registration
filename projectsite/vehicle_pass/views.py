@@ -270,6 +270,7 @@ def vehicle_registration_step_1(request):
                 'first_name': step1_data['first_name'],
                 'middle_name': step1_data['middle_name'],
                 'last_name': step1_data['last_name'],
+                'suffix': step1_data['suffix'],
                 'corporate_email': step1_data['corporate_email'],
                 'role': step1_data['role'],
                 'driver_license_number': step1_data['driver_license_number'],
@@ -287,6 +288,7 @@ def vehicle_registration_step_1(request):
             'first_name': user.firstname,
             'middle_name': user.middle_name,
             'last_name': user.lastname,
+            'suffix': user.suffix,
             'corporate_email': user.corporate_email,
             'role': user.role,
             'driver_license_number': user.dl_number

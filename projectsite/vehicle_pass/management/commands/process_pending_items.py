@@ -24,7 +24,7 @@ class Command(BaseCommand):
                 self.style.SUCCESS(f'Updated {registration_count} pending registrations to "reviewing documents"')
             )
         
-        # 3. Auto-void payments that are pending for more than 3 working days
+        # 3. Auto-cancelled payments that are pending for more than 3 working days
         three_days_ago = timezone.now() - timedelta(days=3)
         pending_payments = PaymentTransaction.objects.filter(
             status='pending',
@@ -34,7 +34,7 @@ class Command(BaseCommand):
         payment_count = pending_payments.count()
         if payment_count > 0:
             for payment in pending_payments:
-                payment.status = 'cancelled'
+                payment.status = 'unpaid'
                 payment.save()  # Using save() to trigger any signals attached to payment
             
             self.stdout.write(

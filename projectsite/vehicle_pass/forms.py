@@ -82,6 +82,7 @@ class VehicleRegistrationStep1Form(forms.Form):
     first_name = forms.CharField(max_length=100, label='First Name')
     middle_name = forms.CharField(max_length=100, required=False, label='Middle Name')
     last_name = forms.CharField(max_length=100, label='Last Name')
+    suffix = forms.CharField(max_length=5, required=False, label='Suffix')
     corporate_email = forms.EmailField(label='Corporate Email')
     role = forms.ChoiceField(choices=[('student', 'Student'), ('faculty', 'Faculty')], label='School Role')
     college_or_workplace = forms.CharField(max_length=100, label='College/Workplace')
@@ -140,6 +141,11 @@ class VehicleRegistrationStep1Form(forms.Form):
         label='Last Name',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your last name'})
     )
+    suffix = forms.CharField(
+        max_length=5,
+        label='Suffix',
+        widget=forms.TextInput(attrs={'placeholder': 'Leave blank if none'})
+    )  
     corporate_email = forms.EmailField(
         label='Corporate Email',
         widget=forms.EmailInput(attrs={'placeholder': '2022example.@psu.edu.ph'})
