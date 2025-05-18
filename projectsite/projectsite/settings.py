@@ -51,7 +51,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'vehicle_pass.middleware.VisitorTrackingMiddleware',
 ]
+
 
 ROOT_URLCONF = 'projectsite.urls'
 
@@ -125,12 +127,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Static files (CSS, JavaScript, images)
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = (
+STATICFILES_DIRS = [
     BASE_DIR / 'static',
-)
+]
 
+# Media files (user-uploaded)
+MEDIA_URL = '/media/'  # URL to access media in the browser
+MEDIA_ROOT = BASE_DIR / 'static/media'  # Where files are stored on disk
 
 LOGIN_URL = "/login" 
 LOGOUT_REDIRECT_URL = '/login'

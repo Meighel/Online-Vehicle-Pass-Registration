@@ -29,9 +29,14 @@ class UserProfile(BaseModel):
                    ('university personnel', 'University Personnel')
                    ]
     
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/',
+        blank=True,
+        null=True,
+    )
     corporate_email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=128)
-    lastname = models.CharField(max_length=25)
+    lastname = models.CharField(max_length=25) 
     firstname = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=25, blank=True, null=True)
     suffix = models.CharField(max_length=5, blank=True, null=True)
@@ -66,6 +71,11 @@ class UserProfile(BaseModel):
 
 class SecurityProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/',
+        blank=True,
+        null=True,
+    )
     badgeNumber = models.CharField(max_length=10)
     job_title = models.CharField(max_length=30)
 
@@ -74,6 +84,11 @@ class SecurityProfile(BaseModel):
 
 class CashierProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/',
+        blank=True,
+        null=True,
+    )
     cashier_id = models.CharField(max_length=15)
     job_title = models.CharField(max_length=40)
 
@@ -82,6 +97,11 @@ class CashierProfile(BaseModel):
 
 class AdminProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/',
+        blank=True,
+        null=True,
+    )
     admin_id = models.CharField(max_length=15)
 
     def __str__(self):
@@ -113,7 +133,7 @@ class PasswordResetCode(BaseModel):
     
 
 class Vehicle(BaseModel):
-    self_ownership = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
+    self_owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
     plateNumber = models.CharField(max_length=10, unique=True)
     type = models.CharField(max_length=20)
     model = models.CharField(max_length=20)
@@ -142,8 +162,6 @@ class Vehicle(BaseModel):
         super().save(*args, **kwargs)
 
 
-
-
 class Registration(BaseModel):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
@@ -159,6 +177,7 @@ class Registration(BaseModel):
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE) 
     files = models.URLField(max_length=250)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    remarks = models.TextField(null=True)
 
     def __str__(self):
         return f"Registration {self.registrationNumber} for {self.user.lastname}, {self.user.firstname}"
@@ -185,7 +204,9 @@ class VehiclePass(BaseModel):
     vehicle = models.OneToOneField(Vehicle, on_delete=models.CASCADE)
     passNumber = models.CharField(max_length=10)
     passExpire = models.DateField()
+    claim_date = models.DateField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+
 
     def __str__(self):
         return f"{self.passNumber}"
@@ -226,6 +247,7 @@ class PaymentTransaction(BaseModel):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
     due_date = models.DateTimeField(blank=True, null=True) 
     date_processed = models.DateTimeField(auto_now_add=True)
+    remarks = models.CharField(max_length=75, null=True)
 
     def save(self, *args, **kwargs):
         # Automatically set due_date when status is pending and due_date is not provided
@@ -261,16 +283,16 @@ class PaymentTransaction(BaseModel):
  
 class InspectionReport(BaseModel):
     REMARK_CHOICES = [
-        ('to_be_inspected', 'To Be Inspected'),
-        ('sticker_released', 'Sticker Released'),
-        ('application_declined', 'Application Declined'),
-        ('request_refund', 'To Request Refund'),
+        ('to be inspected', 'To Be Inspected'),
+        ('sticker released', 'Sticker Released'),
+        ('application declined', 'Application Declined'),
+        ('request refund', 'To Request Refund'),
     ]
 
     payment_number = models.ForeignKey(PaymentTransaction, on_delete=models.CASCADE)
     security = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True)
-    inspection_date = models.DateTimeField(auto_now_add=True)
-    final_inspection_date = models.DateField()
+    document_inspection_date = models.DateTimeField(auto_now_add=True)
+    physical_final_inspection_date = models.DateField()
     remarks = models.CharField(max_length=30, choices=REMARK_CHOICES, default='to_be_inspected')
     additional_notes = models.TextField(blank=True, null=True)
     is_approved = models.BooleanField(default=False)
@@ -282,12 +304,12 @@ class InspectionReport(BaseModel):
         is_new = self.pk is None
 
         if self.is_approved:
-            self.remarks = 'sticker_released'
+            self.remarks = 'sticker released'
 
         super().save(*args, **kwargs)
         
         # Check if this is an update and the necessary conditions are met
-        if not is_new and self.remarks == "sticker_released" and self.is_approved:
+        if not is_new and self.remarks == "sticker released" and self.is_approved:
             from .models import VehiclePass
             VehiclePass.create_from_inspection(self)
 
@@ -308,3 +330,13 @@ class Announcement(BaseModel):
     message = models.TextField()
     date_posted = models.DateTimeField(auto_now_add=True)
     posted_by = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, related_name="announcements_posted")
+
+class SiteVisit(models.Model):
+    session_key = models.CharField(max_length=40, unique=True)
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class LoginActivity(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    login_time = models.DateTimeField(auto_now_add=True)

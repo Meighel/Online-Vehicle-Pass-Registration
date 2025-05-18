@@ -91,45 +91,66 @@
     </section>
 
 
-    <!-- Features Section -->
+<!-- Features Section -->
     <section id="features" class="py-5 features">
         <div class="container">
-            <div class="row text-center">
+            <div class="row g-4 text-center">
+                <!-- Site Statistics -->
+                <div class="col-md-3 d-flex">
+                    <div class="card border-warning bg-black text-white shadow-sm w-100 h-100">
+                        <div class="card-body p-3 d-flex flex-column justify-content-center text-start">
+                            <h6 class="text-warning mb-2">Site Statistics</h6>
+                            <p class="mb-1"><strong>Total Visitors:</strong> {{ stats.total_visitors }}</p>
+                            <p class="mb-1"><strong>Visitors This Week:</strong> {{ stats.weekly_visitors }}</p>
+                            <p class="mb-1"><strong>Visitors This Month:</strong> {{ stats.monthly_visitors }}</p>
+                            <p class="mb-1"><strong>Total Logins:</strong> {{ stats.total_logins }}</p>
+                            <p class="mb-0"><strong>Logins This Week:</strong> {{ stats.weekly_logins }}</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Feature 1 -->
-                <div class="col-md-4 fade-in">
-                    <a href="#secure-registration" class="feature-link">
-                        <div class="feature-card">
-                            <i class="fas fa-shield-alt fa-3x text-warning mb-4"></i>
-                            <h3>Secure Registration</h3>
-                            <p>Protect your vehicle's identity with blockchain encryption.</p>
+                <div class="col-md-3 d-flex">
+                    <a href="#secure-registration" class="feature-link w-100">
+                        <div class="card bg-dark text-white shadow-sm h-100">
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <i class="fas fa-shield-alt fa-3x text-warning mb-4"></i>
+                                <h3>Secure Registration</h3>
+                                <p>Protect your vehicle's identity with blockchain encryption.</p>
+                            </div>
                         </div>
                     </a>
                 </div>
 
                 <!-- Feature 2 -->
-                <div class="col-md-4 fade-in delay-1">
-                    <a href="#documentation" class="feature-link">
-                        <div class="feature-card">
-                            <i class="fas fa-file-alt fa-3x text-warning mb-4"></i>
-                            <h3>Effortless Documentation</h3>
-                            <p>Manage and upload registration documents seamlessly.</p>
+                <div class="col-md-3 d-flex">
+                    <a href="#documentation" class="feature-link w-100">
+                        <div class="card bg-dark text-white shadow-sm h-100">
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <i class="fas fa-file-alt fa-3x text-warning mb-4"></i>
+                                <h3>Effortless Documentation</h3>
+                                <p>Manage and upload registration documents seamlessly.</p>
+                            </div>
                         </div>
                     </a>
                 </div>
 
                 <!-- Feature 3 -->
-                <div class="col-md-4 fade-in delay-2">
-                    <a href="#limited-slots" class="feature-link">
-                        <div class="feature-card">
-                            <i class="fas fa-car fa-3x text-warning mb-4"></i>
-                            <h3>Limited Slots!</h3>
-                            <p>Hurry! Only a few spots left. Secure your registration now.</p>
+                <div class="col-md-3 d-flex">
+                    <a href="#limited-slots" class="feature-link w-100">
+                        <div class="card bg-dark text-white shadow-sm h-100">
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <i class="fas fa-car fa-3x text-warning mb-4"></i>
+                                <h3>Limited Slots!</h3>
+                                <p>Hurry! Only a few spots left. Secure your registration now.</p>
+                            </div>
                         </div>
                     </a>
                 </div>
             </div>
         </div>
     </section>
+
 
 
     <!-- Pricing Section -->

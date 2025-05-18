@@ -10,7 +10,7 @@ from .forms import (UserSignupForm, UserProfileForm,
 )
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
 from .models import Vehicle, Registration, VehiclePass, PaymentTransaction
-from .models import InspectionReport, Notification, Announcement, Owner, PasswordResetCode
+from .models import InspectionReport, Notification, Announcement, PasswordResetCode, LoginActivity, SiteVisit
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
@@ -346,18 +346,18 @@ def vehicle_registration_step_3(request):
                 owner = None
                 if not step2_data.get('is_owner', True):
                     # Create owner object
-                    owner = Owner.objects.create(
+                    owner = Vehicle.objects.create(
                         owner_firstname=step2_data['owner_first_name'],
                         owner_middlename=step2_data['owner_middle_name'],
                         owner_lastname=step2_data['owner_last_name'],
-                        owner_contact_number=step2_data['owner_contact_number'],
+                        contact_number=step2_data['owner_contact_number'],
                         relationship_to_owner="User Relationship"  
                     )
                 
                 # 2. Create Vehicle object
                 vehicle = Vehicle.objects.create(
                     self_ownership=user if step2_data.get('is_owner', True) else None,
-                    legal_owner=None if step2_data.get('is_owner', True) else owner,
+                    is_owner = None if step2_data.get('is_owner', False) else owner,
                     plateNumber=step1_data['plate_number'],
                     type=step1_data['vehicle_type'],
                     model=step1_data['model'],
@@ -569,7 +569,7 @@ class cashierUpdatePayment(CustomLoginRequiredMixin, UpdateView):
 def cashier_report(request):
     return render(request, "Cashier Dashboard/Cashier_Reports.html")
 
-# Security Page Vies
+# Security Page Views
 @login_required
 def security_dashboard(request):
     return render(request, "Security Dashboard/Security_Dashboard.html")
@@ -630,10 +630,10 @@ def handle_inspection_action(request):
                 
                 if action == 'approve':
                     inspection.is_approved = True
-                    inspection.remarks = 'sticker_released'
+                    inspection.remarks = 'sticker released'
                 elif action == 'reject':
                     inspection.is_approved = False
-                    inspection.remarks = 'application_declined'
+                    inspection.remarks = 'application declined'
                     
                 inspection.save()
                 messages.success(request, f"Inspection {action}d successfully.")
@@ -665,3 +665,31 @@ def contact_us(request):
 
 def about_us(request):
     return render(request, "Settings/AboutUs.html")
+
+
+from .models import SiteVisit, LoginActivity
+
+#Total Visitors
+def get_stats():
+    now = timezone.now()
+    week_ago = now - timedelta(days=7)
+    month_ago = now - timedelta(days=30)
+
+    total_visitors = SiteVisit.objects.count()
+    weekly_visitors = SiteVisit.objects.filter(created_at__gte=week_ago).count()
+    monthly_visitors = SiteVisit.objects.filter(created_at__gte=month_ago).count()
+
+    total_logins = LoginActivity.objects.count()
+    weekly_logins = LoginActivity.objects.filter(login_time__gte=week_ago).count()
+
+    return {
+        "total_visitors": total_visitors,
+        "weekly_visitors": weekly_visitors,
+        "monthly_visitors": monthly_visitors,
+        "total_logins": total_logins,
+        "weekly_logins": weekly_logins,
+    }
+
+def dashboard_view(request):
+    stats = get_stats()
+    return render(request, 'User Dashboard/User_Dashboard.html', {'stats': stats})

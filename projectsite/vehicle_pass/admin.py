@@ -1,17 +1,17 @@
 from django.contrib import admin
 from .models import (
     UserProfile, SecurityProfile, CashierProfile, AdminProfile,
-    Vehicle, Registration, VehiclePass, Owner,
-    PaymentTransaction, InspectionReport, Notification, Announcement
+    Vehicle, Registration, VehiclePass,
+    PaymentTransaction, InspectionReport,
+    Notification, Announcement, SiteVisit, LoginActivity, PasswordResetCode
 )
 
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('corporate_email', 'firstname', 'lastname', 'program', 'department')
+    list_display = ('corporate_email', 'firstname', 'middle_name', 'lastname', 'suffix', 'program', 'department', 'address', 'role', 'school_role')
     search_fields = ('corporate_email', 'firstname', 'lastname')
-    list_filter = ('program', 'department')
-
+    list_filter = ('program', 'department', 'role', 'school_role')
 
 
 @admin.register(SecurityProfile)
@@ -65,47 +65,44 @@ class AdminProfileAdmin(admin.ModelAdmin):
     get_last_name.short_description = 'Last Name'
     get_last_name.admin_order_field = 'user__lastname'
 
+@admin.register(PasswordResetCode)
+class PasswordResetCodeAdmin(admin.ModelAdmin):
+    list_display = ('user', 'code', 'expires_at', 'is_used')
+    search_fields = ('user', 'is_used')
+
 @admin.register(Vehicle)
 class VehicleAdmin(admin.ModelAdmin):
-    list_display = ('self_ownership', 'legal_owner', 'plateNumber', 'type', 'model', 'color')
+    list_display = ('self_owner', 'plateNumber', 'type', 'model', 'color', 'chassisNumber', 'OR_Number', 'CR_Number', 'is_owner', 'is_legal_owner', 'owner_firstname', 'owner_middlename', 'owner_lastname', "owner_suffix", "relationship_to_owner", "contact_number")
     search_fields = ('plateNumber', 'self_ownership__firstname', 'self_ownership__lastname','legal_owner__owner_firstname', 'legal_owner__owner_lastname',)
     list_filter = ('color', 'model', 'type')
 
 
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ('registrationNumber', 'user', 'vehicle', 'status', 'files')
+    list_display = ('registrationNumber', 'user', 'vehicle', 'status', 'files', 'remarks')
     search_fields = ('registrationNumber', 'user__firstname', 'user__lastname')
     list_filter = ('status', 'user__department')
 
 
-@admin.register(Owner)
-class OwnerAdmin(admin.ModelAdmin):
-    list_display = ('owner_firstname', 'owner_middlename', 'owner_lastname', 'owner_suffix', 'owner_contact_number', 'relationship_to_owner')
-    search_fields = ('owner_firstname', 'owner_middlename', 'owner_lastname','owner_contact_number', 'relationship_to_owner')
-    list_filter = ('owner_firstname', 'owner_lastname', 'relationship_to_owner')
-                     
-
-
 @admin.register(VehiclePass)
 class VehiclePassAdmin(admin.ModelAdmin):
-    list_display = ('vehicle', 'passNumber', 'passExpire', 'status')
-    search_fields = ('passNumber', 'vehicle__plateNumber')
+    list_display = ('vehicle', 'passNumber', 'passExpire', 'claim_date', 'status', )
+    search_fields = ('passNumber', 'passExpire', 'claim_date', 'vehicle__plateNumber')
     list_filter = ('status',)
 
 
 @admin.register(PaymentTransaction)
 class PaymentTransactionAdmin(admin.ModelAdmin):
-    list_display = ('receipt_number', 'registration', 'cashier', 'status', 'date_processed')
+    list_display = ('receipt_number', 'registration', 'cashier', 'status', 'due_date', 'date_processed', 'remarks')
     search_fields = ('receipt_number', 'registration__registrationNumber', 'cashier__user__firstname')
     list_filter = ('status', 'date_processed')
 
 
 @admin.register(InspectionReport)
 class InspectionReportAdmin(admin.ModelAdmin):
-    list_display = ('payment_number', 'security', 'inspection_date', 'is_approved')
+    list_display = ('payment_number', 'security', 'document_inspection_date', 'physical_final_inspection_date', 'is_approved')
     search_fields = ('payment_number__registration__registrationNumber', 'security__user__firstname')
-    list_filter = ('is_approved', 'inspection_date')
+    list_filter = ('is_approved', 'document_inspection_date', 'physical_final_inspection_date')
 
 
 @admin.register(Notification)
@@ -120,3 +117,14 @@ class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ('title', 'message', 'date_posted', 'posted_by')
     search_fields = ('title', 'posted_by__corporate_email')
     list_filter = ('date_posted',)
+
+@admin.register(SiteVisit)
+class SiteVisitAdmin(admin.ModelAdmin):
+    list_display = ('session_key', 'ip_address', 'user_agent', 'created_at')
+    search_fields = ('user_agent', 'created_at')
+
+@admin.register(LoginActivity)
+class LoginActivityAdmin(admin.ModelAdmin):
+    list_display = ('user', 'login_time')
+    search_fields = ('user', 'login_time')
+
