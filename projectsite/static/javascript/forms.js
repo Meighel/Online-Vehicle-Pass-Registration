@@ -1,144 +1,186 @@
-// Form 1 Validation
-function validateForm1() {
-    const form = document.getElementById("vehicle-form");
-    const nextButton = document.getElementById("form1-next-btn");
-  
-    if (!form || !nextButton) return; // Exit if elements don't exist
-  
-    const requiredFields = form.querySelectorAll("input[required]");
-    let allFilled = true;
-  
-    requiredFields.forEach(input => {
-      if (input.name !== 'middleName' && !input.value) {
-        allFilled = false;
-      }
-    });
-  
-    nextButton.disabled = !allFilled;
-  }
-  
-  // Form 1 Submit Handler
-  function handleForm1Submit(event) {
-    const form = document.getElementById("vehicle-form");
-    
-    if (!form) return; // Exit if element doesn't exist
-    
-    const requiredFields = form.querySelectorAll("input[required]");
-    let allFilled = true;
-  
-    requiredFields.forEach(input => {
-      if (!input.value) {
-        allFilled = false;
-      }
-    });
-  
-    if (!allFilled) {
-      event.preventDefault(); 
-      alert("Please fill in all required fields before proceeding.");
-    }
-  }
-  
-  // Form 2 Owner Toggle
-document.addEventListener('DOMContentLoaded', () => {
-  const ownerDetails = document.getElementById('owner-details');
-  const ownerRadios = document.querySelectorAll('input[name="owner"]');
+document.addEventListener("DOMContentLoaded", () => {
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => document.querySelectorAll(selector);
 
-  if (!ownerDetails || ownerRadios.length === 0) return;
+  const setProgressBar = () => {
+    const path = window.location.pathname;
+    const progress = $(".progress-bar");
+    if (!progress) return;
 
-  const toggleOwnerFields = () => {
-    const selected = document.querySelector('input[name="owner"]:checked');
-    if (selected && selected.value === 'no') {
-      ownerDetails.style.display = 'block';
-    } else {
-      ownerDetails.style.display = 'none';
-      // Optional: clear hidden inputs
-      ownerDetails.querySelectorAll('input').forEach(input => {
-        input.value = '';
+    if (path.includes("step_1")) progress.style.width = "33%";
+    else if (path.includes("step_2")) progress.style.width = "66%";
+    else if (path.includes("step_3")) progress.style.width = "100%";
+  };
+
+  const addRealTimeValidation = () => {
+    const fields = {
+      driverLicense: {
+        el: $("#id_driver_license_number"),
+        regex: /^\d{15}$/,
+        message: "Driver license number must be exactly 15 digits"
+      },
+      plateNumber: {
+        el: $("#id_plate_number"),
+        regex: /^[A-Za-z]{1,3}-\d{1,4}$/,
+        message: "Plate number must be in the format ABC-1234"
+      },
+      chassisNumber: {
+        el: $("#id_chassis_number"),
+        regex: /^[A-Za-z0-9]{17}$/,
+        message: "Chassis number must be exactly 17 alphanumeric characters"
+      },
+      orNumber: {
+        el: $("#id_or_number"),
+        regex: /^\d+$/,
+        message: "OR number must be numeric"
+      },
+      crNumber: {
+        el: $("#id_cr_number"),
+        regex: /^\d+$/,
+        message: "CR number must be numeric"
+      },
+      ownersContactNumber: {
+        el: $("#id_owner_contact_number"), // corrected ID
+        regex: /^[0-9]{11}$/,
+        message: "Contact number must be exactly 11 digits"
+      }
+    };
+
+    const validateField = ({ el, regex, message }) => {
+      if (!el) return;
+
+      const errorId = `${el.id}_error`;
+      let errorEl = document.getElementById(errorId);
+
+      if (!errorEl) {
+        errorEl = document.createElement("div");
+        errorEl.id = errorId;
+        errorEl.style.color = "red";
+        errorEl.style.fontSize = "0.8rem";
+        el.insertAdjacentElement("afterend", errorEl);
+      }
+
+      el.addEventListener("input", () => {
+        const value = el.value.trim();
+        const valid = regex.test(value);
+        el.classList.toggle("invalid", !valid && value !== "");
+        errorEl.textContent = !valid && value !== "" ? message : "";
       });
+    };
+
+    Object.values(fields).forEach(validateField);
+  };
+
+  const validateRequiredInputs = (container) => {
+    const requiredFields = container.querySelectorAll("input[required]");
+    return [...requiredFields].every(
+      (input) => input.name === "middleName" || input.value.trim()
+    );
+  };
+
+  const validateForm1 = () => {
+    const form = $("#vehicle-form");
+    const nextBtn = $("#form1-next-btn");
+    if (!form || !nextBtn) return;
+
+    nextBtn.disabled = !validateRequiredInputs(form);
+  };
+
+  const handleForm1Submit = (e) => {
+    const form = $("#vehicle-form");
+    if (!form) return;
+
+    if (!validateRequiredInputs(form)) {
+      e.preventDefault();
+      alert("Please fill in all required fields before proceeding.");
     }
   };
 
-  // Attach event listeners
-  ownerRadios.forEach(radio => {
-    radio.addEventListener('change', toggleOwnerFields);
-  });
+  const toggleOwnerDetails = () => {
+    const ownerDetails = $("#owner-details");
+    const selected = $('input[name="owner"]:checked');
 
-  // Initial run
-  toggleOwnerFields();
-});
-  
-  // Form 2 Validation
-  function validateForm2() {
-    const ownerRadio = document.querySelector('input[name="owner"]:checked');
-    const ownerDetailsSection = document.getElementById('owner-details');
-    const nextButton = document.querySelector('.form2-btn');
-    
-    if (!nextButton) return; // Exit if element doesn't exist
-    
-    let isValid = true;
-  
-    if (ownerRadio && ownerRadio.value === 'no' && ownerDetailsSection) {
-      const requiredFields = ownerDetailsSection.querySelectorAll('input[required]');
-      requiredFields.forEach(input => {
-        if (!input.value) {
-          isValid = false;
-        }
-      });
-    } else if (!ownerRadio) {
-      isValid = false;
+    if (!ownerDetails || !selected) return;
+
+    if (selected.value === "no") {
+      ownerDetails.style.display = "block";
+    } else {
+      ownerDetails.style.display = "none";
+      ownerDetails.querySelectorAll("input").forEach((input) => (input.value = ""));
     }
-    
-    if (nextButton) {
-      nextButton.disabled = !isValid;
+  };
+
+  const validateForm2 = () => {
+    const ownerRadio = $('input[name="owner"]:checked');
+    const ownerDetails = $("#owner-details");
+    const nextBtn = $(".form2-btn");
+
+    let isValid = !!ownerRadio;
+
+    if (ownerRadio?.value === "no" && ownerDetails) {
+      const requiredInputs = ownerDetails.querySelectorAll("input[required]");
+      isValid = [...requiredInputs].every((input) => input.value.trim());
     }
-  }
-  
-  // Form 3 Validation
-  function validateForm3() {
-    const googleFolderLink = document.querySelector('.form3-form-group input[type="url"]');
-    const nextButton = document.querySelector('.form3-btn');
-    
-    if (!googleFolderLink || !nextButton) return; // Exit if elements don't exist
-    
-    nextButton.disabled = !googleFolderLink.value;
-  }
-  
-  // Initialize event listeners when DOM is loaded
-  document.addEventListener('DOMContentLoaded', function() {
-    // Form 1 event listeners
-    const form1 = document.getElementById("vehicle-form");
-    if (form1) {
+
+    if (nextBtn) nextBtn.disabled = !isValid;
+  };
+
+  const validateForm3 = () => {
+    const input = $(".form3-form-group input[type='url']");
+    const nextBtn = $(".form3-btn");
+
+    if (nextBtn && input) {
+      nextBtn.disabled = !input.value.trim();
+    }
+  };
+
+  // Register all listeners
+  const init = () => {
+    setProgressBar();
+    addRealTimeValidation();
+
+    // Step 1
+    const form1 = $("#vehicle-form");
+    if (form1 && window.location.pathname.includes("step_1")) {
       form1.addEventListener("input", validateForm1);
       form1.addEventListener("submit", handleForm1Submit);
     }
-    
-    // Form 2 event listeners
-    const form2Inputs = document.querySelectorAll('.form2-form-group input');
-    if (form2Inputs.length > 0) {
-      form2Inputs.forEach(input => input.addEventListener('input', validateForm2));
-      
-      // Add listeners to radio buttons
-      const ownerRadios = document.querySelectorAll('input[name="owner"]');
-      ownerRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
+
+    // Step 2
+    const form2Inputs = $$(".form2-form-group input");
+    if (form2Inputs.length) {
+      form2Inputs.forEach((input) =>
+        input.addEventListener("input", validateForm2)
+      );
+      $$('input[name="owner"]').forEach((radio) => {
+        radio.addEventListener("change", () => {
           toggleOwnerDetails();
           validateForm2();
         });
       });
+      toggleOwnerDetails(); // Initial call
+      validateForm2();
     }
-    
-    // Form 3 event listeners
-    const form3Input = document.querySelector('.form3-form-group input[type="url"]');
+
+    // Prevent Step 2 submission if invalid
+    const form2 = document.querySelector("form");
+    if (form2 && window.location.pathname.includes("step_2")) {
+      form2.addEventListener("submit", (e) => {
+        validateForm2(); // Re-check before submit
+        const nextBtn = $(".form2-btn");
+        if (nextBtn.disabled) {
+          e.preventDefault();
+          alert("Please fill in all required fields correctly before proceeding.");
+        }
+      });
+    }
+
+    // Step 3
+    const form3Input = $(".form3-form-group input[type='url']");
     if (form3Input) {
-      form3Input.addEventListener('input', validateForm3);
+      form3Input.addEventListener("input", validateForm3);
     }
-  });
+  };
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const path = window.location.pathname;
-    const progress = document.querySelector('.progress-bar');
-
-    if (path.includes('step_1')) progress.style.width = '33%';
-    else if (path.includes('step_2')) progress.style.width = '66%';
-    else if (path.includes('step_3')) progress.style.width = '100%';
-  });
+  init();
+});

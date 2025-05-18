@@ -302,3 +302,12 @@ button.btn:hover, .back-btn:hover {
   background-color: #aaa;
 }
 
+.invalid {
+  border: 1px solid red;
+}
+
+.field-error {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
