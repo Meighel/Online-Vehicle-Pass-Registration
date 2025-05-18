@@ -27,6 +27,11 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
 from datetime import timedelta 
 
+from django.db.models import Count, Q
+from django.utils.timezone import now
+import calendar
+from django.db.models.functions import TruncMonth
+
 def home(request):
     return render(request, 'index.html')
 
@@ -521,6 +526,38 @@ class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
 # Cashier Page View 
 @login_required
 def cashier_dashboard(request):
+    # Existing data...
+    total_accounts = UserProfile.objects.filter(role='user').count()
+    previous_total = UserProfile.objects.filter(role='user', created_at__lt=now() - timedelta(days=30)).count()
+    account_growth_percent = round(((total_accounts - previous_total) / previous_total) * 100) if previous_total > 0 else 0
+    pending_payments = Registration.objects.filter(status='pending').count()
+    paid_clients = Registration.objects.filter(status='paid').count()
+
+    # Monthly Paid Clients for the Chart
+    monthly_data = (
+        Registration.objects
+        .filter(status='paid')
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(total=Count('registrationNumber'))
+        .order_by('month')
+    )
+
+    # Create a dict with month numbers as keys and totals as values
+    monthly_totals = {month: 0 for month in range(1, 13)}
+    for entry in monthly_data:
+        month_num = entry['month'].month
+        monthly_totals[month_num] = entry['total']
+
+    paid_clients_data = list(monthly_totals.values())
+
+    context = {
+        'total_accounts': total_accounts,
+        'account_growth_percent': account_growth_percent,
+        'pending_payments': pending_payments,
+        'paid_clients': paid_clients,
+        'paid_clients_data': paid_clients_data,
+    }
     return render(request, "Cashier Dashboard/Cashier_Dashboard.html")
 
 

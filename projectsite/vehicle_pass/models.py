@@ -154,8 +154,8 @@ class Vehicle(BaseModel):
         return f"{self.plateNumber}"  
     
     def clean(self):
-        if Vehicle.objects.filter(self_ownership=self.self_ownership).count() >= 2:
-            raise ValidationError({'self_ownership': 'You can only register up to two vehicles.'})
+        if Vehicle.objects.filter(self_owner=self.self_owner).count() >= 2:
+            raise ValidationError({'self_owner': 'You can only register up to two vehicles.'})
 
     def save(self, *args, **kwargs):
         self.full_clean() 
@@ -292,7 +292,7 @@ class InspectionReport(BaseModel):
     payment_number = models.ForeignKey(PaymentTransaction, on_delete=models.CASCADE)
     security = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True)
     document_inspection_date = models.DateTimeField(auto_now_add=True)
-    physical_final_inspection_date = models.DateField()
+    physical_final_inspection_date = models.DateField(null=True)
     remarks = models.CharField(max_length=30, choices=REMARK_CHOICES, default='to_be_inspected')
     additional_notes = models.TextField(blank=True, null=True)
     is_approved = models.BooleanField(default=False)

@@ -109,7 +109,7 @@
             <div class="card mt-4">
                 <div class="card-header d-flex justify-content-between">
                     <span>Recent Applications</span>
-                    <a href="#" class="btn btn-success btn-sm">Open</a>
+                    <a href="{% url 'cashier_payments' %}" class="btn btn-success btn-sm">Open</a>
                 </div>
                 <div class="card-body">
                     <input type="text" id="searchInput" class="form-control" placeholder="Search...">
@@ -139,7 +139,7 @@
                     📈 Monthly Trend of Paid Clients
                 </div>
                 <div class="card-body">
-                    <canvas id="trendChart"></canvas>
+                    <canvas id="trendChart" height="120"></canvas>
                 </div>
             </div>
         </div>
@@ -155,22 +155,9 @@
 <script src="{% static 'javascript/Cashier_Dashboard.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- <script>
-    const trendChart = document.getElementById('trendChart').getContext('2d');
-    const chart = new Chart(trendChart, {
-        type: 'line',
-        data: {
-            labels: {{ chart_labels|safe }},
-            datasets: [{
-                label: 'Paid Clients',
-                data: {{ chart_data|safe }},
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1,
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-</script>  -->
+<script>
+    const paidClientsData = {{ paid_clients_data|safe }};
+</script>
+
+
 {% endblock %} 

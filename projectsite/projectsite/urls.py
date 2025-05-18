@@ -56,7 +56,7 @@ urlpatterns = [
     path("dashboard/security/manage_report/", security_report, name="security_report"),
     
     
-    path("dashboard/cashier/", cashier_dashboard, name="cashier_dashboard"),
+    path("dashboard/cashier/", views.cashier_dashboard, name="cashier_dashboard"),
     path("dashboard/cashier/cashier_payments/", cashierViewPayment.as_view(), name="cashier_payments"),
     path("dashboard/cashier/cashier_payments/<pk>/", cashierUpdatePayment.as_view(), name="cashier_update_payment"),  
     path("dashboard/cashier/cashier_transactions/", cashierViewTransaction.as_view(), name="cashier_transactions"),
