@@ -109,7 +109,7 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">Corporate Email</label>
                         <div class="col-sm-9">
-                            <input type="email" class="form-control compact" name="corporate_email" id="corporate_email" placeholder="example@psu.palawan.edu.ph" required>
+                            <input type="email" class="form-control compact" name="corporate_email" id="corporate_email" placeholder="example@psu.palawan.edu.ph" value="{{ form.initial.corporate_email }}" required>
                             <div class="invalid-feedback" id="email-feedback">Email must end with @psu.palawan.edu.ph</div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">User Role</label>
                         <div class="col-sm-9">
-                            <select class="form-control compact" name="user_role" id="user_role" required>
+                            <select class="form-control compact" name="school_role" id="user_role" required>
                                 <option value="" disabled selected hidden>Select an option</option>
                                 <option value="faculty">Faculty</option>
                                 <option value="student">Student</option>
@@ -185,6 +185,7 @@
             const firstNameField = document.getElementById('firstname');
             const lastNameField = document.getElementById('lastname');
             const middleNameField = document.getElementById('middlename');
+            const school_role = document.getElementById('user_role');
             const passwordField = document.getElementById('password1');
             const confirmPasswordField = document.getElementById('password2');
             
@@ -192,6 +193,7 @@
             const emailFeedback = document.getElementById('email-feedback');
             const firstNameFeedback = document.getElementById('firstname-feedback');
             const lastNameFeedback = document.getElementById('lastname-feedback');
+            const schoolRoleFeedback =document.getElementById('role-feedback');
             const passwordFeedback = document.getElementById('password1-feedback');
             const confirmPasswordFeedback = document.getElementById('password2-feedback');
             
