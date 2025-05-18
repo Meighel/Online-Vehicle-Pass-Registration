@@ -10,6 +10,7 @@ from .forms import (UserSignupForm, UserProfileForm,
 )
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
 from .models import Vehicle, Registration, VehiclePass, PaymentTransaction
+from .models import SiteVisit, LoginActivity
 from .models import InspectionReport, Notification, Announcement, Owner, PasswordResetCode
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -26,6 +27,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
 from datetime import timedelta 
+
 
 def home(request):
     return render(request, 'index.html')
@@ -665,3 +667,28 @@ def contact_us(request):
 
 def about_us(request):
     return render(request, "Settings/AboutUs.html")
+
+#Total Visitors
+def get_stats():
+    now = timezone.now()
+    week_ago = now - timedelta(days=7)
+    month_ago = now - timedelta(days=30)
+
+    total_visitors = SiteVisit.objects.count()
+    weekly_visitors = SiteVisit.objects.filter(created_at__gte=week_ago).count()
+    monthly_visitors = SiteVisit.objects.filter(created_at__gte=month_ago).count()
+
+    total_logins = LoginActivity.objects.count()
+    weekly_logins = LoginActivity.objects.filter(login_time__gte=week_ago).count()
+
+    return {
+        "total_visitors": total_visitors,
+        "weekly_visitors": weekly_visitors,
+        "monthly_visitors": monthly_visitors,
+        "total_logins": total_logins,
+        "weekly_logins": weekly_logins,
+    }
+
+def dashboard_view(request):
+    stats = get_stats()
+    return render(request, 'User Dashboard/User_Dashboard.html', {'stats': stats})

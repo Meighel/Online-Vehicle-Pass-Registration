@@ -306,3 +306,13 @@ class Announcement(BaseModel):
     message = models.TextField()
     date_posted = models.DateTimeField(auto_now_add=True)
     posted_by = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, related_name="announcements_posted")
+
+class SiteVisit(models.Model):
+    session_key = models.CharField(max_length=40, unique=True)
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class LoginActivity(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    login_time = models.DateTimeField(auto_now_add=True)

@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'vehicle_pass.middleware.VisitorTrackingMiddleware',
 ]
 
 ROOT_URLCONF = 'projectsite.urls'
