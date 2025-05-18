@@ -226,7 +226,7 @@ body {
 
 
 .table-container {
-    background: white;
+    background: rgb(0, 0, 0);
     padding: 2px;
     border-radius: 5px;
 }
@@ -511,3 +511,107 @@ body {
         width: 100%;
     }
 }
+
+/* Search Filtering and Pagination Function */
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 120px;
+    background-color: #000;
+}
+        
+/* Override Bootstrap styles */
+.container-fluid {
+    background-color: #000;
+    color: white;
+}
+
+/* Layout adjustments */
+.dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.dataTables_paginate {
+    margin-left: auto;
+}
+
+.dataTables_info {
+    margin-right: auto;
+    color: #ccc;
+}
+
+/* Adjust "Show entries" dropdown */
+.dataTables_length label {
+    color: white;
+    font-size: 14px;
+}
+
+.dataTables_length select {
+    background-color: #000;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 4px 6px;
+}
+
+/* Adjust search input */
+.dataTables_filter {
+    text-align: right;
+}
+
+.dataTables_filter label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 14px;
+}
+
+/* Enlarged search icon */
+.dataTables_filter label::before {
+    content: "🔍";
+    font-size: 20px;
+    display: inline-block;
+}
+
+/* Longer search box */
+.dataTables_filter input {
+    width: 220px; /* make search bar longer */
+    background-color: #1e1e1e;
+    color: white;
+    border: 2px solid yellow;
+    border-radius: 4px;
+    padding: 6px 10px;
+}
+
+.dataTables_paginate a {
+    background-color: #292929;
+    color: yellow !important;
+    border: 1px solid #444;
+    margin: 2px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+.dataTables_paginate .current {
+    background-color: yellow;
+    color: black !important;
+    font-weight: bold;
+}
+
+
+.container-fluid {
+    background-color: #000;
+    color: white;
+}
+        
