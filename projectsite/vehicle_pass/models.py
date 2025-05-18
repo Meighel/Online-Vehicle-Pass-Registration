@@ -23,6 +23,12 @@ class UserProfile(BaseModel):
         ('cashier', 'Cashier'),
         ('admin', 'Admin')
         ]
+    
+    SCHOOL_ROLE_CHOICES = [('student', 'Student'),
+                   ('faculty', 'faculty'),
+                   ('university personnel', 'University Personnel')
+                   ]
+    
     corporate_email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=128)
     lastname = models.CharField(max_length=25)
@@ -35,6 +41,7 @@ class UserProfile(BaseModel):
     department = models.CharField(max_length=100, blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user', null=True)
+    school_role = models.CharField(max_length=20, choices=SCHOOL_ROLE_CHOICES)
 
     def __str__(self):
         return f"{self.firstname} {self.lastname}"
@@ -103,24 +110,10 @@ class PasswordResetCode(BaseModel):
     def is_valid(self):
         """Check if the code is still valid (not expired and not used)"""
         return not self.is_used and timezone.now() < self.expires_at
-
-class Owner(BaseModel):
-    owner_firstname = models.CharField(max_length=50)
-    owner_middlename = models.CharField(max_length=25, null=True)
-    owner_lastname = models.CharField(max_length=25)
-    owner_suffix = models.CharField(max_length=5, null=True, blank=True)
-    owner_contact_number = models.CharField(max_length=13, null=True, blank=True)
-    relationship_to_owner = models.CharField(max_length=25)
-
-    def __str__(self):
-        full_name = f"{self.owner_firstname} {self.owner_middlename or ''} {self.owner_lastname}"
-        if self.owner_suffix:
-            full_name += f", {self.owner_suffix}"
-        return full_name.strip()
+    
 
 class Vehicle(BaseModel):
     self_ownership = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
-    legal_owner = models.ForeignKey(Owner, on_delete=models.CASCADE, null=True, blank=True)
     plateNumber = models.CharField(max_length=10, unique=True)
     type = models.CharField(max_length=20)
     model = models.CharField(max_length=20)
@@ -128,6 +121,14 @@ class Vehicle(BaseModel):
     chassisNumber = models.CharField(max_length=17)
     OR_Number = models.CharField(max_length=15)
     CR_Number = models.CharField(max_length=9)
+    is_owner = models.BooleanField(default=False)
+    is_legal_owner = models.BooleanField(default=False)
+    owner_firstname = models.CharField(max_length=45, null=True, blank=True)
+    owner_middlename = models.CharField(max_length=45, null=True, blank=True)
+    owner_lastname = models.CharField(max_length=45, null=True, blank=True)
+    owner_suffix = models.CharField(max_length=5, null=True, blank=True)
+    relationship_to_owner = models.CharField(max_length=15, null=True, blank=True)
+    contact_number = models.CharField(max_length=13, null=True, blank=True)
 
     def __str__(self):
         return f"{self.plateNumber}"  
@@ -269,6 +270,7 @@ class InspectionReport(BaseModel):
     payment_number = models.ForeignKey(PaymentTransaction, on_delete=models.CASCADE)
     security = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True)
     inspection_date = models.DateTimeField(auto_now_add=True)
+    final_inspection_date = models.DateField()
     remarks = models.CharField(max_length=30, choices=REMARK_CHOICES, default='to_be_inspected')
     additional_notes = models.TextField(blank=True, null=True)
     is_approved = models.BooleanField(default=False)
