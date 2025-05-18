@@ -25,7 +25,7 @@ class UserProfile(BaseModel):
         ]
     
     SCHOOL_ROLE_CHOICES = [('student', 'Student'),
-                   ('faculty', 'faculty'),
+                   ('faculty', 'Faculty'),
                    ('university personnel', 'University Personnel')
                    ]
     
@@ -46,7 +46,7 @@ class UserProfile(BaseModel):
     department = models.CharField(max_length=100, blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user', null=True)
-    school_role = models.CharField(max_length=20, choices=SCHOOL_ROLE_CHOICES)
+    school_role = models.CharField(max_length=20, choices=SCHOOL_ROLE_CHOICES, null=True, blank=True)
 
     def __str__(self):
         return f"{self.firstname} {self.lastname}"
