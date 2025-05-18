@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Vehicle Registration</title>
+  <link rel="stylesheet" href="{% static 'css/landingPage.css' %}">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link rel="icon" href="{% static 'images/favicon.png' %}">
+    <style>
+    .email-error {
+      color: #dc3545;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+    .is-invalid {
+      border-color: #dc3545 !important;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right calc(0.375em + 0.1875rem) center;
+      background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    }
+  </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container d-flex align-items-center">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/navbar-brand img.png' %}" class="img-fluid" style="width: 100px">
+            </a>
+            <button class="navbar-toggler ms-auto border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-center" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'faq' %}">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
+                </ul>
+            </div>
+            <a class="btn btn-warning text-dark fw-bold ms-4 d-none d-lg-block" href="{% url 'login' %}">Login</a>
+        </div>
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section class="hero-section text-start">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="display-4 fw-bold">Streamline Your Vehicle Access</h1>
+                    <p class="lead">Quick and easy vehicle-pass registration for hassle-free access.</p>
+                    
+                    <!-- Email form container -->
+                    <div id="email-form-container" class="d-flex flex-column align-items-start">
+
+                        <!-- Form with email input and button -->
+                        <form id="email-form" class="d-flex align-items-center bg-dark p-2 rounded border border-warning w-100">
+                            <div class="position-relative me-2 flex-grow-1">
+                                <input type="email"
+                                    class="form-control email-input ps-4 pe-3 py-2 text-white border border-warning"
+                                    id="email"
+                                    placeholder="@psu.palawan.edu.ph Email"
+                                    required>
+                                <i class="fas fa-envelope position-absolute start-0 top-50 translate-middle-y ms-2 text-warning"></i>
+                            </div>
+                            <button type="button" id="create-account-btn"
+                                    class="btn btn-warning text-dark fw-bold px-4 py-2 rounded">
+                                Create Free Account
+                            </button>
+                        </form>
+
+                        <!-- Error message placed outside form but inside the container -->
+                        <small id="email-error-message" class="text-danger mt-1 ms-1" style="display: none;"></small>
+
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="gif-container fade-scale">
+                        <img id="vehicleGif" src="{% static 'images/vehicle.gif' %}" alt="Yellow Vehicle" class="img-fluid vehicle-gif">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<!-- Features Section -->
+    <section id="features" class="py-5 features">
+        <div class="container">
+            <div class="row g-4 text-center">
+                <!-- Site Statistics -->
+                <div class="col-md-3 d-flex">
+                    <div class="card border-warning bg-black text-white shadow-sm w-100 h-100">
+                        <div class="card-body p-3 d-flex flex-column justify-content-center text-start">
+                            <h6 class="text-warning mb-2">Site Statistics</h6>
+                            <p class="mb-1"><strong>Total Visitors:</strong> {{ stats.total_visitors }}</p>
+                            <p class="mb-1"><strong>Visitors This Week:</strong> {{ stats.weekly_visitors }}</p>
+                            <p class="mb-1"><strong>Visitors This Month:</strong> {{ stats.monthly_visitors }}</p>
+                            <p class="mb-1"><strong>Total Logins:</strong> {{ stats.total_logins }}</p>
+                            <p class="mb-0"><strong>Logins This Week:</strong> {{ stats.weekly_logins }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 1 -->
+                <div class="col-md-3 d-flex">
+                    <a href="#secure-registration" class="feature-link w-100">
+                        <div class="card bg-dark text-white shadow-sm h-100">
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <i class="fas fa-shield-alt fa-3x text-warning mb-4"></i>
+                                <h3>Secure Registration</h3>
+                                <p>Protect your vehicle's identity with blockchain encryption.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="col-md-3 d-flex">
+                    <a href="#documentation" class="feature-link w-100">
+                        <div class="card bg-dark text-white shadow-sm h-100">
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <i class="fas fa-file-alt fa-3x text-warning mb-4"></i>
+                                <h3>Effortless Documentation</h3>
+                                <p>Manage and upload registration documents seamlessly.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="col-md-3 d-flex">
+                    <a href="#limited-slots" class="feature-link w-100">
+                        <div class="card bg-dark text-white shadow-sm h-100">
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <i class="fas fa-car fa-3x text-warning mb-4"></i>
+                                <h3>Limited Slots!</h3>
+                                <p>Hurry! Only a few spots left. Secure your registration now.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Pricing Section -->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Social Media Icons (Left) -->
+                <div class="col-md-4 text-start">
+                    <div class="footer-icons">
+                        <a href="#"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#"><i class="fas fa-envelope fa-2x"></i></a>
+                        <a href="#"><i class="fab fa-twitter fa-2x"></i></a>
+                        <a href="#"><i class="fab fa-github fa-2x"></i></a>
+                    </div>
+                </div>
+
+                <!-- Copyright (Center) -->
+                <div class="col-md-4 text-center">
+                    <p>© 2025 OVR. All rights reserved.</p>
+                </div>
+
+                <!-- Privacy Policy (Right) -->
+                <div class="col-md-4 text-end">
+                    <a href="#privacy-policy" class="footer-policy">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const signupUrl = "{% url 'signup' %}";
+    </script>
+    <script src="{% static 'javascript/landingPage.js' %}"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

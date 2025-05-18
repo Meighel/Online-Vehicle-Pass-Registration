@@ -1,0 +1,183 @@
+{% extends "includes/security_sidebar.html" %}
+{% load static %}
+
+{% block title %}
+        Inspection Reports
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/security-dashboard-style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.png' %}">
+    <style>
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 120px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="main-content flex-grow-1 ms-uto">
+    <div class="container-fluid py-1">
+            <!-- Title & Top Bar -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+                <h2 class="title mb-3 mb-md-0">Inspection Reports</h2>
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Notification Bell -->
+                    <a href="Announcements.html" class="text-decoration-none text-light position-relative">
+                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
+                    </a>
+                </div>
+            </div>
+
+        <hr>
+        <small><span id="date"></span></small>
+        <br>
+
+        <section class="table-container">
+            <table id="myTable" class="inspection-table">
+                <thead>
+                    <tr>
+                        <th>Payment Number</th>
+                        <th>Processed by</th>
+                        <th>Date</th>
+                        <th>Remarks</th>
+                        <th>Additional Notes</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for applicant in inspections %}
+                    <tr>
+                        <td>{{ applicant.payment_number }}</td>
+                        <td>{{ applicant.security.user.firstname }} {{ applicant.security.user.lastname }} {{ applicant.security.user.middlename |default_if_none:"" }}</td>
+                        <td>{{ applicant.inspection_date }}</td>
+                        <td>{{ applicant.remarks }}</td>
+                        <td>{{ applicant.additional_notes }}</td>
+                        <td>
+                            <!-- Trigger approve -->
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal" data-id="{{ applicant.id }}">Approve</button>
+
+                            <!-- Trigger reject -->
+                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal" data-id="{{ applicant.id }}">Reject</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>                
+            </table>
+        </section>
+        {% include 'includes/pagination.html' %}
+        {% include 'includes/security_modal.html' %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Approve Modal
+        var approveModal = document.getElementById('approveModal');
+        approveModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var inspectionId = button.getAttribute('data-id');
+            var inputField = approveModal.querySelector('#approveInspectionId');
+            inputField.value = inspectionId;
+        });
+    
+        // Reject Modal
+        var rejectModal = document.getElementById('rejectModal');
+        rejectModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var inspectionId = button.getAttribute('data-id');
+            var inputField = rejectModal.querySelector('#rejectInspectionId');
+            inputField.value = inspectionId;
+        });
+    });
+    </script>    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'javascript/base.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            var table = $('#myTable').DataTable({
+                // Basic configuration
+                autoWidth: false,
+                responsive: true,
+                
+                // Custom DOM layout for better control
+                dom: '<"top"<"dataTables_length"l><"dataTables_filter"f>>rt<"bottom"<"dataTables_info"i><"dataTables_paginate"p>>',
+                
+                // Custom language settings
+                language: {
+                    search: "",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    paginate: {
+                        first: "First",
+                        previous: "Prev",
+                        next: "Next",
+                        last: "Last"
+                    }
+                },
+                
+                // Pagination settings
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50],
+                
+                // Dark theme adjustment
+                drawCallback: function() {
+                    // Ensure consistent styling after draw
+                    $('.dataTables_filter input').css({
+                        'background-color': 'white',
+                        'color': 'black',
+                        'border': '2px solid yellow'
+                    });
+                    
+                    $('.dataTables_length select').css({
+                        'background-color': '#000',
+                        'color': 'white',
+                        'border': '1px solid #444'
+                    });
+                }
+            });
+            
+            // Date range filtering
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var startDate = $('#start-date').val();
+                    var endDate = $('#end-date').val();
+                    var dateApplied = data[0]; // Date column is the first
+
+                    if (!startDate && !endDate) return true;
+
+                    var dateObj = new Date(dateApplied);
+                    var startDateObj = startDate ? new Date(startDate) : null;
+                    var endDateObj = endDate ? new Date(endDate) : null;
+
+                    if (startDateObj && endDateObj) {
+                        return dateObj >= startDateObj && dateObj <= endDateObj;
+                    } else if (startDateObj) {
+                        return dateObj >= startDateObj;
+                    } else if (endDateObj) {
+                        return dateObj <= endDateObj;
+                    }
+                    return true;
+                }
+            );
+            
+            // Apply date filters when date inputs change
+            $('#start-date, #end-date').on('change', function() {
+                table.draw();
+            });
+        });
+    </script>
+{% endblock %}

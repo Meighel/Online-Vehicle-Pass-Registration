@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/landingPage.css">
+    <link rel="stylesheet" href="../static/css/signup.css">
+    <link rel="icon" href="../static/images/favicon.png">
+    <style>
+        .invalid-feedback {
+            display: none;
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .is-invalid {
+            border-color: #dc3545 !important;
+            padding-right: calc(1.5em + 0.75rem) !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right calc(0.375em + 0.1875rem) center !important;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem) !important;
+        }
+        .is-valid {
+            border-color: #198754 !important;
+            padding-right: calc(1.5em + 0.75rem) !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right calc(0.375em + 0.1875rem) center !important;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem) !important;
+        }
+        .password-requirements {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+            text-align: left;
+        }
+        .requirement-met {
+            color: #198754;
+        }
+        .requirement-unmet {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+{% load static %}
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container d-flex align-items-center">
+            <a href="{% url 'home' %}">
+                <img src="../static/images/navbar-brand img.png" class="img-fluid" style="width: 100px">
+            </a>
+            <button class="navbar-toggler ms-auto border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-center" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#features">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pricing">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#faq">Contact Us</a></li>
+                </ul>
+            </div>
+            <a class="btn btn-warning text-dark fw-bold ms-4 d-none d-lg-block" href="{% url 'login' %}">Login</a>
+        </div>
+    </nav>
+    <div class="signup-container">
+        <div class="signup-box">
+            <h3 class="fw-bold mb-4">Sign Up</h3>
+            <form method="POST" action="{% url 'signup' %}" id="signupForm" novalidate>
+                {% csrf_token %}
+                
+                {% if messages %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <div class="form-section">
+                    <h4 class="section-title">Personal Information</h4>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control compact" name="firstname" id="firstname" placeholder="First Name" required>
+                            <div class="invalid-feedback" id="firstname-feedback">Required</div>
+                        </div>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control compact" name="lastname" id="lastname" placeholder="Last Name" required>
+                            <div class="invalid-feedback" id="lastname-feedback">Required</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Middle Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control compact" name="middlename" id="middlename" placeholder="(Optional)">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4 class="section-title">Account Information</h4>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Corporate Email</label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control compact" name="corporate_email" id="corporate_email" placeholder="example@psu.palawan.edu.ph" value="{{ form.initial.corporate_email }}" required>
+                            <div class="invalid-feedback" id="email-feedback">Email must end with @psu.palawan.edu.ph</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">User Role</label>
+                        <div class="col-sm-9">
+                            <select class="form-control compact" name="school_role" id="user_role" required>
+                                <option value="" disabled selected hidden>Select an option</option>
+                                <option value="faculty">Faculty</option>
+                                <option value="student">Student</option>
+                                <option value="university personnel">University Personnel</option>
+                            </select>
+                            <div class="invalid-feedback" id="role-feedback">Please select your role</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label align-self-start pt-2">Password</label>
+                        <div class="col-sm-9">
+                            <div class="position-relative">
+                                <input type="password" class="form-control compact" name="password1" id="password1" placeholder="" required>
+                                <span class="position-absolute end-0 top-50 translate-middle-y me-2" style="cursor: pointer;" id="togglePassword1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="invalid-feedback" id="password1-feedback">Password does not meet requirements</div>
+                            <div class="password-requirements" id="password-requirements">
+                                <div id="req-length" class="requirement-unmet">• Minimum 8 characters</div>
+                                <div id="req-uppercase" class="requirement-unmet">• At least 1 uppercase letter</div>
+                                <div id="req-special" class="requirement-unmet">• At least 1 special character</div>
+                                <div id="req-number" class="requirement-unmet">• At least 1 number</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Confirm Password</label>
+                        <div class="col-sm-9">
+                            <div class="position-relative">
+                                <input type="password" class="form-control compact" name="password2" id="password2" placeholder="" required>
+                                <span class="position-absolute end-0 top-50 translate-middle-y me-2" style="cursor: pointer;" id="togglePassword2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="invalid-feedback" id="password2-feedback">Passwords do not match</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3 text-center">
+                    <p>Already have an Account? <a href="{% url 'login' %}">Login</a></p>
+                </div>
+                
+                <button type="submit" class="btn btn-signup" id="signupBtn">Sign Up</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Keep the existing JavaScript validation code -->
+    <script src="{% static 'javascript/password_eye_toggle.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form and field elements
+            const form = document.getElementById('signupForm');
+            const emailField = document.getElementById('corporate_email');
+            const firstNameField = document.getElementById('firstname');
+            const lastNameField = document.getElementById('lastname');
+            const middleNameField = document.getElementById('middlename');
+            const school_role = document.getElementById('user_role');
+            const passwordField = document.getElementById('password1');
+            const confirmPasswordField = document.getElementById('password2');
+            
+            // Feedback elements
+            const emailFeedback = document.getElementById('email-feedback');
+            const firstNameFeedback = document.getElementById('firstname-feedback');
+            const lastNameFeedback = document.getElementById('lastname-feedback');
+            const schoolRoleFeedback =document.getElementById('role-feedback');
+            const passwordFeedback = document.getElementById('password1-feedback');
+            const confirmPasswordFeedback = document.getElementById('password2-feedback');
+            
+            // Password requirement elements
+            const reqLength = document.getElementById('req-length');
+            const reqUppercase = document.getElementById('req-uppercase');
+            const reqSpecial = document.getElementById('req-special');
+            const reqNumber = document.getElementById('req-number');
+            
+            // Validation functions
+            function validateEmail(email) {
+                const emailRegex = /^[a-zA-Z0-9._%+-]+@psu\.palawan\.edu\.ph$/;
+                return emailRegex.test(email);
+            }
+            
+            function validatePasswordRequirements(password) {
+                // Check minimum length (8 characters)
+                const hasMinLength = password.length >= 8;
+                reqLength.className = hasMinLength ? 'requirement-met' : 'requirement-unmet';
+                
+                // Check for at least one uppercase letter
+                const hasUppercase = /[A-Z]/.test(password);
+                reqUppercase.className = hasUppercase ? 'requirement-met' : 'requirement-unmet';
+                
+                // Check for at least one special character
+                const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+                reqSpecial.className = hasSpecial ? 'requirement-met' : 'requirement-unmet';
+                
+                // Check for at least one number
+                const hasNumber = /[0-9]/.test(password);
+                reqNumber.className = hasNumber ? 'requirement-met' : 'requirement-unmet';
+                
+                return hasMinLength && hasUppercase && hasSpecial && hasNumber;
+            }
+            
+            function validatePassword() {
+                const password = passwordField.value.trim();
+                const confirmPassword = confirmPasswordField.value.trim();
+                
+                // Check if password meets requirements
+                const isValid = validatePasswordRequirements(password);
+                
+                if (!isValid) {
+                    passwordField.classList.add('is-invalid');
+                    passwordField.classList.remove('is-valid');
+                    passwordFeedback.style.display = 'block';
+                    return false;
+                } else {
+                    passwordField.classList.remove('is-invalid');
+                    passwordField.classList.add('is-valid');
+                    passwordFeedback.style.display = 'none';
+                    
+                    // If confirm password is filled, validate match
+                    if (confirmPassword) {
+                        if (password !== confirmPassword) {
+                            confirmPasswordField.classList.add('is-invalid');
+                            confirmPasswordField.classList.remove('is-valid');
+                            confirmPasswordFeedback.style.display = 'block';
+                            return false;
+                        } else {
+                            confirmPasswordField.classList.remove('is-invalid');
+                            confirmPasswordField.classList.add('is-valid');
+                            confirmPasswordFeedback.style.display = 'none';
+                        }
+                    }
+                    return true;
+                }
+            }
+            
+            // Real-time validation for email
+            emailField.addEventListener('input', function() {
+                const email = emailField.value.trim();
+                
+                if (email === '') {
+                    emailField.classList.remove('is-invalid');
+                    emailField.classList.remove('is-valid');
+                    emailFeedback.style.display = 'none';
+                } else if (!validateEmail(email)) {
+                    emailField.classList.add('is-invalid');
+                    emailField.classList.remove('is-valid');
+                    emailFeedback.style.display = 'block';
+                } else {
+                    emailField.classList.remove('is-invalid');
+                    emailField.classList.add('is-valid');
+                    emailFeedback.style.display = 'none';
+                }
+            });
+            
+            // Real-time validation for first name
+            firstNameField.addEventListener('input', function() {
+                const firstName = firstNameField.value.trim();
+                
+                if (firstName === '') {
+                    firstNameField.classList.add('is-invalid');
+                    firstNameField.classList.remove('is-valid');
+                    firstNameFeedback.style.display = 'block';
+                } else {
+                    firstNameField.classList.remove('is-invalid');
+                    firstNameField.classList.add('is-valid');
+                    firstNameFeedback.style.display = 'none';
+                }
+            });
+            
+            // Real-time validation for last name
+            lastNameField.addEventListener('input', function() {
+                const lastName = lastNameField.value.trim();
+                
+                if (lastName === '') {
+                    lastNameField.classList.add('is-invalid');
+                    lastNameField.classList.remove('is-valid');
+                    lastNameFeedback.style.display = 'block';
+                } else {
+                    lastNameField.classList.remove('is-invalid');
+                    lastNameField.classList.add('is-valid');
+                    lastNameFeedback.style.display = 'none';
+                }
+            });
+            
+            // Real-time validation for middle name (optional)
+            middleNameField.addEventListener('input', function() {
+                // Middle name is optional, so we just add valid class if it has content
+                if (middleNameField.value.trim() !== '') {
+                    middleNameField.classList.add('is-valid');
+                } else {
+                    middleNameField.classList.remove('is-valid');
+                }
+            });
+            
+            // Real-time validation for password
+            passwordField.addEventListener('input', function() {
+                validatePassword();
+                
+                // If confirm password is already filled, validate it again
+                if (confirmPasswordField.value.trim() !== '') {
+                    const password = passwordField.value.trim();
+                    const confirmPassword = confirmPasswordField.value.trim();
+                    
+                    if (password !== confirmPassword) {
+                        confirmPasswordField.classList.add('is-invalid');
+                        confirmPasswordField.classList.remove('is-valid');
+                        confirmPasswordFeedback.style.display = 'block';
+                    } else {
+                        confirmPasswordField.classList.remove('is-invalid');
+                        confirmPasswordField.classList.add('is-valid');
+                        confirmPasswordFeedback.style.display = 'none';
+                    }
+                }
+            });
+            
+            // Real-time validation for confirm password
+            confirmPasswordField.addEventListener('input', function() {
+                const password = passwordField.value.trim();
+                const confirmPassword = confirmPasswordField.value.trim();
+                
+                if (confirmPassword === '') {
+                    confirmPasswordField.classList.remove('is-invalid');
+                    confirmPasswordField.classList.remove('is-valid');
+                    confirmPasswordFeedback.style.display = 'none';
+                } else if (password !== confirmPassword) {
+                    confirmPasswordField.classList.add('is-invalid');
+                    confirmPasswordField.classList.remove('is-valid');
+                    confirmPasswordFeedback.style.display = 'block';
+                } else {
+                    confirmPasswordField.classList.remove('is-invalid');
+                    confirmPasswordField.classList.add('is-valid');
+                    confirmPasswordFeedback.style.display = 'none';
+                }
+            });
+            
+            // Form submission validation
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+                
+                // Validate email
+                const email = emailField.value.trim();
+                if (email === '') {
+                    emailField.classList.add('is-invalid');
+                    emailFeedback.textContent = 'Email is required';
+                    emailFeedback.style.display = 'block';
+                    isValid = false;
+                } else if (!validateEmail(email)) {
+                    emailField.classList.add('is-invalid');
+                    emailFeedback.textContent = 'Email must end with @psu.palawan.edu.ph';
+                    emailFeedback.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate first name
+                const firstName = firstNameField.value.trim();
+                if (firstName === '') {
+                    firstNameField.classList.add('is-invalid');
+                    firstNameFeedback.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate last name
+                const lastName = lastNameField.value.trim();
+                if (lastName === '') {
+                    lastNameField.classList.add('is-invalid');
+                    lastNameFeedback.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate password
+                const password = passwordField.value.trim();
+                if (password === '') {
+                    passwordField.classList.add('is-invalid');
+                    passwordFeedback.textContent = 'Password is required';
+                    passwordFeedback.style.display = 'block';
+                    isValid = false;
+                } else if (!validatePasswordRequirements(password)) {
+                    passwordField.classList.add('is-invalid');
+                    passwordFeedback.textContent = 'Password does not meet requirements';
+                    passwordFeedback.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate confirm password
+                const confirmPassword = confirmPasswordField.value.trim();
+                if (confirmPassword === '') {
+                    confirmPasswordField.classList.add('is-invalid');
+                    confirmPasswordFeedback.textContent = 'Please confirm your password';
+                    confirmPasswordFeedback.style.display = 'block';
+                    isValid = false;
+                } else if (password !== confirmPassword) {
+                    confirmPasswordField.classList.add('is-invalid');
+                    confirmPasswordFeedback.textContent = 'Passwords do not match';
+                    confirmPasswordFeedback.style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    event.preventDefault();
+                    
+                    // Focus on the first invalid field
+                    if (email === '' || !validateEmail(email)) {
+                        emailField.focus();
+                    } else if (firstName === '') {
+                        firstNameField.focus();
+                    } else if (lastName === '') {
+                        lastNameField.focus();
+                    } else if (password === '' || !validatePasswordRequirements(password)) {
+                        passwordField.focus();
+                    } else if (confirmPassword === '' || password !== confirmPassword) {
+                        confirmPasswordField.focus();
+                    }
+                }
+            });
+            
+            // Initial validation for any pre-filled fields
+            if (emailField.value.trim() !== '') {
+                emailField.dispatchEvent(new Event('input'));
+            }
+            if (firstNameField.value.trim() !== '') {
+                firstNameField.dispatchEvent(new Event('input'));
+            }
+            if (lastNameField.value.trim() !== '') {
+                lastNameField.dispatchEvent(new Event('input'));
+            }
+            if (middleNameField.value.trim() !== '') {
+                middleNameField.dispatchEvent(new Event('input'));
+            }
+            if (passwordField.value.trim() !== '') {
+                passwordField.dispatchEvent(new Event('input'));
+            }
+            if (confirmPasswordField.value.trim() !== '') {
+                confirmPasswordField.dispatchEvent(new Event('input'));
+            }
+        });
+    </script>
+</body>
+</html>

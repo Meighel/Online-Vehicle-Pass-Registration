@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions - Vehicle Pass Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #7c3aed;
+            --hover-color: #6d28d9;
+            --text-color: #111827;
+            --text-light: #4b5563;
+            --border-color: #e5e7eb;
+            --bg-color: #ffffff;
+            --secondary-bg: #f9fafb;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 1rem 0 3rem;
+        }
+
+        header h1 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: var(--text-color);
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            font-size: 1.125rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .search-container {
+            max-width: 550px;
+            margin: 0 auto 4rem;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-container input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+
+        .search-container:before {
+            content: "";
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234b5563'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--secondary-bg);
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            user-select: none;
+            color: var(--text-light);
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            font-weight: 600;
+        }
+
+        .tab:hover:not(.active) {
+            color: var(--primary-color);
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .faq-section {
+            margin-bottom: 4rem;
+        }
+
+        .faq-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            color: var(--text-color);
+            position: relative;
+            padding-left: 1rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .faq-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .faq-item {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .faq-item:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+            border-color: rgba(124, 58, 237, 0.3);
+        }
+
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            font-size: 1.125rem;
+            line-height: 1.4;
+        }
+
+        .faq-answer {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .cta-section {
+            margin-top: 5rem;
+            text-align: center;
+            padding: 3.5rem;
+            background-color: var(--secondary-bg);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), #9f7aea);
+        }
+
+        .cta-section h2 {
+            font-size: 1.875rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .cta-section p {
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            background-color: var(--primary-color);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:hover {
+            background-color: var(--hover-color);
+            box-shadow: var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            margin-left: 1rem;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(124, 58, 237, 0.1);
+            color: var(--primary-color);
+            box-shadow: var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 5rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .faq-container {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+                padding: 0.5rem;
+            }
+            
+            .tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            header h1 {
+                font-size: 2.25rem;
+            }
+            
+            .cta-section {
+                padding: 2.5rem 1.5rem;
+            }
+        }
+
+        /* Accordion styles for mobile */
+        @media (max-width: 640px) {
+            .faq-item {
+                margin-bottom: 1rem;
+            }
+            
+            .cta-section {
+                padding: 2rem 1rem;
+            }
+            
+            .btn, .btn-outline {
+                display: block;
+                margin: 1rem auto;
+                max-width: 80%;
+            }
+            
+            .faq-section h2 {
+                font-size: 1.25rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Frequently Asked Questions</h1>
+            <p>We understand you might have some questions about our new Online Vehicle-Pass Registration System. Here are some of the most common ones to help you get started.</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" placeholder="Search for answers..." id="search-input">
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="all">All Questions</div>
+            <div class="tab" data-tab="getting-started">Getting Started</div>
+            <div class="tab" data-tab="managing">Managing Your Pass</div>
+            <div class="tab" data-tab="support">Technical Support</div>
+        </div>
+
+        <div class="faq-section" id="getting-started">
+            <h2>Getting Started</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">What is this Online Vehicle-Pass Registration System?</div>
+                    <div class="faq-answer">This is a convenient and efficient online platform designed to streamline the process of registering your vehicle for campus access. Say goodbye to paper forms and long queues!</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Who needs to register their vehicle?</div>
+                    <div class="faq-answer">All students, faculty, and staff who intend to park their vehicles on campus are required to register through this system.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How do I create an account?</div>
+                    <div class="faq-answer">Simply click on the "Create Free Account" button on the homepage. You will be guided through a simple registration process where you'll need to provide your corporate email and follow the on-screen instructions.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What information will I need to provide during registration?</div>
+                    <div class="faq-answer">You will typically need to provide details such as your name, your affiliation with the institution (student, faculty, or staff), your vehicle's make, model, color, and license plate number. You may also be asked for your department or student ID.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is there a fee to register my vehicle?</div>
+                    <div class="faq-answer">Please refer to the institution's parking policies for information regarding any applicable registration fees. Details about fees, if any, will be clearly outlined during the registration process.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section" id="managing">
+            <h2>Managing Your Vehicle Pass</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">How long is my vehicle pass valid?</div>
+                    <div class="faq-answer">The validity period of your vehicle pass will depend on your affiliation with the institution (e.g., academic year for students, employment period for staff). You will be notified of the expiry date through the system.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I register more than one vehicle?</div>
+                    <div class="faq-answer">The system typically allows the registration of multiple vehicles per user. However, please check the institution's parking policy for any limitations on the number of registered vehicles allowed at one time.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How do I update my vehicle information?</div>
+                    <div class="faq-answer">You can easily update your vehicle information by logging into your account and navigating to the "Manage Vehicles" section. Follow the prompts to edit or add new vehicle details.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What if I get a temporary vehicle or a rental car?</div>
+                    <div class="faq-answer">The system usually allows you to add a temporary vehicle. Look for a section like "Add Temporary Vehicle" in your account. You will likely need to specify the start and end dates for the temporary vehicle's access.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What if I lose my vehicle pass or have an issue with it?</div>
+                    <div class="faq-answer">Please contact the campus security or parking services department immediately. Their contact information can usually be found on the "Contact Us" page of this system or the institution's website.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section" id="support">
+            <h2>Technical Support</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">What if I forget my password?</div>
+                    <div class="faq-answer">Click on the "Forgot Password" link on the login page. You will be guided through a password recovery process, usually involving your registered email address.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">I'm having trouble registering my vehicle. What should I do?</div>
+                    <div class="faq-answer">Please refer to the "FAQ" or "Contact Us" section for troubleshooting tips and contact information for technical support. You can reach out via the contact form or the provided email address.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is my personal information secure?</div>
+                    <div class="faq-answer">Yes, we take the security of your personal information very seriously. Our system employs industry-standard security measures to protect your data. Please refer to our Privacy Policy for more details.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What browsers are supported by this system?</div>
+                    <div class="faq-answer">This system is designed to work seamlessly with most modern web browsers, including Chrome, Firefox, Safari, and Edge. For the best experience, please ensure your browser is up to date.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Still have questions?</h2>
+            <p>If you couldn't find the answer to your question, our support team is here to help you with any inquiries you might have.</p>
+            <a href="#" class="btn">Contact Support</a>
+            <a href="#" class="btn btn-outline">Visit Help Center</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Vehicle Pass Registration System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        const sections = document.querySelectorAll('.faq-section');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show all sections for "all" tab
+                if (tabId === 'all') {
+                    sections.forEach(section => {
+                        section.style.display = 'block';
+                    });
+                } else {
+                    // Show only the selected section
+                    sections.forEach(section => {
+                        if (section.id === tabId) {
+                            section.style.display = 'block';
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('search-input');
+        const faqItems = document.querySelectorAll('.faq-item');
+        const noResultsElem = document.createElement('div');
+        noResultsElem.className = 'no-results';
+        noResultsElem.style.textAlign = 'center';
+        noResultsElem.style.padding = '2rem';
+        noResultsElem.style.color = '#6b7280';
+        noResultsElem.style.fontSize = '1.125rem';
+        noResultsElem.style.display = 'none';
+        noResultsElem.style.width = '100%';
+        noResultsElem.style.gridColumn = '1 / -1';
+        noResultsElem.innerHTML = 'No results found. Please try a different search term.';
+        
+        document.querySelector('.faq-container').appendChild(noResultsElem);
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            let foundResults = false;
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.style.display = 'block';
+                    foundResults = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Show/hide sections based on search results
+            sections.forEach(section => {
+                const visibleItems = section.querySelectorAll('.faq-item[style="display: block"]');
+                
+                if (visibleItems.length > 0 || searchTerm === '') {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+            
+            // Show or hide no results message
+            if (!foundResults && searchTerm !== '') {
+                noResultsElem.style.display = 'block';
+            } else {
+                noResultsElem.style.display = 'none';
+            }
+        });
+        
+        // Add search clear button
+        const searchContainer = document.querySelector('.search-container');
+        const clearButton = document.createElement('button');
+        clearButton.textContent = '×';
+        clearButton.style.position = 'absolute';
+        clearButton.style.right = '12px';
+        clearButton.style.top = '50%';
+        clearButton.style.transform = 'translateY(-50%)';
+        clearButton.style.border = 'none';
+        clearButton.style.background = 'none';
+        clearButton.style.fontSize = '20px';
+        clearButton.style.fontWeight = 'bold';
+        clearButton.style.color = '#6b7280';
+        clearButton.style.cursor = 'pointer';
+        clearButton.style.display = 'none';
+        clearButton.style.padding = '0 10px';
+        
+        searchContainer.appendChild(clearButton);
+        
+        searchInput.addEventListener('input', function() {
+            clearButton.style.display = this.value ? 'block' : 'none';
+        });
+        
+        clearButton.addEventListener('click', function() {
+            searchInput.value = '';
+            searchInput.dispatchEvent(new Event('input'));
+            clearButton.style.display = 'none';
+            searchInput.focus();
+        });
+    </script>
+</body>
+</html>

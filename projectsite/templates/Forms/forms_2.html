@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apply for Pass (2/3)</title>
+  <link rel="stylesheet" href="{% static 'css/forms_style.css' %}">
+  <script src="{% static 'javascript/forms.js' %}" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h2 class="form2-h2">Registration for Vehicle Pass (2/3)</h2>
+
+    <div class="progress-container">
+      <div class="progress-bar" style="width: 66%;"></div> <!-- Adjust width for each step -->
+    </div>
+
+    <form method="POST">
+      {% csrf_token %}
+      
+      <div class="form-group form2-form-group">
+        <label for="{{ form.owner.id_for_label }}">Are you the owner of this vehicle?</label>
+        {{ form.owner }}
+      </div>
+
+      <div id="owner-details" class="form2-owner-details" style="display: none;">
+        <div class="form2-aligned-group">
+          <div class="form-group form2-form-group">
+            <label for="{{ form.relationship_to_owner.id_for_label }}">Relationship to Owner</label>
+            {{ form.relationship_to_owner }}
+          </div> 
+          <div class="form-group form2-form-group">
+            <label for="{{ form.owner_first_name.id_for_label }}">Owner's First Name</label>
+            {{ form.owner_first_name }}
+          </div>
+          <div class="form-group form2-form-group">
+            <label for="{{ form.owner_middle_name.id_for_label }}">Owner's Middle Name</label>
+            {{ form.owner_middle_name }}
+          </div>
+          <div class="form-group form2-form-group">
+            <label for="{{ form.owner_last_name.id_for_label }}">Owner's Last Name</label>
+            {{ form.owner_last_name }}
+          </div>
+        </div>
+
+        <div class="form-group form2-form-group">
+          <label for="{{ form.owner_contact_number.id_for_label }}">Owner's Contact Number</label>
+          {{ form.owner_contact_number }}
+        </div>
+      </div>
+
+      <div class="form-navigation">
+        <a href="{% url 'vehicle_registration_step_1' %}">
+          <button class="back-btn form3-back-btn" type="button">Back</button>
+        </a>
+      
+        <button class="btn form2-btn" type="submit" id="form2-next-btn" >Next</button>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>

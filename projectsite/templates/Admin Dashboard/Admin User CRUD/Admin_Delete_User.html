@@ -1,0 +1,24 @@
+{% load static %}
+{% block content %}
+<div class="content">
+    <div class="container-fluid">
+        <h4 class="page-title">Delete User</h4>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                    </div>
+
+                    <div class="card-body">
+                        <form action="" method="post" novalidate>
+                            <p>Are you sure you want to delete "{{ object }}"?</p>
+                            {% csrf_token %}
+                            {% include 'Forms/form.html' %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,304 @@
+/* Common Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 1000px;
+  background: black;
+  padding: 30px;
+  border-radius: 12px;
+  position: relative;
+}
+
+h2 {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.welcome {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+}
+
+.btn, .back-btn {
+  color: black;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 25px;
+  font-weight: bold;
+}
+
+.back-btn {
+  background: red;
+  position: absolute;
+  bottom: 20px;
+  right: 160px;
+}
+
+.btn {
+  background: yellow;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.btn:hover {
+  box-shadow: 0 0 20px 5px rgba(255, 255, 0, 0.8);
+  transition: box-shadow 0.1s ease-in-out;
+}
+
+.btn:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+/* Form 1 Specific Styles */
+.form1-h2 {
+  font-size: 22px;
+}
+
+.form1-welcome {
+  font-size: 14px;
+}
+
+
+.form1-form-group label {
+  font-size: 14px;
+}
+
+.form1-form-group input[type="text"],
+.form1-form-group input[type="email"] {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 25px;
+  background: white;
+  color: black;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form1-name-group {
+  display: flex;
+  gap: 30px;
+}
+
+.form1-name-group .form-group {
+  flex: 1;
+}
+
+.form1-aligned-group {
+  display: flex;
+  gap: 30px;
+}
+
+.form1-aligned-group .form-group {
+  flex: 1;
+}
+
+.form1-radio-group {
+  display: flex;
+  gap: 80px;
+  align-items: center;
+  flex: 1;
+}
+
+.form1-radio-group label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.form1-radio-group input[type="radio"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid gray;
+  transform: rotate(45deg);
+  background: transparent;
+  cursor: pointer;
+}
+
+.form1-radio-group input[type="radio"]:checked {
+  background: yellow;
+}
+
+/* Form 2 Specific Styles */
+.form2-h2 {
+  font-size: 22px;
+}
+
+.form2-welcome {
+  font-size: 14px;
+}
+
+
+.form2-form-group label {
+  font-size: 14px;
+}
+
+.form2-form-group input[type="text"],
+.form2-form-group input[type="email"],
+.form2-form-group input[type="tel"] {
+  width: 100%;
+  max-width: 250px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 25px;
+  background: white;
+  color: black;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form2-aligned-group {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.form2-aligned-group .form-group {
+  flex: 1;
+}
+
+.form2-radio-group {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.form2-radio-group label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.form2-radio-group input[type="radio"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid gray;
+  transform: rotate(45deg);
+  background: transparent;
+  cursor: pointer;
+}
+
+.form2-radio-group input[type="radio"]:checked {
+  background: yellow;
+}
+
+.form2-owner-details {
+  display: none;
+  margin-top: 20px;
+}
+
+/* Form 3 Specific Styles */
+.form3-h2 {
+  font-size: 28px;
+}
+
+.form3-welcome {
+  font-size: 16px;
+}
+
+
+.form3-form-group label {
+  font-size: 16px;
+}
+
+.form3-form-group input[type="text"],
+.form3-form-group input[type="url"] {
+  width: 100%;
+  max-width: 250px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 25px;
+  background: white;
+  color: black;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form3-note {
+  font-size: 18px;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.form3-note ul {
+  font-size: 18px;
+  margin-left: 20px;
+}
+
+.form3-document-container {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-bar {
+  background: #ffb300;
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Buttons */
+button.btn, .back-btn {
+  background-color: #ffb300;
+  color: #fff;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+button.btn:hover, .back-btn:hover {
+  background-color: #ffb300;
+}
+.back-btn {
+  background-color: #ccc;
+  color: #333;
+}
+.back-btn:hover {
+  background-color: #aaa;
+}
+

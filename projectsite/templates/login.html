@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/landingPage.css">
+    <link rel="stylesheet" href="../static/css/login.css">
+    <link rel="icon" href="../static/images/favicon.png">
+    <style>
+        .invalid-feedback {
+            display: none;
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .is-invalid {
+            border-color: #dc3545 !important;
+            padding-right: calc(1.5em + 0.75rem) !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right calc(0.375em + 0.1875rem) center !important;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem) !important;
+        }
+        .is-valid {
+            border-color: #198754 !important;
+            padding-right: calc(1.5em + 0.75rem) !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right calc(0.375em + 0.1875rem) center !important;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container d-flex align-items-center">
+            <a href="{% url 'home' %}">
+                <img src="../static/images/navbar-brand img.png" class="img-fluid" style="width: 100px">
+            </a>
+            <button class="navbar-toggler ms-auto border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-center" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#features">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pricing">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#faq">Contact Us</a></li>
+                </ul>
+            </div>
+            <a class="btn btn-warning text-dark fw-bold ms-4 d-none d-lg-block" href="{% url 'signup' %}">Signup</a>
+        </div>
+    </nav>
+
+    <div class="login-box">
+        <h3 class="fw-bold">Login</h3>
+        <form method="POST" action="{% url 'login' %}" id="loginForm" novalidate>
+            {% csrf_token %}
+            
+            <!-- Display Django error messages if authentication fails -->
+            {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <div class="mb-3">
+                <input type="email" class="form-control" name="email" placeholder="Corporate Email" id="email" required>
+                <div class="invalid-feedback" id="email-feedback">Email must end with @psu.palawan.edu.ph</div>
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" name="password" placeholder="Password" id="password" required>
+                <div class="invalid-feedback" id="password-feedback">Password is required</div>
+            </div>
+            <div class="mb-3">
+                <p class="text-center" style="font-size: 1rem;">Don't have an Account? <br> <a href="{% url 'signup' %}" >Sign Up</a></p>
+            </div>
+            <button type="submit" class="btn btn-login" id="submitBtn">Login</button>
+            <p class="mt-3 text-center"><a href="{% url 'forgot_password' %}">Forgot password?</a></p>
+            <p class="mt-3 text-center" id="error-message" style="color: red;"></p>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailField = document.getElementById('email');
+            const emailFeedback = document.getElementById('email-feedback');
+            const passwordField = document.getElementById('password');
+            const passwordFeedback = document.getElementById('password-feedback');
+            const loginForm = document.getElementById('loginForm');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Function to validate email format
+            function validateEmail(email) {
+                // Regular expression to match only emails ending with @psu.palawan.edu.ph
+                const emailRegex = /^[a-zA-Z0-9._%+-]+@psu\.palawan\.edu\.ph$/;
+                return emailRegex.test(email);
+            }
+            
+            // Real-time validation while typing email
+            emailField.addEventListener('input', function() {
+                const email = emailField.value.trim();
+                
+                if (email === '') {
+                    // Empty field - remove validation styles
+                    emailField.classList.remove('is-invalid');
+                    emailField.classList.remove('is-valid');
+                    emailFeedback.style.display = 'none';
+                } 
+                else if (!validateEmail(email)) {
+                    // Invalid email domain
+                    emailField.classList.add('is-invalid');
+                    emailField.classList.remove('is-valid');
+                    emailFeedback.style.display = 'block';
+                } 
+                else {
+                    // Valid email domain
+                    emailField.classList.remove('is-invalid');
+                    emailField.classList.add('is-valid');
+                    emailFeedback.style.display = 'none';
+                }
+            });
+            
+            // Real-time validation for password (just checking if it's empty)
+            passwordField.addEventListener('input', function() {
+                const password = passwordField.value.trim();
+                
+                if (password === '') {
+                    passwordField.classList.add('is-invalid');
+                    passwordFeedback.style.display = 'block';
+                } else {
+                    passwordField.classList.remove('is-invalid');
+                    passwordField.classList.add('is-valid');
+                    passwordFeedback.style.display = 'none';
+                }
+            });
+            
+            // Validate on form submission
+            loginForm.addEventListener('submit', function(event) {
+                const email = emailField.value.trim();
+                const password = passwordField.value.trim();
+                let isValid = true;
+                
+                // Validate email
+                if (email === '') {
+                    emailField.classList.add('is-invalid');
+                    emailFeedback.textContent = 'Email is required';
+                    emailFeedback.style.display = 'block';
+                    isValid = false;
+                }
+                else if (!validateEmail(email)) {
+                    emailField.classList.add('is-invalid');
+                    emailFeedback.textContent = 'Email must end with @psu.palawan.edu.ph';
+                    emailFeedback.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate password
+                if (password === '') {
+                    passwordField.classList.add('is-invalid');
+                    passwordFeedback.style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    event.preventDefault();
+                    // Focus on the first invalid field
+                    if (email === '' || !validateEmail(email)) {
+                        emailField.focus();
+                    } else if (password === '') {
+                        passwordField.focus();
+                    }
+                }
+            });
+            
+            // Check if there are Django messages and highlight fields if so
+            const alertBox = document.querySelector('.alert-danger');
+            if (alertBox) {
+                // If we have error messages, let's prefill and validate the email field if it has a value
+                const emailValue = emailField.value.trim();
+                if (emailValue) {
+                    if (!validateEmail(emailValue)) {
+                        emailField.classList.add('is-invalid');
+                        emailFeedback.style.display = 'block';
+                    }
+                }
+                
+                // Focus on email field when there's an authentication error
+                emailField.focus();
+            }
+        });
+    </script>
+</body>
+</html>
