@@ -245,3 +245,18 @@ class VehicleRegistrationStep3Form(forms.Form):
     
 class MyForm(forms.Form):
     role = forms.ChoiceField(choices=..., widget=forms.Select(attrs={'class': 'custom-select'}))
+    
+class PasswordUpdateForm(forms.Form):
+    old_password = forms.CharField(widget=forms.PasswordInput, label='Old Password')
+    new_password = forms.CharField(widget=forms.PasswordInput, label='New Password')
+    confirm_password = forms.CharField(widget=forms.PasswordInput, label='Confirm New Password')
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get('new_password') != cleaned_data.get('confirm_password'):
+            raise forms.ValidationError("New passwords and confirmation do not match.")
+        
+class VehicleForms(forms.ModelForm):
+    class Meta:
+        model = Vehicle
+        exclude = '__all__'

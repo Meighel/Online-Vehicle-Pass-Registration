@@ -4,7 +4,7 @@ from vehicle_pass import views
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
     #form1_view,
-    default_dashboard, user_pass_status, user_application, user_settings, 
+    default_dashboard, user_pass_status, user_application,
     vehicle_registration_step_1, vehicle_registration_step_2, vehicle_registration_step_3, 
     security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, SecurityViewStickers, 
     SecurityUpdateApplication, SecurityViewInspectionReports, security_report,
@@ -37,13 +37,15 @@ urlpatterns = [
     path('verify-reset-code/', views.verify_reset_code, name='verify_reset_code'),
     path('reset-password/', views.reset_password, name='reset_password'),
     
+    
     path("dashboard/user/", default_dashboard, name="default_dashboard"),
     path("dashboard/user/application/", user_application, name="user_application"),
     path("dashboard/user/application/step-1/", views.vehicle_registration_step_1, name="vehicle_registration_step_1"),
     path("dashboard/user/application/step-2/", views.vehicle_registration_step_2, name="vehicle_registration_step_2"),
     path("dashboard/user/application/step-3/", views.vehicle_registration_step_3, name="vehicle_registration_step_3"),
     path("dashboard/user/pass_status/", user_pass_status, name="user_pass_status"),
-    path("dashboard/user/settings/", user_settings, name="user_settings"),
+    path('dashboard/user/settings/', views.settings_view, name='user_settings'),
+
     
     
     path("dashboard/security/", security_dashboard, name="security_dashboard"),
@@ -61,10 +63,10 @@ urlpatterns = [
     path("dashboard/cashier/cashier_payments/<pk>/", cashierUpdatePayment.as_view(), name="cashier_update_payment"),  
     path("dashboard/cashier/cashier_transactions/", cashierViewTransaction.as_view(), name="cashier_transactions"),
     path("dashboard/cashier/cashier_reports/", cashier_report, name="cashier_reports"),
-
     
     path("dashboard/admin/", admin_dashboard, name="admin_dashboard"),
-    
+    path('dashboard/admin/settings/', views.settings_view, name='admin_settings'),
+
     
     #ADMIN USER CRUD
     path("dashboard/admin/manage_users/add/", AdminCreateUser.as_view(), name="admin_create_user"),
@@ -88,5 +90,7 @@ urlpatterns = [
     path("dashboard/user/application/step-2/", views.vehicle_registration_step_2, name="vehicle_registration_step_2"),
     path("dashboard/user/application/step-3/", views.vehicle_registration_step_3, name="vehicle_registration_step_3"),
     path("dashboard/user/application/complete/", views.registration_complete, name="registration_complete"),
+    
+    path('dashboard/settings/', views.settings_view, name='settings'),
     
 ]

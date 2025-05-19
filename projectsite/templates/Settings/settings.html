@@ -1,0 +1,179 @@
+{% extends "includes/user_sidebar.html" %}
+{% load static %}
+
+{% block title %}
+     Settings
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/security-dashboard-style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.png' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 120px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="main-content flex-grow-1 ms-uto">
+    <div class="container-fluid py-1">
+        <!-- Title & Top Bar -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+            <h2 class="title mb-3 mb-md-0">Settings</h2>
+            <div class="d-flex align-items-center gap-3">
+                <!-- Notification Bell -->
+                <a href="Announcements.html" class="text-decoration-none text-light position-relative">
+                    <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
+                    <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
+                </a>
+            </div>
+        </div>
+
+        <hr class="border-secondary">
+        <small><span id="date" class="text-light"></span></small>
+        <br>
+
+
+        <h5 class="mb-3">Personal Information</h5>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    {% if request.user.profile_picture %}
+                        <img src="{{ request.user.profile_picture.url }}" class="img-thumbnail" width="150" alt="Profile Picture">
+                    {% endif %}
+                    <input type="file" name="profile_picture" class="form-control mt-2">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Email</label>
+                    <input type="email" class="form-control" name="corporate_email" value="{{ request.user.corporate_email }}" required>
+                </div>
+                <div class="col-md-4">
+                    <label>First Name</label>
+                    <input type="text" class="form-control" name="firstname" value="{{ request.user.firstname }}">
+                </div>
+                <div class="col-md-4">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" name="lastname" value="{{ request.user.lastname }}">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <label>Middle Name</label>
+                    <input type="text" class="form-control" name="middle_name" value="{{ request.user.middle_name }}">
+                </div>
+                <div class="col-md-4">
+                    <label>Suffix</label>
+                    <input type="text" class="form-control" name="suffix" value="{{ request.user.suffix }}">
+                </div>
+                <div class="col-md-4">
+                    <label>Address</label>
+                    <input type="text" class="form-control" name="address" value="{{ request.user.address }}">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <label>New Password</label>
+                    <input type="password" class="form-control" name="new_password">
+                </div>
+                <div class="col-md-4">
+                    <label>Confirm Password</label>
+                    <input type="password" class="form-control" name="confirm_password">
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </div>
+        </form>
+
+        <hr class="my-5">
+
+        <h5 class="mb-3">Vehicle Information</h5>
+
+        {% if request.user.role == 'user' %}
+            <div class="mt-4">
+                <h4>Your Vehicles</h4>
+                {% with user_vehicles=request.user.vehicle_set.all %}
+                    {% if user_vehicles %}
+                        {% for vehicle in user_vehicles %}
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <p><strong>Plate Number:</strong> {{ vehicle.plateNumber }}</p>
+                                    <p><strong>Model:</strong> {{ vehicle.model }}</p>
+                                    <p><strong>Type:</strong> {{ vehicle.type }}</p>
+                                    <p><strong>Color:</strong> {{ vehicle.color }}</p>
+                                    <p><strong>Chassis Number:</strong> {{ vehicle.chassisNumber }}</p>
+                                    <p><strong>OR Number:</strong> {{ vehicle.OR_Number }}</p>
+                                    <p><strong>CR Number:</strong> {{ vehicle.CR_Number }}</p>
+                                    <p><strong>Owner:</strong>
+                                        {{ vehicle.owner_firstname }} {{ vehicle.owner_middlename }} {{ vehicle.owner_lastname }} {{ vehicle.owner_suffix }}
+                                    </p>
+                                    <p><strong>Contact:</strong> {{ vehicle.contact_number }}</p>
+                                    <p><strong>Relationship:</strong> {{ vehicle.relationship_to_owner }}</p>
+                                    <p><strong>Is Owner:</strong> {{ vehicle.is_owner|yesno:"Yes,No" }}</p>
+                                    <p><strong>Is Legal Owner:</strong> {{ vehicle.is_legal_owner|yesno:"Yes,No" }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No vehicles registered.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+        {% elif request.user.role == 'admin' or request.user.role == 'security' %}
+            <div class="mt-4">
+                <h4>All Registered Vehicles</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Plate Number</th>
+                            <th>Owner</th>
+                            <th>Model</th>
+                            <th>Type</th>
+                            <th>Color</th>
+                            <th>Chassis No.</th>
+                            <th>OR No.</th>
+                            <th>CR No.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vehicle in all_vehicles %}
+                            <tr>
+                                <td>{{ vehicle.plateNumber }}</td>
+                                <td>{{ vehicle.self_owner.firstname }} {{ vehicle.self_owner.lastname }}</td>
+                                <td>{{ vehicle.model }}</td>
+                                <td>{{ vehicle.type }}</td>
+                                <td>{{ vehicle.color }}</td>
+                                <td>{{ vehicle.chassisNumber }}</td>
+                                <td>{{ vehicle.OR_Number }}</td>
+                                <td>{{ vehicle.CR_Number }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="{% static 'javascript/User_Dashboard.js' %}"></script>
+{% endblock %}

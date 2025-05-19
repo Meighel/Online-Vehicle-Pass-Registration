@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from .forms import (UserSignupForm, UserProfileForm, 
                     PaymentTransactionForm,
                     ApplicationForm,
-                    InspectionApprovalForm,
+                    InspectionApprovalForm, PasswordUpdateForm,
                     VehicleRegistrationStep1Form, VehicleRegistrationStep2Form, VehicleRegistrationStep3Form,
 )
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
@@ -31,6 +31,7 @@ from django.db.models import Count, Q
 from django.utils.timezone import now
 import calendar
 from django.db.models.functions import TruncMonth
+from django.contrib.auth import update_session_auth_hash
 
 def home(request):
     return render(request, 'index.html')
@@ -694,6 +695,60 @@ def security_report(request):
     return render(request, "Security Dashboard/Security_History.html")
 
 
+@login_required
+def settings_view(request):
+    user = request.user
+
+    if request.method == 'POST':
+        # Only allow if user is authenticated (should already be ensured by @login_required)
+        if not request.user.is_authenticated:
+            return redirect('login')  # or wherever your login page is
+
+        # === Handle profile update ===
+        corporate_email = request.POST.get('corporate_email')
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
+        middle_name = request.POST.get('middle_name')
+        suffix = request.POST.get('suffix')
+        address = request.POST.get('address')
+        profile_picture = request.FILES.get('profile_picture')
+
+        user.corporate_email = corporate_email
+        user.firstname = firstname
+        user.lastname = lastname
+        user.middle_name = middle_name
+        user.suffix = suffix
+        user.address = address
+
+        if profile_picture:
+            user.profile_picture = profile_picture
+
+        # === Handle password update ===
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password and confirm_password:
+            if new_password == confirm_password:
+                user.set_password(new_password)
+                update_session_auth_hash(request, user)
+                messages.success(request, "Password updated successfully.")
+            else:
+                messages.error(request, "Passwords do not match.")
+                return redirect('settings')
+
+        user.save()
+        messages.success(request, "Profile updated successfully.")
+        return redirect('settings')
+
+    # === GET Request ===
+    context = {}
+
+    if request.user.is_authenticated and hasattr(request.user, 'role'):
+        if user.role in ['admin', 'security']:
+            context['all_vehicles'] = Vehicle.objects.select_related('self_owner').all()
+
+    return render(request, 'Settings/settings.html', context)
+
 def faq(request):
     return render(request, "Settings/FAQ.html")
 
@@ -730,3 +785,5 @@ def get_stats():
 def dashboard_view(request):
     stats = get_stats()
     return render(request, 'User Dashboard/User_Dashboard.html', {'stats': stats})
+
+
