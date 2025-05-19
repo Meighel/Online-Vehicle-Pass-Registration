@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const fields = {
       driverLicense: {
         el: $("#id_driver_license_number"),
-        regex: /^\d{15}$/,
-        message: "Driver license number must be exactly 15 digits"
+        regex: /^[A-Z0-9]{3}-\d{2}-\d{6}$/,
+        message: "Driver license number must follow the format N01-23-456789"
       },
       plateNumber: {
         el: $("#id_plate_number"),
