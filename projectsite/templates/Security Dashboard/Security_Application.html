@@ -44,7 +44,6 @@
                 <thead>
                     <tr>
                         <th>Username</th>
-                        <th>Application ID</th>
                         <th>Date</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -53,8 +52,7 @@
                 <tbody>
                 {% for applicant in applications %}
                     <tr>
-                        <td>{{ applicant.user.lastname }}, {{ applicant.user.firstname }} {{ applicant.user.middlename|default_if_none:""|slice:":1"}}</td>
-                        <td>{{ applicant.registrationNumber }}</td>
+                        <td>{{ applicant.user.lastname }}, {{ applicant.user.firstname }} {{ applicant.user.middle_name|default_if_none:""|slice:":1"}} {{ registration.user.suffix|default_if_none:""}}</td>
                         <td>{{ applicant.created_at|date:"F d, Y" }}</td>
                         <td>{{ applicant.status }}</td>
                         <td>

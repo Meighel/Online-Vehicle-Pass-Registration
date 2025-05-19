@@ -9,20 +9,72 @@
 
             <div class="list-group">
                 <div class="list-group-item bg-dark border-secondary mb-2">
-                    <strong style="color: #FFD700;">Application ID:</strong> 
-                    <span class="float-end text-white">{{ registration.registrationNumber }}</span>
+                    <strong style="color: #FFD700;">Date Submitted:</strong> 
+                    <span class="float-end text-white">{{ registration.created_at|date:"F d, Y" }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Google Drive Link:</strong> 
+                    <a href="#" class="view-file-link float-end text-white" data-url="{{ registration.files }}">View File</a>
+                </div>
+                <!-- Rest of content remains the same -->
+                <h2>Personal Information</h2>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Applicant Name:</strong> 
+                    <span class="float-end text-white">{{ registration.user.lastname }}, {{ registration.user.firstname }} {{ registration.user.middle_name|default_if_none:""|slice:":1" }}. {{ registration.user.suffix|default_if_none:""}}</span>
+                </div>
+                <!-- Other personal information fields... -->
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Corporate Email:</strong> 
+                    <span class="float-end text-white">{{ registration.user.corporate_email }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Address:</strong> 
+                    <span class="float-end text-white">{{ registration.user.address }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Institutional Role:</strong> 
+                    <span class="float-end text-white">{{ registration.user.school_role }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Department / Workplace:</strong> 
+                    <span class="float-end text-white">{{ registration.user.department }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">College:</strong> 
+                    <span class="float-end text-white">{{ registration.user.college }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Program:</strong> 
+                    <span class="float-end text-white">{{ registration.user.program }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Driver's License Number:</strong> 
+                    <span class="float-end text-white">{{ registration.user.dl_number }}</span>
+                </div>
+                <h2>Vehicle Information</h2>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Type:</strong> 
+                    <span class="float-end text-white">{{ registration.vehicle.type }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Color:</strong> 
+                    <span class="float-end text-white">{{ registration.vehicle.vehicle_color }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">Model:</strong> 
+                    <span class="float-end text-white">{{ registration.vehicle.model }}</span>
                 </div>
                 <div class="list-group-item bg-dark border-secondary mb-2">
                     <strong style="color: #FFD700;">Plate Number:</strong> 
                     <span class="float-end text-white">{{ registration.vehicle.plateNumber }}</span>
                 </div>
                 <div class="list-group-item bg-dark border-secondary mb-2">
-                    <strong style="color: #FFD700;">Date Submitted:</strong> 
-                    <span class="float-end text-white">{{ registration.created_at|date:"F d, Y" }}</span>
+                    <strong style="color: #FFD700;">Chassis Number:</strong> 
+                    <span class="float-end text-white">{{ registration.vehicle.chassisNumber }}</span>
                 </div>
                 <div class="list-group-item bg-dark border-secondary mb-2">
-                    <strong style="color: #FFD700;">Status:</strong> 
-                    <span class="float-end text-white">{{ registration.status|title }}</span>
+                    <strong style="color: #FFD700;">OR/CR Number:</strong> 
+                    <span class="float-end text-white">{{ registration.vehicle.OR_Number }} -- {{ registration.vehicle.CR_Number }}</span>
                 </div>
             </div>
 
@@ -31,5 +83,118 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal for file display -->
+    <div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content bg-dark">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title text-white" id="fileModalLabel">File Viewer</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0 d-flex">
+                    <!-- Left half: Current content -->
+                    <div class="split-view h-100" style="width: 50%; overflow-y: auto; padding: 15px;">
+                        <div id="registration-content">
+                            <!-- Content will be cloned here by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <!-- Right half: File viewer -->
+                    <div class="split-view h-100" style="width: 50%; border-left: 1px solid #333;">
+                        <iframe id="file-frame" style="width: 100%; height: 100%; border: none;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find all file viewing links and attach click handlers
+        const fileLinks = document.querySelectorAll('.view-file-link');
+        
+        fileLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const fileUrl = this.getAttribute('data-url');
+                
+                // Prepare to open a new window with proper specs for split view
+                const screenWidth = window.screen.availWidth;
+                const screenHeight = window.screen.availHeight;
+                const windowWidth = Math.floor(screenWidth / 2);
+                
+                // Open Google Drive in a new window sized to the right half of the screen
+                const newWindow = window.open(
+                    fileUrl, 
+                    '_blank',
+                    `width=${windowWidth},height=${screenHeight},left=${windowWidth},top=0`
+                );
+                
+                // If the window opened successfully, show our modal on the left half
+                if (newWindow) {
+                    // Focus on our original window
+                    window.focus();
+                    
+                    // Clone the registration card content to the modal
+                    const registrationContent = document.querySelector('.card').cloneNode(true);
+                    const modalContent = document.getElementById('registration-content');
+                    modalContent.innerHTML = '';
+                    modalContent.appendChild(registrationContent);
+                    
+                    // Configure and show the modal to take left half
+                    const modalElement = document.getElementById('fileModal');
+                    
+                    // Adjust modal styles for left half only
+                    modalElement.querySelector('.modal-dialog').style.maxWidth = `${windowWidth}px`;
+                    modalElement.querySelector('.modal-dialog').style.margin = '0';
+                    modalElement.querySelector('.modal-dialog').style.height = '100vh';
+                    modalElement.querySelector('.modal-content').style.height = '100%';
+                    
+                    // Remove the right pane since we're using a separate window
+                    const rightPane = modalElement.querySelector('.split-view:last-child');
+                    if (rightPane) {
+                        rightPane.style.display = 'none';
+                    }
+                    
+                    // Make the left pane take full width
+                    const leftPane = modalElement.querySelector('.split-view:first-child');
+                    if (leftPane) {
+                        leftPane.style.width = '100%';
+                    }
+                    
+                    // Add handler for when modal closes
+                    modalElement.addEventListener('hidden.bs.modal', function() {
+                        // Try to close the other window when we close the modal
+                        try {
+                            if (!newWindow.closed) {
+                                newWindow.close();
+                            }
+                        } catch (e) {
+                            // Handle potential security exceptions
+                            console.log('Note: Could not close the other window due to browser security.');
+                        }
+                    }, { once: true });
+                    
+                    // Show the modal
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                    
+                    // Try to position and resize our current window to left half
+                    // Note: This may not work in all browsers due to security restrictions
+                    try {
+                        window.resizeTo(windowWidth, screenHeight);
+                        window.moveTo(0, 0);
+                    } catch (e) {
+                        console.log('Note: Browser prevented window resizing.');
+                    }
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}
