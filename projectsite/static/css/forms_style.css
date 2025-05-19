@@ -30,7 +30,7 @@ h2 {
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .welcome {
@@ -146,6 +146,19 @@ h2 {
   background: yellow;
 }
 
+.form1-form-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 25px;
+  background: white;
+  color: black;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 20px;
+  max-width: 185px;
+}
+
 /* Form 2 Specific Styles */
 .form2-h2 {
   font-size: 22px;
@@ -165,29 +178,31 @@ h2 {
 .form2-form-group input[type="tel"] {
   width: 100%;
   max-width: 250px;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border: none;
   border-radius: 25px;
   background: white;
   color: black;
   font-size: 14px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
+  margin-left: 8px;
 }
 
 .form2-aligned-group {
   display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.form2-aligned-group .form-group {
-  flex: 1;
+.form2-aligned-group .form2-form-group {
+  flex-wrap: 1;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
 .form2-radio-group {
   display: flex;
-  gap: 30px;
+  gap: 10px;
   align-items: center;
 }
 
@@ -215,7 +230,7 @@ h2 {
 
 .form2-owner-details {
   display: none;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 /* Form 3 Specific Styles */

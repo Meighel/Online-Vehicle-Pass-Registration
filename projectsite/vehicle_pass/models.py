@@ -154,8 +154,8 @@ class Vehicle(BaseModel):
         return f"{self.plateNumber}"  
     
     def clean(self):
-        if Vehicle.objects.filter(self_ownership=self.self_ownership).count() >= 2:
-            raise ValidationError({'self_ownership': 'You can only register up to two vehicles.'})
+        if Vehicle.objects.filter(self_owner=self.self_owner).count() >= 2:
+            raise ValidationError({'self_owner': 'You can only register up to two vehicles.'})
 
     def save(self, *args, **kwargs):
         self.full_clean() 

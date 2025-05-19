@@ -41,10 +41,13 @@
         </div>
 
         <div class="form-group form1-form-group">
-          <label for="{{ form.suffix.id_for_label }}">Suffix</label>
-          {{ form.suffix }}
+          <div class="suffix-custom-size" style="width:75px">
+              <label for="{{ form.suffix.id_for_label }}">Suffix</label>
+              {{ form.suffix }}
+          </div>
         </div>
       </div>
+
 
       <div class="form1-aligned-group">
         <div class="form-group form1-form-group">
@@ -54,7 +57,7 @@
 
         <div class="form-group form1-form-group">
           <label for="{{ form.corporate_email.id_for_label }}">Address</label>
-          {{ form.corporate_email }}
+          {{ form.address }}
         </div>
 
         <div class="form-group form1-form-group">
@@ -65,21 +68,24 @@
 
       <div class="form1-aligned-group">
         <div class="form-group form1-form-group">
-          <label for="{{ form.college_or_workplace.id_for_label }}">Department/Workplace</label>
-          {{ form.college_or_workplace }}
+          <label for="{{ form.department_or_workplace.id_for_label }}">Department/Workplace</label>
+          {{ form.department_or_workplace }}
         </div>
 
         <div class="form-group form1-form-group">
-          <label for="{{ form.college_or_workplace.id_for_label }}">College</label>
-          {{ form.college_or_workplace }}
+          <label for="{{ form.college.id_for_label }}">College</label>
+          {{ form.college }}
         </div>
         <div class="form-group form1-form-group">
-          <label for="{{ form.college_or_workplace.id_for_label }}">Program</label>
-          {{ form.college_or_workplace }}
+          <label for="{{ form.program.id_for_label }}">Program</label>
+          {{ form.program }}
         </div>
-        <div class="form-group form1-form-group">
-          <label for="{{ form.driver_license_number.id_for_label }}">Driver License's Number</label>
-          {{ form.driver_license_number }}
+      </div>
+
+      <div class="form1-aligned-group">
+        <div class="form-group form1-form-group" style="flex: 1; max-width: 300px;">
+              <label for="{{ form.driver_license_number.id_for_label }}">Driver's License Number</label>
+              {{ form.driver_license_number }}
         </div>
       </div>
 
