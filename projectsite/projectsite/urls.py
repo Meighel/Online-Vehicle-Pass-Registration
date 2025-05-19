@@ -56,13 +56,15 @@ urlpatterns = [
     path("dashboard/security/manage_inspection/action/", handle_inspection_action, name='inspection_action'),
     path("dashboard/security/manage_stickers", SecurityViewStickers.as_view() , name="security_manage_stickers"),
     path("dashboard/security/manage_report/", security_report, name="security_report"),
-    
+    path('dashboard/security/settings/', views.settings_view, name='security_settings'),
     
     path("dashboard/cashier/", views.cashier_dashboard, name="cashier_dashboard"),
     path("dashboard/cashier/cashier_payments/", cashierViewPayment.as_view(), name="cashier_payments"),
     path("dashboard/cashier/cashier_payments/<pk>/", cashierUpdatePayment.as_view(), name="cashier_update_payment"),  
     path("dashboard/cashier/cashier_transactions/", cashierViewTransaction.as_view(), name="cashier_transactions"),
-    path("dashboard/cashier/cashier_reports/", cashier_report, name="cashier_reports"),
+    path("dashboard/cashier/cashier_reports/", cashier_report, name="cashier_reports"),    path('dashboard/admin/settings/', views.settings_view, name='admin_settings'),
+    path('dashboard/cashier/settings/', views.settings_view, name='cashier_settings'),
+
     
     path("dashboard/admin/", admin_dashboard, name="admin_dashboard"),
     path('dashboard/admin/settings/', views.settings_view, name='admin_settings'),

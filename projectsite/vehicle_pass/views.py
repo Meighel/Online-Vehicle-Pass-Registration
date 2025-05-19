@@ -724,26 +724,15 @@ def settings_view(request):
     user = request.user
 
     if request.method == 'POST':
-        # Only allow if user is authenticated (should already be ensured by @login_required)
-        if not request.user.is_authenticated:
-            return redirect('login')  # or wherever your login page is
-
         # === Handle profile update ===
-        corporate_email = request.POST.get('corporate_email')
-        firstname = request.POST.get('firstname')
-        lastname = request.POST.get('lastname')
-        middle_name = request.POST.get('middle_name')
-        suffix = request.POST.get('suffix')
-        address = request.POST.get('address')
+        user.corporate_email = request.POST.get('corporate_email')
+        user.firstname = request.POST.get('firstname')
+        user.lastname = request.POST.get('lastname')
+        user.middle_name = request.POST.get('middle_name')
+        user.suffix = request.POST.get('suffix')
+        user.address = request.POST.get('address')
+
         profile_picture = request.FILES.get('profile_picture')
-
-        user.corporate_email = corporate_email
-        user.firstname = firstname
-        user.lastname = lastname
-        user.middle_name = middle_name
-        user.suffix = suffix
-        user.address = address
-
         if profile_picture:
             user.profile_picture = profile_picture
 
@@ -751,25 +740,30 @@ def settings_view(request):
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
 
-        if new_password and confirm_password:
-            if new_password == confirm_password:
-                user.set_password(new_password)
-                update_session_auth_hash(request, user)
-                messages.success(request, "Password updated successfully.")
+        try:
+            if new_password and confirm_password:
+                if new_password == confirm_password:
+                    user.set_password(new_password)
+                    user.save()  # Save after setting password
+                    update_session_auth_hash(request, user)  # Keep the user logged in
+                    messages.success(request, "Password updated successfully.")
+                else:
+                    messages.error(request, "Passwords do not match.")
+                    return redirect('settings')
             else:
-                messages.error(request, "Passwords do not match.")
-                return redirect('settings')
+                # If no password update, just save the other changes
+                user.save()
+                messages.success(request, "Profile updated successfully.")
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
 
-        user.save()
-        messages.success(request, "Profile updated successfully.")
         return redirect('settings')
 
     # === GET Request ===
     context = {}
 
-    if request.user.is_authenticated and hasattr(request.user, 'role'):
-        if user.role in ['admin', 'security']:
-            context['all_vehicles'] = Vehicle.objects.select_related('applicant').all()
+    if hasattr(user, 'role') and user.role in ['admin', 'security']:
+        context['all_vehicles'] = Vehicle.objects.select_related('self_owner').all()
 
     return render(request, 'Settings/settings.html', context)
 
