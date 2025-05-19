@@ -1,0 +1,397 @@
+/* ========================================= */
+/*                GENERAL RESET              */
+/* ========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+:root {
+  --primary-bg: #000000;
+  --secondary-bg: #111111;
+  --card-bg: #1a1a1a;
+  --text-light: #ffffff;
+  --text-gray: #cccccc;
+  --border-color: #333333;
+  --highlight-yellow: #FFD700;
+  --hover-color: #e6c200;
+  --accent-bg: rgba(255, 215, 0, 0.1);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  background-color: var(--primary-bg);
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.main-content {
+  flex-grow: 1;
+  background-color: var(--primary-bg);
+}
+
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 4rem;
+  padding: 1rem 0 3rem;
+}
+
+header h1 {
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  color: var(--text-light);
+}
+
+header p {
+  font-size: 1.125rem;
+  color: var(--text-gray);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ========================================= */
+/*                NAVBAR                     */
+/* ========================================= */
+
+.navbar {
+  background-color: #000000 !important;
+  transition: all 0.4s ease-in-out;
+  padding-top: 5px;
+}
+
+.navbar.scrolled {
+  background-color: #000000 !important;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .nav-link {
+  color: var(--text-gray);
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.navbar .nav-link:hover {
+  color: var(--highlight-yellow);
+}
+
+.navbar .nav-link::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 1px;
+  background: var(--highlight-yellow);
+  transition: width 0.3s ease-in-out;
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navbar .nav-link:hover::after {
+  width: 50%;
+}
+
+.navbar-toggler {
+  border: none;
+  outline: none;
+}
+
+.navbar-toggler-icon {
+  filter: invert(1);
+}
+
+.btn-warning {
+  background-color: var(--highlight-yellow);
+  border-color: var(--highlight-yellow);
+}
+
+.btn-warning:hover {
+  background-color: var(--hover-color);
+  border-color: var(--hover-color);
+}
+
+/* ========================================= */
+/*                SEARCH                     */
+/* ========================================= */
+
+.search-container {
+  max-width: 550px;
+  margin: 0 auto 4rem;
+  position: relative;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  background-color: var(--secondary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  color: var(--text-light);
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.search-container input:focus {
+  border-color: var(--highlight-yellow);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+}
+
+.search-container:before {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23bbbbbb'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+}
+
+/* ========================================= */
+/*                TABS                       */
+/* ========================================= */
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--secondary-bg);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tab {
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  user-select: none;
+  color: var(--text-gray);
+}
+
+.tab.active {
+  color: var(--highlight-yellow);
+  background-color: var(--accent-bg);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+}
+
+.tab:hover:not(.active) {
+  color: var(--highlight-yellow);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================= */
+/*                FAQ SECTION                */
+/* ========================================= */
+
+.faq-section {
+  margin-bottom: 4rem;
+}
+
+.faq-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  color: var(--text-light);
+  padding-left: 1rem;
+  border-left: 4px solid var(--highlight-yellow);
+}
+
+.faq-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.faq-item {
+  background-color: var(--card-bg);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--highlight-yellow);
+}
+
+.faq-question {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+  line-height: 1.4;
+  color: var(--text-light);
+}
+
+.faq-answer {
+  color: var(--text-gray);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+/* ========================================= */
+/*                CTA SECTION                */
+/* ========================================= */
+
+.cta-section {
+  margin-top: 5rem;
+  text-align: center;
+  padding: 3.5rem;
+  background-color: var(--secondary-bg);
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, var(--highlight-yellow), #e6c200);
+}
+
+.cta-section h2 {
+  font-size: 1.875rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.cta-section p {
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  color: var(--text-gray);
+  font-size: 1.1rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.875rem 2rem;
+  background-color: var(--highlight-yellow);
+  color: var(--primary-bg);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:hover {
+  background-color: var(--hover-color);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--highlight-yellow);
+  border: 1px solid var(--highlight-yellow);
+  margin-left: 1rem;
+}
+
+.btn-outline:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+/* ========================================= */
+/*                FOOTER                     */
+/* ========================================= */
+
+footer {
+  text-align: center;
+  margin-top: 5rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-gray);
+  font-size: 0.875rem;
+  background-color: var(--primary-bg);
+}
+
+/* ========================================= */
+/*              MEDIA QUERIES                */
+/* ========================================= */
+
+@media (max-width: 768px) {
+  .faq-container {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  header h1 {
+    font-size: 2.25rem;
+  }
+
+  .cta-section {
+    padding: 2.5rem 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .faq-item {
+    margin-bottom: 1rem;
+  }
+
+  .cta-section {
+    padding: 2rem 1rem;
+  }
+
+  .btn,
+  .btn-outline {
+    display: block;
+    margin: 1rem auto;
+    max-width: 80%;
+  }
+
+  .faq-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+}

@@ -1,452 +1,37 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Campus Vehicle Registration System</title>
+    <link rel="stylesheet" href="{% static 'css/settings_about.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.png' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #3563E9;
-            --secondary-color: #121B2C;
-            --light-blue: #F0F5FF;
-            --light-gray: #F8F9FA;
-            --text-dark: #1A202C;
-            --text-gray: #64748B;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        body {
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header Styles */
-        header {
-            padding: 20px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            position: sticky;
-            top: 0;
-            background: white;
-            z-index: 100;
-        }
-        
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-        
-        .cta-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .cta-button:hover {
-            background-color: #2951d5;
-        }
-        
-        /* Hero Section */
-        .hero {
-            padding: 80px 0;
-            background-color: var(--light-blue);
-            text-align: center;
-        }
-        
-        .section-subtitle {
-            color: var(--primary-color);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 16px;
-            font-size: 16px;
-        }
-        
-        .section-title {
-            font-size: 48px;
-            font-weight: 800;
-            margin-bottom: 24px;
-            line-height: 1.2;
-        }
-        
-        .section-description {
-            font-size: 18px;
-            color: var(--text-gray);
-            max-width: 700px;
-            margin: 0 auto 40px;
-        }
-        
-        /* Mission Section */
-        .mission {
-            padding: 100px 0;
-        }
-        
-        .mission-container {
-            display: flex;
-            align-items: center;
-            gap: 60px;
-        }
-        
-        .mission-image {
-            flex: 1;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-            background-color: var(--light-gray);
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .mission-content {
-            flex: 1;
-        }
-        
-        .mission-content h2 {
-            font-size: 36px;
-            margin-bottom: 24px;
-        }
-        
-        .mission-content p {
-            color: var(--text-gray);
-            margin-bottom: 24px;
-        }
-        
-        /* Team Section */
-        .team {
-            padding: 100px 0;
-            background-color: var(--light-gray);
-        }
-        
-        .team-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 40px;
-        }
-        
-        .team-member {
-            background-color: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-        }
-        
-        .team-member:hover {
-            transform: translateY(-10px);
-        }
-        
-        .member-image {
-            height: 250px;
-            background-color: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .member-info {
-            padding: 24px;
-            text-align: center;
-        }
-        
-        .member-name {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .member-role {
-            color: var(--primary-color);
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-        }
-        
-        .social-links a {
-            color: var(--text-gray);
-            font-size: 18px;
-            transition: color 0.3s;
-        }
-        
-        .social-links a:hover {
-            color: var(--primary-color);
-        }
-        
-        /* Stats Section */
-        .stats {
-            padding: 100px 0;
-        }
-        
-        .stats-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-        }
-        
-        .stat-item {
-            text-align: center;
-            padding: 40px 20px;
-            border-radius: 16px;
-            background-color: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        }
-        
-        .stat-number {
-            font-size: 48px;
-            font-weight: 800;
-            color: var(--primary-color);
-            margin-bottom: 16px;
-        }
-        
-        .stat-label {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 100px 0;
-            background-color: var(--light-blue);
-        }
-        
-        .features-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 40px;
-        }
-        
-        .feature-card {
-            background-color: white;
-            border-radius: 16px;
-            padding: 40px 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .feature-icon {
-            font-size: 36px;
-            color: var(--primary-color);
-            margin-bottom: 24px;
-            display: inline-block;
-            width: 80px;
-            height: 80px;
-            line-height: 80px;
-            text-align: center;
-            border-radius: 50%;
-            background-color: var(--light-blue);
-        }
-        
-        .feature-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-        
-        .feature-description {
-            color: var(--text-gray);
-        }
-        
-        /* CTA Section */
-        .cta {
-            padding: 100px 0;
-        }
-        
-        .cta-container {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 60px;
-            border-radius: 20px;
-            text-align: center;
-        }
-        
-        .cta-title {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 24px;
-        }
-        
-        .cta-description {
-            font-size: 18px;
-            max-width: 700px;
-            margin: 0 auto 40px;
-            opacity: 0.9;
-        }
-        
-        .cta-button-white {
-            background-color: white;
-            color: var(--primary-color);
-            border: none;
-            padding: 14px 32px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .cta-button-white:hover {
-            background-color: #f0f0f0;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 80px 0 40px;
-        }
-        
-        .footer-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 60px;
-            margin-bottom: 60px;
-        }
-        
-        .footer-col h3 {
-            font-size: 20px;
-            margin-bottom: 24px;
-            font-weight: 700;
-        }
-        
-        .footer-col p {
-            margin-bottom: 24px;
-            opacity: 0.8;
-            line-height: 1.8;
-        }
-        
-        .footer-links {
-            list-style: none;
-        }
-        
-        .footer-links li {
-            margin-bottom: 16px;
-        }
-        
-        .footer-links a {
-            color: white;
-            opacity: 0.8;
-            text-decoration: none;
-            transition: opacity 0.3s;
-        }
-        
-        .footer-links a:hover {
-            opacity: 1;
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .mission-container {
-                flex-direction: column;
-            }
-            
-            .section-title {
-                font-size: 36px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .section-title {
-                font-size: 32px;
-            }
-            
-            .hero, .mission, .team, .stats, .features, .cta {
-                padding: 60px 0;
-            }
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <a href="#" class="logo">CampusVehicle</a>
-            <nav class="nav-links">
-                <a href="#">Home</a>
-                <a href="#">About</a>
-                <a href="#">Features</a>
-                <a href="#">Pricing</a>
-                <a href="#">Contact</a>
-            </nav>
-            <button class="cta-button">Register Now</button>
+
+<div class="main-content">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
+        <div class="container d-flex align-items-center">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/navbar-brand img.png' %}" class="img-fluid" style="width: 100px">
+            </a>
+            <button class="navbar-toggler ms-auto border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-center" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'faq' %}">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
+                </ul>
+            </div>
+            <a class="btn btn-warning text-dark fw-bold ms-4 d-none d-lg-block" href="{% url 'login' %}">Login</a>
         </div>
-    </header>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -487,7 +72,7 @@
                         <img src="/api/placeholder/250/250" alt="Team member">
                     </div>
                     <div class="member-info">
-                        <h3 class="member-name">Sarah Johnson</h3>
+                        <h3 class="member-name">Ken Cinco</h3>
                         <div class="member-role">CEO & Founder</div>
                         <div class="social-links">
                             <a href="#"><i class="fab fa-linkedin"></i></a>
@@ -501,7 +86,7 @@
                         <img src="/api/placeholder/250/250" alt="Team member">
                     </div>
                     <div class="member-info">
-                        <h3 class="member-name">Michael Chen</h3>
+                        <h3 class="member-name">Meighel Nicolle Padon</h3>
                         <div class="member-role">CTO</div>
                         <div class="social-links">
                             <a href="#"><i class="fab fa-linkedin"></i></a>
@@ -515,7 +100,7 @@
                         <img src="/api/placeholder/250/250" alt="Team member">
                     </div>
                     <div class="member-info">
-                        <h3 class="member-name">David Rodriguez</h3>
+                        <h3 class="member-name">Frances Bea Magdayao</h3>
                         <div class="member-role">Head of Product</div>
                         <div class="social-links">
                             <a href="#"><i class="fab fa-linkedin"></i></a>
@@ -529,7 +114,35 @@
                         <img src="/api/placeholder/250/250" alt="Team member">
                     </div>
                     <div class="member-info">
-                        <h3 class="member-name">Lisa Patel</h3>
+                        <h3 class="member-name">Carla Jane Lagan</h3>
+                        <div class="member-role">Education Specialist</div>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="/api/placeholder/250/250" alt="Team member">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Rex Gatchalian</h3>
+                        <div class="member-role">Education Specialist</div>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="/api/placeholder/250/250" alt="Team member">
+                    </div>
+                    <div class="member-info">
+                        <h3 class="member-name">Spledelyn Recarze</h3>
                         <div class="member-role">Education Specialist</div>
                         <div class="social-links">
                             <a href="#"><i class="fab fa-linkedin"></i></a>
