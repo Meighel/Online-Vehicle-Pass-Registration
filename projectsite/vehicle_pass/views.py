@@ -548,18 +548,17 @@ class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('admin_manage_application')
 
 
-# Cashier Page View 
+# Cashier Page View @login_required
 @login_required
 def cashier_dashboard(request):
-    # Existing data...
     total_accounts = UserProfile.objects.filter(role='user').count()
     previous_total = UserProfile.objects.filter(role='user', created_at__lt=now() - timedelta(days=30)).count()
     account_growth_percent = round(((total_accounts - previous_total) / previous_total) * 100) if previous_total > 0 else 0
     pending_payments = Registration.objects.filter(status='pending').count()
     paid_clients = Registration.objects.filter(status='paid').count()
 
-    # Monthly Paid Clients for the Chart
-    monthly_data = (
+    # Chart 2: Monthly Paid Clients
+    monthly_paid = (
         Registration.objects
         .filter(status='paid')
         .annotate(month=TruncMonth('created_at'))
@@ -568,13 +567,14 @@ def cashier_dashboard(request):
         .order_by('month')
     )
 
-    # Create a dict with month numbers as keys and totals as values
-    monthly_totals = {month: 0 for month in range(1, 13)}
-    for entry in monthly_data:
-        month_num = entry['month'].month
-        monthly_totals[month_num] = entry['total']
+    def convert_to_monthly_array(queryset):
+        totals = {m: 0 for m in range(1, 13)}
+        for item in queryset:
+            month_num = item['month'].month
+            totals[month_num] = item['total']
+        return list(totals.values())
 
-    paid_clients_data = list(monthly_totals.values())
+    paid_clients_data = convert_to_monthly_array(monthly_paid)
 
     context = {
         'total_accounts': total_accounts,
@@ -583,8 +583,7 @@ def cashier_dashboard(request):
         'paid_clients': paid_clients,
         'paid_clients_data': paid_clients_data,
     }
-    return render(request, "Cashier Dashboard/Cashier_Dashboard.html")
-
+    return render(request, "Cashier Dashboard/Cashier_Dashboard.html", context)
 
 class cashierViewPayment(CustomLoginRequiredMixin, ListView):
     model = PaymentTransaction
@@ -594,7 +593,6 @@ class cashierViewPayment(CustomLoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return PaymentTransaction.objects.filter(status='pending')
-    
     
 class cashierViewTransaction(CustomLoginRequiredMixin, ListView):
     model = PaymentTransaction
@@ -619,7 +617,6 @@ class cashierViewTransaction(CustomLoginRequiredMixin, ListView):
             context['form'] = PaymentTransactionForm()
         
         return context
-
 
 class cashierUpdatePayment(CustomLoginRequiredMixin, UpdateView):
     model = PaymentTransaction
