@@ -346,19 +346,20 @@ def vehicle_registration_step_2(request):
 def vehicle_registration_step_3(request):
     user_id = request.session.get("user_id")
     user = UserProfile.objects.get(id=user_id)
-    
+
     if request.method == 'POST':
         form = VehicleRegistrationStep3Form(request.POST)
         if form.is_valid():
             google_folder_link = form.cleaned_data['google_drive_link']
-            
+
             try:
                 # Get data from previous steps
                 step1_data = request.session.get('step1_data', {})
                 step2_data = request.session.get('step2_data', {})
-                
+
                 # Update UserProfile with collected information
-                # Update only if the field is provided in the form data
+                if step1_data.get('middle_name'):
+                    user.middle_name = step1_data['middle_name']
                 if step1_data.get('address'):
                     user.address = step1_data['address']
                 if step1_data.get('role'):
@@ -371,48 +372,48 @@ def vehicle_registration_step_3(request):
                     user.program = step1_data['program']
                 if step1_data.get('driver_license_number'):
                     user.dl_number = step1_data['driver_license_number']
-                
-                # Save the updated user profile
+
                 user.save()
-                # Create Vehicle object based on updated model schema
+
+                # Create Vehicle object
                 vehicle = Vehicle.objects.create(
-                    applicant=user,  # Current user is always linked to the vehicle
+                    applicant=user,
                     plateNumber=step1_data['plate_number'],
                     type=step1_data['vehicle_type'],
                     model=step1_data['model'],
-                    vehicle_color=step1_data['vehicle_color'],  
+                    vehicle_color=step1_data['vehicle_color'],
                     chassisNumber=step1_data['chassis_number'],
                     OR_Number=step1_data['or_number'],
                     CR_Number=step1_data['cr_number'],
-                    # Set ownership information
                     is_owner=step2_data.get('is_owner', False),
-                    # Owner information if not the user
                     owner_firstname=None if step2_data.get('is_owner', False) else step2_data.get('owner_first_name'),
                     owner_middlename=None if step2_data.get('is_owner', False) else step2_data.get('owner_middle_name'),
                     owner_lastname=None if step2_data.get('is_owner', False) else step2_data.get('owner_last_name'),
                     owner_suffix=None if step2_data.get('is_owner', False) else step2_data.get('owner_suffix'),
                     contact_number=None if step2_data.get('is_owner', False) else step2_data.get('owner_contact_number'),
-                    relationship_to_owner=None if step2_data.get('is_owner', False) else step2_data.get('relationship_to_owner')                )
-                
+                    relationship_to_owner=None if step2_data.get('is_owner', False) else step2_data.get('relationship_to_owner')
+                )
+
                 # Create Registration object
-                registration = Registration.objects.create(
+                Registration.objects.create(
                     user=user,
                     vehicle=vehicle,
                     files=google_folder_link,
                     status='pending'
                 )
-                
+
                 # Clear session data
                 for key in ['step1_data', 'step2_data']:
-                    if key in request.session:
-                        del request.session[key]
-                
+                    request.session.pop(key, None)
+
                 messages.success(request, "Vehicle registration submitted successfully!")
                 return redirect('user_pass_status')
-                
+
             except Exception as e:
                 messages.error(request, f"Error saving registration: {str(e)}")
-                
+
+        # If form is invalid or exception occurred, fall through to render again
+
     else:
         form = VehicleRegistrationStep3Form()
 
@@ -421,6 +422,7 @@ def vehicle_registration_step_3(request):
         'user': user
     }
     return render(request, 'forms/forms_3.html', context)
+
 
 
 def registration_complete(request):

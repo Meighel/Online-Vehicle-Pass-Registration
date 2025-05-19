@@ -14,7 +14,7 @@ class UserSignupForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['corporate_email', 'firstname', 'middle_name', 'lastname',  'school_role']
+        fields = ['corporate_email', 'firstname', 'middle_name', 'lastname', 'school_role']
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -35,7 +35,6 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = '__all__' 
-
 
 class PaymentTransactionForm(forms.ModelForm):
     class Meta:
@@ -69,74 +68,11 @@ class PaymentTransactionForm(forms.ModelForm):
             except CashierProfile.DoesNotExist:
                 self.fields['cashier'].initial = None
 
-
-
-
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Registration
         fields = ['status']
-        
-class VehicleRegistrationStep1Form(forms.Form):
-    first_name = forms.CharField(max_length=100, label='First Name')
-    middle_name = forms.CharField(max_length=100, required=False, label='Middle Name')
-    last_name = forms.CharField(max_length=100, label='Last Name')
-    suffix = forms.CharField(max_length=5, required=False, label='Suffix')
-    corporate_email = forms.EmailField(label='Corporate Email')
-    role = forms.ChoiceField(choices=[('student', 'Student'), ('faculty', 'Faculty')], label='School Role')
-    department_or_workplace = forms.CharField(max_length=100, label='Department/Workplace')
-    college = forms.CharField(max_length=75, label='College')
-    program = forms.CharField(max_length=100, label='Program')
-    driver_license_number = forms.CharField(max_length=55, label="Driver's License Number")
-    vehicle_type = forms.ChoiceField(choices=[('car', 'Car'), ('motorcycle', 'Motorcycle')], label='Vehicle Type')
-    vehicle_color = forms.CharField(max_length=100, label='Vehicle Color')
-    model = forms.CharField(max_length=100, label='Vehicle Model')
-    plate_number = forms.CharField(max_length=100, label='Plate Number')
-    chassis_number = forms.CharField(max_length=100, label='Chassis Number')
-    or_number = forms.CharField(max_length=100, label='OR Number')
-    cr_number = forms.CharField(max_length=100, label='CR Number')
 
-class VehicleRegistrationStep2Form(forms.Form):
-    owner = forms.ChoiceField(choices=[('yes', 'Yes, I am the owner of the vehicle'), 
-                                       ('no', 'No, I am registering on behalf of the owner')], 
-                              label='Are you the owner of this vehicle?',
-                              widget=forms.RadioSelect)
-    # Owner details if "no" is selected
-    relationship_to_owner = forms.CharField(
-        max_length=100,
-        label="Relationship to Owner",
-        required=False,
-        widget=forms.TextInput(attrs={
-            'placeholder': 'e.g. Parent, Sibling, Employer',
-            'class': 'form-control'
-        })
-    )
-    owner_first_name = forms.CharField(max_length=100, label='Owner\'s First Name')
-    owner_middle_name = forms.CharField(max_length=100, required=False, label='Owner\'s Middle Name')
-    owner_last_name = forms.CharField(max_length=100, label='Owner\'s Last Name')
-    owner_suffix = forms.CharField(max_length=5, required=False, label='Owner\'s Suffix')
-    owner_contact_number = forms.CharField(max_length=15, required=False, label='Owner\'s Contact Number')
-
-    def clean(self):
-        cleaned_data = super().clean()
-        is_owner = cleaned_data.get("owner") == "yes"
-
-        if not is_owner:
-            required_fields = ["owner_first_name", "owner_last_name", "relationship_to_owner", "owner_contact_number"]
-            for field in required_fields:
-                if not cleaned_data.get(field):
-                    self.add_error(field, "This field is required if you're not the owner.")
-
-class VehicleRegistrationStep3Form(forms.Form):
-    google_drive_link = forms.URLField(label='Google Folder Link')
-
-
-class InspectionApprovalForm(forms.ModelForm):
-    class Meta:
-        model = InspectionReport
-        fields = ['remarks', 'additional_notes', 'is_approved']
-        
-        
 class VehicleRegistrationStep1Form(forms.Form):
     first_name = forms.CharField(
         max_length=100,
@@ -164,48 +100,39 @@ class VehicleRegistrationStep1Form(forms.Form):
         label='Corporate Email',
         widget=forms.EmailInput(attrs={'placeholder': '20228000X@psu.edu.ph'})
     )
-
     address = forms.CharField(
         max_length=105,
         label='Address',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. Escano St., Brgy Tiniguiban'})
     )
-
-
     role = forms.ChoiceField(
         choices=[('student', 'Student'), ('faculty', 'Faculty'), ('university personnel', 'University Personnel')],
         label='School Role',
         widget=forms.Select(attrs={'placeholder': 'Select your role'})
     )
-
     department_or_workplace = forms.CharField(
         max_length=100,
         required=False,
         label='Department/Workplace',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your college or workplace'})
     )
-
     college = forms.CharField(
         max_length=100,
         required=False,
         label='College',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your college'})
     )
-
     program = forms.CharField(
         max_length=100,
         required=False,
         label='Program',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. BS Computer Science'})
     )
-
-
     driver_license_number = forms.CharField(
         max_length=100,
         label="Driver's License Number",
         widget=forms.TextInput(attrs={'placeholder': 'N03-12-123456'})
     )
-
     vehicle_type = forms.ChoiceField(
         choices=[('car', 'Car'), ('motorcycle', 'Motorcycle')],
         label='Vehicle Type',
@@ -255,34 +182,30 @@ class VehicleRegistrationStep2Form(forms.Form):
         label='Relationship to Owner',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. Father, Mother, etc.'})
     )
-
     owner_first_name = forms.CharField(
         max_length=100,
         required=False,
         label="Owner's First Name",
         widget=forms.TextInput(attrs={'placeholder': "Enter owner's first name"})
     )
-
     owner_middle_name = forms.CharField(
         max_length=100,
         required=False,
         label="Owner's Middle Name",
         widget=forms.TextInput(attrs={'placeholder': "Enter owner's middle name (optional)"})
     )
-
     owner_last_name = forms.CharField(
         max_length=100,
         label="Owner's Last Name",
+        required=False,
         widget=forms.TextInput(attrs={'placeholder': "Enter owner's last name"})
     )
-
     owner_suffix = forms.CharField(
         max_length=5,
         required=False,
         label="Owner's Suffix",
         widget=forms.TextInput(attrs={'placeholder': "e.g. Jr"})
     )
-
     owner_contact_number = forms.CharField(
         max_length=15,
         required=False,
@@ -290,15 +213,28 @@ class VehicleRegistrationStep2Form(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': "e.g. 09123456789"})
     )
     
+    def clean(self):
+        cleaned_data = super().clean()
+        is_owner = cleaned_data.get("owner") == "yes"
+
+        if not is_owner:
+            required_fields = ["owner_first_name", "owner_last_name", "relationship_to_owner", "owner_contact_number"]
+            for field in required_fields:
+                if not cleaned_data.get(field):
+                    self.add_error(field, "This field is required if you're not the owner.")
+        return cleaned_data
+
 class VehicleRegistrationStep3Form(forms.Form):
     google_drive_link = forms.URLField(
         label='Google Folder Link',
         widget=forms.URLInput(attrs={'placeholder': 'Paste the link of your Google Drive folder'}) 
     )
-  
-class MyForm(forms.Form):
-    role = forms.ChoiceField(choices=..., widget=forms.Select(attrs={'class': 'custom-select'}))
-    
+
+class InspectionApprovalForm(forms.ModelForm):
+    class Meta:
+        model = InspectionReport
+        fields = ['remarks', 'additional_notes', 'is_approved']
+
 class PasswordUpdateForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput, label='Old Password')
     new_password = forms.CharField(widget=forms.PasswordInput, label='New Password')
@@ -309,7 +245,7 @@ class PasswordUpdateForm(forms.Form):
         if cleaned_data.get('new_password') != cleaned_data.get('confirm_password'):
             raise forms.ValidationError("New passwords and confirmation do not match.")
         
-class VehicleForms(forms.ModelForm):
+class VehicleForm(forms.ModelForm):
     class Meta:
         model = Vehicle
-        exclude = '__all__'
+        fields = '__all__'  # Changed from 'exclude' to 'fields' as the original had an incorrect usage

@@ -31,13 +31,13 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       orNumber: {
         el: $("#id_or_number"),
-        regex: /^\d+$/,
-        message: "OR number must be numeric"
+        regex: /^\d{1,15}$/,  // Allows 1 to 15 digits
+        message: "OR number must be numeric and a max of 15 digits"
       },
       crNumber: {
         el: $("#id_cr_number"),
-        regex: /^\d+$/,
-        message: "CR number must be numeric"
+        regex: /^\d{1,9}$/,  // Allows 1 to 9 digits
+        message: "CR number must be numeric and a max of 9 digits"
       },
       ownersContactNumber: {
         el: $("#id_owner_contact_number"), // corrected ID
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (ownerRadio?.value === "no" && ownerDetails) {
       const requiredInputs = ownerDetails.querySelectorAll("input[required]");
-      isValid = [...requiredInputs].every((input) => input.value.trim());
+      isValid = isValid && [...requiredInputs].every((input) => input.value.trim());
     }
 
     if (nextBtn) nextBtn.disabled = !isValid;
@@ -129,9 +129,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const input = $(".form3-form-group input[type='url']");
     const nextBtn = $(".form3-btn");
 
-    if (nextBtn && input) {
-      nextBtn.disabled = !input.value.trim();
+    if (!input || !nextBtn) return;
+
+    const errorId = `${input.id || "drive_url"}_error`;
+    let errorEl = document.getElementById(errorId);
+
+    if (!errorEl) {
+      errorEl = document.createElement("div");
+      errorEl.id = errorId;
+      errorEl.style.color = "red";
+      errorEl.style.fontSize = "0.8rem";
+      input.insertAdjacentElement("afterend", errorEl);
     }
+
+    const value = input.value.trim();
+    const isValidDriveLink = /^https:\/\/drive\.google\.com\/(file\/d\/|open\?id=|uc\?id=)[\w-]+/.test(value);
+
+    input.classList.toggle("invalid", !isValidDriveLink && value !== "");
+    errorEl.textContent = !isValidDriveLink && value !== "" 
+      ? "Please enter a valid Google Drive link." 
+      : "";
+
+    nextBtn.disabled = !isValidDriveLink;
   };
 
   // Register all listeners
