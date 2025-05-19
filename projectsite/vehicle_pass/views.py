@@ -276,10 +276,16 @@ def vehicle_registration_step_1(request):
                 'first_name': step1_data['first_name'],
                 'middle_name': step1_data['middle_name'],
                 'last_name': step1_data['last_name'],
+                'suffix': step1_data['suffix'],
                 'corporate_email': step1_data['corporate_email'],
+                'address': step1_data['address'],
                 'role': step1_data['role'],
+                'department_or_workplace': step1_data['department_or_workplace'],
+                'college': step1_data['college'],
+                'program': step1_data['program'],
                 'driver_license_number': step1_data['driver_license_number'],
                 'vehicle_type': step1_data['vehicle_type'],
+                'vehicle_color': step1_data['vehicle_color'],
                 'model': step1_data['model'],
                 'plate_number': step1_data['plate_number'],
                 'chassis_number': step1_data['chassis_number'],
@@ -293,8 +299,10 @@ def vehicle_registration_step_1(request):
             'first_name': user.firstname,
             'middle_name': user.middle_name,
             'last_name': user.lastname,
+            'suffix': user.suffix,
             'corporate_email': user.corporate_email,
-            'role': user.role,
+            'address': user.address,
+            'role': user.school_role,
             'driver_license_number': user.dl_number
         }
         form = VehicleRegistrationStep1Form(initial=initial_data)
@@ -320,6 +328,8 @@ def vehicle_registration_step_2(request):
                 'owner_first_name': step2_data.get('owner_first_name', ''),
                 'owner_middle_name': step2_data.get('owner_middle_name', ''),
                 'owner_last_name': step2_data.get('owner_last_name', ''),
+                'owner_suffix': step2_data.get('owner_suffix', ''),
+                'relationship_to_owner': step2_data.get('relationship_to_owner', ''),
                 'owner_contact_number': step2_data.get('owner_contact_number', '')
             }
             return redirect('vehicle_registration_step_3')
@@ -347,33 +357,27 @@ def vehicle_registration_step_3(request):
                 step1_data = request.session.get('step1_data', {})
                 step2_data = request.session.get('step2_data', {})
                 
-                # Save to database
-                # 1. First determine if we need to create an Owner object
-                owner = None
-                if not step2_data.get('is_owner', True):
-                    # Create owner object
-                    owner = Vehicle.objects.create(
-                        owner_firstname=step2_data['owner_first_name'],
-                        owner_middlename=step2_data['owner_middle_name'],
-                        owner_lastname=step2_data['owner_last_name'],
-                        contact_number=step2_data['owner_contact_number'],
-                        relationship_to_owner="User Relationship"  
-                    )
-                
-                # 2. Create Vehicle object
+                # Create Vehicle object based on updated model schema
                 vehicle = Vehicle.objects.create(
-                    self_ownership=user if step2_data.get('is_owner', True) else None,
-                    is_owner = None if step2_data.get('is_owner', False) else owner,
+                    self_owner=user,  # Current user is always linked to the vehicle
                     plateNumber=step1_data['plate_number'],
                     type=step1_data['vehicle_type'],
                     model=step1_data['model'],
-                    color="Not Specified",  # You might want to add this to your form
+                    vehicle_color=step1_data['vehicle_color'],  
                     chassisNumber=step1_data['chassis_number'],
                     OR_Number=step1_data['or_number'],
-                    CR_Number=step1_data['cr_number']
-                )
+                    CR_Number=step1_data['cr_number'],
+                    # Set ownership information
+                    is_owner=step2_data.get('is_owner', False),
+                    # Owner information if not the user
+                    owner_firstname=None if step2_data.get('is_owner', False) else step2_data.get('owner_first_name'),
+                    owner_middlename=None if step2_data.get('is_owner', False) else step2_data.get('owner_middle_name'),
+                    owner_lastname=None if step2_data.get('is_owner', False) else step2_data.get('owner_last_name'),
+                    owner_suffix=None if step2_data.get('is_owner', False) else step2_data.get('owner_suffix'),
+                    contact_number=None if step2_data.get('is_owner', False) else step2_data.get('owner_contact_number'),
+                    relationship_to_owner=None if step2_data.get('is_owner', False) else step2_data.get('relationship_to_owner')                )
                 
-                # 3. Create Registration object
+                # Create Registration object
                 registration = Registration.objects.create(
                     user=user,
                     vehicle=vehicle,
@@ -401,8 +405,9 @@ def vehicle_registration_step_3(request):
     }
     return render(request, 'forms/forms_3.html', context)
 
+
 def registration_complete(request):
-    return render(request, 'User Dasgboard/User_Pass_Status')
+    return render(request, 'User Dashboard/User_Pass_Status')
 
 @login_required
 def user_pass_status(request):

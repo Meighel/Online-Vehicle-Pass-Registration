@@ -77,16 +77,18 @@ class ApplicationForm(forms.ModelForm):
         model = Registration
         fields = ['status']
         
-
 class VehicleRegistrationStep1Form(forms.Form):
     first_name = forms.CharField(max_length=100, label='First Name')
     middle_name = forms.CharField(max_length=100, required=False, label='Middle Name')
     last_name = forms.CharField(max_length=100, label='Last Name')
+    suffix = forms.CharField(max_length=5, required=False, label='Suffix')
     corporate_email = forms.EmailField(label='Corporate Email')
     role = forms.ChoiceField(choices=[('student', 'Student'), ('faculty', 'Faculty')], label='School Role')
-    college_or_workplace = forms.CharField(max_length=100, label='College/Workplace')
-    driver_license_number = forms.CharField(max_length=100, label="Driver's License Number")
-    vehicle_type = forms.ChoiceField(choices=[('car', 'Car'), ('motorbike', 'Motorbike')], label='Vehicle Type')
+    department_or_workplace = forms.CharField(max_length=100, label='Department/Workplace')
+    college = forms.CharField(max_length=75, label='College')
+    program = forms.CharField(max_length=100, label='Program')
+    driver_license_number = forms.CharField(max_length=55, label="Driver's License Number")
+    vehicle_type = forms.ChoiceField(choices=[('car', 'Car'), ('motorcycle', 'Motorcycle')], label='Vehicle Type')
     vehicle_color = forms.CharField(max_length=100, label='Vehicle Color')
     model = forms.CharField(max_length=100, label='Vehicle Model')
     plate_number = forms.CharField(max_length=100, label='Plate Number')
@@ -97,7 +99,8 @@ class VehicleRegistrationStep1Form(forms.Form):
 class VehicleRegistrationStep2Form(forms.Form):
     owner = forms.ChoiceField(choices=[('yes', 'Yes, I am the owner of the vehicle'), 
                                        ('no', 'No, I am registering on behalf of the owner')], 
-                              label='Are you the owner of this vehicle?')
+                              label='Are you the owner of this vehicle?',
+                              widget=forms.RadioSelect)
     # Owner details if "no" is selected
     relationship_to_owner = forms.CharField(
         max_length=100,
@@ -108,10 +111,21 @@ class VehicleRegistrationStep2Form(forms.Form):
             'class': 'form-control'
         })
     )
-    owner_first_name = forms.CharField(max_length=100, required=False, label='Owner\'s First Name')
+    owner_first_name = forms.CharField(max_length=100, label='Owner\'s First Name')
     owner_middle_name = forms.CharField(max_length=100, required=False, label='Owner\'s Middle Name')
-    owner_last_name = forms.CharField(max_length=100, required=False, label='Owner\'s Last Name')
+    owner_last_name = forms.CharField(max_length=100, label='Owner\'s Last Name')
+    owner_suffix = forms.CharField(max_length=5, required=False, label='Owner\'s Suffix')
     owner_contact_number = forms.CharField(max_length=15, required=False, label='Owner\'s Contact Number')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        is_owner = cleaned_data.get("owner") == "yes"
+
+        if not is_owner:
+            required_fields = ["owner_first_name", "owner_last_name", "relationship_to_owner", "owner_contact_number"]
+            for field in required_fields:
+                if not cleaned_data.get(field):
+                    self.add_error(field, "This field is required if you're not the owner.")
 
 class VehicleRegistrationStep3Form(forms.Form):
     google_drive_link = forms.URLField(label='Google Folder Link')
@@ -140,27 +154,60 @@ class VehicleRegistrationStep1Form(forms.Form):
         label='Last Name',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your last name'})
     )
+    suffix = forms.CharField(
+        max_length=5,
+        required=False,
+        label='Suffix',
+        widget=forms.TextInput(attrs={'placeholder': 'e.g. Jr'})
+    )  
     corporate_email = forms.EmailField(
         label='Corporate Email',
-        widget=forms.EmailInput(attrs={'placeholder': '2022example.@psu.edu.ph'})
+        widget=forms.EmailInput(attrs={'placeholder': '20228000X@psu.edu.ph'})
     )
+
+    address = forms.CharField(
+        max_length=105,
+        label='Address',
+        widget=forms.TextInput(attrs={'placeholder': 'e.g. Escano St., Brgy Tiniguiban'})
+    )
+
+
     role = forms.ChoiceField(
-        choices=[('student', 'Student'), ('faculty', 'Faculty'), ('personnel', 'Personnel')],
+        choices=[('student', 'Student'), ('faculty', 'Faculty'), ('university personnel', 'University Personnel')],
         label='School Role',
         widget=forms.Select(attrs={'placeholder': 'Select your role'})
     )
-    college_or_workplace = forms.CharField(
+
+    department_or_workplace = forms.CharField(
         max_length=100,
-        label='College/Workplace',
+        required=False,
+        label='Department/Workplace',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your college or workplace'})
     )
+
+    college = forms.CharField(
+        max_length=100,
+        required=False,
+        label='College',
+        widget=forms.TextInput(attrs={'placeholder': 'Enter your college'})
+    )
+
+    program = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Program',
+        widget=forms.TextInput(attrs={'placeholder': 'e.g. BS Computer Science'})
+    )
+
+
     driver_license_number = forms.CharField(
         max_length=100,
         label="Driver's License Number",
-        widget=forms.TextInput(attrs={'placeholder': 'DLN-1234567'})
+        widget=forms.TextInput(attrs={'placeholder': 'N03-12-123456'})
     )
+
     vehicle_type = forms.ChoiceField(
-        choices=[('car', 'Car'), ('motorbike', 'Motorbike')],
+        choices=[('car', 'Car'), ('motorcycle', 'Motorcycle')],
         label='Vehicle Type',
         widget=forms.RadioSelect(attrs={'placeholder': 'Choose type'})
     )
@@ -225,9 +272,15 @@ class VehicleRegistrationStep2Form(forms.Form):
 
     owner_last_name = forms.CharField(
         max_length=100,
-        required=False,
         label="Owner's Last Name",
         widget=forms.TextInput(attrs={'placeholder': "Enter owner's last name"})
+    )
+
+    owner_suffix = forms.CharField(
+        max_length=5,
+        required=False,
+        label="Owner's Suffix",
+        widget=forms.TextInput(attrs={'placeholder': "e.g. Jr"})
     )
 
     owner_contact_number = forms.CharField(
@@ -242,7 +295,7 @@ class VehicleRegistrationStep3Form(forms.Form):
         label='Google Folder Link',
         widget=forms.URLInput(attrs={'placeholder': 'Paste the link of your Google Drive folder'}) 
     )
-    
+  
 class MyForm(forms.Form):
     role = forms.ChoiceField(choices=..., widget=forms.Select(attrs={'class': 'custom-select'}))
     
