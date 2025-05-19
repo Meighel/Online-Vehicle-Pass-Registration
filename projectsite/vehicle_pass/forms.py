@@ -100,7 +100,8 @@ class VehicleRegistrationStep1Form(forms.Form):
 class VehicleRegistrationStep2Form(forms.Form):
     owner = forms.ChoiceField(choices=[('yes', 'Yes, I am the owner of the vehicle'), 
                                        ('no', 'No, I am registering on behalf of the owner')], 
-                              label='Are you the owner of this vehicle?')
+                              label='Are you the owner of this vehicle?',
+                              widget=forms.RadioSelect)
     # Owner details if "no" is selected
     relationship_to_owner = forms.CharField(
         max_length=100,
@@ -115,8 +116,17 @@ class VehicleRegistrationStep2Form(forms.Form):
     owner_middle_name = forms.CharField(max_length=100, required=False, label='Owner\'s Middle Name')
     owner_last_name = forms.CharField(max_length=100, label='Owner\'s Last Name')
     owner_suffix = forms.CharField(max_length=5, required=False, label='Owner\'s Suffix')
-
     owner_contact_number = forms.CharField(max_length=15, required=False, label='Owner\'s Contact Number')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        is_owner = cleaned_data.get("owner") == "yes"
+
+        if not is_owner:
+            required_fields = ["owner_first_name", "owner_last_name", "relationship_to_owner", "owner_contact_number"]
+            for field in required_fields:
+                if not cleaned_data.get(field):
+                    self.add_error(field, "This field is required if you're not the owner.")
 
 class VehicleRegistrationStep3Form(forms.Form):
     google_drive_link = forms.URLField(label='Google Folder Link')

@@ -279,6 +279,7 @@ def vehicle_registration_step_1(request):
                 'program': step1_data['program'],
                 'driver_license_number': step1_data['driver_license_number'],
                 'vehicle_type': step1_data['vehicle_type'],
+                'vehicle_color': step1_data['vehicle_color'],
                 'model': step1_data['model'],
                 'plate_number': step1_data['plate_number'],
                 'chassis_number': step1_data['chassis_number'],
@@ -356,21 +357,19 @@ def vehicle_registration_step_3(request):
                     plateNumber=step1_data['plate_number'],
                     type=step1_data['vehicle_type'],
                     model=step1_data['model'],
-                    color=step1_data['vehicle_color'],  
+                    vehicle_color=step1_data['vehicle_color'],  
                     chassisNumber=step1_data['chassis_number'],
                     OR_Number=step1_data['or_number'],
                     CR_Number=step1_data['cr_number'],
                     # Set ownership information
                     is_owner=step2_data.get('is_owner', False),
-                    is_legal_owner=step2_data.get('is_owner', False),
                     # Owner information if not the user
                     owner_firstname=None if step2_data.get('is_owner', False) else step2_data.get('owner_first_name'),
                     owner_middlename=None if step2_data.get('is_owner', False) else step2_data.get('owner_middle_name'),
                     owner_lastname=None if step2_data.get('is_owner', False) else step2_data.get('owner_last_name'),
                     owner_suffix=None if step2_data.get('is_owner', False) else step2_data.get('owner_suffix'),
                     contact_number=None if step2_data.get('is_owner', False) else step2_data.get('owner_contact_number'),
-                    relationship_to_owner=None if step2_data.get('is_owner', False) else step2_data.get('relationship', 'Not Specified')
-                )
+                    relationship_to_owner=None if step2_data.get('is_owner', False) else step2_data.get('relationship_to_owner')                )
                 
                 # Create Registration object
                 registration = Registration.objects.create(

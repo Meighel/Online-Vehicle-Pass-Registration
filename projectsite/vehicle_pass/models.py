@@ -137,12 +137,13 @@ class Vehicle(BaseModel):
     plateNumber = models.CharField(max_length=10, unique=True)
     type = models.CharField(max_length=20)
     model = models.CharField(max_length=20)
-    color = models.CharField(max_length=20)
+    vehicle_color = models.CharField(max_length=20)
     chassisNumber = models.CharField(max_length=17)
     OR_Number = models.CharField(max_length=15)
     CR_Number = models.CharField(max_length=9)
     is_owner = models.BooleanField(default=False)
-    is_legal_owner = models.BooleanField(default=False)
+    
+    # Only relevant if not the owner
     owner_firstname = models.CharField(max_length=45, null=True, blank=True)
     owner_middlename = models.CharField(max_length=45, null=True, blank=True)
     owner_lastname = models.CharField(max_length=45, null=True, blank=True)
@@ -152,14 +153,23 @@ class Vehicle(BaseModel):
 
     def __str__(self):
         return f"{self.plateNumber}"  
-    
+
     def clean(self):
         if Vehicle.objects.filter(self_owner=self.self_owner).count() >= 2:
             raise ValidationError({'self_owner': 'You can only register up to two vehicles.'})
 
+        # If user is owner, these fields should not be filled
+        if self.is_owner:
+            if any([self.owner_firstname, self.owner_lastname, self.relationship_to_owner, self.contact_number]):
+                raise ValidationError("Owner fields should be empty if you are the vehicle owner.")
+        else:
+            if not all([self.owner_firstname, self.owner_lastname, self.relationship_to_owner, self.contact_number]):
+                raise ValidationError("Complete owner details are required if you're not the owner.")
+
     def save(self, *args, **kwargs):
-        self.full_clean() 
+        self.full_clean()
         super().save(*args, **kwargs)
+
 
 
 class Registration(BaseModel):
