@@ -155,8 +155,8 @@ class Vehicle(BaseModel):
         return f"{self.plateNumber}"  
 
     def clean(self):
-        if Vehicle.objects.filter(self_owner=self.self_owner).count() >= 2:
-            raise ValidationError({'self_owner': 'You can only register up to two vehicles.'})
+        if Vehicle.objects.filter(applicant=self.applicant).count() >= 2:
+            raise ValidationError({'Applicant': 'You can only register up to two vehicles.'})
 
         # If user is owner, these fields should not be filled
         if self.is_owner:
