@@ -133,7 +133,7 @@ class PasswordResetCode(BaseModel):
     
 
 class Vehicle(BaseModel):
-    self_owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
+    applicant = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
     plateNumber = models.CharField(max_length=10, unique=True)
     type = models.CharField(max_length=20)
     model = models.CharField(max_length=20)

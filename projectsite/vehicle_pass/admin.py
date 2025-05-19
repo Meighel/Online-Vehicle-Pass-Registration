@@ -72,8 +72,8 @@ class PasswordResetCodeAdmin(admin.ModelAdmin):
 
 @admin.register(Vehicle)
 class VehicleAdmin(admin.ModelAdmin):
-    list_display = ('self_owner', 'plateNumber', 'type', 'model', 'vehicle_color', 'chassisNumber', 'OR_Number', 'CR_Number', 'is_owner', 'owner_firstname', 'owner_middlename', 'owner_lastname', "owner_suffix", "relationship_to_owner", "contact_number")
-    search_fields = ('plateNumber', 'self_owner__firstname', 'self_owner__lastname')
+    list_display = ('applicant', 'plateNumber', 'type', 'model', 'vehicle_color', 'chassisNumber', 'OR_Number', 'CR_Number', 'is_owner', 'owner_firstname', 'owner_middlename', 'owner_lastname', "owner_suffix", "relationship_to_owner", "contact_number")
+    search_fields = ('plateNumber', 'applicant__firstname', 'applicant__lastname')
     list_filter = ('vehicle_color', 'model', 'type')
 
 
