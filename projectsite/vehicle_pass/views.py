@@ -357,9 +357,26 @@ def vehicle_registration_step_3(request):
                 step1_data = request.session.get('step1_data', {})
                 step2_data = request.session.get('step2_data', {})
                 
+                # Update UserProfile with collected information
+                # Update only if the field is provided in the form data
+                if step1_data.get('address'):
+                    user.address = step1_data['address']
+                if step1_data.get('role'):
+                    user.school_role = step1_data['role']
+                if step1_data.get('department_or_workplace'):
+                    user.department = step1_data['department_or_workplace']
+                if step1_data.get('college'):
+                    user.college = step1_data['college']
+                if step1_data.get('program'):
+                    user.program = step1_data['program']
+                if step1_data.get('driver_license_number'):
+                    user.dl_number = step1_data['driver_license_number']
+                
+                # Save the updated user profile
+                user.save()
                 # Create Vehicle object based on updated model schema
                 vehicle = Vehicle.objects.create(
-                    self_owner=user,  # Current user is always linked to the vehicle
+                    applicant=user,  # Current user is always linked to the vehicle
                     plateNumber=step1_data['plate_number'],
                     type=step1_data['vehicle_type'],
                     model=step1_data['model'],
@@ -490,7 +507,7 @@ class adminUpdatePayment(UpdateView):
 @login_required
 def admin_manage_passes(request):
     # Fetch all vehicle passes and related data
-    vehicle_passes = VehiclePass.objects.select_related('vehicle__self_ownership').all()
+    vehicle_passes = VehiclePass.objects.select_related('vehicle__applicant').all()
 
     context = {
         'vehicle_passes': vehicle_passes,
@@ -750,7 +767,7 @@ def settings_view(request):
 
     if request.user.is_authenticated and hasattr(request.user, 'role'):
         if user.role in ['admin', 'security']:
-            context['all_vehicles'] = Vehicle.objects.select_related('self_owner').all()
+            context['all_vehicles'] = Vehicle.objects.select_related('applicant').all()
 
     return render(request, 'Settings/settings.html', context)
 
