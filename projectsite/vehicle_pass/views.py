@@ -32,6 +32,7 @@ from django.utils.timezone import now
 import calendar
 from django.db.models.functions import TruncMonth
 from django.contrib.auth import update_session_auth_hash
+from .models import SiteVisit, LoginActivity
 
 def home(request):
     return render(request, 'index.html')
@@ -498,7 +499,7 @@ class AdminViewUser(CustomLoginRequiredMixin, ListView):
     model = UserProfile
     context_object_name = "users"
     template_name = 'Admin Dashboard/Admin_Manage_User.html'
-    paginate_by = 5
+    paginate_by = 20
 
 class AdminCreateUser(CustomLoginRequiredMixin, CreateView):
     model = UserProfile
@@ -538,7 +539,7 @@ class adminViewPayment(ListView):
     model = PaymentTransaction
     template_name = "Admin Dashboard/Admin_Manage_Payment.html"
     context_object_name = 'payment_list'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_queryset(self):
         return PaymentTransaction.objects.filter(status='pending')
@@ -547,7 +548,7 @@ class adminViewTransaction(ListView):
     model = PaymentTransaction
     template_name = "Admin Dashboard/Admin_Transaction.html"
     context_object_name = 'transaction_list'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_queryset(self):
         return PaymentTransaction.objects.exclude(status='pending')
@@ -576,7 +577,7 @@ class AdminViewApplication(CustomLoginRequiredMixin, ListView):
     model = Registration
     template_name = 'Admin Dashboard/Admin_Application.html'
     context_object_name = 'applications'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -641,7 +642,7 @@ class cashierViewPayment(CustomLoginRequiredMixin, ListView):
     model = PaymentTransaction
     template_name = "Cashier Dashboard/Cashier_Payment.html"
     context_object_name = 'payment_list'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_queryset(self):
         return PaymentTransaction.objects.filter(status='pending')
@@ -650,7 +651,7 @@ class cashierViewTransaction(CustomLoginRequiredMixin, ListView):
     model = PaymentTransaction
     template_name = "Cashier Dashboard/Cashier_Transaction.html"
     context_object_name = 'transaction_list'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_queryset(self):
         return PaymentTransaction.objects.exclude(status='pending')
@@ -693,7 +694,7 @@ class SecurityViewApplication(CustomLoginRequiredMixin, ListView):
     model = Registration
     template_name = 'Security Dashboard/Security_Application.html'
     context_object_name = 'applications'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -723,7 +724,7 @@ class SecurityViewInspectionReports(CustomLoginRequiredMixin, ListView):
     model = InspectionReport
     template_name = 'Security Dashboard/Security_Inspection.html'
     context_object_name = 'inspections'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_queryset(self):
         return InspectionReport.objects.exclude(remarks='sticker_released')
@@ -761,7 +762,7 @@ class SecurityViewStickers(CustomLoginRequiredMixin, ListView):
     model = VehiclePass
     template_name = 'Security Dashboard/Security_Release_Stickers.html'
     context_object_name = 'stickers'
-    paginate_by = 5
+    paginate_by = 20
 
 @login_required
 def security_report(request):
@@ -839,7 +840,7 @@ def about_us(request):
     return render(request, "Settings/AboutUs.html")
 
 
-from .models import SiteVisit, LoginActivity
+
 
 #Total Visitors
 def get_stats():
