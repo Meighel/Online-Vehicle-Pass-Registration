@@ -6,169 +6,187 @@
 {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/admin-dashboard-style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/security-dashboard-style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
 
-        .container {
+        .main-content {
             flex-grow: 1;
             padding: 20px;
-            margin-left: 120px !important;
+            margin-left: 120px;
         }
     </style>
 {% endblock %}
 
 {% block content %}
-
-    <div class="container py-5 bg-dark">
-        <h1 class="mb-4 text-light">Payment & Transaction Reports</h1>
-
-        <!-- Filter Form -->
-        <form method="get" class="row g-3 mb-4">
-            <div class="col-md-3">
-                <label for="status" class="form-label">Status</label>
-                <select name="status" id="status" class="form-select">
-                    <option value="">All</option>
-                    <option value="pending">Pending</option>
-                    <option value="completed">Completed</option>
-                </select>
-            </div>
-            <div class="col-md-3 d-flex align-items-end">
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="nearingDeadline" name="nearing_deadline" value="true">
-                    <label class="form-check-label" for="nearingDeadline">Nearing Deadline (3 days)</label>
+<div class="main-content flex-grow-1 ms-uto">
+    <div class="container-fluid py-1">
+            <!-- Title & Top Bar -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+                <h2 class="title mb-3 mb-md-0">Reports</h2>
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Notification Bell -->
+                    <a href="Announcements.html" class="text-decoration-none text-light position-relative">
+                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
+                    </a>
                 </div>
             </div>
-            <div class="col-md-3 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary">Apply Filters</button>
-            </div>
-        </form>
 
-        <!-- Report Cards Grid -->
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            <!-- Payment by College -->
-            {% for item in payments_by_college %}
-            <div class="col">
-                <div class="card border-primary h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">College: {{ item.registration__user__college }}</h5>
-                        <p class="card-text fs-4 text-primary">{{ item.count }} Payments</p>
+        <hr>
+        <small><span id="date"></span></small>
+        <br>
+        <div class="container py-5 bg-dark">
+            <h1 class="mb-4 text-light">Payment & Transaction Reports</h1>
+
+            <!-- Filter Form -->
+            <form method="get" class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="nearingDeadline" name="nearing_deadline" value="true">
+                        <label class="form-check-label" for="nearingDeadline">Nearing Deadline (3 days)</label>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                </div>
+            </form>
 
-            <!-- Payment by Program -->
-            {% for item in payments_by_program %}
-            <div class="col">
-                <div class="card border-success h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Program: {{ item.registration__user__program }}</h5>
-                        <p class="card-text fs-4 text-success">{{ item.count }} Payments</p>
+            <!-- Report Cards Grid -->
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <!-- Payment by College -->
+                {% for item in payments_by_college %}
+                <div class="col">
+                    <div class="card border-primary h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">College: {{ item.registration__user__college }}</h5>
+                            <p class="card-text fs-4 text-primary">{{ item.count }} Payments</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
 
-            <!-- Payment by Department -->
-            {% for item in payments_by_department %}
-            <div class="col">
-                <div class="card border-warning h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Department: {{ item.registration__user__department }}</h5>
-                        <p class="card-text fs-4 text-warning">{{ item.count }} Payments</p>
+                <!-- Payment by Program -->
+                {% for item in payments_by_program %}
+                <div class="col">
+                    <div class="card border-success h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Program: {{ item.registration__user__program }}</h5>
+                            <p class="card-text fs-4 text-success">{{ item.count }} Payments</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
 
-            <!-- Payment by Personnel -->
-            {% for item in payments_by_school_role %}
-            <div class="col">
-                <div class="card border-info h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Personnel: {{ item.registration__user__school_role }}</h5>
-                        <p class="card-text fs-4 text-info">{{ item.count }} Payments</p>
+                <!-- Payment by Department -->
+                {% for item in payments_by_department %}
+                <div class="col">
+                    <div class="card border-warning h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Department: {{ item.registration__user__department }}</h5>
+                            <p class="card-text fs-4 text-warning">{{ item.count }} Payments</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
 
-            <!-- Payment by Role -->
-            {% for item in payments_by_role %}
-            <div class="col">
-                <div class="card border-secondary h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">User Role: {{ item.registration__user__role }}</h5>
-                        <p class="card-text fs-4 text-secondary">{{ item.count }} Payments</p>
+                <!-- Payment by Personnel -->
+                {% for item in payments_by_school_role %}
+                <div class="col">
+                    <div class="card border-info h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Personnel: {{ item.registration__user__school_role }}</h5>
+                            <p class="card-text fs-4 text-info">{{ item.count }} Payments</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
 
-            <!-- Transactions by College -->
-            {% for item in transactions_by_college %}
-            <div class="col">
-                <div class="card border-primary h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">College: {{ item.user__college }}</h5>
-                        <p class="card-text fs-4 text-primary">{{ item.count }} Transactions</p>
+                <!-- Payment by Role -->
+                {% for item in payments_by_role %}
+                <div class="col">
+                    <div class="card border-secondary h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">User Role: {{ item.registration__user__role }}</h5>
+                            <p class="card-text fs-4 text-secondary">{{ item.count }} Payments</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
 
-            <!-- Transactions by Program -->
-            {% for item in transactions_by_program %}
-            <div class="col">
-                <div class="card border-success h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Program: {{ item.user__program }}</h5>
-                        <p class="card-text fs-4 text-success">{{ item.count }} Transactions</p>
+                <!-- Transactions by College -->
+                {% for item in transactions_by_college %}
+                <div class="col">
+                    <div class="card border-primary h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">College: {{ item.user__college }}</h5>
+                            <p class="card-text fs-4 text-primary">{{ item.count }} Transactions</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
 
-            <!-- Transactions by Department -->
-            {% for item in transactions_by_department %}
-            <div class="col">
-                <div class="card border-warning h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Department: {{ item.user__department }}</h5>
-                        <p class="card-text fs-4 text-warning">{{ item.count }} Transactions</p>
+                <!-- Transactions by Program -->
+                {% for item in transactions_by_program %}
+                <div class="col">
+                    <div class="card border-success h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Program: {{ item.user__program }}</h5>
+                            <p class="card-text fs-4 text-success">{{ item.count }} Transactions</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
 
-            <!-- Transactions by Personnel -->
-            {% for item in transactions_by_school_role %}
-            <div class="col">
-                <div class="card border-info h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">Personnel: {{ item.user__school_role }}</h5>
-                        <p class="card-text fs-4 text-info">{{ item.count }} Transactions</p>
+                <!-- Transactions by Department -->
+                {% for item in transactions_by_department %}
+                <div class="col">
+                    <div class="card border-warning h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Department: {{ item.user__department }}</h5>
+                            <p class="card-text fs-4 text-warning">{{ item.count }} Transactions</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
 
-            <!-- Transactions by Role -->
-            {% for item in transactions_by_role %}
-            <div class="col">
-                <div class="card border-dark h-100">
-                    <div class="card-body">
-                        <h5 class="card-title">User Role: {{ item.user__role }}</h5>
-                        <p class="card-text fs-4 text-dark">{{ item.count }} Transactions</p>
+                <!-- Transactions by Personnel -->
+                {% for item in transactions_by_school_role %}
+                <div class="col">
+                    <div class="card border-info h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Personnel: {{ item.user__school_role }}</h5>
+                            <p class="card-text fs-4 text-info">{{ item.count }} Transactions</p>
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
+
+                <!-- Transactions by Role -->
+                {% for item in transactions_by_role %}
+                <div class="col">
+                    <div class="card border-dark h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">User Role: {{ item.user__role }}</h5>
+                            <p class="card-text fs-4 text-dark">{{ item.count }} Transactions</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
