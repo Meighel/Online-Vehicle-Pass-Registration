@@ -437,9 +437,61 @@ def user_settings(request):
     return render(request, "User Dashboard/User_Settings.html")
 
 # Admin Page View 
+from django.db.models.functions import TruncMonth
+from django.db.models import Count
+from django.utils.timezone import now
+from datetime import timedelta
+from .models import UserProfile, Registration
+
 @login_required
 def admin_dashboard(request):
-    return render(request, "Admin Dashboard/Admin_Dashboard.html")
+    # Total users by role
+    total_students = UserProfile.objects.filter(school_role='student').count()
+    total_security = UserProfile.objects.filter(role='security').count()
+    total_cashier = UserProfile.objects.filter(role='cashier').count()
+    total_admin = UserProfile.objects.filter(role='admin').count()
+
+    # Account growth: compare last month to this month
+    current_month_users = UserProfile.objects.filter(
+        created_at__gte=now().replace(day=1)
+    ).count()
+    previous_month_users = UserProfile.objects.filter(
+        created_at__lt=now().replace(day=1),
+        created_at__gte=(now().replace(day=1) - timedelta(days=30))
+    ).count()
+
+    growth_percent = round(((current_month_users - previous_month_users) / previous_month_users) * 100, 1) if previous_month_users > 0 else 0
+
+    # Monthly Registered Students for Chart
+    monthly_users = (
+        UserProfile.objects
+        .filter(school_role='student')
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(total=Count('id'))
+        .order_by('month')
+    )
+    
+    chart_data = PaymentTransaction.objects.values('status').annotate(count=Count('id'))
+
+    monthly_totals = {month: 0 for month in range(1, 13)}
+    for entry in monthly_users:
+        month_num = entry['month'].month
+        monthly_totals[month_num] = entry['total']
+    monthly_chart_data = list(monthly_totals.values())
+
+    context = {
+        "total_students": total_students,
+        "total_security": total_security,
+        "total_cashier": total_cashier,
+        "total_admin": total_admin,
+        "growth_percent": growth_percent,
+        "monthly_chart_data": monthly_chart_data,
+        "chart_data": chart_data,
+    }
+
+    return render(request, "Admin Dashboard/Admin_Dashboard.html", context)
+
 
 
 class AdminViewUser(CustomLoginRequiredMixin, ListView):
@@ -718,7 +770,12 @@ def security_report(request):
 
 @login_required
 def settings_view(request):
-    user = request.user
+    user_id = request.session.get('user_id')
+    if not user_id:
+        messages.error(request, "You must be logged in to access settings.")
+        return redirect('login')  # Replace with your login route name
+
+    user = get_object_or_404(UserProfile, id=user_id)
 
     if request.method == 'POST':
         # === Handle profile update ===
@@ -737,32 +794,40 @@ def settings_view(request):
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
 
-        try:
-            if new_password and confirm_password:
-                if new_password == confirm_password:
-                    user.set_password(new_password)
-                    user.save()  # Save after setting password
-                    update_session_auth_hash(request, user)  # Keep the user logged in
-                    messages.success(request, "Password updated successfully.")
-                else:
-                    messages.error(request, "Passwords do not match.")
-                    return redirect('settings')
+        if new_password and confirm_password:
+            if new_password == confirm_password:
+                user.password = new_password  # Save securely if you hash it manually
+                messages.success(request, "Password updated successfully.")
             else:
-                # If no password update, just save the other changes
-                user.save()
-                messages.success(request, "Profile updated successfully.")
-        except Exception as e:
-            messages.error(request, f"An error occurred: {str(e)}")
-
-        return redirect('settings')
+                messages.error(request, "Passwords do not match.")
+                return redirect(request.path)
+        
+        user.save()
+        messages.success(request, "Profile updated successfully.")
+        return redirect(request.path)
 
     # === GET Request ===
-    context = {}
+    context = {
+        'user': user
+    }
 
-    if hasattr(user, 'role') and user.role in ['admin', 'security']:
+    # Role-specific template and context
+    if user.role == 'admin':
         context['all_vehicles'] = Vehicle.objects.select_related('self_owner').all()
+        template_name = 'Settings/admin_settings.html'
+    elif user.role == 'cashier':
+        template_name = 'Settings/cashier_settings.html'
+    elif user.role == 'security':
+        context['all_vehicles'] = Vehicle.objects.select_related('self_owner').all()
+        template_name = 'Settings/security_settings.html'
+    elif user.role == 'user':
+        context['user_vehicle'] = Vehicle.objects.filter(applicant=user)
+        template_name = 'Settings/user_settings.html'
+    else:
+        messages.error(request, "Unknown role. Contact admin.")
+        return redirect('home')
 
-    return render(request, 'Settings/settings.html', context)
+    return render(request, template_name, context)
 
 def faq(request):
     return render(request, "Settings/FAQ.html")
