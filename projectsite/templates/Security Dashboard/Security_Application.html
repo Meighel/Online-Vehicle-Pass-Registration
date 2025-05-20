@@ -46,15 +46,19 @@
                         <th>Username</th>
                         <th>Date</th>
                         <th>Status</th>
+                        <th>Document reviewed by</th>
+                        <th>Additional Notes</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for applicant in applications %}
                     <tr>
-                        <td>{{ applicant.user.lastname }}, {{ applicant.user.firstname }} {{ applicant.user.middle_name|default_if_none:""|slice:":1"}} {{ registration.user.suffix|default_if_none:""}}</td>
+                        <td>{{ applicant.user.lastname }}, {{ applicant.user.firstname }} {{ applicant.user.middle_name|default_if_none:""|slice:":1" }} {{ registration.user.suffix|default_if_none:""}}</td>
                         <td>{{ applicant.created_at|date:"F d, Y" }}</td>
                         <td>{{ applicant.status }}</td>
+                        <td>{{ applicant.document_reviewed_by.user.firstname }} {{ applicant.document_reviewed_by.user.middle_name|default_if_none:""|slice:":1" }} {{ applicant.document_reviewed_by.user.lastname }}  {{ applicant.document_reviewed_by.user.suffix|default_if_none:"" }}</td>
+                        <td>{{ applicant.remarks|default_if_none:"no remarks" }}</td>
                         <td>
                             <a href="{% url 'security_view_specific_application' applicant.pk %}" class="btn btn-secondary">View</a>
                             <a href="{% url 'security_update_application' applicant.pk %}" class="btn btn-primary">Update</a>

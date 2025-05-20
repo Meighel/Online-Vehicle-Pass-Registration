@@ -79,7 +79,7 @@ class VehicleAdmin(admin.ModelAdmin):
 
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ('registrationNumber', 'user', 'vehicle', 'status', 'files', 'remarks')
+    list_display = ('registrationNumber', 'user', 'vehicle', 'status', 'files', 'remarks', 'document_reviewed_by')
     search_fields = ('registrationNumber', 'user__firstname', 'user__lastname')
     list_filter = ('status', 'user__department')
 

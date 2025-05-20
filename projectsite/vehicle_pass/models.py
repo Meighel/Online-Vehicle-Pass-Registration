@@ -188,6 +188,7 @@ class Registration(BaseModel):
     files = models.URLField(max_length=250)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     remarks = models.TextField(null=True)
+    document_reviewed_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f"Registration {self.registrationNumber} for {self.user.lastname}, {self.user.firstname}"
@@ -302,7 +303,7 @@ class InspectionReport(BaseModel):
     payment_number = models.ForeignKey(PaymentTransaction, on_delete=models.CASCADE)
     security = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True)
     document_inspection_date = models.DateTimeField(auto_now_add=True)
-    physical_final_inspection_date = models.DateField()
+    physical_final_inspection_date = models.DateField(null=True, blank=True)
     remarks = models.CharField(max_length=30, choices=REMARK_CHOICES, default='to_be_inspected')
     additional_notes = models.TextField(blank=True, null=True)
     is_approved = models.BooleanField(default=False)

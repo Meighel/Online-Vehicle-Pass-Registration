@@ -129,11 +129,11 @@
                                             {% if app.status == 'approved' %}
                                                 {{ app.updated_at|date:"Y-m-d" }}
                                             {% else %}
-                                                <span class="text-warning">Pending</span>
+                                                <span class="text-success">Pending</span>
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <span class="badge bg-{{ app.status|slugify }}">
+                                            <span class="badge bg-{{ app.status|slugify }}" style="color:black">
                                                 {{ app.status|title }}
                                             </span>
                                         </td>

@@ -5,8 +5,10 @@ from .models import (UserProfile,
                      Vehicle,
                      InspectionReport,
                      CashierProfile,
+                     SecurityProfile
 )
 from django.contrib.auth.hashers import make_password
+from django.utils.safestring import mark_safe
 
 class UserSignupForm(forms.ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput, label='Password')
@@ -41,7 +43,7 @@ class PaymentTransactionForm(forms.ModelForm):
         model = PaymentTransaction
         fields = ['status', 'cashier']
         labels = {
-            'cashier': 'Cashier'  # Explicit label to control display
+            'cashier': 'Cashier'
         }
 
     def __init__(self, *args, **kwargs):
@@ -59,20 +61,84 @@ class PaymentTransactionForm(forms.ModelForm):
                 # Get cashier profile
                 cashier_profile = CashierProfile.objects.get(user=user_profile)
                 
-                # Set the initial value for the cashier field
-                self.fields['cashier'].initial = cashier_profile
+                # Restrict choices to ONLY this cashier - this is the key change
+                self.fields['cashier'].queryset = CashierProfile.objects.filter(id=cashier_profile.id)
                 
-                # Important: Make it read-only but VISIBLE (not hidden)
-                self.fields['cashier'].disabled = True
+                # Set the initial value to the current cashier
+                self.fields['cashier'].initial = cashier_profile
                 
             except CashierProfile.DoesNotExist:
                 self.fields['cashier'].initial = None
 
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        # Make absolutely sure the cashier is set
+        if hasattr(self, 'user') and self.user and not instance.cashier:
+            try:
+                if isinstance(self.user, str):
+                    user_profile = UserProfile.objects.get(id=self.user)
+                else:
+                    user_profile = self.user
+                cashier_profile = CashierProfile.objects.get(user=user_profile)
+                instance.cashier = cashier_profile
+            except (UserProfile.DoesNotExist, CashierProfile.DoesNotExist):
+                pass
+        
+        if commit:
+            instance.save()
+        return instance
+
+
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Registration
-        fields = ['status']
+        fields = ['status', 'remarks', 'document_reviewed_by']
+        labels = {
+            'document_reviewed_by': 'Security Personnel'
+        }
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if self.user:
+            try:
+                # Get UserProfile instance
+                if isinstance(self.user, str):
+                    user_profile = UserProfile.objects.get(id=self.user)
+                else:
+                    user_profile = self.user
+                
+                security_profile = SecurityProfile.objects.get(user=user_profile)
+                
+                # Restrict choices to ONLY this security profile - this is the key change
+                self.fields['document_reviewed_by'].queryset = SecurityProfile.objects.filter(id=security_profile.id)
+                
+                # Set the initial value
+                self.fields['document_reviewed_by'].initial = security_profile
+                
+            except SecurityProfile.DoesNotExist:
+                self.fields['document_reviewed_by'].initial = None
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        # Make absolutely sure the reviewer is set
+        if hasattr(self, 'user') and self.user and not instance.document_reviewed_by:
+            try:
+                if isinstance(self.user, str):
+                    user_profile = UserProfile.objects.get(id=self.user)
+                else:
+                    user_profile = self.user
+                security_profile = SecurityProfile.objects.get(user=user_profile)
+                instance.document_reviewed_by = security_profile
+            except (UserProfile.DoesNotExist, SecurityProfile.DoesNotExist):
+                pass
+        
+        if commit:
+            instance.save()
+        return instance
+
+  
 class VehicleRegistrationStep1Form(forms.Form):
     first_name = forms.CharField(
         max_length=100,

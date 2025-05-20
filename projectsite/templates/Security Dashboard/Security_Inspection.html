@@ -43,9 +43,10 @@
             <table id="myTable" class="inspection-table">
                 <thead>
                     <tr>
-                        <th>Payment Number</th>
+                        <th>Applicant Name</th>
+                        <th>Document Inspected Date</th>
                         <th>Processed by</th>
-                        <th>Date</th>
+                        <th>Final Physical Inspection Date</th>
                         <th>Remarks</th>
                         <th>Additional Notes</th>
                         <th>Action</th>
@@ -54,12 +55,15 @@
                 <tbody>
                 {% for applicant in inspections %}
                     <tr>
-                        <td>{{ applicant.payment_number }}</td>
-                        <td>{{ applicant.security.user.firstname }} {{ applicant.security.user.lastname }} {{ applicant.security.user.middlename |default_if_none:"" }}</td>
-                        <td>{{ applicant.inspection_date }}</td>
+                        <td>{{ applicant.payment_number.registration.user.firstname }} {{ applicant.payment_number.registration.user.middle_name|default_if_none:""|slice:":1" }} {{ applicant.payment_number.registration.user.lastname }} {{ applicant.payment_number.registration.user.suffix|default_if_none:"" }}</td>
+                        <td>{{ applicant.document_inspection_date }}</td>
+                        <td>{{ applicant.security.user.firstname }} {{ applicant.security.user.lastname }} {{ applicant.security.user.middlename |default_if_none:""|slice:":1" }}</td>
+                        <td>{{ applicant.physical_final_inspection_date }}</td>
                         <td>{{ applicant.remarks }}</td>
                         <td>{{ applicant.additional_notes }}</td>
                         <td>
+                            <button class="btn btn-primary" href="#">Update</button>
+
                             <!-- Trigger approve -->
                             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal" data-id="{{ applicant.id }}">Approve</button>
 

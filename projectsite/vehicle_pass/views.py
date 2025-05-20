@@ -66,7 +66,6 @@ def login_view(request):
 
         if user.check_password(password):
             request.session["user_id"] = user.id
-            messages.success(request, "Login successful!")  # ✅ Toast message here
             return redirect_user_dashboard(user)
         else:
             messages.error(request, "Invalid email or password.")
