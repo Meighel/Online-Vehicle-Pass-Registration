@@ -897,6 +897,34 @@ def settings_view(request):
 
     return render(request, template_name, context)
 
+def report_dashboard(request):
+    payments = PaymentTransaction.objects.select_related('registration__user')
+
+    # Filters
+    status_filter = request.GET.get('status')
+    deadline_filter = request.GET.get('nearing_deadline')
+
+    if status_filter:
+        payments = payments.filter(status=status_filter)
+
+    if deadline_filter == 'true':
+        payments = payments.filter(due_date__lte=now() + timedelta(days=3))
+
+    context = {
+        'payments_by_college': payments.values('registration__user__college').annotate(count=Count('id')).order_by('-count'),
+        'payments_by_program': payments.values('registration__user__program').annotate(count=Count('id')).order_by('-count'),
+        'payments_by_department': payments.values('registration__user__department').annotate(count=Count('id')).order_by('-count'),
+        'payments_by_school_role': payments.values('registration__user__school_role').annotate(count=Count('id')).order_by('-count'),
+        'payments_by_role': payments.values('registration__user__role').annotate(count=Count('id')).order_by('-count'),
+        'transactions_by_college': Registration.objects.values('user__college').annotate(count=Count('id')).order_by('-count'),
+        'transactions_by_program': Registration.objects.values('user__program').annotate(count=Count('id')).order_by('-count'),
+        'transactions_by_department': Registration.objects.values('user__department').annotate(count=Count('id')).order_by('-count'),
+        'transactions_by_school_role': Registration.objects.values('user__school_role').annotate(count=Count('id')).order_by('-count'),
+        'transactions_by_role': Registration.objects.values('user__role').annotate(count=Count('id')).order_by('-count'),
+        'filtered_payments': payments,
+    }
+    return render(request, 'report_dashboard.html', context)
+
 def faq(request):
     return render(request, "Settings/FAQ.html")
 
@@ -905,9 +933,6 @@ def contact_us(request):
 
 def about_us(request):
     return render(request, "Settings/AboutUs.html")
-
-
-
 
 #Total Visitors
 def get_stats():

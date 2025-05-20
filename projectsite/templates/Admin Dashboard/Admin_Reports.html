@@ -38,6 +38,92 @@
         <hr>
         <small><span id="date"></span></small>
         <br>
+
+        <form method="get">
+            <label>Status:
+                <select name="status">
+                    <option value="">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </label>
+            <label>
+                <input type="checkbox" name="nearing_deadline" value="true"> Nearing Deadline (3 days)
+            </label>
+            <button type="submit">Filter</button>
+        </form>
+
+        <h2>Payments</h2>
+        <h3>By College</h3>
+        <ul>
+            {% for item in payments_by_college %}
+            <li>{{ item.registration__user__college }}: {{ item.count }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>By Program</h3>
+        <ul>
+            {% for item in payments_by_program %}
+            <li>{{ item.registration__user__program }}: {{ item.count }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>By Department</h3>
+        <ul>
+            {% for item in payments_by_department %}
+            <li>{{ item.registration__user__department }}: {{ item.count }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>By University Personnel</h3>
+        <ul>
+            {% for item in payments_by_school_role %}
+            <li>{{ item.registration__user__school_role }}: {{ item.count }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>By Role</h3>
+        <ul>
+            {% for item in payments_by_role %}
+            <li>{{ item.registration__user__role }}: {{ item.count }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Transactions</h2>
+        <h3>By College</h3>
+        <ul>
+            {% for item in transactions_by_college %}
+            <li>{{ item.user__college }}: {{ item.count }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>By Program</h3>
+        <ul>
+            {% for item in transactions_by_program %}
+            <li>{{ item.user__program }}: {{ item.count }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>By Department</h3>
+        <ul>
+            {% for item in transactions_by_department %}
+            <li>{{ item.user__department }}: {{ item.count }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>By University Personnel</h3>
+        <ul>
+            {% for item in transactions_by_school_role %}
+            <li>{{ item.user__school_role }}: {{ item.count }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>By Role</h3>
+        <ul>
+            {% for item in transactions_by_role %}
+            <li>{{ item.user__role }}: {{ item.count }}</li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 {% endblock %}

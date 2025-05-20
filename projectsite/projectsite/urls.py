@@ -63,13 +63,14 @@ urlpatterns = [
     path("dashboard/cashier/cashier_payments/", cashierViewPayment.as_view(), name="cashier_payments"),
     path("dashboard/cashier/cashier_payments/<pk>/", cashierUpdatePayment.as_view(), name="cashier_update_payment"),  
     path("dashboard/cashier/cashier_transactions/", cashierViewTransaction.as_view(), name="cashier_transactions"),
-    path("dashboard/cashier/cashier_reports/", cashier_report, name="cashier_reports"),    path('dashboard/admin/settings/', views.settings_view, name='admin_settings'),
+    path("dashboard/cashier/cashier_reports/", cashier_report, name="cashier_reports"),    
     path('dashboard/cashier/settings/', views.settings_view, name='cashier_settings'),
 
     
     path("dashboard/admin/", admin_dashboard, name="admin_dashboard"),
     path('dashboard/admin/settings/', views.settings_view, name='admin_settings'),
-        
+    path('dashboard/admin/admin_reports/', views.admin_report, name='admin_reports'),
+
     #ADMIN USER CRUD
     path("dashboard/admin/manage_users/add/", AdminCreateUser.as_view(), name="admin_create_user"),
     path("dashboard/admin/manage_users/<pk>/", AdminUpdateUser.as_view(), name="admin_update_user"),
