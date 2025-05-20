@@ -86,8 +86,8 @@ class RegistrationAdmin(admin.ModelAdmin):
 
 @admin.register(VehiclePass)
 class VehiclePassAdmin(admin.ModelAdmin):
-    list_display = ('vehicle', 'passNumber', 'passExpire', 'claim_date', 'status', )
-    search_fields = ('passNumber', 'passExpire', 'claim_date', 'vehicle__plateNumber')
+    list_display = ('vehicle', 'passNumber', 'passExpire', 'status', )
+    search_fields = ('passNumber', 'passExpire', 'vehicle__plateNumber')
     list_filter = ('status',)
 
 

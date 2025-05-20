@@ -158,7 +158,6 @@ class Vehicle(BaseModel):
         if Vehicle.objects.filter(applicant=self.applicant).count() >= 2:
             raise ValidationError({'Applicant': 'You can only register up to two vehicles.'})
 
-        # If user is owner, these fields should not be filled
         if self.is_owner:
             if any([self.owner_firstname, self.owner_lastname, self.relationship_to_owner, self.contact_number]):
                 raise ValidationError("Owner fields should be empty if you are the vehicle owner.")
@@ -215,8 +214,7 @@ class VehiclePass(BaseModel):
     vehicle = models.OneToOneField(Vehicle, on_delete=models.CASCADE)
     passNumber = models.CharField(max_length=10)
     passExpire = models.DateField()
-    claim_date = models.DateField()
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="active")
 
 
     def __str__(self):
@@ -232,7 +230,7 @@ class VehiclePass(BaseModel):
 
     @classmethod
     def create_from_inspection(cls, inspection_report):
-        if inspection_report.remarks == "sticker_released" and inspection_report.is_approved:
+        if inspection_report.remarks == "sticker released" and inspection_report.is_approved:
             vehicle = inspection_report.payment_number.registration.vehicle
             
             if not cls.objects.filter(vehicle=vehicle).exists():

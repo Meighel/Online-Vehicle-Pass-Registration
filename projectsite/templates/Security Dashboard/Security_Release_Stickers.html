@@ -42,28 +42,28 @@
                 <thead>
                     <tr>
                         <th>Vehicle Pass Number</th>
-                        <th>Expiration Date</th>
-                        <th>Status</th>
+                        <th>Vehicle Pass Owner</th>
+                        <th>University Organization</th>
+                        <th>Plate Number</th>
                         <th>Vehicle Owner</th>
+                        <th>Vehicle Color and Type</th>
+                        <th>Date Applied</th>
+                        <th>Status</th>
+                        <th>Renewal Date</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for sticker in stickers %}
                   <tr>
                     <td>{{ sticker.passNumber }}</td>
-                    <td>{{ sticker.passExpire }}</td>
+                    <td>{{ sticker.vehicle.applicant.firstname }} {{ sticker.vehicle.applicant.middle_name|default_if_none:""|slice:":1" }} {{ sticker.vehicle.applicant.lastname }} {{ sticker.vehicle.applicant.suffix }}</td>
+                    <td>{{ sticker.vehicle.applicant.department|default_if_none:"" }} - {{ sticker.vehicle.applicant.college|default_if_none:"" }} - {{ sticker.vehicle.applicant.program|default_if_none:"" }}</td>
+                    <td>{{ sticker.vehicle.plateNumber }}</td>
+                    <td>{{ sticker.vehicle.owner_firstname|default_if_none:"" }} {{ sticker.vehicle.owner_middlename|default_if_none:""|slice:":1" }} {{ sticker.vehicle.owner_lastname|default_if_none:"" }} {{ sticker.vehicle.owner_suffix|default_if_none:"" }}</td>
+                    <td>{{ sticker.vehicle.vehicle_color }} - {{ sticker.vehicle.type }}</td>
+                    <td>{{ sticker.created_at }}</td>
                     <td>{{ sticker.status }}</td>
-                    <td>
-                        {% if sticker.vehicle.self_ownership %}
-                            {{ sticker.vehicle.self_ownership.firstname }} 
-                            {% if sticker.vehicle.self_ownership.middle_name %}{{ sticker.vehicle.self_ownership.middle_name|slice:":1" }}. {% endif %}
-                            {{ sticker.vehicle.self_ownership.lastname }}
-                        {% elif sticker.vehicle.legal_owner %}
-                            {{ sticker.vehicle.legal_owner.owner_firstname }} 
-                            {% if sticker.vehicle.legal_owner.owner_middlename %}{{ sticker.vehicle.legal_owner.owner_middlename|slice:":1" }}. {% endif %}
-                            {{ sticker.vehicle.legal_owner.owner_lastname }}
-                        {% endif %}
-                    </td>
+                    <td>{{ sticker.passExpire }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>          
