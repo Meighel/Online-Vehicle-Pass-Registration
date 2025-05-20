@@ -237,27 +237,35 @@ def send_reset_code_email(user, code):
 @login_required
 def default_dashboard(request):
     user_id = request.session.get("user_id")
-    
+
     try:
         profile = UserProfile.objects.get(id=user_id)
     except UserProfile.DoesNotExist:
         profile = None
-    
+
     # Get the latest registration
     try:
         registration = Registration.objects.filter(user=profile).latest('created_at')
     except Registration.DoesNotExist:
         registration = None
-    
+
     # Get application history
     history = Registration.objects.filter(user=profile).order_by('-created_at')
-    
+
+    # Fix: Avoid accessing userprofile on AnonymousUser
+    inspection = None
+    if profile:
+        inspection = InspectionReport.objects.filter(
+            payment_number__registration__user=profile
+        ).last()  # Get latest one (if any)
+
     context = {
         'profile': profile,
         'registration': registration,
         'history': history,
+        'inspection': inspection,
     }
-    
+
     return render(request, "User Dashboard/User_Dashboard.html", context)
 
 @login_required

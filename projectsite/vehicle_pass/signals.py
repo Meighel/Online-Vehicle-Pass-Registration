@@ -90,8 +90,16 @@ def void_unpaid_payments():
     )
     
     for transaction in unpaid_transactions:
-        transaction.status = 'void'
+        transaction.status = 'unpaid'
         transaction.save()
+
+@receiver(post_save, sender=InspectionReport)
+def update_registration_on_sticker_release(sender, instance, **kwargs):
+    if instance.remarks == 'sticker released' and instance.is_approved:
+        with transaction.atomic():
+            registration = instance.payment_number.registration
+            registration.status = 'approved'
+            registration.save(update_fields=['status', 'updated_at'])
 
 
 # Add this code to make sure signals are loaded when Django starts

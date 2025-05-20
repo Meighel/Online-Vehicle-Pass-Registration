@@ -84,8 +84,17 @@
                                 </p>
                             </div>
                             <p class="text small mt-3">
-                                Date Applied: {{ registration.created_at|date:"F j, Y" }}
+                                Date Applied: {{ registration.created_at|date:"F j, Y" }} 
                             </p>
+                            {% if inspection %}
+                                <p class="text small mt-3">
+                                    Physical Inspection Date: {{ inspection.physical_final_inspection_date|date:"F j, Y" }}
+                                </p>
+                            {% else %}
+                                <p class="text small mt-3 text-muted">
+                                    Physical Inspection Date: N/A
+                                </p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

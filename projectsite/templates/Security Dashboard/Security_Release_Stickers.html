@@ -46,7 +46,7 @@
                         <th>University Organization</th>
                         <th>Plate Number</th>
                         <th>Vehicle Owner</th>
-                        <th>Vehicle Color and Type</th>
+                        <th>Vehicle Model: Color and Type</th>
                         <th>Date Applied</th>
                         <th>Status</th>
                         <th>Renewal Date</th>
@@ -60,7 +60,7 @@
                     <td>{{ sticker.vehicle.applicant.department|default_if_none:"" }} - {{ sticker.vehicle.applicant.college|default_if_none:"" }} - {{ sticker.vehicle.applicant.program|default_if_none:"" }}</td>
                     <td>{{ sticker.vehicle.plateNumber }}</td>
                     <td>{{ sticker.vehicle.owner_firstname|default_if_none:"" }} {{ sticker.vehicle.owner_middlename|default_if_none:""|slice:":1" }} {{ sticker.vehicle.owner_lastname|default_if_none:"" }} {{ sticker.vehicle.owner_suffix|default_if_none:"" }}</td>
-                    <td>{{ sticker.vehicle.vehicle_color }} - {{ sticker.vehicle.type }}</td>
+                    <td>{{ sticker.vehicle.model }} : {{ sticker.vehicle.vehicle_color }} {{ sticker.vehicle.type }}</td>
                     <td>{{ sticker.created_at }}</td>
                     <td>{{ sticker.status }}</td>
                     <td>{{ sticker.passExpire }}</td>
