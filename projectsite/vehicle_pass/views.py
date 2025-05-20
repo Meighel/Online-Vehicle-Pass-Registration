@@ -608,30 +608,57 @@ class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
 # Cashier Page View @login_required
 @login_required
 def cashier_dashboard(request):
-    total_accounts = UserProfile.objects.filter(role='user').count()
-    previous_total = UserProfile.objects.filter(role='user', created_at__lt=now() - timedelta(days=30)).count()
-    account_growth_percent = round(((total_accounts - previous_total) / previous_total) * 100) if previous_total > 0 else 0
-    pending_payments = Registration.objects.filter(status='pending').count()
-    paid_clients = Registration.objects.filter(status='paid').count()
+    today = now().date()
 
-    # Chart 2: Monthly Paid Clients
-    monthly_paid = (
-        Registration.objects
-        .filter(status='paid')
+    # Total student accounts
+    total_accounts = UserProfile.objects.filter(school_role='student').count()
+
+    # Account growth: this month vs last month
+    current_month_start = now().replace(day=1)
+    last_month_start = (current_month_start - timedelta(days=30)).replace(day=1)
+
+    current_month_users = UserProfile.objects.filter(
+        created_at__gte=current_month_start,
+        school_role='student'
+    ).count()
+
+    last_month_users = UserProfile.objects.filter(
+        created_at__gte=last_month_start,
+        created_at__lt=current_month_start,
+        school_role='student'
+    ).count()
+
+    account_growth_percent = round(((current_month_users - last_month_users) / last_month_users) * 100, 1) if last_month_users else 0
+
+    # Pending payments (as of today)
+    pending_payments = PaymentTransaction.objects.filter(
+        status='pending', created_at__date=today
+    ).count()
+
+    # Total paid clients
+    paid_clients = PaymentTransaction.objects.filter(status='paid').values('registration__user').distinct().count()
+
+    # Paid clients by month (for chart)
+    paid_clients_monthly = (
+        PaymentTransaction.objects.filter(status='paid')
         .annotate(month=TruncMonth('created_at'))
         .values('month')
-        .annotate(total=Count('registrationNumber'))
+        .annotate(total=Count('id'))
         .order_by('month')
     )
 
-    def convert_to_monthly_array(queryset):
-        totals = {m: 0 for m in range(1, 13)}
-        for item in queryset:
-            month_num = item['month'].month
-            totals[month_num] = item['total']
-        return list(totals.values())
+    # Format for chart.js (ensure 12 months)
+    monthly_paid_totals = {month: 0 for month in range(1, 13)}
+    for entry in paid_clients_monthly:
+        if entry['month']:
+            month_number = entry['month'].month
+            monthly_paid_totals[month_number] = entry['total']
+    paid_clients_data = list(monthly_paid_totals.values())
 
-    paid_clients_data = convert_to_monthly_array(monthly_paid)
+    # Payments table
+    payment_list = PaymentTransaction.objects.select_related(
+        'registration__user'
+    ).order_by('-created_at')[:20]
 
     context = {
         'total_accounts': total_accounts,
@@ -639,8 +666,11 @@ def cashier_dashboard(request):
         'pending_payments': pending_payments,
         'paid_clients': paid_clients,
         'paid_clients_data': paid_clients_data,
+        'payment_list': payment_list,
+        'current_date': today.strftime("%B %d, %Y")
     }
-    return render(request, "Cashier Dashboard/Cashier_Dashboard.html", context)
+
+    return render(request, 'Cashier Dashboard/Cashier_Dashboard.html', context)
 
 class cashierViewPayment(CustomLoginRequiredMixin, ListView):
     model = PaymentTransaction

@@ -50,26 +50,17 @@
                 <tbody>
                     {% for pass in vehicle_passes %}
                     <tr>
-                        <!-- 1. Vehicle Pass Number -->
                         <td>{{ pass.id }}</td>
-
-                        <!-- 2. Vehicle Pass Owner (applicant's full name, uppercase) -->
                         <td>
                             {{ pass.vehicle.applicant.firstname|default:"N/A"|upper }},
                             {{ pass.vehicle.applicant.lastname|default:"N/A"|upper }}
                         </td>
-
-                        <!-- 3. Community: combine college, department, program -->
                         <td>
                             {{ pass.vehicle.applicant.college|default:"N/A" }} /
                             {{ pass.vehicle.applicant.department|default:"N/A" }} /
                             {{ pass.vehicle.applicant.program|default:"N/A" }}
                         </td>
-
-                        <!-- 4. Plate Number -->
                         <td>{{ pass.vehicle.plateNumber|default:"N/A" }}</td>
-
-                        <!-- 5. Vehicle Owner (legal owner or applicant if owner) -->
                         <td>
                             {% if pass.vehicle.is_owner %}
                                 {{ pass.vehicle.applicant.firstname|default:"N/A"|upper }},
@@ -79,17 +70,9 @@
                                 {{ pass.vehicle.owner_lastname|default:"N/A"|upper }}
                             {% endif %}
                         </td>
-
-                        <!-- 6. Type -->
                         <td>{{ pass.vehicle.type|default:"N/A" }}</td>
-
-                        <!-- 7. Date Applied -->
                         <td>{{ pass.vehicle.created_at|date:"m/d/Y" }}</td>
-
-                        <!-- 8. Status -->
                         <td>{{ pass.status|default:"N/A" }}</td>
-
-                        <!-- 9. Renewal Date -->
                         <td>{{ pass.passExpire|date:"m/d/Y" }}</td>
                     </tr>
                     {% empty %}
@@ -99,7 +82,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-
         </section>
 
         <!-- Pagination -->
