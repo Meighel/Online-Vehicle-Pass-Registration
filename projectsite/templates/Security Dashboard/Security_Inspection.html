@@ -57,25 +57,24 @@
                     <tr>
                         <td>{{ applicant.payment_number.registration.user.firstname }} {{ applicant.payment_number.registration.user.middle_name|default_if_none:""|slice:":1" }} {{ applicant.payment_number.registration.user.lastname }} {{ applicant.payment_number.registration.user.suffix|default_if_none:"" }}</td>
                         <td>{{ applicant.document_inspection_date }}</td>
-                        <td>{{ applicant.security.user.firstname }} {{ applicant.security.user.lastname }} {{ applicant.security.user.middlename |default_if_none:""|slice:":1" }}</td>
+                        <td>{{ applicant.payment_number.registration.document_reviewed_by.user.firstname }} {{ applicant.payment_number.registration.document_reviewed_by.user.middle_name|default_if_none:""|slice:":1" }} {{ applicant.payment_number.registration.document_reviewed_by.user.lastname }} </td>
                         <td>{{ applicant.physical_final_inspection_date }}</td>
                         <td>{{ applicant.remarks }}</td>
                         <td>{{ applicant.additional_notes }}</td>
                         <td>
-                            <button class="btn btn-primary" href="#">Update</button>
+                            <a href="{% url 'update_final_inspection_date' applicant.pk %}" class="btn btn-primary">Update</a>
 
-                            <!-- Trigger approve -->
-                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal" data-id="{{ applicant.id }}">Approve</button>
+                            <!-- Add debug info to data attribute -->
+                            <button class="btn btn-success inspect-btn" data-bs-toggle="modal" data-bs-target="#approveModal" data-id="{{ applicant.id }}" onclick="console.log('Approve button clicked for ID: {{ applicant.id }}')">Approve</button>
 
-                            <!-- Trigger reject -->
-                            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal" data-id="{{ applicant.id }}">Reject</button>
+                            <!-- Add debug info to data attribute -->
+                            <button class="btn btn-danger inspect-btn" data-bs-toggle="modal" data-bs-target="#rejectModal" data-id="{{ applicant.id }}" onclick="console.log('Reject button clicked for ID: {{ applicant.id }}')">Reject</button>
                         </td>
                     </tr>
                 {% endfor %}
                 </tbody>                
             </table>
         </section>
-        {% include 'includes/pagination.html' %}
         {% include 'includes/security_modal.html' %}
     </div>
 </div>
@@ -83,26 +82,95 @@
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Approve Modal
-        var approveModal = document.getElementById('approveModal');
+document.addEventListener('DOMContentLoaded', function () {
+    // For debugging purposes, log when the page loads
+    console.log('DOM fully loaded - setting up modal handlers');
+    
+    // Approve Modal
+    var approveModal = document.getElementById('approveModal');
+    if (approveModal) {
         approveModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;
             var inspectionId = button.getAttribute('data-id');
+            console.log('Approve Modal opened for inspection ID:', inspectionId);
+            
             var inputField = approveModal.querySelector('#approveInspectionId');
-            inputField.value = inspectionId;
+            if (inputField) {
+                inputField.value = inspectionId;
+                console.log('Set approveInspectionId value to:', inspectionId);
+            } else {
+                console.error('Could not find #approveInspectionId input field');
+            }
         });
+        
+        // Add form submit handler for debugging
+        var approveForm = approveModal.querySelector('form');
+        if (approveForm) {
+            approveForm.addEventListener('submit', function(event) {
+                // Don't prevent default, just log what's happening
+                var inspectionId = approveForm.querySelector('#approveInspectionId').value;
+                var action = approveForm.querySelector('input[name="action"]').value;
+                var notes = approveForm.querySelector('#approveNotes').value;
+                
+                console.log('Submitting approve form with:');
+                console.log('- Inspection ID:', inspectionId);
+                console.log('- Action:', action);
+                console.log('- Notes:', notes);
+                
+                if (!inspectionId || inspectionId.trim() === '') {
+                    console.error('ERROR: Missing inspection ID!');
+                    alert('Error: Missing inspection ID. Please try again.');
+                    event.preventDefault();
+                }
+            });
+        }
+    } else {
+        console.error('Could not find #approveModal element');
+    }
     
-        // Reject Modal
-        var rejectModal = document.getElementById('rejectModal');
+    // Reject Modal
+    var rejectModal = document.getElementById('rejectModal');
+    if (rejectModal) {
         rejectModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;
             var inspectionId = button.getAttribute('data-id');
+            console.log('Reject Modal opened for inspection ID:', inspectionId);
+            
             var inputField = rejectModal.querySelector('#rejectInspectionId');
-            inputField.value = inspectionId;
+            if (inputField) {
+                inputField.value = inspectionId;
+                console.log('Set rejectInspectionId value to:', inspectionId);
+            } else {
+                console.error('Could not find #rejectInspectionId input field');
+            }
         });
-    });
-    </script>    
+        
+        // Add form submit handler for debugging
+        var rejectForm = rejectModal.querySelector('form');
+        if (rejectForm) {
+            rejectForm.addEventListener('submit', function(event) {
+                // Don't prevent default, just log what's happening
+                var inspectionId = rejectForm.querySelector('#rejectInspectionId').value;
+                var action = rejectForm.querySelector('input[name="action"]').value;
+                var notes = rejectForm.querySelector('#rejectNotes').value;
+                
+                console.log('Submitting reject form with:');
+                console.log('- Inspection ID:', inspectionId);
+                console.log('- Action:', action);
+                console.log('- Notes:', notes);
+                
+                if (!inspectionId || inspectionId.trim() === '') {
+                    console.error('ERROR: Missing inspection ID!');
+                    alert('Error: Missing inspection ID. Please try again.');
+                    event.preventDefault();
+                }
+            });
+        }
+    } else {
+        console.error('Could not find #rejectModal element');
+    }
+});
+</script>   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'javascript/base.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>

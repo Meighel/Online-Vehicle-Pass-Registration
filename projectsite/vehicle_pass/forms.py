@@ -315,3 +315,14 @@ class VehicleForm(forms.ModelForm):
     class Meta:
         model = Vehicle
         fields = '__all__'  # Changed from 'exclude' to 'fields' as the original had an incorrect usage
+
+class FinalDateInspectionForm(forms.ModelForm):
+    class Meta:
+        model = InspectionReport
+        fields = ['physical_final_inspection_date', ]
+        widgets = {
+            'physical_final_inspection_date': forms.DateInput(attrs={
+                'type': 'date', 
+                'class': 'form-control',
+            }),
+        }

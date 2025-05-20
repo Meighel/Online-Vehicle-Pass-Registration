@@ -1,52 +1,55 @@
-<div class="modal fade" id="approveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <form method="post" action="{% url 'inspection_action' %}">
-            {% csrf_token %}
-            <input type="hidden" name="inspection_id" id="approveInspectionId">
-            <input type="hidden" name="action" value="approve">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="approveModalLabel">Approve Inspection</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to approve this inspection?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Yes, Approve</button>
-                </div>
+<!-- Approve Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">Approve Inspection</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </form>
-    </div>
-</div>
-
-<div class="modal fade" id="rejectModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <form method="post" action="{% url 'inspection_action' %}">
-            {% csrf_token %}
-            <input type="hidden" name="inspection_id" id="rejectInspectionId">
-            <input type="hidden" name="action" value="reject">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="rejectModalLabel">Reject Inspection</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+            <form action="{% url 'handle_inspection_action' %}" method="POST">
+                {% csrf_token %}
                 <div class="modal-body">
-                    <p>Are you sure you want to reject this inspection?</p>
+                    <input type="hidden" name="inspection_id" id="approveInspectionId">
+                    <input type="hidden" name="action" value="approve">
                     <div class="mb-3">
-                        <label for="rejectNotes" class="form-label">Additional Notes:</label>
-                        <textarea name="additional_notes" class="form-control" id="rejectNotes" rows="3"></textarea>
+                        <label for="approveNotes" class="form-label">Additional Notes (Required)</label>
+                        <textarea class="form-control" id="approveNotes" name="additional_notes" rows="3" required></textarea>
                     </div>
+                    <p>Are you sure you want to approve this inspection?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Yes, Reject</button>
+                    <button type="submit" class="btn btn-success">Approve</button>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
-
-
+<!-- Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rejectModalLabel">Reject Inspection</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{% url 'handle_inspection_action' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="inspection_id" id="rejectInspectionId">
+                    <input type="hidden" name="action" value="reject">
+                    <div class="mb-3">
+                        <label for="rejectNotes" class="form-label">Additional Notes (Required)</label>
+                        <textarea class="form-control" id="rejectNotes" name="additional_notes" rows="3" required></textarea>
+                    </div>
+                    <p>Are you sure you want to reject this inspection?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Reject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

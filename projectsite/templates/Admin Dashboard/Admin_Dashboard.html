@@ -89,11 +89,15 @@
             </div>
 
             <br>
+            
 
-            <!-- Payments Record Table -->
+            <!-- Transaction Record Table -->
             <section class="table-container">
                 <table id="myTable" class="transaction-table">
                     <thead>
+                        <caption style="caption-side: top; text-align: float; font-size: 20px; font-weight: bold; padding: 10px; color:white">
+                            Transaction Table
+                        </caption>
                         <tr>
                             <th>Date</th>
                             <th>Username</th>
@@ -110,7 +114,6 @@
                                 <td>{{ transaction.cashier.user.firstname }} {{ transaction.cashier.user.lastname }}</td>
                             </tr>
                         {% endfor %}
-                        
                     </tbody>
                 </table>
             </section>
