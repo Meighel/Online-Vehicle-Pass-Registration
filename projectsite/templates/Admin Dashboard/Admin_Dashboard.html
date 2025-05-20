@@ -88,55 +88,77 @@
                 </div>
             </div>
 
+            <br>
 
-            <!-- Transaction Table -->
-            <div class="mt-5">
-                <h4>Recent Transactions</h4>
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                        <thead class="table-dark">
+            <!-- Payments Record Table -->
+            <section class="table-container">
+                <table id="myTable" class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Username</th>
+                            <th>Status</th>
+                            <th>Processed By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transaction_list %}
                             <tr>
-                                <th>Student Name</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Processed By</th>
+                                <td>{{ transaction.date_processed }}</td>
+                                <td>{{ transaction.registration.user.lastname }} , {{ transaction.registration.user.firstname }}</td>
+                                <td><button class="btn btn-success btn-sm">{{ transaction.status }}</button></td>
+                                <td>{{ transaction.cashier.user.firstname }} {{ transaction.cashier.user.lastname }}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {% for txn in transactions %}
-                            <tr onclick="window.location='{% url 'transaction_detail_view' txn.id %}'" style="cursor: pointer;">
-                                <td>{{ txn.registration.user.firstname }} {{ txn.registration.user.lastname }}</td>
-                                <td>{{ txn.date_processed|date:"Y-m-d" }}</td>
-                                <td>
-                                    <span class="badge 
-                                        {% if txn.status == 'paid' %}bg-success
-                                        {% elif txn.status == 'pending' %}bg-warning
-                                        {% elif txn.status == 'void' %}bg-danger
-                                        {% else %}bg-secondary{% endif %}">
-                                        {{ txn.status|title }}
-                                    </span>
-                                </td>
-                                <td>
-                                    {% if txn.cashier %}
-                                        {{ txn.cashier.user.firstname }} {{ txn.cashier.user.lastname }}
-                                    {% elif txn.admin %}
-                                        {{ txn.admin.user.firstname }} {{ txn.admin.user.lastname }}
-                                    {% else %}
-                                        —
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="4" class="text-center">No transactions found.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div> <!-- End Container -->
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+            </section>
+        </div>
     </div> <!-- End Main Content -->
 </div> <!-- End Dashboard Wrapper -->
 
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'javascript/base.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+        // Initialize DataTable with minimal UI (no search/filter on top)
+        var table = $('#myTable').DataTable({
+            autoWidth: false,
+            responsive: true,
+
+            // Only show bottom info and pagination
+            dom: 'rt<"bottom"<"dataTables_info"i><"dataTables_paginate"p>>',
+
+            // Custom language settings
+            language: {
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoFiltered: "",
+                paginate: {
+                    first: "First",
+                    previous: "Prev",
+                    next: "Next",
+                    last: "Last"
+                }
+            },
+
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50],
+
+            drawCallback: function () {
+                $('.dataTables_length select').css({
+                    'background-color': '#000',
+                    'color': 'white',
+                    'border': '1px solid #444'
+                });
+            }
+        });
+
+        // Remove date range filtering logic if not needed anymore
+    });
+    </script>
 {% endblock %}

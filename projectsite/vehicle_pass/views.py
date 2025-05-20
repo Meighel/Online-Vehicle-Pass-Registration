@@ -437,12 +437,7 @@ def user_pass_status(request):
 def user_settings(request):
     return render(request, "User Dashboard/User_Settings.html")
 
-# Admin Page View 
-from django.db.models.functions import TruncMonth
-from django.db.models import Count
-from django.utils.timezone import now
-from datetime import timedelta
-from .models import UserProfile, Registration
+# Admin Page View
 
 @login_required
 def admin_dashboard(request):
@@ -452,7 +447,7 @@ def admin_dashboard(request):
     total_cashier = UserProfile.objects.filter(role='cashier').count()
     total_admin = UserProfile.objects.filter(role='admin').count()
 
-    # Account growth: compare last month to this month
+    # Account growth calculation
     current_month_users = UserProfile.objects.filter(
         created_at__gte=now().replace(day=1)
     ).count()
@@ -460,10 +455,9 @@ def admin_dashboard(request):
         created_at__lt=now().replace(day=1),
         created_at__gte=(now().replace(day=1) - timedelta(days=30))
     ).count()
-
     growth_percent = round(((current_month_users - previous_month_users) / previous_month_users) * 100, 1) if previous_month_users > 0 else 0
 
-    # Monthly Registered Students for Chart
+    # Monthly Registered Students
     monthly_users = (
         UserProfile.objects
         .filter(school_role='student')
@@ -472,14 +466,19 @@ def admin_dashboard(request):
         .annotate(total=Count('id'))
         .order_by('month')
     )
-    
-    chart_data = PaymentTransaction.objects.values('status').annotate(count=Count('id'))
-
     monthly_totals = {month: 0 for month in range(1, 13)}
     for entry in monthly_users:
         month_num = entry['month'].month
         monthly_totals[month_num] = entry['total']
     monthly_chart_data = list(monthly_totals.values())
+
+    # Chart Data for Transactions by Status
+    chart_data = PaymentTransaction.objects.values('status').annotate(count=Count('id'))
+
+    # Fetch all transactions for the table
+    transaction_list = PaymentTransaction.objects.select_related(
+        'registration__user', 'cashier__user'
+    ).all().order_by('-date_processed')  # Order newest first (optional)
 
     context = {
         "total_students": total_students,
@@ -489,6 +488,7 @@ def admin_dashboard(request):
         "growth_percent": growth_percent,
         "monthly_chart_data": monthly_chart_data,
         "chart_data": chart_data,
+        "transaction_list": transaction_list,  # Add this for your table
     }
 
     return render(request, "Admin Dashboard/Admin_Dashboard.html", context)
@@ -561,13 +561,16 @@ class adminUpdatePayment(UpdateView):
 
 @login_required
 def admin_manage_passes(request):
-    # Fetch all vehicle passes and related data
-    vehicle_passes = VehiclePass.objects.select_related('vehicle__applicant').all()
+    vehicle_passes = VehiclePass.objects.select_related(
+        'vehicle', 
+        'vehicle__applicant',
+    ).all()
 
     context = {
         'vehicle_passes': vehicle_passes,
     }
     return render(request, "Admin Dashboard/Admin_Manage_Passes.html", context)
+
 
 @login_required
 def admin_report(request):
