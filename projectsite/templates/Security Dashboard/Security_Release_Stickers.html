@@ -56,7 +56,7 @@
                 {% for sticker in stickers %}
                   <tr>
                     <td>{{ sticker.passNumber }}</td>
-                    <td>{{ sticker.vehicle.applicant.firstname }} {{ sticker.vehicle.applicant.middle_name|default_if_none:""|slice:":1" }} {{ sticker.vehicle.applicant.lastname }} {{ sticker.vehicle.applicant.suffix }}</td>
+                    <td>{{ sticker.vehicle.applicant.firstname }} {{ sticker.vehicle.applicant.middle_name|default_if_none:""|slice:":1" }} {{ sticker.vehicle.applicant.lastname }} {{ sticker.vehicle.applicant.suffix|default_if_none:"" }}</td>
                     <td>{{ sticker.vehicle.applicant.department|default_if_none:"" }} - {{ sticker.vehicle.applicant.college|default_if_none:"" }} - {{ sticker.vehicle.applicant.program|default_if_none:"" }}</td>
                     <td>{{ sticker.vehicle.plateNumber }}</td>
                     <td>{{ sticker.vehicle.owner_firstname|default_if_none:"" }} {{ sticker.vehicle.owner_middlename|default_if_none:""|slice:":1" }} {{ sticker.vehicle.owner_lastname|default_if_none:"" }} {{ sticker.vehicle.owner_suffix|default_if_none:"" }}</td>
