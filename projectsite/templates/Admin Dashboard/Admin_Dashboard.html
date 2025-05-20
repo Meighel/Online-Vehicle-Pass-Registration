@@ -124,41 +124,4 @@
     <script src="{% static 'javascript/base.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function () {
-        // Initialize DataTable with minimal UI (no search/filter on top)
-        var table = $('#myTable').DataTable({
-            autoWidth: false,
-            responsive: true,
-
-            // Only show bottom info and pagination
-            dom: 'rt<"bottom"<"dataTables_info"i><"dataTables_paginate"p>>',
-
-            // Custom language settings
-            language: {
-                info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                infoFiltered: "",
-                paginate: {
-                    first: "First",
-                    previous: "Prev",
-                    next: "Next",
-                    last: "Last"
-                }
-            },
-
-            pageLength: 10,
-            lengthMenu: [5, 10, 25, 50],
-
-            drawCallback: function () {
-                $('.dataTables_length select').css({
-                    'background-color': '#000',
-                    'color': 'white',
-                    'border': '1px solid #444'
-                });
-            }
-        });
-
-        // Remove date range filtering logic if not needed anymore
-    });
-    </script>
 {% endblock %}
