@@ -741,12 +741,22 @@ class SecurityUpdateFinalInspectionDate(CustomLoginRequiredMixin, UpdateView):
 
 def handle_inspection_action(request):
     if request.method == "POST":
+        # Debug information
+        print("POST data received:", request.POST)
+        
         inspection_id = request.POST.get('inspection_id')
         action = request.POST.get('action')
         additional_notes = request.POST.get('additional_notes', '')
         
+        print(f"Extracted values - inspection_id: {inspection_id}, action: {action}, notes: {additional_notes}")
+        
         if inspection_id and action:
             try:
+                # Check that ID is valid before attempting to get object
+                if not inspection_id.isdigit():
+                    messages.error(request, f"Invalid inspection ID format: {inspection_id}")
+                    return redirect('security_manage_inspection')
+                
                 inspection = InspectionReport.objects.get(id=inspection_id)
                 inspection.additional_notes = additional_notes
                 
@@ -756,15 +766,21 @@ def handle_inspection_action(request):
                 elif action == 'reject':
                     inspection.is_approved = False
                     inspection.remarks = 'application declined'
+                else:
+                    messages.error(request, f"Invalid action: {action}")
+                    return redirect('security_manage_inspection')
                     
                 inspection.save()
                 messages.success(request, f"Inspection {action}d successfully.")
             except InspectionReport.DoesNotExist:
-                messages.error(request, "Inspection record not found.")
+                messages.error(request, f"Inspection record not found for ID: {inspection_id}")
             except Exception as e:
                 messages.error(request, f"Error: {str(e)}")
+                print(f"Exception details: {type(e).__name__}, {str(e)}")
         else:
-            messages.error(request, "Missing required parameters.")
+            messages.error(request, f"Missing required parameters. Got inspection_id={inspection_id}, action={action}")
+    else:
+        messages.error(request, "This endpoint only accepts POST requests.")
     
     return redirect('security_manage_inspection')
 
