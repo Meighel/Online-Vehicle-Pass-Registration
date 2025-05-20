@@ -1,0 +1,226 @@
+
+/* ========================================= */
+/*              Sidebar                      */
+/* ========================================= */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: right;
+    width: 250px;
+    height: 100vh;
+    background: #242424;
+    color: black !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+    overflow-y: hidden;
+}
+
+/* Sidebar Menu Items */
+.sidebar ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.sidebar ul li {
+    padding: 10px 20px;
+    text-align: left;
+    margin: 10px;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    font-size: 18px;
+    font-weight: 200% !important;
+}
+
+.sidebar ul li a img {
+    margin-left: 3%;
+    margin-right: 3%;
+    align-items: center;
+}
+
+.sidebar p {
+    font-size: 14px;
+    color: rgb(134, 136, 133);
+    padding-top: 10px;
+    padding-left: 23px;
+    font-weight: bold;
+}
+
+/* Sidebar Collapse */
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed ul li {
+    margin: 0;
+}
+
+/* Hide text inside the sidebar when collapsed */
+.sidebar.collapsed ul li a {
+    text-align: center;
+    font-size: 0;
+}
+
+/* Show only icons when collapsed */
+.sidebar.collapsed ul li a::before {
+    font-size: 20px;
+}
+
+.sidebar.collapsed .toggle-btn {
+    left: 50%;
+}
+
+.content.expanded {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar.collapsed p {
+    display: none;
+}
+
+.sidebar.collapsed .navbar-brand {
+    display: none;
+}
+
+/* Toggle Button */
+.toggle-btn {
+    position: absolute;
+    top: 95%;
+    transform: translate(-50%, -50%);
+    left: 220px;
+    background: none;
+    border: none;
+    color: yellow !important;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px 5px;
+    border-radius: 5px;
+    transition: left 0.3s ease;
+}
+
+/* Profile Section */
+.profile {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px;
+    width: max-content;
+}
+
+.profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: gray;
+    object-fit: cover;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    font-size: 14px;
+}
+
+.profile-info .name {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.profile-info .position {
+    font-size: 12px;
+    color: rgb(170, 170, 170); 
+}
+
+/* Logout */
+#logout {
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+#logout img {
+    width: 26px;
+    height: 26px;
+    transition: transform 0.4s ease-in-out;
+}
+#logout img:hover {
+    transform:scale(1.2);
+    color: #ffd700;
+}
+.sidebar.collapsed .profile {
+    display: none;
+}
+
+.sidebar.collapsed #logout {
+    display: none;
+}
+.sidebar.collapsed .toggle-btn {
+    left: 50%;
+}
+.sidebar ul li.active {
+    background: yellow !important; 
+    border-radius: 20px;
+}
+.sidebar ul li.active a {
+    color: black !important;
+}
+.sidebar ul li:hover {
+    background: rgba(255, 255, 0, 0.237);
+    cursor: pointer;
+    border-radius: 20px;
+}
+.sidebar ul li:hover a {
+    color: #121212 !important;
+    font-weight: 100 !important;
+}
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    background: yellow;
+    color: black;
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
+}
+
+.sidebar.collapsed .logo {
+    font-size: 0;
+    padding: 0;
+}
+
+.nav-link {
+    color: white;
+    padding: 10px;
+}
+
+.nav-link:hover, .active {
+    background-color: yellow !important;
+    border-radius: 5px;
+}
