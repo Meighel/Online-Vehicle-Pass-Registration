@@ -7,7 +7,7 @@ from vehicle_pass.views import (
     default_dashboard, user_pass_status, user_application,
     vehicle_registration_step_1, vehicle_registration_step_2, vehicle_registration_step_3, 
     security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, SecurityViewStickers, 
-    SecurityUpdateApplication, SecurityViewInspectionReports, security_report,
+    SecurityUpdateApplication, SecurityViewInspectionReports, security_report, SecurityUpdateFinalInspectionDate,
     handle_inspection_action,
 
     cashier_dashboard, cashierViewPayment, cashierUpdatePayment, cashierViewTransaction, cashier_report,
@@ -53,6 +53,7 @@ urlpatterns = [
     path("dashboard/security/manage_application/<pk>/", SecurityUpdateApplication.as_view(), name="security_update_application"),
     path("dashboard/security/manage_application/view/<pk>", SecurityViewSpecificApplication.as_view(), name="security_view_specific_application"),
     path("dashboard/security/manage_inspection/", SecurityViewInspectionReports.as_view(), name="security_manage_inspection"),
+    path("dashboard/security/manage_inspection/<pk>/", SecurityUpdateFinalInspectionDate.as_view(), name='update_final_inspection_date'),
     path("dashboard/security/manage_inspection/action/", handle_inspection_action, name='inspection_action'),
     path("dashboard/security/manage_stickers", SecurityViewStickers.as_view() , name="security_manage_stickers"),
     path("dashboard/security/manage_report/", security_report, name="security_report"),

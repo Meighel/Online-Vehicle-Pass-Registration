@@ -7,6 +7,7 @@ from .forms import (UserSignupForm, UserProfileForm,
                     ApplicationForm,
                     InspectionApprovalForm, PasswordUpdateForm,
                     VehicleRegistrationStep1Form, VehicleRegistrationStep2Form, VehicleRegistrationStep3Form,
+                    FinalDateInspectionForm,
 )
 from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
 from .models import Vehicle, Registration, VehiclePass, PaymentTransaction
@@ -731,6 +732,12 @@ class SecurityViewInspectionReports(CustomLoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return InspectionReport.objects.exclude(remarks='sticker_released')
+    
+class SecurityUpdateFinalInspectionDate(CustomLoginRequiredMixin, UpdateView):
+    model = InspectionReport
+    form_class = FinalDateInspectionForm
+    template_name = 'Security Dashboard/Security Application CRUD/Security_Update_Final_Inspection_Date.html'
+    success_url = reverse_lazy('security_manage_inspection')
 
 def handle_inspection_action(request):
     if request.method == "POST":

@@ -57,12 +57,12 @@
                     <tr>
                         <td>{{ applicant.payment_number.registration.user.firstname }} {{ applicant.payment_number.registration.user.middle_name|default_if_none:""|slice:":1" }} {{ applicant.payment_number.registration.user.lastname }} {{ applicant.payment_number.registration.user.suffix|default_if_none:"" }}</td>
                         <td>{{ applicant.document_inspection_date }}</td>
-                        <td>{{ applicant.security.user.firstname }} {{ applicant.security.user.lastname }} {{ applicant.security.user.middlename |default_if_none:""|slice:":1" }}</td>
+                        <td>{{ applicant.payment_number.registration.document_reviewed_by.user.firstname }} {{ applicant.payment_number.registration.document_reviewed_by.user.middle_name|default_if_none:""|slice:":1" }} {{ applicant.payment_number.registration.document_reviewed_by.user.lastname }} </td>
                         <td>{{ applicant.physical_final_inspection_date }}</td>
                         <td>{{ applicant.remarks }}</td>
                         <td>{{ applicant.additional_notes }}</td>
                         <td>
-                            <button class="btn btn-primary" href="#">Update</button>
+                            <a href="{% url 'update_final_inspection_date' applicant.pk %}" class="btn btn-primary">Update</a>
 
                             <!-- Trigger approve -->
                             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal" data-id="{{ applicant.id }}">Approve</button>
@@ -75,7 +75,6 @@
                 </tbody>                
             </table>
         </section>
-        {% include 'includes/pagination.html' %}
         {% include 'includes/security_modal.html' %}
     </div>
 </div>
