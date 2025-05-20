@@ -68,8 +68,7 @@ urlpatterns = [
     
     path("dashboard/admin/", admin_dashboard, name="admin_dashboard"),
     path('dashboard/admin/settings/', views.settings_view, name='admin_settings'),
-
-    
+        
     #ADMIN USER CRUD
     path("dashboard/admin/manage_users/add/", AdminCreateUser.as_view(), name="admin_create_user"),
     path("dashboard/admin/manage_users/<pk>/", AdminUpdateUser.as_view(), name="admin_update_user"),
@@ -92,7 +91,5 @@ urlpatterns = [
     path("dashboard/user/application/step-2/", views.vehicle_registration_step_2, name="vehicle_registration_step_2"),
     path("dashboard/user/application/step-3/", views.vehicle_registration_step_3, name="vehicle_registration_step_3"),
     path("dashboard/user/application/complete/", views.registration_complete, name="registration_complete"),
-    
-    path('dashboard/settings/', views.settings_view, name='settings'),
     
 ]
