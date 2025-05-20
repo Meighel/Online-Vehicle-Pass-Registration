@@ -32,6 +32,7 @@ from django.utils.timezone import now
 import calendar
 from django.db.models.functions import TruncMonth
 from django.contrib.auth import update_session_auth_hash
+from .models import SiteVisit, LoginActivity
 
 def home(request):
     return render(request, 'index.html')
@@ -437,16 +438,68 @@ def user_settings(request):
     return render(request, "User Dashboard/User_Settings.html")
 
 # Admin Page View 
+from django.db.models.functions import TruncMonth
+from django.db.models import Count
+from django.utils.timezone import now
+from datetime import timedelta
+from .models import UserProfile, Registration
+
 @login_required
 def admin_dashboard(request):
-    return render(request, "Admin Dashboard/Admin_Dashboard.html")
+    # Total users by role
+    total_students = UserProfile.objects.filter(school_role='student').count()
+    total_security = UserProfile.objects.filter(role='security').count()
+    total_cashier = UserProfile.objects.filter(role='cashier').count()
+    total_admin = UserProfile.objects.filter(role='admin').count()
+
+    # Account growth: compare last month to this month
+    current_month_users = UserProfile.objects.filter(
+        created_at__gte=now().replace(day=1)
+    ).count()
+    previous_month_users = UserProfile.objects.filter(
+        created_at__lt=now().replace(day=1),
+        created_at__gte=(now().replace(day=1) - timedelta(days=30))
+    ).count()
+
+    growth_percent = round(((current_month_users - previous_month_users) / previous_month_users) * 100, 1) if previous_month_users > 0 else 0
+
+    # Monthly Registered Students for Chart
+    monthly_users = (
+        UserProfile.objects
+        .filter(school_role='student')
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(total=Count('id'))
+        .order_by('month')
+    )
+    
+    chart_data = PaymentTransaction.objects.values('status').annotate(count=Count('id'))
+
+    monthly_totals = {month: 0 for month in range(1, 13)}
+    for entry in monthly_users:
+        month_num = entry['month'].month
+        monthly_totals[month_num] = entry['total']
+    monthly_chart_data = list(monthly_totals.values())
+
+    context = {
+        "total_students": total_students,
+        "total_security": total_security,
+        "total_cashier": total_cashier,
+        "total_admin": total_admin,
+        "growth_percent": growth_percent,
+        "monthly_chart_data": monthly_chart_data,
+        "chart_data": chart_data,
+    }
+
+    return render(request, "Admin Dashboard/Admin_Dashboard.html", context)
+
 
 
 class AdminViewUser(CustomLoginRequiredMixin, ListView):
     model = UserProfile
     context_object_name = "users"
     template_name = 'Admin Dashboard/Admin_Manage_User.html'
-    paginate_by = 5
+    paginate_by = 20
 
 class AdminCreateUser(CustomLoginRequiredMixin, CreateView):
     model = UserProfile
@@ -486,7 +539,7 @@ class adminViewPayment(ListView):
     model = PaymentTransaction
     template_name = "Admin Dashboard/Admin_Manage_Payment.html"
     context_object_name = 'payment_list'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_queryset(self):
         return PaymentTransaction.objects.filter(status='pending')
@@ -495,7 +548,7 @@ class adminViewTransaction(ListView):
     model = PaymentTransaction
     template_name = "Admin Dashboard/Admin_Transaction.html"
     context_object_name = 'transaction_list'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_queryset(self):
         return PaymentTransaction.objects.exclude(status='pending')
@@ -524,7 +577,7 @@ class AdminViewApplication(CustomLoginRequiredMixin, ListView):
     model = Registration
     template_name = 'Admin Dashboard/Admin_Application.html'
     context_object_name = 'applications'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -548,18 +601,17 @@ class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('admin_manage_application')
 
 
-# Cashier Page View 
+# Cashier Page View @login_required
 @login_required
 def cashier_dashboard(request):
-    # Existing data...
     total_accounts = UserProfile.objects.filter(role='user').count()
     previous_total = UserProfile.objects.filter(role='user', created_at__lt=now() - timedelta(days=30)).count()
     account_growth_percent = round(((total_accounts - previous_total) / previous_total) * 100) if previous_total > 0 else 0
     pending_payments = Registration.objects.filter(status='pending').count()
     paid_clients = Registration.objects.filter(status='paid').count()
 
-    # Monthly Paid Clients for the Chart
-    monthly_data = (
+    # Chart 2: Monthly Paid Clients
+    monthly_paid = (
         Registration.objects
         .filter(status='paid')
         .annotate(month=TruncMonth('created_at'))
@@ -568,13 +620,14 @@ def cashier_dashboard(request):
         .order_by('month')
     )
 
-    # Create a dict with month numbers as keys and totals as values
-    monthly_totals = {month: 0 for month in range(1, 13)}
-    for entry in monthly_data:
-        month_num = entry['month'].month
-        monthly_totals[month_num] = entry['total']
+    def convert_to_monthly_array(queryset):
+        totals = {m: 0 for m in range(1, 13)}
+        for item in queryset:
+            month_num = item['month'].month
+            totals[month_num] = item['total']
+        return list(totals.values())
 
-    paid_clients_data = list(monthly_totals.values())
+    paid_clients_data = convert_to_monthly_array(monthly_paid)
 
     context = {
         'total_accounts': total_accounts,
@@ -583,24 +636,22 @@ def cashier_dashboard(request):
         'paid_clients': paid_clients,
         'paid_clients_data': paid_clients_data,
     }
-    return render(request, "Cashier Dashboard/Cashier_Dashboard.html")
-
+    return render(request, "Cashier Dashboard/Cashier_Dashboard.html", context)
 
 class cashierViewPayment(CustomLoginRequiredMixin, ListView):
     model = PaymentTransaction
     template_name = "Cashier Dashboard/Cashier_Payment.html"
     context_object_name = 'payment_list'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_queryset(self):
         return PaymentTransaction.objects.filter(status='pending')
-    
     
 class cashierViewTransaction(CustomLoginRequiredMixin, ListView):
     model = PaymentTransaction
     template_name = "Cashier Dashboard/Cashier_Transaction.html"
     context_object_name = 'transaction_list'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_queryset(self):
         return PaymentTransaction.objects.exclude(status='pending')
@@ -619,7 +670,6 @@ class cashierViewTransaction(CustomLoginRequiredMixin, ListView):
             context['form'] = PaymentTransactionForm()
         
         return context
-
 
 class cashierUpdatePayment(CustomLoginRequiredMixin, UpdateView):
     model = PaymentTransaction
@@ -644,7 +694,7 @@ class SecurityViewApplication(CustomLoginRequiredMixin, ListView):
     model = Registration
     template_name = 'Security Dashboard/Security_Application.html'
     context_object_name = 'applications'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -674,7 +724,7 @@ class SecurityViewInspectionReports(CustomLoginRequiredMixin, ListView):
     model = InspectionReport
     template_name = 'Security Dashboard/Security_Inspection.html'
     context_object_name = 'inspections'
-    paginate_by = 5
+    paginate_by = 20
 
     def get_queryset(self):
         return InspectionReport.objects.exclude(remarks='sticker_released')
@@ -712,7 +762,7 @@ class SecurityViewStickers(CustomLoginRequiredMixin, ListView):
     model = VehiclePass
     template_name = 'Security Dashboard/Security_Release_Stickers.html'
     context_object_name = 'stickers'
-    paginate_by = 5
+    paginate_by = 20
 
 @login_required
 def security_report(request):
@@ -721,7 +771,12 @@ def security_report(request):
 
 @login_required
 def settings_view(request):
-    user = request.user
+    user_id = request.session.get('user_id')
+    if not user_id:
+        messages.error(request, "You must be logged in to access settings.")
+        return redirect('login')  # Replace with your login route name
+
+    user = get_object_or_404(UserProfile, id=user_id)
 
     if request.method == 'POST':
         # Only allow if user is authenticated (should already be ensured by @login_required)
@@ -753,25 +808,38 @@ def settings_view(request):
 
         if new_password and confirm_password:
             if new_password == confirm_password:
-                user.set_password(new_password)
-                update_session_auth_hash(request, user)
+                user.password = new_password  # Save securely if you hash it manually
                 messages.success(request, "Password updated successfully.")
             else:
                 messages.error(request, "Passwords do not match.")
-                return redirect('settings')
-
+                return redirect(request.path)
+        
         user.save()
         messages.success(request, "Profile updated successfully.")
-        return redirect('settings')
+        return redirect(request.path)
 
     # === GET Request ===
-    context = {}
+    context = {
+        'user': user
+    }
 
-    if request.user.is_authenticated and hasattr(request.user, 'role'):
-        if user.role in ['admin', 'security']:
-            context['all_vehicles'] = Vehicle.objects.select_related('applicant').all()
+    # Role-specific template and context
+    if user.role == 'admin':
+        context['all_vehicles'] = Vehicle.objects.select_related('self_owner').all()
+        template_name = 'Settings/admin_settings.html'
+    elif user.role == 'cashier':
+        template_name = 'Settings/cashier_settings.html'
+    elif user.role == 'security':
+        context['all_vehicles'] = Vehicle.objects.select_related('self_owner').all()
+        template_name = 'Settings/security_settings.html'
+    elif user.role == 'user':
+        context['user_vehicle'] = Vehicle.objects.filter(applicant=user)
+        template_name = 'Settings/user_settings.html'
+    else:
+        messages.error(request, "Unknown role. Contact admin.")
+        return redirect('home')
 
-    return render(request, 'Settings/settings.html', context)
+    return render(request, template_name, context)
 
 def faq(request):
     return render(request, "Settings/FAQ.html")
@@ -783,7 +851,7 @@ def about_us(request):
     return render(request, "Settings/AboutUs.html")
 
 
-from .models import SiteVisit, LoginActivity
+
 
 #Total Visitors
 def get_stats():

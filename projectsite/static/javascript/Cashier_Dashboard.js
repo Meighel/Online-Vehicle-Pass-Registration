@@ -1,52 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
-        const canvas = document.getElementById("trendChart");
-        if (!canvas) {
-            console.error("Canvas element #trendChart not found!");
-            return;
-        }
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-        const ctx = canvas.getContext("2d");
-
-        const chartData = {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [
-                {
+    // Chart 2: Paid Clients
+    const paidCanvas = document.getElementById("paidChart");
+    if (paidCanvas) {
+        new Chart(paidCanvas.getContext("2d"), {
+            type: "bar",
+            data: {
+                labels: months,
+                datasets: [{
                     label: "Paid Clients",
-                    data: paidClientsData,  // Now using dynamic data
+                    data: paidClientsData,
+                    backgroundColor: "rgba(255, 206, 86, 0.5)",
                     borderColor: "#ffcc00",
-                    backgroundColor: "rgba(255, 204, 0, 0.2)",
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4,
-                },
-            ],
-        };
-
-        const chartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: true,
-                },
+                    borderWidth: 1,
+                }],
             },
-            scales: {
-                x: {
-                    grid: {
-                        display: false,
-                    },
-                },
-                y: {
-                    beginAtZero: true,
-                },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: true }},
+                scales: { y: { beginAtZero: true }},
             },
-        };
-
-        new Chart(ctx, {
-            type: "line",
-            data: chartData,
-            options: chartOptions,
         });
-
-        console.log("Chart initialized successfully.");
-    });
+    }
+});

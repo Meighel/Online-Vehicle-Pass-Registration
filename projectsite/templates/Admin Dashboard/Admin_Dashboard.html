@@ -46,57 +46,97 @@
 
             <!-- Statistic Boxes -->
             <div class="row g-4 mt-3">
-                {% for i in "1234" %}
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                     <div class="p-3 border rounded shadow-sm dashboard-card">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0">
-                                <img src="{% static 'images/student.png' %}" alt="Student Icon" width="25" height="25">
-                                Students Accounts
-                            </h6>
-                        </div>
-                        <h5>255</h5>
-                        <small><p class="text-success mb-0">+2.5% than usual</p></small>
+                        <h6>
+                            <img src="{% static 'images/student.png' %}" alt="Student Icon" width="25" height="25">
+                            Students Accounts
+                        </h6>
+                        <h5>{{ total_students }}</h5>
+                        <small><p class="text-success mb-0">+{{ growth_percent }}% than last month</p></small>
                     </div>
                 </div>
-                {% endfor %}
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="p-3 border rounded shadow-sm dashboard-card">
+                        <h6>
+                            <img src="{% static 'images/security.png' %}" alt="Security Icon" width="25" height="25">
+                            Security Accounts
+                        </h6>
+                        <h5>{{ total_security }}</h5>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="p-3 border rounded shadow-sm dashboard-card">
+                        <h6>
+                            <img src="{% static 'images/cashier.png' %}" alt="Cashier Icon" width="25" height="25">
+                            Cashier Accounts
+                        </h6>
+                        <h5>{{ total_cashier }}</h5>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="p-3 border rounded shadow-sm dashboard-card">
+                        <h6>
+                            <img src="{% static 'images/admin.png' %}" alt="Admin Icon" width="25" height="25">
+                            Admin Accounts
+                        </h6>
+                        <h5>{{ total_admin }}</h5>
+                    </div>
+                </div>
             </div>
 
-            <!-- Transactions Table -->
-            <div class="row mt-5">
-                <div class="col-12">
-                    <div class="p-3 border rounded shadow-sm bg-white">
-                        <h6 class="mb-3">Transactions</h6>
-                        <div class="table-responsive">
-                            <table class="table table-hover table-borderless align-middle">
-                                <thead class="border-bottom">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
-                                        <th>Processed By</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr onclick="window.location='#';" style="cursor: pointer;">
-                                        <td>John Doe</td>
-                                        <td>2025-02-24</td>
-                                        <td><span class="badge bg-success">Approved</span></td>
-                                        <td>Admin</td>
-                                    </tr>
-                                    <!-- Add more rows as needed -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+
+            <!-- Transaction Table -->
+            <div class="mt-5">
+                <h4>Recent Transactions</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Processed By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for txn in transactions %}
+                            <tr onclick="window.location='{% url 'transaction_detail_view' txn.id %}'" style="cursor: pointer;">
+                                <td>{{ txn.registration.user.firstname }} {{ txn.registration.user.lastname }}</td>
+                                <td>{{ txn.date_processed|date:"Y-m-d" }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if txn.status == 'paid' %}bg-success
+                                        {% elif txn.status == 'pending' %}bg-warning
+                                        {% elif txn.status == 'void' %}bg-danger
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ txn.status|title }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if txn.cashier %}
+                                        {{ txn.cashier.user.firstname }} {{ txn.cashier.user.lastname }}
+                                    {% elif txn.admin %}
+                                        {{ txn.admin.user.firstname }} {{ txn.admin.user.lastname }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center">No transactions found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-            </div> <!-- End Row -->
+            </div>
         </div> <!-- End Container -->
     </div> <!-- End Main Content -->
 </div> <!-- End Dashboard Wrapper -->
 
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'javascript/Admin_Dashboard.js' %}"></script>
 {% endblock %}

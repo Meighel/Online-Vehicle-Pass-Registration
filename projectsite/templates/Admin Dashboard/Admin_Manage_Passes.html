@@ -51,14 +51,20 @@
                 <tbody>
                     {% for pass in vehicle_passes %}
                     <tr>
-                        <td>{{ pass.vehicle.self_ownership.id }}</td>
-                        <td>{{ pass.vehicle.self_ownership.firstname|upper }}, {{ pass.vehicle.owner.lastname|upper }}</td>
-                        <td>{{ pass.vehicle.self_ownership.college }}</td>
-                        <td>{{ pass.vehicle.self_ownership.department }}</td>
-                        <td>{{ pass.vehicle.self_ownership.program }}</td>
-                        <td>{{ pass.vehicle.plateNumber }}</td>
-                        <td>{{ pass.vehicle.legal_owner.owner_firstname|upper }}, {{ pass.vehicle.legal_owner.owner_lastname|upper }}</td>
-                        <td>{{ pass.vehicle.type }}</td>
+                        <td>{{ pass.vehicle.self_ownership.id|default:"N/A" }}</td>
+                        <td>
+                            {{ pass.vehicle.self_ownership.firstname|default:"N/A"|upper }},
+                            {{ pass.vehicle.owner.lastname|default:"N/A"|upper }}
+                        </td>
+                        <td>{{ pass.vehicle.self_ownership.college|default:"N/A" }}</td>
+                        <td>{{ pass.vehicle.self_ownership.department|default:"N/A" }}</td>
+                        <td>{{ pass.vehicle.self_ownership.program|default:"N/A" }}</td>
+                        <td>{{ pass.vehicle.plateNumber|default:"N/A" }}</td>
+                        <td>
+                            {{ pass.vehicle.legal_owner.owner_firstname|default:"N/A"|upper }},
+                            {{ pass.vehicle.legal_owner.owner_lastname|default:"N/A"|upper }}
+                        </td>
+                        <td>{{ pass.vehicle.type|default:"N/A" }}</td>
                         <td>{{ pass.vehicle.created_at|date:"m/d/Y" }}</td>
                         <td>{{ pass.passExpire|date:"m/d/Y" }}</td>
                     </tr>
@@ -67,7 +73,7 @@
                         <td colspan="10" class="text-center">No passes found.</td>
                     </tr>
                     {% endfor %}
-                </tbody>               
+                </tbody>
             </table>
         </section>
 
