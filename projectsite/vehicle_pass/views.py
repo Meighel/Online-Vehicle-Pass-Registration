@@ -321,7 +321,7 @@ def vehicle_registration_step_1(request):
         'form': form,
         'user': user
     }
-    return render(request, 'forms/forms_1.html', context)
+    return render(request, 'Forms/forms_1.html', context)
 
 @login_required
 def vehicle_registration_step_2(request):
@@ -350,7 +350,7 @@ def vehicle_registration_step_2(request):
         'form': form,
         'user': user
     }
-    return render(request, 'forms/forms_2.html', context)
+    return render(request, 'Forms/forms_2.html', context)
 
 @login_required
 def vehicle_registration_step_3(request):
@@ -431,7 +431,7 @@ def vehicle_registration_step_3(request):
         'form': form,
         'user': user
     }
-    return render(request, 'forms/forms_3.html', context)
+    return render(request, 'Forms/forms_3.html', context)
 
 
 
@@ -726,7 +726,7 @@ def cashier_report(request):
 # Security Page Views
 @login_required
 def security_dashboard(request):
-    return render(request, "Security Dashboard/Security_Dashboard.html")
+    return render(request, "Security Dashboard/security_dashboard.html")
 
 @login_required
 def security_manage_application(request):
