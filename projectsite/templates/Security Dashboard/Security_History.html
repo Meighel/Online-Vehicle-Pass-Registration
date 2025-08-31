@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block extra_css %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
     <link rel="stylesheet" href="{% static 'css/security-dashboard-style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
@@ -21,6 +22,14 @@
 {% endblock %}
 
 {% block content %}
+<!-- Mobile Menu Toggle Button -->
+<button class="mobile-menu-toggle" id="mobile-menu-toggle">
+    ☰
+</button>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
 <div class="main-content flex-grow-1 ms-uto">
     <div class="container-fluid py-1">
             <!-- Title & Top Bar -->
@@ -193,4 +202,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script src="{% static 'javascript/base.js' %}"></script>
+    <script src="{% static 'javascript/Security_Dashboard.js' %}"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 {% endblock %}

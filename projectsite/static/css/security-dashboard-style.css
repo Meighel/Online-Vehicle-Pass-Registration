@@ -521,3 +521,41 @@ body {
         z-index: 9999 !important;
     }
 }
+
+/* Default (desktop) */
+.users-table {
+    font-size: 14px;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+    .users-table {
+        font-size: 12px;
+    }
+    .users-table th,
+    .users-table td {
+        padding: 6px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .table-container {
+        overflow-x: auto; /* Add horizontal scroll if needed */
+    }
+
+    .users-table {
+        width: 100%;
+        font-size: 11px;
+        border-collapse: collapse;
+    }
+
+    /* Hide less important columns on mobile */
+    .users-table th:nth-child(4),
+    .users-table td:nth-child(4),
+    .users-table th:nth-child(5),
+    .users-table td:nth-child(5) {
+        display: none;
+    }
+}
+

@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block extra_css %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
     <link rel="stylesheet" href="{% static 'css/security-dashboard-style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
@@ -19,7 +20,16 @@
     </style>
 {% endblock %}
 
+
 {% block content %}
+<!-- Mobile Menu Toggle Button -->
+<button class="mobile-menu-toggle" id="mobile-menu-toggle">
+    ☰
+</button>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
 <div class="main-content flex-grow-1 ms-uto">
     <div class="container-fluid py-1">
             <!-- Title & Top Bar -->
@@ -75,9 +85,10 @@
 {% block extra_js %}
     <script src="{% static 'javascript/base.js' %}"></script>
     <script src="{% static 'javascript/Admin_User.js' %}"></script>
-
-        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="{% static 'javascript/Security_Dashboard.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 
     <script>
         $(document).ready(function () {
