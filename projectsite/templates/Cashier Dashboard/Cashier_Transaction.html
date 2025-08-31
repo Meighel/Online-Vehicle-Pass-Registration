@@ -10,7 +10,10 @@
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
     <style>
-
+            /* Ensure main content shifts to the right of sidebar */
+        .dashboard-wrapper {
+            display: flex;
+        }
         .main-content {
             flex-grow: 1;
             padding: 20px;
@@ -20,54 +23,61 @@
         .dashboard-card {
             min-height: 140px;
         }
-
     </style>
 {% endblock %}
 
 {% block content %}
-<div class="main-content flex-grow-1 ms-uto">
-    <div class="container-fluid py-1">
-        <!-- Title & Top Bar -->
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-             <h2 class="title mb-3 mb-md-0">Transaction</h2>
-            <div class="d-flex align-items-center gap-3">
-                <!-- Notification Bell -->
-                <a href="Announcements.html" class="text-decoration-none text-light position-relative">
-                    <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
-                    <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
-                </a>
+<!-- Mobile Menu Toggle Button -->
+<button class="mobile-menu-toggle" id="mobile-menu-toggle">
+    ☰
+</button>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="dashboard-wrapper d-flex flex-wrap">
+    <div class="main-content flex-grow-1 p-3">
+        <div class="container-fluid">
+            <!-- Title & Top Bar -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+                <h2 class="title mb-3 mb-md-0">Manage Transaction</h2>
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Notification Bell -->
+                    <a href="Announcements.html" class="text-decoration-none text-light position-relative">
+                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
+                    </a>
+                </div>
             </div>
-        </div>
+            <hr>
+            <p><small><span id="date">{{ current_date }}</span></small></p>
 
-        <hr>
-        <small><span id="date"></span></small>
-        <br>
-
-        <!-- Payments Record Table -->
-        <section class="table-container">
-            <table id="myTable" class="transaction-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Username</th>
-                        <th>Status</th>
-                        <th>Processed By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for transaction in transaction_list %}
+            <!-- Payments Record Table -->
+            <section class="table-container">
+                <table id="myTable" class="transaction-table">
+                    <thead>
                         <tr>
-                            <td>{{ transaction.date_processed }}</td>
-                            <td>{{ transaction.registration.user.lastname }} , {{ transaction.registration.user.firstname }}</td>
-                            <td><button class="btn btn-success btn-sm">{{ transaction.status }}</button></td>
-                            <td>{{ transaction.cashier.user.firstname }} {{ transaction.cashier.user.lastname }}</td>
+                            <th>Date</th>
+                            <th>Username</th>
+                            <th>Status</th>
+                            <th>Processed By</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-        <!-- Pagination -->
-        {% include 'includes/pagination.html' %}
+                    </thead>
+                    <tbody>
+                        {% for transaction in transaction_list %}
+                            <tr>
+                                <td>{{ transaction.date_processed }}</td>
+                                <td>{{ transaction.registration.user.lastname }} , {{ transaction.registration.user.firstname }}</td>
+                                <td><button class="btn btn-success btn-sm">{{ transaction.status }}</button></td>
+                                <td>{{ transaction.cashier.user.firstname }} {{ transaction.cashier.user.lastname }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+            <!-- Pagination -->
+            {% include 'includes/pagination.html' %}
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -75,6 +85,9 @@
 {% block extra_js %}
     <script src="{% static 'javascript/base.js' %}"></script>
     <script src="{% static 'javascript/Cashier_Payment.js' %}"></script>
+    <script src="{% static 'javascript/Cashier_Transaction.js' %}"></script>
+    <script src="{% static 'javascript/Cashier_Dashboard.js' %}"></script>
+
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script>
