@@ -95,20 +95,6 @@
     <section id="features" class="py-5 features">
         <div class="container">
             <div class="row g-4 text-center">
-                <!-- Site Statistics -->
-                <div class="col-md-3 d-flex">
-                    <div class="card border-warning bg-black text-white shadow-sm w-100 h-100">
-                        <div class="card-body p-3 d-flex flex-column justify-content-center text-start">
-                            <h6 class="text-warning mb-2">Site Statistics</h6>
-                            <p class="mb-1"><strong>Total Visitors:</strong> {{ stats.total_visitors }}</p>
-                            <p class="mb-1"><strong>Visitors This Week:</strong> {{ stats.weekly_visitors }}</p>
-                            <p class="mb-1"><strong>Visitors This Month:</strong> {{ stats.monthly_visitors }}</p>
-                            <p class="mb-1"><strong>Total Logins:</strong> {{ stats.total_logins }}</p>
-                            <p class="mb-0"><strong>Logins This Week:</strong> {{ stats.weekly_logins }}</p>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Feature 1 -->
                 <div class="col-md-3 d-flex">
                     <a href="#secure-registration" class="feature-link w-100">
@@ -147,6 +133,20 @@
                         </div>
                     </a>
                 </div>
+
+                <!-- Site Statistics -->
+                <div class="col-md-3 d-flex">
+                    <div class="card border-warning bg-black text-white shadow-sm w-100 h-100">
+                        <div class="card-body p-3 d-flex flex-column justify-content-center text-start">
+                            <h6 class="text-warning mb-2">Site Statistics</h6>
+                            <p class="mb-1"><strong>Total Visitors:</strong> {{ stats.total_visitors }}</p>
+                            <p class="mb-1"><strong>Visitors This Week:</strong> {{ stats.weekly_visitors }}</p>
+                            <p class="mb-1"><strong>Visitors This Month:</strong> {{ stats.monthly_visitors }}</p>
+                            <p class="mb-1"><strong>Total Logins:</strong> {{ stats.total_logins }}</p>
+                            <p class="mb-0"><strong>Logins This Week:</strong> {{ stats.weekly_logins }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -154,7 +154,6 @@
 
 
     <!-- Pricing Section -->
-
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -165,7 +164,6 @@
                         <a href="#"><i class="fab fa-facebook fa-2x"></i></a>
                         <a href="#"><i class="fas fa-envelope fa-2x"></i></a>
                         <a href="#"><i class="fab fa-twitter fa-2x"></i></a>
-                        <a href="#"><i class="fab fa-github fa-2x"></i></a>
                     </div>
                 </div>
 
