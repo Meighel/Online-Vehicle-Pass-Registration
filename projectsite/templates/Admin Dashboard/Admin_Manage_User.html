@@ -9,87 +9,99 @@
     <link rel="stylesheet" href="{% static 'css/admin-dashboard-style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
-    <style>
+<style>
         /* Ensure main content shifts to the right of sidebar */
-        .dashboard-wrapper {
-            display: flex;
-        }
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-            margin-left: 120px;
-        }
-        /* Ensure cards and table have proper spacing */
-        .dashboard-card {
-            min-height: 140px;
-        }
-    </style>
+    .dashboard-wrapper {
+        display: flex;
+    }
+    .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        margin-left: 120px;
+    }
+    /* Ensure cards and table have proper spacing */
+    .dashboard-card {
+        min-height: 140px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="main-content flex-grow-1 ms-uto">
-    <div class="container-fluid py-1">
-        <!-- Title & Top Bar -->
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-             <h2 class="title mb-3 mb-md-0">Manage User</h2>
-            <div class="d-flex align-items-center gap-3">
-                <!-- Notification Bell -->
-                <a href="Announcements.html" class="text-decoration-none text-light position-relative">
-                    <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
-                    <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
-                </a>
+<!-- Mobile Menu Toggle Button -->
+<button class="mobile-menu-toggle" id="mobile-menu-toggle">
+    ☰
+</button>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="dashboard-wrapper d-flex">
+    <!-- Main Content -->
+    <div class="main-content flex-grow-1 ms-uto">
+        <div class="container-fluid py-1">
+            <!-- Title & Top Bar -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+                <h2 class="title mb-3 mb-md-0">Manage User</h2>
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Notification Bell -->
+                    <a href="Announcements.html" class="text-decoration-none text-light position-relative">
+                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
+                    </a>
+                </div>
             </div>
-        </div>
 
-        <hr>
-        <small><span id="date"></span></small>
-        <br>
+            <hr>
+            <small><span id="date"></span></small>
 
 
 
-        <div class="filter-container d-flex justify-content-end">
-            <a href="{% url 'admin_create_user' %}" class="btn btn-success">Add New User</a>
-        </div>
+            <div class="filter-container d-flex justify-content-end">
+                <a href="{% url 'admin_create_user' %}" class="btn btn-success">Add New User</a>
+            </div>
 
-        <section class="table-container">
-            <table id="myTable" class="users-table">
-                <thead>
-                    <tr>
-                        <th>Corporate Email</th>
-                        <th>Full Name</th>
-                        <th>Address</th>
-                        <th>Role</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for user in users %}
-                    <tr>
-                        <td>{{ user.corporate_email }}</td>
-                        <td>{{ user.lastname }}, {{ user.firstname }} {{ user.middle_name|slice:":1" }}.</td>
-                        <td>{{ user.address }}</td>
-                        <td>{{ user.role }}</td>
-                        <td>
-                            <a href="{% url 'admin_view_specific_user' user.pk %}" class="btn btn-info">View</a>
-                            <button class="btn btn-danger">Delete</button>
+            <section class="table-container">
+                <table id="myTable" class="users-table">
+                    <thead>
+                        <tr>
+                            <th>Corporate Email</th>
+                            <th>Full Name</th>
+                            <th>Address</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.corporate_email }}</td>
+                            <td>{{ user.lastname }}, {{ user.firstname }} {{ user.middle_name|slice:":1" }}.</td>
+                            <td>{{ user.address }}</td>
+                            <td>{{ user.role }}</td>
+                            <td>
+                                <a href="{% url 'admin_view_specific_user' user.pk %}" class="btn btn-info">View</a>
+                                <button class="btn btn-danger">Delete</button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                        <td colspan="5" style="text-align: center">
+                            <p class="text-sm font-weight-bold mb-0">No Records Found</p>
                         </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                      <td colspan="5" style="text-align: center">
-                        <p class="text-sm font-weight-bold mb-0">No Records Found</p>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
     <script src="{% static 'javascript/base.js' %}"></script>
+    <script src="{% static 'javascript/Admin_Dashboard.js' %}"></script>
+    
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 

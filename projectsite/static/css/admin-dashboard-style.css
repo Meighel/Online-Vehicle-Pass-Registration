@@ -14,7 +14,6 @@ body {
     transition: all 0.3s ease;
 }
 
-
 /* ========================================= */
 /*         Dashboard MAIN CONTENT            */
 /* ========================================= */
@@ -24,6 +23,14 @@ body {
     padding: 20px;
     transition: margin-left 0.3s ease, width 0.3s ease;
     width: calc(100% - 250px);
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 120px;
+    background-color: #000;
+    transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
 .title {
@@ -37,7 +44,6 @@ body {
     padding: 5px 10px; 
 }
 
-
 #date {
     font-size: 12px;
     color: rgb(213, 213, 213);
@@ -46,7 +52,6 @@ body {
     align-items: center; 
     margin-bottom: 5px;
 }
-
 
 .top-bar:hover .icons-container {
     opacity: 1;
@@ -68,6 +73,7 @@ body {
     color: #f2e570;
     border-color: #f2e570;
 }
+
 .status-badge {
     padding: 5px 10px;
     border-radius: 5px;
@@ -81,7 +87,6 @@ body {
 
 .status-rejected {
     background-color: red;
-
 }
 
 .status-pending {
@@ -117,7 +122,6 @@ body {
     cursor: pointer;
     font-size: 14px;
 }
-
 
 /* ========== Pagination ========== */
 .pagination {
@@ -186,13 +190,11 @@ body {
     background-color: #5a6268;
 }
 
-
 .table-container {
     background: rgb(0, 0, 0);
     padding: 2px;
     border-radius: 5px;
 }
-
 
 /* ========== Admin Search Bar ========== */
 .dashboard .btn {
@@ -202,7 +204,6 @@ body {
     gap: 5px;
     margin-top: 10px;
     height: 40px;
-
 }
 
 /* ========================================= */
@@ -307,11 +308,9 @@ body {
     padding-right: 15px;
 }
 
-
 /* ========================================= */
 /*          user table styling                */
 /* ========================================= */
-
 
 .users-table {
     width: 100%;
@@ -362,7 +361,6 @@ body {
 /* ========================================= */
 /*      payments page styling                */
 /* ========================================= */
-
 
 .payments-table {
     width: 100%;
@@ -462,173 +460,6 @@ body {
     padding-right: 15px;
 }
 
-
-/* ========== Responsive Design Enhancements ========== */
-
-/* Tablets and small desktops */
-@media (max-width: 1024px) {
-    .content {
-        width: 100%;
-        padding: 15px;
-    }
-
-    .title {
-        font-size: 26px;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .filter-container {
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        gap: 10px;
-    }
-
-    .entries-info {
-        text-align: center;
-    }
-
-    .search-container {
-        flex-wrap: wrap;
-    }
-}
-
-/* Tablets & landscape phones */
-@media (max-width: 768px) {
-    .sidebar {
-        display: none;
-    }
-
-    .content {
-        width: 100%;
-        margin-left: 0 !important;
-    }
-
-    .title {
-        font-size: 22px;
-        padding: 10px 0;
-    }
-
-    .table-container {
-        padding: 8px;
-        background-color: #000;
-    }
-
-    .application-table th,
-    .application-table td,
-    .passes-table th,
-    .passes-table td,
-    .users-table th,
-    .users-table td,
-    .payments-table th,
-    .payments-table td {
-        padding: 8px;
-        font-size: 13px;
-    }
-
-    #search-bar {
-        width: 100%;
-        height: 36px;
-        font-size: 13px;
-    }
-
-    .search-btn {
-        width: 100%;
-        height: 36px;
-        font-size: 13px;
-    }
-
-    .filter-container,
-    .search-container {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .btn-view,
-    .btn-approve,
-    .btn-reject,
-    .btn-delete {
-        padding: 6px 10px;
-        font-size: 13px;
-        width: 100%;
-    }
-
-    .pagination {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .pagination button {
-        padding: 6px 10px;
-        font-size: 12px;
-    }
-
-    .users-table td:nth-child(7),
-    .application-table td:nth-child(7),
-    .passes-table td:nth-child(7),
-    .payments-table td:nth-child(7) {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 6px;
-    }
-}
-
-/* Small phones */
-@media (max-width: 480px) {
-    .title {
-        font-size: 18px;
-    }
-
-    .status-badge {
-        font-size: 11px;
-        padding: 3px 6px;
-    }
-
-    .icon-btn {
-        font-size: 9px;
-        padding: 4px;
-    }
-
-    .btn-view,
-    .btn-approve,
-    .btn-reject,
-    .btn-delete {
-        font-size: 12px;
-        padding: 5px 8px;
-    }
-
-    .pagination button {
-        font-size: 11px;
-        padding: 5px 8px;
-    }
-
-    .dashboard .btn {
-        font-size: 12px;
-    }
-
-    .application-table td,
-    .passes-table td,
-    .users-table td,
-    .payments-table td {
-        font-size: 12px;
-    }
-
-    .application-table th,
-    .passes-table th,
-    .users-table th,
-    .payments-table th {
-        font-size: 13px;
-    }
-}
-
-/* Search Filtering and Pagination Function */
-.main-content {
-    flex-grow: 1;
-    padding: 20px;
-    margin-left: 120px;
-    background-color: #000;
-}
-        
 /* Override Bootstrap styles */
 .container-fluid {
     background-color: #000;
@@ -718,9 +549,336 @@ body {
     font-weight: bold;
 }
 
+/* ========================================= */
+/*       RESPONSIVE DESIGN WITH TOGGLE      */
+/* ========================================= */
 
-.container-fluid {
-    background-color: #000;
-    color: white;
+/* Extra Large screens (1200px and up) */
+@media (min-width: 1200px) {
+    .main-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        padding: 30px;
+    }
+    
+    .content {
+        width: calc(100% - 250px);
+        padding: 30px;
+    }
 }
-        
+
+/* Large screens (992px to 1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .main-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        padding: 25px;
+    }
+    
+    .content {
+        width: calc(100% - 250px);
+        padding: 25px;
+    }
+    
+    .title {
+        font-size: 28px !important;
+    }
+}
+
+/* Medium screens (768px to 991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+    .main-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        padding: 20px;
+    }
+    
+    .content {
+        width: calc(100% - 250px);
+        padding: 20px;
+    }
+    
+    .payment-container {
+        width: 90%;
+        max-width: 600px;
+    }
+    
+    .title {
+        font-size: 26px !important;
+    }
+}
+
+/* Small screens (576px to 767px) - Mobile */
+@media (max-width: 767px) {
+    .main-content {
+        margin-left: 0 !important;  /* Remove left margin completely */
+        width: 100% !important;     /* Full width */
+        padding: 60px 15px 15px;   /* Top padding for mobile toggle button */
+    }
+    
+    .content {
+        width: 100% !important;
+        margin-left: 0 !important;
+        padding: 60px 15px 15px;
+    }
+    
+    .title {
+        font-size: 24px !important;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    #search-bar {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    .filter-container {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .entries-info {
+        text-align: center;
+    }
+
+    .search-container {
+        flex-wrap: wrap;
+    }
+    
+    .profile-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .profile-info {
+        margin-top: 15px;
+        margin-left: 0 !important;
+    }
+    
+    .payment-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .payment-container {
+        width: 95%;
+        padding: 25px;
+    }
+    
+    .circles {
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .table-container {
+        padding: 8px;
+        background-color: #000;
+    }
+
+    .application-table th,
+    .application-table td,
+    .passes-table th,
+    .passes-table td,
+    .users-table th,
+    .users-table td,
+    .payments-table th,
+    .payments-table td,
+    .transaction-table th,
+    .transaction-table td {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .search-btn {
+        width: 100%;
+        height: 36px;
+        font-size: 13px;
+    }
+
+    .filter-container,
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-view,
+    .btn-approve,
+    .btn-reject,
+    .btn-delete {
+        padding: 6px 10px;
+        font-size: 13px;
+        width: 100%;
+    }
+
+    .pagination {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .pagination button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .users-table td:nth-child(7),
+    .application-table td:nth-child(7),
+    .passes-table td:nth-child(7),
+    .payments-table td:nth-child(7),
+    .transaction-table td:nth-child(7) {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+    }
+    
+    .dashboard-wrapper,
+    .main-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .mobile-menu-toggle {
+        z-index: 9999 !important;
+    }
+}
+
+/* Extra Small screens (up to 575px) */
+@media (max-width: 575px) {
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 60px 10px 10px;
+    }
+    
+    .content {
+        width: 100% !important;
+        margin-left: 0 !important;
+        padding: 60px 10px 10px;
+    }
+    
+    .dashboard-search {
+        width: 100%;
+        margin-top: 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    #search-bar {
+        width: 100%;
+        min-width: unset;
+    }
+    
+    .title {
+        font-size: 20px !important;
+        text-align: center;
+    }
+    
+    .payment-container {
+        width: 100%;
+        padding: 15px;
+        margin: 10px 0;
+    }
+    
+    .payment-message {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    .profile-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+        margin: 10px 0;
+    }
+    
+    .circles {
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .payment-header h3 {
+        font-size: 18px;
+    }
+    
+    /* Stack buttons vertically on very small screens */
+    .btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+    
+    .status-badge {
+        font-size: 11px;
+        padding: 3px 6px;
+    }
+
+    .icon-btn {
+        font-size: 9px;
+        padding: 4px;
+    }
+
+    .btn-view,
+    .btn-approve,
+    .btn-reject,
+    .btn-delete {
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+
+    .pagination button {
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+
+    .dashboard .btn {
+        font-size: 12px;
+    }
+
+    .application-table td,
+    .passes-table td,
+    .users-table td,
+    .payments-table td,
+    .transaction-table td {
+        font-size: 12px;
+    }
+
+    .application-table th,
+    .passes-table th,
+    .users-table th,
+    .payments-table th,
+    .transaction-table th {
+        font-size: 13px;
+    }
+}
+
+/* Ultra Small screens (up to 375px) */
+@media (max-width: 375px) {
+    .main-content {
+        margin-left: 0 !important;
+        padding: 60px 8px 8px;
+    }
+    
+    .content {
+        margin-left: 0 !important;
+        padding: 60px 8px 8px;
+    }
+    
+    .title {
+        font-size: 18px !important;
+    }
+    
+    .payment-container {
+        padding: 12px;
+    }
+    
+    .payment-message {
+        font-size: 13px;
+    }
+    
+    .profile-card {
+        padding: 12px;
+    }
+}
