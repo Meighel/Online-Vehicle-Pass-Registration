@@ -361,220 +361,163 @@ body {
     padding-right: 15px;
 }
 
+/* ========== Responsive Design for User Settings ========== */
 
-/* ========== Responsive Layout ========== */
-@media (max-width: 1024px) {
-    .content {
-        width: 100%;
-        padding: 15px;
-        margin-left: 0;
+/* Extra Large screens (1200px and up) */
+@media (min-width: 1200px) {
+    .main-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        padding: 30px;
+    }
+}
+
+/* Large screens (992px to 1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .main-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        padding: 25px;
+    }
+    
+    .title {
+        font-size: 28px !important;
+    }
+}
+
+/* Medium screens (768px to 991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+    .main-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        padding: 20px;
+    }
+    
+    .title {
+        font-size: 26px !important;
+    }
+
+    .profile-picture-container {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-picture {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+/* Small screens (576px to 767px) - Mobile */
+@media (max-width: 767px) {
+    .main-content {
+        margin-left: 0 !important;   /* remove sidebar margin */
+        width: 100% !important;
+        padding: 60px 15px 15px;    /* add top padding for mobile toggle */
     }
 
     .title {
-        font-size: 24px;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .filter-container {
-        flex-wrap: wrap;
-        justify-content: flex-start;
-    }
-
-    .pagination {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .entries-info {
+        font-size: 24px !important;
         text-align: center;
     }
-}
 
-@media (max-width: 768px) {
-    .sidebar {
-        display: none;
+    .profile-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
 
-    .content {
-        width: 100%;
+    .profile-picture-container {
+        margin-bottom: 15px;
+    }
+
+    .profile-info {
         margin-left: 0 !important;
     }
-    .title {
-        font-size: 20px;
-        padding: 10px 0;
-    }
 
-    .search-container {
+    .row {
         flex-direction: column;
-        align-items: stretch;
+    }
+
+    .col-md-6,
+    .col-md-4,
+    .col-md-3,
+    .col-md-2,
+    .col-md-1 {
         width: 100%;
-        gap: 8px;
     }
 
-    #search-bar {
+    .btn {
         width: 100%;
-        font-size: 14px;
-    }
-
-    .search-btn {
-        width: 100%;
-        font-size: 14px;
-    }
-
-    .users-table td,
-    .users-table th,
-    .inspection-table td,
-    .inspection-table th,
-    .release-table td,
-    .release-table th {
-        font-size: 12px;
-        padding: 8px;
-    }
-
-    .users-table td:nth-child(7),
-    .inspection-table td:nth-child(7),
-    .release-table td:nth-child(7) {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 5px;
+        margin: 5px 0;
     }
 }
 
-@media (max-width: 480px) {
+/* Extra Small screens (up to 575px) */
+@media (max-width: 575px) {
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 60px 10px 10px;
+    }
+
     .title {
-        font-size: 18px;
+        font-size: 20px !important;
+        text-align: center;
     }
 
-    .status-badge {
+    .profile-picture-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
+
+/* Ultra Small screens (up to 375px) */
+@media (max-width: 375px) {
+    .main-content {
+        margin-left: 0 !important;
+        padding: 60px 8px 8px;
+    }
+
+    .title {
+        font-size: 18px !important;
+    }
+
+    .btn {
         font-size: 12px;
-        padding: 3px 6px;
-    }
-
-    .btn-view,
-    .btn-approve,
-    .btn-reject,
-    .btn-delete {
-        padding: 6px 8px;
-        font-size: 12px;
-    }
-
-    .pagination button {
         padding: 6px 10px;
-        font-size: 12px;
     }
 
-    .dashboard .btn {
-        font-size: 13px;
+    .profile-picture-container {
+        width: 80px;
+        height: 80px;
     }
 
-    img {
-        width: 100%;
-        height: auto;
-        display: block;
+    .profile-picture {
+        width: 80px;
+        height: 80px;
     }
 }
 
-/* Search Filtering and Pagination Function */
-.main-content {
-    flex-grow: 1;
-    padding: 20px;
-    margin-left: 120px;
-    background-color: #000;
-}
-        
-/* Override Bootstrap styles */
-.container-fluid {
-    background-color: #000;
-    color: white;
-}
+/* Mobile menu layering fix */
+@media (max-width: 767px) {
+    .dashboard-wrapper,
+    .main-content {
+        position: relative;
+        z-index: 1;
+    }
 
-/* Layout adjustments */
-.dataTables_wrapper .top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+    .mobile-menu-toggle {
+        z-index: 9999 !important;
+    }
 }
-
-.dataTables_wrapper .bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.dataTables_paginate {
-    margin-left: auto;
-}
-
-.dataTables_info {
-    margin-right: auto;
-    color: #ccc;
-}
-
-/* Adjust "Show entries" dropdown */
-.dataTables_length label {
-    color: white;
-    font-size: 14px;
-}
-
-.dataTables_length select {
-    background-color: #000;
-    color: white;
-    border: 1px solid #444;
-    border-radius: 4px;
-    padding: 4px 6px;
-}
-
-/* Adjust search input */
-.dataTables_filter {
-    text-align: right;
-}
-
-.dataTables_filter label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: white;
-    font-size: 14px;
-}
-
-/* Enlarged search icon */
-.dataTables_filter label::before {
-    content: "🔍";
-    font-size: 20px;
-    display: inline-block;
-}
-
-/* Longer search box */
-.dataTables_filter input {
-    width: 220px; /* make search bar longer */
-    background-color: #1e1e1e;
-    color: white;
-    border: 2px solid yellow;
-    border-radius: 4px;
-    padding: 6px 10px;
-}
-
-.dataTables_paginate a {
-    background-color: #292929;
-    color: yellow !important;
-    border: 1px solid #444;
-    margin: 2px;
-    padding: 4px 8px;
-    border-radius: 4px;
-    text-decoration: none;
-}
-.dataTables_paginate .current {
-    background-color: yellow;
-    color: black !important;
-    font-weight: bold;
-}
-
-
-.container-fluid {
-    background-color: #000;
-    color: white;
-}
-        
