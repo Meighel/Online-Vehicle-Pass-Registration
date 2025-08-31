@@ -73,6 +73,16 @@ body {
   filter: invert(1);
 }
 
+.navbar.sticky-top {
+  background: black;
+}
+
+.navbar.sticky-top.scrolled {
+  background: black;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
 /* ========================================= */
 /*              HERO SECTION                 */
 /* ========================================= */
