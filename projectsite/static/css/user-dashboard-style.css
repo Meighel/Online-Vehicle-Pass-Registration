@@ -471,3 +471,15 @@ body {
         padding: 12px;
     }
 }
+
+@media (max-width: 767px) {
+    .dashboard-wrapper,
+    .main-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .mobile-menu-toggle {
+        z-index: 9999 !important;
+    }
+}

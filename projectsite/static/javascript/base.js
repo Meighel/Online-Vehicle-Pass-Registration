@@ -63,21 +63,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 // }
 
 // 📌 Sidebar toggle functionality
-function setupSidebarToggle() {
-    const sidebar = document.getElementById("sidebar");
-    const toggleBtn = document.getElementById("toggle-btn");
+// function setupSidebarToggle() {
+//     const sidebar = document.getElementById("sidebar");
+//     const toggleBtn = document.getElementById("toggle-btn");
 
-    if (!sidebar || !toggleBtn) return;
+//     if (!sidebar || !toggleBtn) return;
 
-    toggleBtn.addEventListener("click", () => {
-        sidebar.classList.toggle("collapsed");
-        localStorage.setItem("sidebarState", sidebar.classList.contains("collapsed") ? "collapsed" : "expanded");
-    });
+//     toggleBtn.addEventListener("click", () => {
+//         sidebar.classList.toggle("collapsed");
+//         localStorage.setItem("sidebarState", sidebar.classList.contains("collapsed") ? "collapsed" : "expanded");
+//     });
 
-    if (localStorage.getItem("sidebarState") === "collapsed") {
-        sidebar.classList.add("collapsed");
-    }
-}
+//     if (localStorage.getItem("sidebarState") === "collapsed") {
+//         sidebar.classList.add("collapsed");
+//     }
+// }
 
 // Highlight active sidebar menu & navigate
 function setupSidebarHighlight() {

@@ -459,6 +459,6 @@
     }
     
     .sidebar-overlay.active {
-        display: block;
+        display: transparent !important;
     }
 }
