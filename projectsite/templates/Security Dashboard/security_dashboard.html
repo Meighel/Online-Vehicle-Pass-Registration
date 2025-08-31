@@ -24,6 +24,14 @@
 {% endblock %}
 
 {% block content %}
+<!-- Mobile Menu Toggle Button -->
+<button class="mobile-menu-toggle" id="mobile-menu-toggle">
+    ☰
+</button>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
 <div class="dashboard-wrapper d-flex flex-wrap">
     <div class="main-content flex-grow-1 p-3">
         <div class="container-fluid">
@@ -113,7 +121,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <!-- Add JavaScript for dynamic updates -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -158,8 +168,6 @@
     });
 </script>
 
-
-    <script src="../../static/javascript/securitydashboard.js"></script> 
-    <script src="../../static/javascript/base.js"></script>  <!--THIS IS USE TO FETCH THE SIDEBAR FROM BASE.JS-->
-
+<script src="../../static/javascript/Security_Dashboard.js"></script> 
+<script src="../../static/javascript/base.js"></script>  <!--THIS IS USE TO FETCH THE SIDEBAR FROM BASE.JS-->
 {% endblock %}

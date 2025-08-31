@@ -13,6 +13,10 @@
 </head>
 <body>
 
+<button class="mobile-menu-toggle" id="mobile-menu-toggle">
+    ☰
+</button>
+
 <!-- Sidebar -->
 
 <div class="sidebar" id="sidebar">
@@ -83,8 +87,11 @@
     {% block content %}{% endblock %}
 </div>
 
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+{% block extra_js %}
 <script src="{% static 'javascript/base.js' %}"></script>
-{% block extra_js %}{% endblock %}
+{% endblock %}
 
 </body>
 </html>
