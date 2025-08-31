@@ -13,8 +13,10 @@
 </head>
 <body>
 
+<button class="mobile-menu-toggle" id="mobile-menu-toggle">
+    ☰
+</button>
 <!-- Sidebar -->
-
 <div class="sidebar" id="sidebar">
     <a href="#">
         <img src="{% static 'images/navbar-brand img.png' %}" class="img-fluid" style="width: 100px; margin-left: 20px;">
@@ -77,7 +79,8 @@
 </div>
 
 
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
 {% block extra_js %}
 <script src="{% static 'javascript/base.js' %}"></script>
-
 {% endblock %}

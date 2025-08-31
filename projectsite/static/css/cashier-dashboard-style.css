@@ -615,3 +615,184 @@ body {
     color: white;
 }
         
+/* ========== Responsive Design ========== */
+/* Extra Large screens (1200px and up) */
+@media (min-width: 1200px) {
+    .main-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        padding: 30px;
+    }
+}
+
+/* Large screens (992px to 1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .main-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        padding: 25px;
+    }
+    
+    .title {
+        font-size: 28px !important;
+    }
+}
+
+/* Medium screens (768px to 991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+    .main-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        padding: 20px;
+    }
+    
+    .payment-container {
+        width: 90%;
+        max-width: 600px;
+    }
+    
+    .title {
+        font-size: 26px !important;
+    }
+}
+
+/* Small screens (576px to 767px) - Mobile */
+@media (max-width: 767px) {
+    .main-content {
+        margin-left: 0 !important;  /* Remove left margin completely */
+        width: 100% !important;     /* Full width */
+        padding: 60px 15px 15px;   /* Top padding for mobile toggle button */
+    }
+    
+    .title {
+        font-size: 24px !important;
+    }
+    
+    #search-bar {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    
+    .profile-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .profile-info {
+        margin-top: 15px;
+        margin-left: 0 !important;
+    }
+    
+    .payment-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .payment-container {
+        width: 95%;
+        padding: 25px;
+    }
+    
+    .circles {
+        justify-content: center;
+        gap: 10px;
+    }
+}
+
+/* Extra Small screens (up to 575px) */
+@media (max-width: 575px) {
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 60px 10px 10px;
+    }
+    
+    .dashboard-search {
+        width: 100%;
+        margin-top: 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    #search-bar {
+        width: 100%;
+        min-width: unset;
+    }
+    
+    .title {
+        font-size: 20px !important;
+        text-align: center;
+    }
+    
+    .payment-container {
+        width: 100%;
+        padding: 15px;
+        margin: 10px 0;
+    }
+    
+    .payment-message {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    .profile-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+        margin: 10px 0;
+    }
+    
+    .circles {
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .payment-header h3 {
+        font-size: 18px;
+    }
+    
+    /* Stack buttons vertically on very small screens */
+    .btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* Ultra Small screens (up to 375px) */
+@media (max-width: 375px) {
+    .main-content {
+        margin-left: 0 !important;
+        padding: 60px 8px 8px;
+    }
+    
+    .title {
+        font-size: 18px !important;
+    }
+    
+    .payment-container {
+        padding: 12px;
+    }
+    
+    .payment-message {
+        font-size: 13px;
+    }
+    
+    .profile-card {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 767px) {
+    .dashboard-wrapper,
+    .main-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .mobile-menu-toggle {
+        z-index: 9999 !important;
+    }
+}

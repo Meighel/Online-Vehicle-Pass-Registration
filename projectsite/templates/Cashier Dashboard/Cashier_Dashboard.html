@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{% static 'css/cashier-dashboard-style.css' %}">
 <link rel="icon" href="{% static 'images/favicon.png' %}">
 <style>
-    /* Ensure main content shifts to the right of sidebar */
+        /* Ensure main content shifts to the right of sidebar */
     .dashboard-wrapper {
         display: flex;
     }
@@ -24,6 +24,14 @@
 {% endblock %}
 
 {% block content %}
+<!-- Mobile Menu Toggle Button -->
+<button class="mobile-menu-toggle" id="mobile-menu-toggle">
+    ☰
+</button>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
 <div class="dashboard-wrapper d-flex flex-wrap">
     <div class="main-content flex-grow-1 p-3">
         <div class="container-fluid">
@@ -138,6 +146,7 @@
     <!-- Scripts -->
     <script src="{% static 'javascript/base.js' %}"></script>
     <script src="{% static 'javascript/Cashier_Dashboard.js' %}"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
