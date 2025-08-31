@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-qdrfftacyt9kn(00pc7cn#dm_p-^!eg#n9b%_hth-=+%!=wtk+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['VeripassOfficial.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['VeripassPortal.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
