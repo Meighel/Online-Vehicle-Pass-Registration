@@ -12,11 +12,13 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-
+<button class="mobile-menu-toggle" id="mobile-menu-toggle">
+    ☰
+</button>
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <a href="#">
-        <img src="{% static 'images/navbar-brand img.png' %}" class="img-fluid" style="width: 100px; margin-left: 20px;">
+        <img src="{% static 'images/navbar-brand img.png' %}" class="img-fluid" style="width: 150px; margin-left: 20px;">
     </a>
     <p>Main Menu</p>
     <ul>
@@ -68,7 +70,11 @@
 </div>
 
 
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
 {% block extra_js %}
 <script src="{% static 'javascript/base.js' %}"></script>
 {% endblock %}
+
+</body>
 </html>
