@@ -45,9 +45,9 @@
             </button>
             <div class="collapse navbar-collapse text-center" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#features">FAQ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#pricing">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#faq">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'faq' %}">FAQ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
                 </ul>
             </div>
             <a class="btn btn-warning text-dark fw-bold ms-4 d-none d-lg-block" href="{% url 'signup' %}">Signup</a>
