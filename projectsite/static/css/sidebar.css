@@ -39,7 +39,6 @@
 .mobile-menu-toggle:hover {
     background: #333;
 }
-
 /* Sidebar Menu Items */
 .sidebar ul {
     list-style: none;
@@ -64,6 +63,23 @@
     margin-left: 3%;
     margin-right: 3%;
     align-items: center;
+}
+
+/* Add Option 2 here - Remove Bootstrap collapse trigger styling */
+.sidebar a[data-bs-toggle="collapse"] {
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.sidebar a[data-bs-toggle="collapse"]:focus,
+.sidebar a[data-bs-toggle="collapse"]:active,
+.sidebar a[data-bs-toggle="collapse"]:hover {
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    text-decoration: none !important;
 }
 
 .sidebar p {
