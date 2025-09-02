@@ -39,6 +39,7 @@
 .mobile-menu-toggle:hover {
     background: #333;
 }
+
 /* Sidebar Menu Items */
 .sidebar ul {
     list-style: none;
@@ -65,7 +66,7 @@
     align-items: center;
 }
 
-/* Add Option 2 here - Remove Bootstrap collapse trigger styling */
+/* Remove Bootstrap collapse trigger styling */
 .sidebar a[data-bs-toggle="collapse"] {
     outline: none !important;
     box-shadow: none !important;
@@ -80,6 +81,43 @@
     box-shadow: none !important;
     background-color: transparent !important;
     text-decoration: none !important;
+}
+
+/* Style the dropdown/collapse menu items */
+.sidebar #settingsMenu li {
+    padding: 8px 20px;
+    margin: 5px 0;
+    margin-left: 30px; /* Additional indentation */
+}
+
+.sidebar #settingsMenu li a {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 16px !important;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: normal !important;
+}
+
+/* Remove all highlight effects from dropdown items */
+.sidebar #settingsMenu li a:hover,
+.sidebar #settingsMenu li a:focus,
+.sidebar #settingsMenu li a:active {
+    background-color: transparent !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-decoration: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Override the parent hover effects for dropdown items */
+.sidebar #settingsMenu li:hover {
+    background: transparent !important;
+    cursor: pointer;
+    border-radius: 0 !important;
+}
+
+.sidebar #settingsMenu li:hover a {
+    color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .sidebar p {

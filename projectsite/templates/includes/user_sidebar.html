@@ -35,11 +35,11 @@
             </a>
         </li>
         <li data-menu="usersettings">
-            <a data-bs-toggle="collapse" href="#settingsMenu" role="button" aria-expanded="false" aria-controls="settingsMenu">
+            <a data-bs-toggle="collapse" data-bs-target="#settingsMenu" role="button" aria-expanded="false" aria-controls="settingsMenu">
                 <img src="{% static 'images/settings.png' %}" alt="Settings" width="25">
                 <span>Settings</span>
             </a>
-            <ul class="collapse list-unstyled ps-4" id="settingsMenu">
+            <ul class="collapse list-unstyled" id="settingsMenu">
                 <li><a href="#">Profile</a></li>
                 <li><a href="#">Security</a></li>
                 <li><a href="#">Notifications</a></li>
