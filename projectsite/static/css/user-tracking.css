@@ -1,0 +1,240 @@
+/* Ensure main content shifts to the right of sidebar */
+.dashboard-wrapper {
+    display: flex;
+}
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 120px;
+}
+/* Ensure cards and table have proper spacing */
+.dashboard-card {
+    min-height: 140px;
+}
+
+/* Progress Tracker Styles */
+.progress-tracker {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30px 0;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 120px;
+    position: relative;
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.step-icon.completed {
+    background: #28a745;
+    color: white;
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
+}
+
+.step-icon.current {
+    background: #ffc107;
+    color: #333;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+}
+
+.step-icon.pending {
+    background: #6c757d;
+    color: white;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.step-label {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 5px;
+    max-width: 100px;
+    line-height: 1.2;
+}
+
+.step-date {
+    font-size: 10px;
+    opacity: 0.8;
+    margin-top: 3px;
+}
+
+/* Progress Line */
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 25px;
+    right: -50%;
+    width: 100%;
+    height: 3px;
+    background: #6c757d;
+    z-index: 1;
+}
+
+.step.completed:not(:last-child)::after {
+    background: #28a745;
+}
+
+/* Timeline Details */
+.timeline-toggle {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.timeline-toggle:hover {
+    background: rgba(255,255,255,0.3);
+    color: white;
+}
+
+.timeline-details {
+    margin-top: 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.timeline-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.timeline-item:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.timeline-item.completed {
+    border-left: 4px solid #28a745;
+}
+
+.timeline-item.current {
+    border-left: 4px solid #ffc107;
+    background: rgba(255,193,7,0.1);
+}
+
+.timeline-item.pending {
+    border-left: 4px solid #6c757d;
+    opacity: 0.7;
+}
+
+.timeline-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.timeline-content h6 {
+    margin: 0 0 5px 0;
+    font-weight: 600;
+}
+
+.timeline-content p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.timeline-content small {
+    opacity: 0.7;
+    font-size: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .progress-steps {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .step {
+        width: 100%;
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+    }
+
+    .step-icon {
+        margin-right: 15px;
+        margin-bottom: 0;
+    }
+
+    .step:not(:last-child)::after {
+        display: none;
+    }
+
+    .step-label {
+        text-align: left;
+        max-width: none;
+    }
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.submitted { background: #17a2b8; color: white; }
+.status-badge.reviewing { background: #fd7e14; color: white; }
+.status-badge.payment { background: #6f42c1; color: white; }
+.status-badge.confirmed { background: #20c997; color: white; }
+.status-badge.inspection { background: #ffc107; color: #333; }
+.status-badge.approved { background: #28a745; color: white; }
+.status-badge.disapproved { background: #dc3545; color: white; }

@@ -5,6 +5,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/user-dashboard-style.css' %}">
+<link rel="stylesheet" href="{% static 'css/user-tracking.css' %}">
 <link rel="icon" href="{% static 'images/favicon.png' %}">
 <style>
         /* Ensure main content shifts to the right of sidebar */
@@ -51,49 +52,251 @@
             <hr class="border-secondary">
             <small><span id="date" class="text-light"></span></small>
 
-            <!-- Profile Card -->
-            <div class="card profile-card p-4 mt-4 shadow-sm position-relative">
+            <!-- Progress Tracker Card -->
+            {% if registration %}
+            <div class="progress-tracker">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0">
+                        <i class="fas fa-route me-2"></i>
+                        Application Progress
+                    </h4>
+                    <span class="status-badge {{ registration.status|lower|cut:' ' }}">
+                        {{ registration.status }}
+                    </span>
+                </div>
+                
+                <p class="mb-4 opacity-75">
+                    Track your vehicle pass registration progress in real-time
+                </p>
 
-                <!-- Edit Button in the upper right -->
-                <a href="#" class="btn btn-sm btn-primary position-absolute top-0 end-0 m-3">
-                    Edit Profile
-                </a>
-
-                <!-- Profile Content -->
-                <div class="d-flex flex-row align-items-center">
-                    <div class="rounded-circle overflow-hidden border border-light" style="width: 100px; height: 100px;">
-                        <img src="{% static 'images/student.png' %}" class="w-100 h-100 object-fit-cover" alt="User">
+                <!-- Progress Steps -->
+                <div class="progress-steps">
+                    <div class="step">
+                        <div class="step-icon completed">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="step-label">Application Submitted</div>
+                        <div class="step-date">{{ registration.created_at|date:"M j, Y" }}</div>
                     </div>
-                    <div class="profile-info ms-4">
-                        <p class="fs-5 fw-bold">Name: {{ profile.firstname }} {{ profile.lastname }}</p>
 
-                        {% if profile.school_role == "student" %}
-                            <p>Student ID: {{ profile.corporate_email|slice:":9" }}</p>
-                            <p>Driver License Number: {{ profile.dl_number }}</p>
-                            <p>College: {{ profile.college }}</p>
-                            <p>Program: {{ profile.program }}</p>
-                            <p>Role: Student</p>
+                    <div class="step {% if registration.status == 'Under Review' or registration.status == 'Approved' or registration.status == 'Payment Required' %}completed{% elif registration.status == 'Submitted' %}current{% else %}pending{% endif %}">
+                        <div class="step-icon {% if registration.status == 'Under Review' or registration.status == 'Approved' or registration.status == 'Payment Required' %}completed{% elif registration.status == 'Submitted' %}current{% else %}pending{% endif %}">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="step-label">Document Review</div>
+                        <div class="step-date">
+                            {% if registration.review_date %}
+                                {{ registration.review_date|date:"M j, Y" }}
+                            {% else %}
+                                Pending
+                            {% endif %}
+                        </div>
+                    </div>
 
-                        {% elif profile.school_role == "faculty" %}
-                            <p>Faculty ID: {{ profile.corporate_email|slice:":9" }}</p>
-                            <p>Driver License Number: {{ profile.dl_number }}</p>
-                            <p>Department: {{ profile.department }}</p>
-                            <p>Role: Faculty</p>
+                    <div class="step {% if registration.status == 'Payment Required' %}current{% elif registration.status == 'Payment Confirmed' or registration.status == 'Approved' %}completed{% else %}pending{% endif %}">
+                        <div class="step-icon {% if registration.status == 'Payment Required' %}current{% elif registration.status == 'Payment Confirmed' or registration.status == 'Approved' %}completed{% else %}pending{% endif %}">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="step-label">Payment</div>
+                        <div class="step-date">
+                            {% if registration.payment_date %}
+                                {{ registration.payment_date|date:"M j, Y" }}
+                            {% else %}
+                                Pending
+                            {% endif %}
+                        </div>
+                    </div>
 
-                        {% elif profile.school_role == "university personnel" %}
-                            <p>Personnel ID: {{ profile.corporate_email|slice:":9" }}</p>
-                            <p>Driver License Number: {{ profile.dl_number }}</p>
-                            <p>Department: {{ profile.department }}</p>
-                            <p>Role: University Personnel</p>
-                        {% endif %}
+                    <div class="step {% if registration.status == 'Payment Confirmed' %}current{% elif registration.status == 'Approved' %}completed{% else %}pending{% endif %}">
+                        <div class="step-icon {% if registration.status == 'Payment Confirmed' %}current{% elif registration.status == 'Approved' %}completed{% else %}pending{% endif %}">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="step-label">Payment Confirmed</div>
+                        <div class="step-date">
+                            {% if registration.payment_confirmed_date %}
+                                {{ registration.payment_confirmed_date|date:"M j, Y" }}
+                            {% else %}
+                                Pending
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="step {% if registration.status == 'For Inspection' %}current{% elif registration.status == 'Approved' %}completed{% else %}pending{% endif %}">
+                        <div class="step-icon {% if registration.status == 'For Inspection' %}current{% elif registration.status == 'Approved' %}completed{% else %}pending{% endif %}">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="step-label">Physical Inspection</div>
+                        <div class="step-date">
+                            {% if inspection.physical_final_inspection_date %}
+                                {{ inspection.physical_final_inspection_date|date:"M j, Y" }}
+                            {% else %}
+                                TBD
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="step {% if registration.status == 'Approved' %}completed{% elif registration.status == 'Disapproved' %}completed{% else %}pending{% endif %}">
+                        <div class="step-icon {% if registration.status == 'Approved' %}completed{% elif registration.status == 'Disapproved' %}completed{% else %}pending{% endif %}">
+                            {% if registration.status == 'Approved' %}
+                                <i class="fas fa-check"></i>
+                            {% elif registration.status == 'Disapproved' %}
+                                <i class="fas fa-times"></i>
+                            {% else %}
+                                <i class="fas fa-star"></i>
+                            {% endif %}
+                        </div>
+                        <div class="step-label">Final Decision</div>
+                        <div class="step-date">
+                            {% if registration.final_decision_date %}
+                                {{ registration.final_decision_date|date:"M j, Y" }}
+                            {% else %}
+                                Pending
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expandable Timeline -->
+                <button class="timeline-toggle" id="toggleTimeline">
+                    <i class="fas fa-chevron-down me-2"></i>
+                    View Detailed Timeline
+                </button>
+
+                <div class="timeline-details" id="timelineDetails" style="display: none;">
+                    <h6 class="mb-3"><i class="fas fa-history me-2"></i>Process Timeline</h6>
+                    
+                    <div class="timeline-item completed">
+                        <div class="timeline-icon" style="background: #28a745; color: white;">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Application Submitted</h6>
+                            <p>Your vehicle pass registration form has been successfully submitted.</p>
+                            <small>{{ registration.created_at|date:"F j, Y - g:i A" }}</small>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item {% if registration.status == 'Under Review' or registration.status == 'Approved' or registration.status == 'Payment Required' %}completed{% elif registration.status == 'Submitted' %}current{% else %}pending{% endif %}">
+                        <div class="timeline-icon" style="background: {% if registration.status == 'Under Review' or registration.status == 'Approved' or registration.status == 'Payment Required' %}#28a745{% elif registration.status == 'Submitted' %}#ffc107{% else %}#6c757d{% endif %}; color: {% if registration.status == 'Submitted' %}#333{% else %}white{% endif %};">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Document Review</h6>
+                            <p>Security personnel are reviewing your submitted documents for compliance.</p>
+                            <small>
+                                {% if registration.review_date %}
+                                    {{ registration.review_date|date:"F j, Y - g:i A" }}
+                                {% else %}
+                                    Waiting for review
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item {% if registration.status == 'Payment Required' %}current{% elif registration.status == 'Payment Confirmed' or registration.status == 'Approved' %}completed{% else %}pending{% endif %}">
+                        <div class="timeline-icon" style="background: {% if registration.status == 'Payment Required' %}#ffc107{% elif registration.status == 'Payment Confirmed' or registration.status == 'Approved' %}#28a745{% else %}#6c757d{% endif %}; color: {% if registration.status == 'Payment Required' %}#333{% else %}white{% endif %};">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Payment Processing</h6>
+                            <p>Complete payment at the cashier's office to proceed with your application.</p>
+                            <small>
+                                {% if registration.payment_date %}
+                                    {{ registration.payment_date|date:"F j, Y - g:i A" }}
+                                {% else %}
+                                    Payment required after document approval
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item {% if registration.status == 'Payment Confirmed' %}current{% elif registration.status == 'Approved' %}completed{% else %}pending{% endif %}">
+                        <div class="timeline-icon" style="background: {% if registration.status == 'Payment Confirmed' %}#ffc107{% elif registration.status == 'Approved' %}#28a745{% else %}#6c757d{% endif %}; color: {% if registration.status == 'Payment Confirmed' %}#333{% else %}white{% endif %};">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Payment Confirmation</h6>
+                            <p>Your payment has been verified and confirmed by the cashier.</p>
+                            <small>
+                                {% if registration.payment_confirmed_date %}
+                                    {{ registration.payment_confirmed_date|date:"F j, Y - g:i A" }}
+                                {% else %}
+                                    Pending payment confirmation
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item {% if registration.status == 'For Inspection' %}current{% elif registration.status == 'Approved' %}completed{% else %}pending{% endif %}">
+                        <div class="timeline-icon" style="background: {% if registration.status == 'For Inspection' %}#ffc107{% elif registration.status == 'Approved' %}#28a745{% else %}#6c757d{% endif %}; color: {% if registration.status == 'For Inspection' %}#333{% else %}white{% endif %};">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Physical Vehicle Inspection</h6>
+                            <p>
+                                {% if inspection.physical_final_inspection_date %}
+                                    Scheduled for physical inspection of your vehicle.
+                                {% else %}
+                                    Physical inspection will be scheduled after payment confirmation.
+                                {% endif %}
+                            </p>
+                            <small>
+                                {% if inspection.physical_final_inspection_date %}
+                                {% else %}
+                                    Date to be determined
+                                {% endif %}
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item {% if registration.status == 'Approved' %}completed{% elif registration.status == 'Disapproved' %}completed{% else %}pending{% endif %}">
+                        <div class="timeline-icon" style="background: {% if registration.status == 'Approved' %}#28a745{% elif registration.status == 'Disapproved' %}#dc3545{% else %}#6c757d{% endif %}; color: white;">
+                            {% if registration.status == 'Approved' %}
+                                <i class="fas fa-check"></i>
+                            {% elif registration.status == 'Disapproved' %}
+                                <i class="fas fa-times"></i>
+                            {% else %}
+                                <i class="fas fa-star"></i>
+                            {% endif %}
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Final Decision</h6>
+                            <p>
+                                {% if registration.status == 'Approved' %}
+                                    Congratulations! Your vehicle pass has been approved.
+                                {% elif registration.status == 'Disapproved' %}
+                                    Your application has been disapproved. Please contact the office for details.
+                                {% else %}
+                                    Final approval or disapproval after inspection.
+                                {% endif %}
+                            </p>
+                            <small>
+                                {% if registration.final_decision_date %}
+                                    {{ registration.final_decision_date|date:"F j, Y - g:i A" }}
+                                {% else %}
+                                    Pending final decision
+                                {% endif %}
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
 
-
-
-            <!-- Status & Quick Access -->
+            <!-- Quick Access & Status -->
             <div class="row mt-4 g-4">
+                <div class="col-md-6">
+                    <div class="card quick-access-card h-100 border-info shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title d-flex align-items-center">
+                                📝 <span class="ms-2">Quick Access</span>
+                            </h5>
+                            <p class="mt-3">Apply for a new vehicle pass easily.</p>
+                            <a href="{% url 'vehicle_registration_step_1' %}" class="btn btn-apply mt-2">Apply Now</a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-md-6">
                     <div class="card status-card h-100 border-danger shadow-sm">
                         <div class="card-body">
@@ -111,7 +314,6 @@
                             </p>
                             {% if inspection %}
                                 <p class="text small mt-3">
-                                    Physical Inspection Date: {{ inspection.physical_final_inspection_date|date:"F j, Y" }}
                                 </p>
                             {% else %}
                                 <p class="text small mt-3 text-muted">
@@ -119,63 +321,6 @@
                                 </p>
                             {% endif %}
                         </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="card quick-access-card h-100 border-info shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title d-flex align-items-center">
-                                📝 <span class="ms-2">Quick Access</span>
-                            </h5>
-                            <p class="mt-3">Apply for a new vehicle pass easily.</p>
-                            <a href="{% url 'vehicle_registration_step_1' %}" class="btn btn-apply mt-2">Apply Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Application History -->
-            <div class="card mt-4 border-secondary shadow-sm">
-                <div class="card-header bg-dark">
-                    <h5 class="mb-0">Application History</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle text-center">
-                            <thead>
-                                <tr>
-                                    <th>Application No.</th>
-                                    <th>Vehicle Type</th>
-                                    <th>Approval Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% if history %}
-                                    {% for app in history %}
-                                    <tr>
-                                        <td>{{ app.registrationNumber }}</td>
-                                        <td>{{ app.vehicle.type }}</td>
-                                        <td>
-                                            {% if app.status == 'approved' %}
-                                                {{ app.updated_at|date:"Y-m-d" }}
-                                            {% else %}
-                                                <span class="text-success">Pending</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-{{ app.status|slugify }}" style="color:black">
-                                                {{ app.status|title }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr><td colspan="4" class="text-center py-3">No history found.</td></tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -189,4 +334,29 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script src="{% static 'javascript/User_Dashboard.js' %}"></script>
+    
+    <script>
+        // Toggle Timeline Details
+        document.getElementById('toggleTimeline').addEventListener('click', function() {
+            const timeline = document.getElementById('timelineDetails');
+            const button = this;
+            const icon = button.querySelector('i');
+            
+            if (timeline.style.display === 'none') {
+                timeline.style.display = 'block';
+                button.innerHTML = '<i class="fas fa-chevron-up me-2"></i>Hide Detailed Timeline';
+            } else {
+                timeline.style.display = 'none';
+                button.innerHTML = '<i class="fas fa-chevron-down me-2"></i>View Detailed Timeline';
+            }
+        });
+
+        // Set current date
+        document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    </script>
 {% endblock %}
