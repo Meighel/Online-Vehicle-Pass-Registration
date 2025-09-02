@@ -194,6 +194,7 @@ body {
     background: rgb(0, 0, 0);
     padding: 2px;
     border-radius: 5px;
+    overflow-x: auto; /* Add horizontal scroll for mobile */
 }
 
 /* ========== Admin Search Bar ========== */
@@ -207,212 +208,14 @@ body {
 }
 
 /* ========================================= */
-/*         application page styling          */
+/*         SHARED TABLE STYLING              */
 /* ========================================= */
 
-.application-table {
-    width: 100%;
-    border-collapse: separate;
-    border-radius: 5px;
-    background-color: #292929;
-    color: white;
-    padding-top: 30px;
-}
-
-.application-table th {
-    font-weight: bold;
-    padding: 14px;
-    color: yellow;
-    font-size: 16px;
-}
-.application-table td {
-    padding: 12px;
-    font-size: 15px;
-}
-
-.application-table tr {
-    color: white;
-}
-.application-table tbody tr:nth-child(odd) {
-    background-color: #1e1e1e !important;
-}
-
-.application-table tbody tr:nth-child(even) {
-    background-color: #1e1e1e !important; 
-}
-
-.application-table th:first-child {
-    cursor: pointer;
-}
-
-.application-table th:nth-child(7),
-.application-table td:nth-child(7) { 
-    text-align: center;
-}
-
-.application-table td:nth-child(7) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 5px; 
-    padding-right: 15px;
-}
-
-/* ========================================= */
-/*         passes page styling                */
-/* ========================================= */
-
-.passes-table {
-    width: 100%;
-    border-collapse: separate;
-    border-radius: 5px;
-    background-color: #292929;
-    color: white;
-    padding-top: 30px;
-}
-
-.passes-table th {
-    font-weight: bold;
-    padding: 14px;
-    color: yellow;
-    font-size: 16px;
-}
-.passes-table td {
-    padding: 12px;
-    font-size: 15px;
-}
-
-.passes-table tr {
-    color: white;
-}
-.passes-table tbody tr:nth-child(odd) {
-    background-color: #1e1e1e !important;
-}
-
-.passes-table tbody tr:nth-child(even) {
-    background-color: #1e1e1e !important; 
-}
-
-.passes-table th:first-child {
-    cursor: pointer;
-}
-
-.passes-table th:nth-child(7),
-.passes-table td:nth-child(7) { 
-    text-align: center;
-}
-
-.passes-table td:nth-child(7) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 5px; 
-    padding-right: 15px;
-}
-
-/* ========================================= */
-/*          user table styling                */
-/* ========================================= */
-
-.users-table {
-    width: 100%;
-    border-collapse: separate;
-    border-radius: 5px;
-    background-color: #292929;
-    color: white;
-}
-
-.users-table th {
-    font-weight: bold;
-    padding: 14px;
-    color: yellow;
-    font-size: 16px;
-}
-.users-table td {
-    padding: 12px;
-    font-size: 15px;
-}
-
-.users-table tr {
-    color: white;
-}
-.users-table tbody tr:nth-child(odd) {
-    background-color: #1e1e1e !important;
-}
-
-.users-table tbody tr:nth-child(even) {
-    background-color: #1e1e1e !important; 
-}
-
-.users-table th:first-child {
-    cursor: pointer;
-}
-
-.users-table th:nth-child(7),
-.users-table td:nth-child(7) { 
-    text-align: center;
-}
-
-.users-table td:nth-child(7) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 5px; 
-    padding-right: 15px;
-}
-
-/* ========================================= */
-/*      payments page styling                */
-/* ========================================= */
-
-.payments-table {
-    width: 100%;
-    border-collapse: separate;
-    border-radius: 5px;
-    background-color: #292929;
-    color: white;
-    padding-top: 30px;
-}
-
-.payments-table th {
-    font-weight: bold;
-    padding: 14px;
-    color: yellow;
-    font-size: 16px;
-}
-.payments-table td {
-    padding: 12px;
-    font-size: 15px;
-}
-
-.payments-table tr {
-    color: white;
-}
-.payments-table tbody tr:nth-child(odd) {
-    background-color: #1e1e1e !important;
-}
-
-.payments-table tbody tr:nth-child(even) {
-    background-color: #1e1e1e !important; 
-}
-
-.payments-table th:first-child {
-    cursor: pointer;
-}
-
-.payments-table th:nth-child(7),
-.payments-table td:nth-child(7) { 
-    text-align: center;
-}
-
-.payments-table td:nth-child(7) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 5px; 
-    padding-right: 15px;
-}
-
-/* ========================================= */
-/*         transaction page styling          */
-/* ========================================= */
-
+/* Base table styles that apply to all tables */
+.application-table,
+.passes-table,
+.users-table,
+.payments-table,
 .transaction-table {
     width: 100%;
     border-collapse: separate;
@@ -420,44 +223,66 @@ body {
     background-color: #292929;
     color: white;
     padding-top: 30px;
+    min-width: 800px; /* Ensure minimum width for readability */
 }
 
+.application-table th,
+.passes-table th,
+.users-table th,
+.payments-table th,
 .transaction-table th {
     font-weight: bold;
     padding: 14px;
     color: yellow;
     font-size: 16px;
+    white-space: nowrap; /* Prevent header text wrapping */
 }
+
+.application-table td,
+.passes-table td,
+.users-table td,
+.payments-table td,
 .transaction-table td {
     padding: 12px;
     font-size: 15px;
+    vertical-align: middle;
 }
 
+.application-table tr,
+.passes-table tr,
+.users-table tr,
+.payments-table tr,
 .transaction-table tr {
     color: white;
 }
+
+.application-table tbody tr:nth-child(odd),
+.passes-table tbody tr:nth-child(odd),
+.users-table tbody tr:nth-child(odd),
+.payments-table tbody tr:nth-child(odd),
 .transaction-table tbody tr:nth-child(odd) {
     background-color: #1e1e1e !important;
 }
 
+.application-table tbody tr:nth-child(even),
+.passes-table tbody tr:nth-child(even),
+.users-table tbody tr:nth-child(even),
+.payments-table tbody tr:nth-child(even),
 .transaction-table tbody tr:nth-child(even) {
     background-color: #1e1e1e !important; 
 }
 
-.transaction-table th:first-child {
-    cursor: pointer;
-}
-
-.transaction-table th:nth-child(7),
-.transaction-table td:nth-child(7) { 
-    text-align: center;
-}
-
-.transaction-table td:nth-child(7) {
+/* Action column styling */
+.application-table td:last-child,
+.passes-table td:last-child,
+.users-table td:last-child,
+.payments-table td:last-child,
+.transaction-table td:last-child {
     display: flex;
     justify-content: flex-end;
     gap: 5px; 
     padding-right: 15px;
+    white-space: nowrap;
 }
 
 /* Override Bootstrap styles */
@@ -606,6 +431,33 @@ body {
     .title {
         font-size: 26px !important;
     }
+
+    /* Adjust table for medium screens */
+    .application-table,
+    .passes-table,
+    .users-table,
+    .payments-table,
+    .transaction-table {
+        min-width: 700px;
+    }
+
+    .application-table th,
+    .passes-table th,
+    .users-table th,
+    .payments-table th,
+    .transaction-table th {
+        font-size: 15px;
+        padding: 12px;
+    }
+
+    .application-table td,
+    .passes-table td,
+    .users-table td,
+    .payments-table td,
+    .transaction-table td {
+        font-size: 14px;
+        padding: 10px;
+    }
 }
 
 /* Small screens (576px to 767px) - Mobile */
@@ -637,6 +489,7 @@ body {
         flex-wrap: wrap;
         justify-content: flex-start;
         gap: 10px;
+        margin-bottom: 15px;
     }
 
     .entries-info {
@@ -677,20 +530,64 @@ body {
     .table-container {
         padding: 8px;
         background-color: #000;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+
+    /* Mobile table adjustments */
+    .application-table,
+    .passes-table,
+    .users-table,
+    .payments-table,
+    .transaction-table {
+        min-width: 600px; /* Reduce minimum width for mobile */
+        font-size: 13px;
     }
 
     .application-table th,
-    .application-table td,
     .passes-table th,
-    .passes-table td,
     .users-table th,
-    .users-table td,
     .payments-table th,
-    .payments-table td,
-    .transaction-table th,
-    .transaction-table td {
+    .transaction-table th {
         padding: 8px;
         font-size: 13px;
+    }
+    
+    .application-table td,
+    .passes-table td,
+    .users-table td,
+    .payments-table td,
+    .transaction-table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    /* Mobile button adjustments */
+    .btn-view,
+    .btn-approve,
+    .btn-reject,
+    .btn-delete,
+    .btn-info,
+    .btn-danger,
+    .btn-secondary,
+    .btn-primary,
+    .btn-success {
+        padding: 6px 10px;
+        font-size: 11px;
+        margin: 2px 0;
+        min-width: 60px;
+    }
+
+    /* Stack action buttons vertically on mobile */
+    .application-table td:last-child,
+    .passes-table td:last-child,
+    .users-table td:last-child,
+    .payments-table td:last-child,
+    .transaction-table td:last-child {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        padding: 8px;
     }
 
     .search-btn {
@@ -699,39 +596,15 @@ body {
         font-size: 13px;
     }
 
-    .filter-container,
-    .search-container {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .btn-view,
-    .btn-approve,
-    .btn-reject,
-    .btn-delete {
-        padding: 6px 10px;
-        font-size: 13px;
-        width: 100%;
-    }
-
     .pagination {
         justify-content: center;
         flex-wrap: wrap;
+        gap: 5px;
     }
 
     .pagination button {
         padding: 6px 10px;
         font-size: 12px;
-    }
-
-    .users-table td:nth-child(7),
-    .application-table td:nth-child(7),
-    .passes-table td:nth-child(7),
-    .payments-table td:nth-child(7),
-    .transaction-table td:nth-child(7) {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 6px;
     }
     
     .dashboard-wrapper,
@@ -742,6 +615,27 @@ body {
     
     .mobile-menu-toggle {
         z-index: 9999 !important;
+    }
+
+    /* Better mobile DataTables integration */
+    .dataTables_filter input {
+        width: 100% !important;
+        max-width: 200px;
+    }
+
+    .dataTables_length select {
+        margin: 0 5px;
+    }
+
+    .dataTables_wrapper .top {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    .dataTables_filter,
+    .dataTables_length {
+        text-align: center;
     }
 }
 
@@ -803,37 +697,22 @@ body {
     .payment-header h3 {
         font-size: 18px;
     }
-    
-    /* Stack buttons vertically on very small screens */
-    .btn {
-        width: 100%;
-        margin: 5px 0;
-    }
-    
-    .status-badge {
-        font-size: 11px;
-        padding: 3px 6px;
+
+    /* Extra small screen table adjustments */
+    .application-table,
+    .passes-table,
+    .users-table,
+    .payments-table,
+    .transaction-table {
+        min-width: 500px; /* Further reduce for very small screens */
     }
 
-    .icon-btn {
-        font-size: 9px;
-        padding: 4px;
-    }
-
-    .btn-view,
-    .btn-approve,
-    .btn-reject,
-    .btn-delete {
-        font-size: 12px;
-        padding: 5px 8px;
-    }
-
-    .pagination button {
-        font-size: 11px;
-        padding: 5px 8px;
-    }
-
-    .dashboard .btn {
+    .application-table th,
+    .passes-table th,
+    .users-table th,
+    .payments-table th,
+    .transaction-table th {
+        padding: 6px;
         font-size: 12px;
     }
 
@@ -842,15 +721,61 @@ body {
     .users-table td,
     .payments-table td,
     .transaction-table td {
-        font-size: 12px;
+        padding: 6px;
+        font-size: 11px;
+    }
+    
+    /* Stack buttons vertically on very small screens */
+    .btn {
+        width: 100%;
+        margin: 3px 0;
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+    
+    .status-badge {
+        font-size: 10px;
+        padding: 2px 5px;
     }
 
-    .application-table th,
-    .passes-table th,
-    .users-table th,
-    .payments-table th,
-    .transaction-table th {
-        font-size: 13px;
+    .icon-btn {
+        font-size: 8px;
+        padding: 3px;
+    }
+
+    .btn-view,
+    .btn-approve,
+    .btn-reject,
+    .btn-delete,
+    .btn-info,
+    .btn-danger,
+    .btn-secondary,
+    .btn-primary,
+    .btn-success {
+        font-size: 10px;
+        padding: 4px 6px;
+        min-width: 50px;
+    }
+
+    .pagination button {
+        font-size: 10px;
+        padding: 4px 6px;
+    }
+
+    .dashboard .btn {
+        font-size: 11px;
+    }
+
+    .filter-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    /* Better spacing for filter container */
+    .filter-container .btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 
@@ -880,5 +805,18 @@ body {
     
     .profile-card {
         padding: 12px;
+    }
+
+    /* Ultra small table adjustments */
+    .application-table,
+    .passes-table,
+    .users-table,
+    .payments-table,
+    .transaction-table {
+        min-width: 450px;
+    }
+
+    .table-container {
+        padding: 4px;
     }
 }
