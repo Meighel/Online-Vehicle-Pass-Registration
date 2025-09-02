@@ -824,7 +824,7 @@ body {
     }
 }
 
-/* Simple Payment & Transaction Reports CSS */
+/* Reports CSS */
 
 /* Main container */
 .reports-container {
@@ -845,7 +845,7 @@ body {
 
 /* Filter form */
 .reports-container form {
-    background-color: #000000;
+    background-color: #333232;
     padding: 1.5rem;
     border-radius: 8px;
     margin-bottom: 2rem;
