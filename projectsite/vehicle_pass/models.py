@@ -25,8 +25,8 @@ class UserProfile(BaseModel):
         ]
     
     SCHOOL_ROLE_CHOICES = [('student', 'Student'),
-                   ('faculty', 'Faculty'),
-                   ('university personnel', 'University Personnel')
+                   ('faculty and staff', 'Faculty and Staff'),
+                   ('university official', 'University Personnel')
                    ]
     
     profile_picture = models.ImageField(
