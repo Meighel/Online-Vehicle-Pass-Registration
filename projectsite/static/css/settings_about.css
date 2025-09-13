@@ -452,6 +452,7 @@ footer {
   color: var(--text-gray);
   font-size: 0.95rem;
   transition: color 0.3s ease;
+  text-decoration: none !important;
 }
 
 .footer-links a:hover {
