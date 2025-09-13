@@ -331,6 +331,16 @@ header p {
   transform: translateY(-2px);
 }
 
+.cta-section .btn-outline {
+  color: var(--text-light); 
+  border: 1px solid var(--text-light);
+}
+
+.cta-section .btn-outline:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--highlight-yellow); 
+}
+
 /* ========================================= */
 /*                FOOTER                     */
 /* ========================================= */
