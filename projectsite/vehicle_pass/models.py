@@ -20,36 +20,73 @@ class BaseModel(models.Model):
 class UserProfile(BaseModel):
     ROLE_CHOICES = [('user', 'User'),
         ('security', 'Security'),
-        ('cashier', 'Cashier'),
         ('admin', 'Admin')
         ]
     
     SCHOOL_ROLE_CHOICES = [('student', 'Student'),
-                   ('faculty and staff', 'Faculty and Staff'),
+                   ('faculty & staff', 'Faculty and Staff'),
                    ('university official', 'University Personnel')
                    ]
     
-    profile_picture = models.ImageField(
-        upload_to='profile_pictures/',
-        blank=True,
-        null=True,
-    )
+    COLLEGE_CHOICES = [('CAD'), ('College of Architecture and Design'),
+                       ('CAH'), ('College of Arts and Humanities'),
+                       ('CBA'), ('College of Business and Accountancy'),
+                       ('CCJE'), ('College of Criminal Justice and Education'),
+                       ('CoE'), ('College of Engineering'),
+                       ('CHTM'), ('College of Hospitality Management and Tourism'),
+                       ('CNHS'), ('College of Nursing and Health Sciences'),
+                       ('CS'), ('College of Sciences'),
+                       ('CTE'), ('College of Teacher Education'),                       
+                       ]
+    
+    OFFICE_CHOICES = [('CAD'), ('College of Architecture and Design'),
+                       ('CAH'), ('College of Arts and Humanities'),
+                       ('CBA'), ('College of Business and Accountancy'),
+                       ('CCJE'), ('College of Criminal Justice and Education'),
+                       ('CoE'), ('College of Engineering'),
+                       ('CHTM'), ('College of Hospitality Management and Tourism'),
+                       ('CNHS'), ('College of Nursing and Health Sciences'),
+                       ('CS'), ('College of Sciences'),
+                       ('CTE'), ('College of Teacher Education'),                       
+                       ]
+
+    # PERSONAL INFORMATION
     corporate_email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=128)
+    contact = models.CharField(max_length=13)
     lastname = models.CharField(max_length=25) 
     firstname = models.CharField(max_length=50)
-    middle_name = models.CharField(max_length=25, blank=True, null=True)
+    middlename = models.CharField(max_length=25, blank=True, null=True)
     suffix = models.CharField(max_length=5, blank=True, null=True)
-    dl_number = models.CharField(max_length=15, blank=True, null=True)
-    college = models.CharField(max_length=100, blank=True, null=True)
-    program = models.CharField(max_length=100, blank=True, null=True)
-    department = models.CharField(max_length=100, blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
+
+    # FOR STUDENT
+    college = models.CharField(max_length=100, choices=COLLEGE_CHOICES ,blank=True, null=True)
+    program = models.CharField(max_length=100, blank=True, null=True)
+    father_name = models.CharField(max_length=100, blank=True, null=True)
+    father_contact = models.CharField(max_length=13, blank=True, null=True)
+    father_address = models.CharField(max_length=150, blank=True, null=True)
+    mother_name = models.CharField(max_length=100, blank=True, null=True)
+    mother_contact =models.CharField(max_length=13, blank=True, null=True)
+    mother_address = models.CharField(max_length=150, blank=True, null=True)
+    guardian_name = models.CharField(max_length=100, blank=True, null=True)
+    guardian_contact = models.CharField(max_length=13, blank=True, null=True)
+    guardian_address = models.CharField(max_length=150, blank=True, null=True)
+
+
+    # FOR EMPLOYEE
+    position = models.CharField(max_length=50, blank=True, null=True)
+    office_or_college = models.CharField(max_length=75, blank=True, null=True)
+
+    #extra fields
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user', null=True)
     school_role = models.CharField(max_length=20, choices=SCHOOL_ROLE_CHOICES, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.firstname} {self.lastname}"
+        middle_initial = f"{self.middlename[0]}." if self.middlename else ""
+        # Add a space only if middle_initial exists
+        return f"{self.firstname} {middle_initial + ' ' if middle_initial else ''}{self.lastname}"
+
     
     def save(self, *args, **kwargs):
         if not self.password.startswith("pbkdf2_sha256$"):  # Prevent double hashing
@@ -60,8 +97,6 @@ class UserProfile(BaseModel):
         # Create profile based on role if not already existing
         if self.role == 'security' and not hasattr(self, 'securityprofile'):
             SecurityProfile.objects.create(user=self)
-        elif self.role == 'cashier' and not hasattr(self, 'cashierprofile'):
-            CashierProfile.objects.create(user=self)
         elif self.role == 'admin' and not hasattr(self, 'adminprofile'):
             AdminProfile.objects.create(user=self)
 
@@ -71,29 +106,11 @@ class UserProfile(BaseModel):
 
 class SecurityProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(
-        upload_to='profile_pictures/',
-        blank=True,
-        null=True,
-    )
     badgeNumber = models.CharField(max_length=10)
     job_title = models.CharField(max_length=30)
 
     def __str__(self):
         return f"Security Personnel: {self.user.firstname} {self.user.lastname} {self.badgeNumber}"  
-
-class CashierProfile(BaseModel):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(
-        upload_to='profile_pictures/',
-        blank=True,
-        null=True,
-    )
-    cashier_id = models.CharField(max_length=15)
-    job_title = models.CharField(max_length=40)
-
-    def __str__(self):
-        return f"Cashier: {self.user.firstname} {self.user.lastname} {self.cashier_id}"  
 
 class AdminProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
@@ -133,37 +150,25 @@ class PasswordResetCode(BaseModel):
     
 
 class Vehicle(BaseModel):
-    applicant = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
-    plateNumber = models.CharField(max_length=10, unique=True)
-    type = models.CharField(max_length=20)
-    model = models.CharField(max_length=20)
-    vehicle_color = models.CharField(max_length=20)
-    chassisNumber = models.CharField(max_length=17)
-    OR_Number = models.CharField(max_length=15)
-    CR_Number = models.CharField(max_length=9)
-    is_owner = models.BooleanField(default=False)
+    VEHICLE_TYPE = [('motor'), ('Motor'),
+                    ('car'), ('Car'),
+                    ('van'), ('Van')]
     
-    # Only relevant if not the owner
-    owner_firstname = models.CharField(max_length=45, null=True, blank=True)
-    owner_middlename = models.CharField(max_length=45, null=True, blank=True)
-    owner_lastname = models.CharField(max_length=45, null=True, blank=True)
-    owner_suffix = models.CharField(max_length=5, null=True, blank=True)
-    relationship_to_owner = models.CharField(max_length=15, null=True, blank=True)
-    contact_number = models.CharField(max_length=13, null=True, blank=True)
+    applicant = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
+    make_model = models.CharField(max_length=35)
+    plate_number = models.CharField(max_length=10, unique=True)
+    year_model = models.IntegerField(max_length=4)
+    color = models.CharField(max_length=20)
+    type = models.CharField(choices=VEHICLE_TYPE, max_length=5)
+    engine_number = models.CharField(max_length=25)
+    chassis_number = models.CharField(max_length=17)
 
     def __str__(self):
-        return f"{self.plateNumber}"  
+        return f"{self.plate_number}"  
 
     def clean(self):
         if Vehicle.objects.filter(applicant=self.applicant).count() >= 2:
             raise ValidationError({'Applicant': 'You can only register up to two vehicles.'})
-
-        if self.is_owner:
-            if any([self.owner_firstname, self.owner_lastname, self.relationship_to_owner, self.contact_number]):
-                raise ValidationError("Owner fields should be empty if you are the vehicle owner.")
-        else:
-            if not all([self.owner_firstname, self.owner_lastname, self.relationship_to_owner, self.contact_number]):
-                raise ValidationError("Complete owner details are required if you're not the owner.")
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -173,37 +178,35 @@ class Vehicle(BaseModel):
 
 class Registration(BaseModel):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('cancelled', 'Cancelled'),
-        ('for payment', 'For Payment'),
-        ('reviewing documents', 'Reviewing Documents'),
-        ('for final inspection', 'For Final Inspection'),
+        ('no application', 'No Application'),
+        ('application submitted', 'Application Submitted'),
+        ('initial approval', 'Waiting for Approval by OIC'),
+        ('final approval', 'Waiting for Final Approval by GSO - Director')
         ('approved', 'Approved'),
+        ('sticker released', 'Vehicle Pass Sticker Released'),
         ('rejected', 'Rejected')
     ]
-    registrationNumber = models.BigAutoField(primary_key=True) 
+    registration_number = models.BigAutoField(primary_key=True) 
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE) 
-    files = models.URLField(max_length=250)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    files = models.URLField(max_length=255)
+    status = models.CharField(max_length=60, choices=STATUS_CHOICES, default='no application')
     remarks = models.TextField(null=True)
-    document_reviewed_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True, blank=True)
+    initial_approved_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True, blank=True)
+    final_approved_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True, blank=True)
+    date_of_filing = models.DateTimeField(auto_now_add=True)
+    sticker_released_date = models.DateField(blank=True, null=True)
+
+    # E-signature fields
+    e_signature = models.TextField(blank=True, null=True)  # Store signature as base64 data
+    printed_name = models.CharField(max_length=255, blank=True, null=True)
+    signature_date = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return f"Registration {self.registrationNumber} for {self.user.lastname}, {self.user.firstname}"
+        return f"Registration {self.registration_number} for {self.user.lastname}, {self.user.firstname}"
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs) 
-
-        if self.status == "for payment":
-            payment, created = PaymentTransaction.objects.get_or_create(
-                registration=self,
-                defaults={
-                    'status': 'pending',
-                }
-            )
-            if created:
-                payment.save() 
+        super().save(*args, **kwargs)  
 
 class VehiclePass(BaseModel):
     STATUS_CHOICES = [
@@ -240,87 +243,6 @@ class VehiclePass(BaseModel):
                     passExpire=now().date() + timedelta(days=365),  # 1-year validity
                     status="active"
                 )
-
-
-class PaymentTransaction(BaseModel):
-    STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('paid', 'Paid'),
-        ('unpaid', 'Unpaid'),
-        ('void', 'Void')
-    ]
-    registration = models.ForeignKey(Registration, on_delete=models.CASCADE)
-    receipt_number = models.CharField(max_length=20, unique=True, null=True)
-    cashier = models.ForeignKey(CashierProfile, on_delete=models.CASCADE, null=True)
-    admin = models.ForeignKey(AdminProfile, on_delete=models.CASCADE, null=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
-    due_date = models.DateTimeField(blank=True, null=True) 
-    date_processed = models.DateTimeField(auto_now_add=True)
-    remarks = models.CharField(max_length=75, null=True)
-
-    def save(self, *args, **kwargs):
-        # Automatically set due_date when status is pending and due_date is not provided
-        if self.status == "pending" and not self.due_date:
-            self.due_date = timezone.now() + timedelta(days=7)
-
-        # Check if the object already exists (for updates)
-        if self.pk is not None:
-            original = PaymentTransaction.objects.get(pk=self.pk)
-            if original.status != self.status:  # If status has changed
-                self.date_processed = timezone.now().astimezone(pytz.timezone('Asia/Manila'))
-
-        # Save the instance
-        super().save(*args, **kwargs)
-
-        # Create an inspection report when the status is "paid" (if not already exists)
-        if self.status == "paid":
-            from .models import InspectionReport  
-
-            inspection_exists = InspectionReport.objects.filter(payment_number=self).exists()
-
-            if not inspection_exists:  
-                InspectionReport.objects.create(
-                    payment_number=self, 
-                    security=None,
-                    remarks="to_be_inspected",  
-                    is_approved=False
-                )
-
-    def __str__(self):
-        return self.receipt_number if self.receipt_number else f"Registration {self.registration.registrationNumber}"
-
- 
-class InspectionReport(BaseModel):
-    REMARK_CHOICES = [
-        ('to be inspected', 'To Be Inspected'),
-        ('sticker released', 'Sticker Released'),
-        ('application declined', 'Application Declined'),
-        ('request refund', 'To Request Refund'),
-    ]
-
-    payment_number = models.ForeignKey(PaymentTransaction, on_delete=models.CASCADE)
-    security = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True)
-    document_inspection_date = models.DateTimeField(auto_now_add=True)
-    physical_final_inspection_date = models.DateField(null=True, blank=True)
-    remarks = models.CharField(max_length=30, choices=REMARK_CHOICES, default='to_be_inspected')
-    additional_notes = models.TextField(blank=True, null=True)
-    is_approved = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"Inspection {self.payment_number}"
-    
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-
-        if self.is_approved:
-            self.remarks = 'sticker released'
-
-        super().save(*args, **kwargs)
-        
-        # Check if this is an update and the necessary conditions are met
-        if not is_new and self.remarks == "sticker released" and self.is_approved:
-            from .models import VehiclePass
-            VehiclePass.create_from_inspection(self)
 
 class Notification(BaseModel):
     NOTIFICATION_TYPES = [
