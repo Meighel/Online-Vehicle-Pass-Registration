@@ -332,13 +332,13 @@ header p {
 }
 
 .cta-section .btn-outline {
-  color: var(--text-light); 
-  border: 1px solid var(--text-light);
+  color: var(--text-light);
+  border: 1px solid var(--highlight-yellow);
 }
 
 .cta-section .btn-outline:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--highlight-yellow); 
+  background-color: var(--highlight-yellow);
+  color: var(--primary-bg); /* text black when hovered */
 }
 
 /* ========================================= */
