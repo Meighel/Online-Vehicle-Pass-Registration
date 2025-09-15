@@ -23,131 +23,98 @@ class UserProfile(BaseModel):
         ('admin', 'Admin')
         ]
     
-    SCHOOL_ROLE_CHOICES = [
-                    ('student', 'Student'),
-                    ('faculty & staff', 'Faculty and Staff'),
-                    ('university official', 'University Personnel')
+    SCHOOL_ROLE_CHOICES = [('student', 'Student'),
+                   ('faculty & staff', 'Faculty and Staff'),
+                   ('university official', 'University Personnel')
                    ]
     
     COLLEGE_CHOICES = [
-                        ('CAD', 'College of Architecture and Design'),
-                        ('CAH', 'College of Arts and Humanities'),
-                        ('CBA', 'College of Business and Accountancy'),
-                        ('CCJE', 'College of Criminal Justice and Education'),
-                        ('CoE', 'College of Engineering'),
-                        ('CHTM', 'College of Hospitality Management and Tourism'),
-                        ('CNHS', 'College of Nursing and Health Sciences'),
-                        ('CS', 'College of Sciences'),
-                        ('CTE', 'College of Teacher Education'),                       
-                       ]
-    
+        ('CAD', 'College of Architecture and Design'),
+        ('CAH', 'College of Arts and Humanities'),
+        ('CBA', 'College of Business and Accountancy'),
+        ('CCJE', 'College of Criminal Justice and Education'),
+        ('CoE', 'College of Engineering'),
+        ('CHTM', 'College of Hospitality Management and Tourism'),
+        ('CNHS', 'College of Nursing and Health Sciences'),
+        ('CS', 'College of Sciences'),
+        ('CTE', 'College of Teacher Education'),
+    ]
+
     OFFICE_CHOICES = [
-                        ('CAD', 'College of Architecture and Design'),
-                        ('CAH', 'College of Arts and Humanities'),
-                        ('CBA', 'College of Business and Accountancy'),
-                        ('CCJE', 'College of Criminal Justice and Education'),
-                        ('CoE', 'College of Engineering'),
-                        ('CHTM', 'College of Hospitality Management and Tourism'),
-                        ('CNHS', 'College of Nursing and Health Sciences'),
-                        ('CS', 'College of Sciences'),
-                        ('CTE', 'College of Teacher Education'), 
-                        
-                        ('University Offices', [
-                            ('University President', 'university president'),
-                            ('University President COA', 'university president coa'),
-                            ('Office of the University Secretary', 'office of the university secretary'),
-                            ('Legal Office (Data Privacy Office)', 'legal office (data privacy office)'),
-                            ('Planning and Development Office', 'planning and development office'),
-                            ('Office of the Internal Audit Services (QMS)', 'office of the internal audit services (qms)'),
-                            ('Public Information Office', 'public information office'),
-                            ('Alumni Affairs Office', 'alumni affairs office'),
-                            ('Academic Council', 'academic council'),
-                            ('Administrative Council', 'administrative council'),
-                            ('Research and Extension Council', 'research and extension council'),
-                            ('Management Committee', 'management committee'),
-                            ('University Ethics Committee', 'university ethics committee'),
-                            ('Gender and Development Office', 'gender and development office'),
-                            ('International Affairs and Linkages Office', 'international affairs and linkages office'),
-                        ]),
-                        
-                        ('Vice President for Finance and Administration', [
-                            ('Bids and Awards Committee', 'bids and awards committee'),
-                            ('Administrative Management Office', 'administrative management office'),
-                            ('Records Archives Management Office', 'records archives management office'),
-                            ('Human Resource Management Office', 'human resource management office'),
-                            ('Faculty and Staff Development Unit', 'faculty and staff development unit'),
-                            ('Health Services Office', 'health services office'),
-                            ('Management Information System Information Office', 'management information system information office'),
-                            ('Security Office', 'security office'),
-                            ('Supply and Property Management Office', 'supply and property management office'),
-                            ('Disaster Risk Reduction and Management Office', 'disaster risk reduction and management office'),
-                            ('Project Management Office', 'project management office'),
+        ('university president', 'University President'),
+        ('university president coa', 'University President COA'),
+        ('office of the university secretary', 'Office of the University Secretary'),
+        ('legal office', 'Legal Office (Data Privacy Office)'),
+        ('planning and development office', 'Planning and Development Office'),
+        ('office of the internal audit services', 'Office of the Internal Audit Services (QMS)'),
+        ('public information office', 'Public Information Office'),
+        ('alumni affairs office', 'Alumni Affairs Office'),
+        ('academic council', 'Academic Council'),
+        ('administrative council', 'Administrative Council'),
+        ('research and extension council', 'Research and Extension Council'),
+        ('management committee', 'Management Committee'),
+        ('university ethics committee', 'University Ethics Committee'),
+        ('gender and development office', 'Gender and Development Office'),
+        ('international affairs and linkages office', 'International Affairs and Linkages Office'),
+        ('office of the vice president for finance and administration', 'Office of the Vice President for Finance and Administration'),
+        ('bids and awards committee', 'Bids and Awards Committee'),
+        ('administrative management office', 'Administrative Management Office'),
+        ('records archives management office', 'Records Archives Management Office'),
+        ('human resource management office', 'Human Resource Management Office'),
+        ('faculty and staff development unit', 'Faculty and Staff Development Unit'),
+        ('health services office', 'Health Services Office'),
+        ('management information system information office', 'Management Information System Information Office'),
+        ('security office', 'Security Office'),
+        ('supply and property management office', 'Supply and Property Management Office'),
+        ('disaster risk reduction and management office', 'Disaster Risk Reduction and Management Office'),
+        ('project management office', 'Project Management Office'),
+        ('general services office', 'General Services Office'),
+        ('utility and environmental management office', 'Utility and Environmental Management Office'),
+        ('motorpool office', 'Motorpool Office'),
+        ('finance management service offices (cfo)', 'Finance Management Service Offices (CFO)'),
+        ('accounting office', 'Accounting Office'),
+        ('processing unit', 'Processing Unit'),
+        ('student accounts & assessment', 'Student Accounts & Assessment'),
+        ('financial reporting', 'Financial Reporting'),
+        ('budget office', 'Budget Office'),
+        ('production services/income generating projects office', 'Production Services/Income Generating Projects Office'),
+        ('production', 'Production'),
+        ('sifma', 'SIFMA'),
+        ('university bookstore', 'University Bookstore'),
+        ('auxiliary services - canteen', 'Auxiliary Services - Canteen'),
+        ('auxiliary services - hostel', 'Auxiliary Services - Hostel'),
+        ('auxiliary services - dormitory', 'Auxiliary Services - Dormitory'),
+        ('university printing press', 'University Printing Press'),
+        ('procurement office', 'Procurement Office'),
+        ('cashiers office', 'Cashier’s Office'),
+        ('office of the vice president for research, development and extension', 'Office of the Vice President for Research, Development and Extension'),
+        ('university research office', 'University Research Office'),
+        ('university extension service office', 'University Extension Service Office'),
+        ('intellectual property and technology transfer office', 'Intellectual Property and Technology Transfer Office'),
+        ('palawan studies center', 'Palawan Studies Center'),
+        ('center for strategy policy and governance', 'Center for Strategy Policy and Governance'),
+        ('panrehiyong iv-b sentro ng wikang pilipino', 'Panrehiyong IV-B Sentro ng Wikang Pilipino'),
+        ('marine science research center', 'Marine Science Research Center'),
+        ('palawan international technology business incubator & startup hub office', 'Palawan International Technology Business Incubator & Startup Hub Office'),
+        ('office of the vice president for academic affairs', 'Office of the Vice President for Academic Affairs'),
+        ('office of the eteeap', 'Office of the ETEEAP'),
+        ('office of the university registrar', 'Office of the University Registrar'),
+        ('university quality assurance center', 'University Quality Assurance Center'),
+        ('office of the university sports', 'Office of the University Sports'),
+        ('office of the curriculum & instructional materials development', 'Office of the Curriculum & Instructional Materials Development'),
+        ('office of the student affairs and services', 'Office of the Student Affairs and Services'),
+        ('social and cultural affairs (psu band, psu dance troupe, psu singers)', 'Social and Cultural Affairs (PSU Band, PSU Dance Troupe, PSU Singers)'),
+        ('office of the university library', 'Office of the University Library'),
+        ('psu museum', 'PSU Museum'),
+    ]
 
-                            # Group under General Services Office
-                            ('General Services Office', 'general services office', [
-                                ('Utility and Environmental Management Office', '— utility and environmental management office'),
-                                ('Motorpool Office', '— motorpool office'), 
-                            ]),
-                        ]),
-                        
-                        # === Finance Management Services ===
-                        ('Finance Management Service Offices (CFO)', [
-                            ('Accounting Office', 'accounting office',[
-                                ('Processing Unit', 'processing unit'),
-                                ('Student Accounts & Assessment', 'student accounts & assessment'),
-                                ('Financial Reporting', 'financial reporting'),
-                            ]),
-                            
-                            ('Budget Office', 'budget office'),
-                            
-                            ('Production Services/Income Generating Projects Office', 'production services/income generating projects office', [
-                                ('SIFMA', '—— sifma'),
-                                ('University Bookstore', '—— university bookstore'),
-                                ('Auxiliary Services - Canteen', '—— auxiliary services - canteen'),
-                                ('Auxiliary Services - Hostel', '—— auxiliary services - hostel'),
-                                ('Auxiliary Services - Dormitory', '—— auxiliary services - dormitory'),
-                                ('University Printing Press', 'university printing press'),
-                            ]),
-
-                            ('Procurement Office', 'procurement office'),
-                            ('Cashier’s Office', 'cashier’s office'),
-                        ]),
-                        
-                        ('Vice President for Research, Development and Extension', [
-                            ('University Research Office', 'university research office'),
-                            ('University Extension Service Office', 'university extension service office',[
-                                ('Intellectual Property and Technology Transfer Office', 'intellectual property and technology transfer office'),
-                                ('Palawan Studies Center', 'palawan studies center'),
-                                ('Center for Strategy Policy and Governance', 'center for strategy policy and governance'), 
-                                ('Panrehiyong IV-B Sentro ng Wikang Pilipino', 'panrehiyong iv-b sentro ng wikang pilipino'),
-                                ('Marine Science Research Center', 'marine science research center'),
-                            ]),
-
-                            ('Palawan International Technology Business Incubator & Startup Hub Office', 'palawan international technology business incubator & startup hub office'),
-                        ]),  
-                        
-                        ('Vice President for Academic Affairs', [
-                            ('Office of the ETEEAP', 'office of the eteeap'),
-                            ('Office of the University Registrar', 'office of the university registrar'),
-                            ('University Quality Assurance Center', 'university quality assurance center'),
-                            ('Office of the University Sports', 'office of the university sports'),
-                            ('Office of the Curriculum & Instructional Materials Development', 'office of the curriculum & instructional materials development'),
-                            
-                            ('Office of the Student Affairs and Services', 'office of the student affairs and services', [
-                                ('Social and Cultural Affairs (PSU Band, PSU Dance Troupe, PSU Singers)', 'social and cultural affairs (psu band, psu dance troupe, psu singers)'),
-                            ]),
-                            
-                            ('Office of the University Library', 'office of the university library', [
-                                ('PSU Museum', 'psu museum'),
-                            ]),
-                        ]),
-                                                  
-                       ]
+    WORKPLACE_CHOICES = OFFICE_CHOICES + COLLEGE_CHOICES    
 
     # PERSONAL INFORMATION
+        
     corporate_email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=128)
-    contact = models.CharField(max_length=13)
+    contact = models.CharField(max_length=14)
     lastname = models.CharField(max_length=25) 
     firstname = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=25, blank=True, null=True)
@@ -170,7 +137,7 @@ class UserProfile(BaseModel):
 
     # FOR EMPLOYEE
     position = models.CharField(max_length=50, blank=True, null=True)
-    office_or_college = models.CharField(max_length=75, blank=True, null=True)
+    workplace = models.CharField(max_length=150, choices=WORKPLACE_CHOICES, blank=True, null=True)
 
     #extra fields
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user', null=True)
@@ -257,12 +224,29 @@ class Vehicle(BaseModel):
     engine_number = models.CharField(max_length=25)
     chassis_number = models.CharField(max_length=17)
 
+    # Only relevant if not the owner
+    owner_firstname = models.CharField(max_length=45, null=True, blank=True)
+    owner_middlename = models.CharField(max_length=45, null=True, blank=True)
+    owner_lastname = models.CharField(max_length=45, null=True, blank=True)
+    owner_suffix = models.CharField(max_length=5, null=True, blank=True)
+    relationship_to_owner = models.CharField(max_length=15, null=True, blank=True)
+    contact_number = models.CharField(max_length=13, null=True, blank=True)
+    address = models.CharField(max_length=75, null=True, blank=True)
+
+
     def __str__(self):
         return f"{self.plate_number}"  
 
     def clean(self):
-        if Vehicle.objects.filter(applicant=self.applicant).count() >= 1:
-            raise ValidationError({'Applicant': 'You can only register one vehicle.'})
+        if Vehicle.objects.filter(applicant=self.applicant).count() >= 2:
+            raise ValidationError({'Applicant': 'You can only register up to two vehicles.'})
+
+        if self.is_owner:
+            if any([self.owner_firstname, self.owner_lastname, self.relationship_to_owner, self.contact_number]):
+                raise ValidationError("Owner fields should be empty if you are the vehicle owner.")
+        else:
+            if not all([self.owner_firstname, self.owner_lastname, self.relationship_to_owner, self.contact_number]):
+                raise ValidationError("Complete owner details are required if you're not the owner.")
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -309,34 +293,129 @@ class VehiclePass(BaseModel):
         ('revoked', 'Revoked')
     ]
     vehicle = models.OneToOneField(Vehicle, on_delete=models.CASCADE)
-    passNumber = models.CharField(max_length=10)
-    passExpire = models.DateField()
+    pass_number = models.CharField(max_length=20)
+    pass_expire = models.DateField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="active")
 
-
     def __str__(self):
-        return f"{self.passNumber}"
+        return f"{self.pass_number}"
     
-
     @staticmethod
-    def generate_pass_number():
-        last_pass = VehiclePass.objects.order_by('-id').first()
-        last_number = int(last_pass.passNumber[-5:]) if last_pass else 0
-        new_number = str(last_number + 1).zfill(5)
-        return f"VRPSS{new_number}"
+    def generate_pass_number(user_school_role):
+        """
+        Generate pass number based on user's school role:
+        - Student: STUDENT001 (limit: 2500)
+        - University Official: UNIVERSITY OFFICIALS001 (limit: 500)  
+        - Faculty & Staff: FACULTY AND STAFF0001 (limit: 1000)
+        """
+        
+        if user_school_role == 'student':
+            # Get last student pass number
+            student_passes = VehiclePass.objects.filter(
+                pass_number__startswith='STUDENT'
+            ).order_by('-id')
+            
+            if student_passes.exists():
+                last_pass = student_passes.first()
+                # Extract number from format like "STUDENT001"
+                last_number = int(last_pass.pass_number.replace('STUDENT', ''))
+                new_number = last_number + 1
+            else:
+                new_number = 1
+                
+            if new_number > 2500:
+                raise ValueError("Student pass limit (2500) exceeded")
+                
+            return f"STUDENTS {str(new_number).zfill(3)}"
+            
+        elif user_school_role == 'university official':
+            # Get last university official pass number
+            official_passes = VehiclePass.objects.filter(
+                pass_number__startswith='UNIVERSITY OFFICIALS'
+            ).order_by('-id')
+            
+            if official_passes.exists():
+                last_pass = official_passes.first()
+                # Extract number from format like "UNIVERSITY OFFICIALS001"
+                last_number = int(last_pass.pass_number.replace('UNIVERSITY OFFICIALS', ''))
+                new_number = last_number + 1
+            else:
+                new_number = 1
+                
+            if new_number > 500:
+                raise ValueError("University Officials pass limit (500) exceeded")
+                
+            return f"UNIVERSITY OFFICIALS {str(new_number).zfill(3)}"
+            
+        elif user_school_role == 'faculty & staff':
+            # Get last faculty & staff pass number
+            faculty_passes = VehiclePass.objects.filter(
+                pass_number__startswith='FACULTY AND STAFF'
+            ).order_by('-id')
+            
+            if faculty_passes.exists():
+                last_pass = faculty_passes.first()
+                # Extract number from format like "FACULTY AND STAFF0001"
+                last_number = int(last_pass.pass_number.replace('FACULTY AND STAFF', ''))
+                new_number = last_number + 1
+            else:
+                new_number = 1
+                
+            if new_number > 1000:
+                raise ValueError("Faculty and Staff pass limit (1000) exceeded")
+                
+            return f"FACULTY AND STAFF {str(new_number).zfill(4)}"
+        else:
+            # Fallback to original format for unknown roles
+            last_pass = VehiclePass.objects.order_by('-id').first()
+            last_number = int(last_pass.pass_number[-5:]) if last_pass else 0
+            new_number = str(last_number + 1).zfill(5)
+            return f"VRPSS{new_number}"
 
     @classmethod
-    def create_from_inspection(cls, inspection_report):
-        if inspection_report.remarks == "sticker released" and inspection_report.is_approved:
-            vehicle = inspection_report.payment_number.registration.vehicle
+    def create_from_registration(cls, registration):
+        """
+        Create vehicle pass from registration when status is 'sticker released'
+        """
+        if registration.status == "sticker released":
+            vehicle = registration.vehicle
+            user_school_role = registration.user.school_role
             
+            # Check if vehicle pass already exists for this vehicle
             if not cls.objects.filter(vehicle=vehicle).exists():
-                return cls.objects.create(
+                vehicle_pass = cls.objects.create(
                     vehicle=vehicle,
-                    passNumber=cls.generate_pass_number(),
-                    passExpire=now().date() + timedelta(days=365),  # 1-year validity
+                    pass_number=cls.generate_pass_number(user_school_role),
+                    pass_expire=now().date() + timedelta(days=365),  # 1-year validity
                     status="active"
                 )
+                
+                # Update registration sticker_released_date if not already set
+                if not registration.sticker_released_date:
+                    registration.sticker_released_date = now().date()
+                    registration.save(update_fields=['sticker_released_date'])
+                
+                return vehicle_pass
+            else:
+                # If vehicle pass already exists, just return the existing one
+                return cls.objects.get(vehicle=vehicle)
+        else:
+            raise ValueError(f"Cannot create vehicle pass. Registration status is '{registration.status}', expected 'sticker released'")
+
+    @classmethod
+    def create_vehicle_pass(cls, vehicle, user_school_role):
+        """
+        Direct method to create vehicle pass with user school role
+        """
+        if not cls.objects.filter(vehicle=vehicle).exists():
+            return cls.objects.create(
+                vehicle=vehicle,
+                pass_number=cls.generate_pass_number(user_school_role),
+                pass_expire=now().date() + timedelta(days=365),
+                status="active"
+            )
+        else:
+            raise ValueError("Vehicle pass already exists for this vehicle")
 
 class Notification(BaseModel):
     NOTIFICATION_TYPES = [

@@ -6,6 +6,21 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/user-dashboard-style.css' %}">
 <link rel="icon" href="{% static 'images/favicon.png' %}">
+<style>
+        /* Ensure main content shifts to the right of sidebar */
+    .dashboard-wrapper {
+        display: flex;
+    }
+    .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        margin-left: auto;
+    }
+    /* Ensure cards and table have proper spacing */
+    .dashboard-card {
+        min-height: 140px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
