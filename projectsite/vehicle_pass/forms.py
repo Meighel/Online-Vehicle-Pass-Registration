@@ -1,10 +1,7 @@
 from django import forms
 from .models import (UserProfile,
-                     PaymentTransaction,
                      Registration,
                      Vehicle,
-                     InspectionReport,
-                     CashierProfile,
                      SecurityProfile
 )
 from django.contrib.auth.hashers import make_password
@@ -38,63 +35,13 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = '__all__' 
 
-class PaymentTransactionForm(forms.ModelForm):
-    class Meta:
-        model = PaymentTransaction
-        fields = ['status', 'cashier']
-        labels = {
-            'cashier': 'Cashier'
-        }
 
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
-
-        if self.user:
-            try:
-                # Get UserProfile instance
-                if isinstance(self.user, str):
-                    user_profile = UserProfile.objects.get(id=self.user)
-                else:
-                    user_profile = self.user
-                
-                # Get cashier profile
-                cashier_profile = CashierProfile.objects.get(user=user_profile)
-                
-                # Restrict choices to ONLY this cashier - this is the key change
-                self.fields['cashier'].queryset = CashierProfile.objects.filter(id=cashier_profile.id)
-                
-                # Set the initial value to the current cashier
-                self.fields['cashier'].initial = cashier_profile
-                
-            except CashierProfile.DoesNotExist:
-                self.fields['cashier'].initial = None
-
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-        # Make absolutely sure the cashier is set
-        if hasattr(self, 'user') and self.user and not instance.cashier:
-            try:
-                if isinstance(self.user, str):
-                    user_profile = UserProfile.objects.get(id=self.user)
-                else:
-                    user_profile = self.user
-                cashier_profile = CashierProfile.objects.get(user=user_profile)
-                instance.cashier = cashier_profile
-            except (UserProfile.DoesNotExist, CashierProfile.DoesNotExist):
-                pass
-        
-        if commit:
-            instance.save()
-        return instance
-
-
-class ApplicationForm(forms.ModelForm):
+class RegistrationForm(forms.ModelForm):
     class Meta:
         model = Registration
-        fields = ['status', 'remarks', 'document_reviewed_by']
+        fields = ['status', 'remarks', 'initial_approved_by']
         labels = {
-            'document_reviewed_by': 'Security Personnel'
+            'initial_approved_by': 'Security Personnel'
         }
 
     def __init__(self, *args, **kwargs):
@@ -166,6 +113,10 @@ class VehicleRegistrationStep1Form(forms.Form):
         label='Corporate Email',
         widget=forms.EmailInput(attrs={'placeholder': '20228000X@psu.edu.ph'})
     )
+    contact = forms.Charfield(
+        label='Contact Number',
+        widget=forms.TextInput(attrs={'placeholder': '+6391234567891'})
+    )
     address = forms.CharField(
         max_length=105,
         label='Address',
@@ -177,13 +128,15 @@ class VehicleRegistrationStep1Form(forms.Form):
         widget=forms.Select(attrs={'placeholder': 'Select your role'})
     )
     department_or_workplace = forms.CharField(
+        choices = UserProfile.WORKPLACE_CHOICES
         max_length=100,
         required=False,
-        label='Department/Workplace',
-        widget=forms.TextInput(attrs={'placeholder': 'Enter your college or workplace'})
+        label='Workplace',
+        widget=forms.Select(attrs={'placeholder': 'Enter your college or workplace'})
     )
     college = forms.CharField(
-        max_length=100,
+        choices = UserProfile.COLLEGE_CHOICES
+        max_length=150,
         required=False,
         label='College',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your college'})

@@ -114,7 +114,7 @@ class UserProfile(BaseModel):
         
     corporate_email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=128)
-    contact = models.CharField(max_length=13)
+    contact = models.CharField(max_length=14)
     lastname = models.CharField(max_length=25) 
     firstname = models.CharField(max_length=50)
     middlename = models.CharField(max_length=25, blank=True, null=True)
@@ -137,7 +137,7 @@ class UserProfile(BaseModel):
 
     # FOR EMPLOYEE
     position = models.CharField(max_length=50, blank=True, null=True)
-    office_or_college = models.CharField(max_length=75, blank=True, null=True)
+    workplace = models.CharField(max_length=150, choices=WORKPLACE_CHOICES, blank=True, null=True)
 
     #extra fields
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user', null=True)

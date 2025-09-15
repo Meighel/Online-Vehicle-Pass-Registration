@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.db import transaction
 from datetime import timedelta
 import pytz
-from .models import Registration, PaymentTransaction, InspectionReport, VehiclePass
+from .models import Registration, VehiclePass
 
 @receiver(user_logged_in)
 def log_user_login(sender, request, user, **kwargs):
