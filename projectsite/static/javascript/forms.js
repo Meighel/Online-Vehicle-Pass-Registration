@@ -31,16 +31,16 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       orNumber: {
         el: $("#id_or_number"),
-        regex: /^\d{1,15}$/,  // Allows 1 to 15 digits
+        regex: /^\d{1,15}$/,
         message: "OR number must be numeric and a max of 15 digits"
       },
       crNumber: {
         el: $("#id_cr_number"),
-        regex: /^\d{1,9}$/,  // Allows 1 to 9 digits
+        regex: /^\d{1,9}$/,
         message: "CR number must be numeric and a max of 9 digits"
       },
       ownersContactNumber: {
-        el: $("#id_owner_contact_number"), // corrected ID
+        el: $("#id_contact_number"), // Fixed ID to match HTML
         regex: /^[0-9]{11}$/,
         message: "Contact number must be exactly 11 digits"
       }
@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         errorEl.id = errorId;
         errorEl.style.color = "red";
         errorEl.style.fontSize = "0.8rem";
+        errorEl.style.marginTop = "5px";
         el.insertAdjacentElement("afterend", errorEl);
       }
 
@@ -72,22 +73,26 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const validateRequiredInputs = (container) => {
-    const requiredFields = container.querySelectorAll("input[required]");
-    return [...requiredFields].every(
-      (input) => input.name === "middleName" || input.value.trim()
-    );
+    const requiredFields = container.querySelectorAll("input[required], select[required]");
+    return [...requiredFields].every((input) => {
+      // Allow middle name to be empty even if required
+      if (input.name === "middle_name" || input.name === "middleName") return true;
+      return input.value.trim() !== "";
+    });
   };
 
+  // Step 1 validation
   const validateForm1 = () => {
-    const form = $("#vehicle-form");
+    const form = $("form");
     const nextBtn = $("#form1-next-btn");
     if (!form || !nextBtn) return;
 
-    nextBtn.disabled = !validateRequiredInputs(form);
+    const isValid = validateRequiredInputs(form);
+    nextBtn.disabled = !isValid;
   };
 
   const handleForm1Submit = (e) => {
-    const form = $("#vehicle-form");
+    const form = $("form");
     if (!form) return;
 
     if (!validateRequiredInputs(form)) {
@@ -96,38 +101,73 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Step 2 functionality
   const toggleOwnerDetails = () => {
     const ownerDetails = $("#owner-details");
     const selected = $('input[name="owner"]:checked');
 
-    if (!ownerDetails || !selected) return;
+    if (!ownerDetails) return;
 
-    if (selected.value === "no") {
+    if (selected && selected.value === "no") {
       ownerDetails.style.display = "block";
+      // Make owner details fields required when visible
+      ownerDetails.querySelectorAll("input, select").forEach((input) => {
+        if (input.name !== "owner_suffix") { // Suffix is optional
+          input.setAttribute("required", "required");
+        }
+      });
     } else {
       ownerDetails.style.display = "none";
-      ownerDetails.querySelectorAll("input").forEach((input) => (input.value = ""));
+      // Clear values and remove required attribute when hidden
+      ownerDetails.querySelectorAll("input, select").forEach((input) => {
+        input.value = "";
+        input.removeAttribute("required");
+      });
     }
   };
 
   const validateForm2 = () => {
     const ownerRadio = $('input[name="owner"]:checked');
     const ownerDetails = $("#owner-details");
-    const nextBtn = $(".form2-btn");
+    const nextBtn = $("#form2-next-btn");
 
     let isValid = !!ownerRadio;
 
-    if (ownerRadio?.value === "no" && ownerDetails) {
-      const requiredInputs = ownerDetails.querySelectorAll("input[required]");
-      isValid = isValid && [...requiredInputs].every((input) => input.value.trim());
+    // Check if "No" is selected and owner details are required
+    if (ownerRadio && ownerRadio.value === "no" && ownerDetails) {
+      const requiredInputs = ownerDetails.querySelectorAll("input[required], select[required]");
+      isValid = isValid && [...requiredInputs].every((input) => input.value.trim() !== "");
     }
 
     if (nextBtn) nextBtn.disabled = !isValid;
   };
 
+  const handleForm2Submit = (e) => {
+    const ownerRadio = $('input[name="owner"]:checked');
+    const ownerDetails = $("#owner-details");
+
+    if (!ownerRadio) {
+      e.preventDefault();
+      alert("Please select whether you are the owner of the vehicle.");
+      return;
+    }
+
+    if (ownerRadio.value === "no" && ownerDetails) {
+      const requiredInputs = ownerDetails.querySelectorAll("input[required], select[required]");
+      const isValid = [...requiredInputs].every((input) => input.value.trim() !== "");
+      
+      if (!isValid) {
+        e.preventDefault();
+        alert("Please fill in all required owner information fields.");
+        return;
+      }
+    }
+  };
+
+  // Step 3 validation
   const validateForm3 = () => {
-    const input = $(".form3-form-group input[type='url']");
-    const nextBtn = $(".form3-btn");
+    const input = $(".form3-form-group input[type='url'], input[name='google_drive_link']");
+    const nextBtn = $(".form3-btn, .btn[type='submit']");
 
     if (!input || !nextBtn) return;
 
@@ -139,30 +179,44 @@ document.addEventListener("DOMContentLoaded", () => {
       errorEl.id = errorId;
       errorEl.style.color = "red";
       errorEl.style.fontSize = "0.8rem";
+      errorEl.style.marginTop = "5px";
       input.insertAdjacentElement("afterend", errorEl);
     }
 
     const value = input.value.trim();
-    const isValidDriveLink = /^https:\/\/drive\.google\.com\/(file\/d\/|open\?id=|uc\?id=)[\w-]+/.test(value);
+    const isValidDriveLink = value === "" || /^https:\/\/drive\.google\.com\/(file\/d\/|open\?id=|uc\?id=)[\w-]+/.test(value);
 
-    input.classList.toggle("invalid", !isValidDriveLink && value !== "");
-    errorEl.textContent = !isValidDriveLink && value !== "" 
+    input.classList.toggle("invalid", !isValidDriveLink);
+    errorEl.textContent = !isValidDriveLink 
       ? "Please enter a valid Google Drive link." 
       : "";
 
     nextBtn.disabled = !isValidDriveLink;
   };
 
-  // Register all listeners
+  // Initialize all functionality
   const init = () => {
     setProgressBar();
     addRealTimeValidation();
 
-    // Step 1
-    const form1 = $("#vehicle-form");
-    if (form1 && window.location.pathname.includes("step_1")) {
-      form1.addEventListener("input", validateForm1);
-      form1.addEventListener("submit", handleForm1Submit);
+    const currentPath = window.location.pathname;
+
+    // Step 1 - Personal Information Form
+    if (currentPath.includes("step_1") || currentPath.includes("vehicle_registration") && !currentPath.includes("step_2") && !currentPath.includes("step_3")) {
+      const form = $("form");
+      const nextBtn = $("#form1-next-btn");
+      
+      if (form && nextBtn) {
+        // Add event listeners to all form inputs
+        const inputs = form.querySelectorAll("input, select");
+        inputs.forEach((input) => {
+          input.addEventListener("input", validateForm1);
+          input.addEventListener("change", validateForm1);
+        });
+
+        form.addEventListener("submit", handleForm1Submit);
+        validateForm1(); // Initial validation
+      }
     }
 
     // Step 2
@@ -194,10 +248,14 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // Step 3
-    const form3Input = $(".form3-form-group input[type='url']");
-    if (form3Input) {
-      form3Input.addEventListener("input", validateForm3);
+    // Step 3 - Document Upload Form
+    if (currentPath.includes("step_3")) {
+      const input = $("input[type='url'], input[name='google_drive_link']");
+      
+      if (input) {
+        input.addEventListener("input", validateForm3);
+        validateForm3(); // Initial validation
+      }
     }
   };
 

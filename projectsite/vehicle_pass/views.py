@@ -1245,44 +1245,68 @@ def user_application(request):
 def vehicle_registration_step_1(request):
     user_id = request.session.get("user_id")
     user = UserProfile.objects.get(id=user_id)
-    
+
     if request.method == 'POST':
         form = VehicleRegistrationStep1Form(request.POST)
         if form.is_valid():
-            # Store data in session for later use
             step1_data = form.cleaned_data
+            # Save Step 1 data into session
             request.session['step1_data'] = {
-                'last_name': step1_data['last_name'],
-                'first_name': step1_data['first_name'],
+                # Personal Information
+                'lastname': step1_data['lastname'],
+                'firstname': step1_data['firstname'],
                 'middle_name': step1_data['middle_name'],
                 'suffix': step1_data['suffix'],
-                'corporate_email': step1_data['corporate_email'],
                 'address': step1_data['address'],
-                'role': step1_data['role'],
-                'department_or_workplace': step1_data['department_or_workplace'],
+                'contact': step1_data['contact'],
+                'corporate_email': step1_data['corporate_email'],
+                'school_role': step1_data['school_role'],
+
+                # Employees
+                'position': step1_data['position'],
+                'workplace': step1_data['workplace'],
+
+                # Students
                 'college': step1_data['college'],
                 'program': step1_data['program'],
-                # 'driver_license_number': step1_data['driver_license_number'],
-                'vehicle_type': step1_data['vehicle_type'],
-                'vehicle_color': step1_data['vehicle_color'],
-                'model': step1_data['model'],
-                'plate_number': step1_data['plate_number'],
-                'chassis_number': step1_data['chassis_number'],
-                'or_number': step1_data['or_number'],
-                'cr_number': step1_data['cr_number']
+
+                # Family Info
+                'father_name': step1_data['father_name'],
+                'father_contact': step1_data['father_contact'],
+                'father_address': step1_data['father_address'],
+                'mother_name': step1_data['mother_name'],
+                'mother_contact': step1_data['mother_contact'],
+                'mother_address': step1_data['mother_address'],
+                'guardian_name': step1_data['guardian_name'],
+                'guardian_contact': step1_data['guardian_contact'],
+                'guardian_address': step1_data['guardian_address'],
             }
             return redirect('vehicle_registration_step_2')
     else:
-        # Pre-fill form with user data if available
+        # Pre-fill form with user profile data if available
         initial_data = {
-            'first_name': user.firstname,
+            'firstname': user.firstname,
             'middle_name': user.middle_name,
-            'last_name': user.lastname,
+            'lastname': user.lastname,
             'suffix': user.suffix,
-            'corporate_email': user.corporate_email,
             'address': user.address,
-            'role': user.school_role,
-            # 'driver_license_number': user.dl_number
+            'contact': user.contact,
+            'corporate_email': user.corporate_email,
+            'school_role': user.school_role,
+            'position': getattr(user, 'position', ''),
+            'workplace': getattr(user, 'workplace', ''),
+            'college': getattr(user, 'college', ''), 
+            'program': getattr(user, 'program', ''),
+            # Family info may be blank initially
+            'father_name': getattr(user, 'father_name', ''),
+            'father_contact': getattr(user, 'father_contact', ''),
+            'father_address': getattr(user, 'father_address', ''),
+            'mother_name': getattr(user, 'mother_name', ''),
+            'mother_contact': getattr(user, 'mother_contact', ''),
+            'mother_address': getattr(user, 'mother_address', ''),
+            'guardian_name': getattr(user, 'guardian_name', ''),
+            'guardian_contact': getattr(user, 'guardian_contact', ''),
+            'guardian_address': getattr(user, 'guardian_address', ''),
         }
         form = VehicleRegistrationStep1Form(initial=initial_data)
 
@@ -1292,25 +1316,38 @@ def vehicle_registration_step_1(request):
     }
     return render(request, 'Forms/forms_1.html', context)
 
+# views.py
 @login_required
 def vehicle_registration_step_2(request):
     user_id = request.session.get("user_id")
     user = UserProfile.objects.get(id=user_id)
-    
+
     if request.method == 'POST':
         form = VehicleRegistrationStep2Form(request.POST)
         if form.is_valid():
-            # Store owner data in session
             step2_data = form.cleaned_data
+
+            # Save Step 2 data into session
             request.session['step2_data'] = {
-                'is_owner': step2_data['owner'] == 'yes',
-                'owner_first_name': step2_data.get('owner_first_name', ''),
-                'owner_middle_name': step2_data.get('owner_middle_name', ''),
-                'owner_last_name': step2_data.get('owner_last_name', ''),
+                # Vehicle Information
+                'make_model': step2_data['make_model'],
+                'plate_number': step2_data['plate_number'],
+                'year_model': step2_data['year_model'],
+                'color': step2_data['color'],
+                'type': step2_data['type'],
+                'engine_number': step2_data['engine_number'],
+                'chassis_number': step2_data['chassis_number'],
+
+                # Owner Information (if not the applicant)
+                'owner_firstname': step2_data.get('owner_firstname', ''),
+                'owner_middlename': step2_data.get('owner_middlename', ''),
+                'owner_lastname': step2_data.get('owner_lastname', ''),
                 'owner_suffix': step2_data.get('owner_suffix', ''),
                 'relationship_to_owner': step2_data.get('relationship_to_owner', ''),
-                'owner_contact_number': step2_data.get('owner_contact_number', '')
+                'contact_number': step2_data.get('contact_number', ''),
+                'address': step2_data.get('address', ''),
             }
+
             return redirect('vehicle_registration_step_3')
     else:
         form = VehicleRegistrationStep2Form()
@@ -1320,6 +1357,7 @@ def vehicle_registration_step_2(request):
         'user': user
     }
     return render(request, 'Forms/forms_2.html', context)
+
 
 @login_required
 def vehicle_registration_step_3(request):

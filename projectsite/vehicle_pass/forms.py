@@ -250,34 +250,65 @@ class VehicleRegistrationStep1Form(forms.Form):
     # )
 
 class VehicleRegistrationStep2Form(forms.Form):
+    # Vehicle Information
+    make_model = forms.CharField(
+        max_length=35,
+        label="Vehicle Make and Model",
+        widget=forms.TextInput(attrs={'placeholder': 'e.g. Toyota Vios, Honda Click'})
+    )
+    plate_number = forms.CharField(
+        max_length=10,
+        label="Plate Number",
+        widget=forms.TextInput(attrs={'placeholder': 'e.g. ABC1234'})
+    )
+    year_model = forms.IntegerField(
+        label="Year Model",
+        widget=forms.NumberInput(attrs={'placeholder': 'e.g. 2020'})
+    )
+    color = forms.CharField(
+        max_length=20,
+        label="Color",
+        widget=forms.TextInput(attrs={'placeholder': 'e.g. Red'})
+    )
+    vehicle_type = forms.ChoiceField(
+        choices=Vehicle.VEHICLE_TYPE,
+        label="Vehicle Type",
+        widget=forms.Select()
+    )
+    engine_number = forms.CharField(
+        max_length=25,
+        label="Motor/Engine Number",
+        widget=forms.TextInput(attrs={'placeholder': 'Enter engine number'})
+    )
+    chassis_number = forms.CharField(
+        max_length=17,
+        label="Chassis Number",
+        widget=forms.TextInput(attrs={'placeholder': 'Enter chassis number'})
+    )
+
+    # Owner Information
     owner = forms.ChoiceField(
-        choices=[('yes', 'Yes, I am the owner of the vehicle'), 
+        choices=[('yes', 'Yes, I am the owner of the vehicle'),
                  ('no', 'No, I am registering on behalf of the owner')],
-        label='Are you the owner of this vehicle?',
+        label="Are you the owner of this vehicle?",
         widget=forms.RadioSelect()
     )
-    relationship_to_owner = forms.CharField(
-        max_length=100,
-        required=False,
-        label='Relationship to Owner',
-        widget=forms.TextInput(attrs={'placeholder': 'e.g. Father, Mother, etc.'})
-    )
-    owner_first_name = forms.CharField(
-        max_length=100,
+    owner_firstname = forms.CharField(
+        max_length=45,
         required=False,
         label="Owner's First Name",
         widget=forms.TextInput(attrs={'placeholder': "Enter owner's first name"})
     )
-    owner_middle_name = forms.CharField(
-        max_length=100,
+    owner_middlename = forms.CharField(
+        max_length=45,
         required=False,
         label="Owner's Middle Name",
-        widget=forms.TextInput(attrs={'placeholder': "Enter owner's middle name (optional)"})
+        widget=forms.TextInput(attrs={'placeholder': "Enter owner's middle name"})
     )
-    owner_last_name = forms.CharField(
-        max_length=100,
-        label="Owner's Last Name",
+    owner_lastname = forms.CharField(
+        max_length=45,
         required=False,
+        label="Owner's Last Name",
         widget=forms.TextInput(attrs={'placeholder': "Enter owner's last name"})
     )
     owner_suffix = forms.CharField(
@@ -286,12 +317,25 @@ class VehicleRegistrationStep2Form(forms.Form):
         label="Owner's Suffix",
         widget=forms.TextInput(attrs={'placeholder': "e.g. Jr"})
     )
-    owner_contact_number = forms.CharField(
+    relationship_to_owner = forms.CharField(
         max_length=15,
+        required=False,
+        label="Relationship to Owner",
+        widget=forms.TextInput(attrs={'placeholder': "e.g. Father, Mother, etc."})
+    )
+    contact_number = forms.CharField(
+        max_length=13,
         required=False,
         label="Owner's Contact Number",
         widget=forms.TextInput(attrs={'placeholder': "e.g. 09123456789"})
     )
+    address = forms.CharField(
+        max_length=75,
+        required=False,
+        label="Owner's Address",
+        widget=forms.TextInput(attrs={'placeholder': "Enter owner's address"})
+    )
+
     
     def clean(self):
         cleaned_data = super().clean()
