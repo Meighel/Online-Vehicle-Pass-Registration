@@ -28,29 +28,90 @@ class UserProfile(BaseModel):
                    ('university official', 'University Personnel')
                    ]
     
-    COLLEGE_CHOICES = [('CAD'), ('College of Architecture and Design'),
-                       ('CAH'), ('College of Arts and Humanities'),
-                       ('CBA'), ('College of Business and Accountancy'),
-                       ('CCJE'), ('College of Criminal Justice and Education'),
-                       ('CoE'), ('College of Engineering'),
-                       ('CHTM'), ('College of Hospitality Management and Tourism'),
-                       ('CNHS'), ('College of Nursing and Health Sciences'),
-                       ('CS'), ('College of Sciences'),
-                       ('CTE'), ('College of Teacher Education'),                       
-                       ]
-    
-    OFFICE_CHOICES = [('CAD'), ('College of Architecture and Design'),
-                       ('CAH'), ('College of Arts and Humanities'),
-                       ('CBA'), ('College of Business and Accountancy'),
-                       ('CCJE'), ('College of Criminal Justice and Education'),
-                       ('CoE'), ('College of Engineering'),
-                       ('CHTM'), ('College of Hospitality Management and Tourism'),
-                       ('CNHS'), ('College of Nursing and Health Sciences'),
-                       ('CS'), ('College of Sciences'),
-                       ('CTE'), ('College of Teacher Education'),                       
-                       ]
+    COLLEGE_CHOICES = [
+        ('CAD', 'College of Architecture and Design'),
+        ('CAH', 'College of Arts and Humanities'),
+        ('CBA', 'College of Business and Accountancy'),
+        ('CCJE', 'College of Criminal Justice and Education'),
+        ('CoE', 'College of Engineering'),
+        ('CHTM', 'College of Hospitality Management and Tourism'),
+        ('CNHS', 'College of Nursing and Health Sciences'),
+        ('CS', 'College of Sciences'),
+        ('CTE', 'College of Teacher Education'),
+    ]
+
+    OFFICE_CHOICES = [
+        ('university president', 'University President'),
+        ('university president coa', 'University President COA'),
+        ('office of the university secretary', 'Office of the University Secretary'),
+        ('legal office', 'Legal Office (Data Privacy Office)'),
+        ('planning and development office', 'Planning and Development Office'),
+        ('office of the internal audit services', 'Office of the Internal Audit Services (QMS)'),
+        ('public information office', 'Public Information Office'),
+        ('alumni affairs office', 'Alumni Affairs Office'),
+        ('academic council', 'Academic Council'),
+        ('administrative council', 'Administrative Council'),
+        ('research and extension council', 'Research and Extension Council'),
+        ('management committee', 'Management Committee'),
+        ('university ethics committee', 'University Ethics Committee'),
+        ('gender and development office', 'Gender and Development Office'),
+        ('international affairs and linkages office', 'International Affairs and Linkages Office'),
+        ('office of the vice president for finance and administration', 'Office of the Vice President for Finance and Administration'),
+        ('bids and awards committee', 'Bids and Awards Committee'),
+        ('administrative management office', 'Administrative Management Office'),
+        ('records archives management office', 'Records Archives Management Office'),
+        ('human resource management office', 'Human Resource Management Office'),
+        ('faculty and staff development unit', 'Faculty and Staff Development Unit'),
+        ('health services office', 'Health Services Office'),
+        ('management information system information office', 'Management Information System Information Office'),
+        ('security office', 'Security Office'),
+        ('supply and property management office', 'Supply and Property Management Office'),
+        ('disaster risk reduction and management office', 'Disaster Risk Reduction and Management Office'),
+        ('project management office', 'Project Management Office'),
+        ('general services office', 'General Services Office'),
+        ('utility and environmental management office', 'Utility and Environmental Management Office'),
+        ('motorpool office', 'Motorpool Office'),
+        ('finance management service offices (cfo)', 'Finance Management Service Offices (CFO)'),
+        ('accounting office', 'Accounting Office'),
+        ('processing unit', 'Processing Unit'),
+        ('student accounts & assessment', 'Student Accounts & Assessment'),
+        ('financial reporting', 'Financial Reporting'),
+        ('budget office', 'Budget Office'),
+        ('production services/income generating projects office', 'Production Services/Income Generating Projects Office'),
+        ('production', 'Production'),
+        ('sifma', 'SIFMA'),
+        ('university bookstore', 'University Bookstore'),
+        ('auxiliary services - canteen', 'Auxiliary Services - Canteen'),
+        ('auxiliary services - hostel', 'Auxiliary Services - Hostel'),
+        ('auxiliary services - dormitory', 'Auxiliary Services - Dormitory'),
+        ('university printing press', 'University Printing Press'),
+        ('procurement office', 'Procurement Office'),
+        ('cashiers office', 'Cashier’s Office'),
+        ('office of the vice president for research, development and extension', 'Office of the Vice President for Research, Development and Extension'),
+        ('university research office', 'University Research Office'),
+        ('university extension service office', 'University Extension Service Office'),
+        ('intellectual property and technology transfer office', 'Intellectual Property and Technology Transfer Office'),
+        ('palawan studies center', 'Palawan Studies Center'),
+        ('center for strategy policy and governance', 'Center for Strategy Policy and Governance'),
+        ('panrehiyong iv-b sentro ng wikang pilipino', 'Panrehiyong IV-B Sentro ng Wikang Pilipino'),
+        ('marine science research center', 'Marine Science Research Center'),
+        ('palawan international technology business incubator & startup hub office', 'Palawan International Technology Business Incubator & Startup Hub Office'),
+        ('office of the vice president for academic affairs', 'Office of the Vice President for Academic Affairs'),
+        ('office of the eteeap', 'Office of the ETEEAP'),
+        ('office of the university registrar', 'Office of the University Registrar'),
+        ('university quality assurance center', 'University Quality Assurance Center'),
+        ('office of the university sports', 'Office of the University Sports'),
+        ('office of the curriculum & instructional materials development', 'Office of the Curriculum & Instructional Materials Development'),
+        ('office of the student affairs and services', 'Office of the Student Affairs and Services'),
+        ('social and cultural affairs (psu band, psu dance troupe, psu singers)', 'Social and Cultural Affairs (PSU Band, PSU Dance Troupe, PSU Singers)'),
+        ('office of the university library', 'Office of the University Library'),
+        ('psu museum', 'PSU Museum'),
+    ]
+
+    WORKPLACE_CHOICES = OFFICE_CHOICES + COLLEGE_CHOICES    
 
     # PERSONAL INFORMATION
+        
     corporate_email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=128)
     contact = models.CharField(max_length=13)
@@ -114,12 +175,7 @@ class SecurityProfile(BaseModel):
 
 class AdminProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(
-        upload_to='profile_pictures/',
-        blank=True,
-        null=True,
-    )
-    admin_id = models.CharField(max_length=15)
+    admin_id = models.CharField(max_length=10)
 
     def __str__(self):
         return f"Admin: {self.user.firstname} {self.user.lastname} ({self.admin_id})"
@@ -150,9 +206,9 @@ class PasswordResetCode(BaseModel):
     
 
 class Vehicle(BaseModel):
-    VEHICLE_TYPE = [('motor'), ('Motor'),
-                    ('car'), ('Car'),
-                    ('van'), ('Van')]
+    VEHICLE_TYPE = [('motor', 'Motor'),
+                    ('car', 'Car'),
+                    ('van', 'Van')]
     
     applicant = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
     make_model = models.CharField(max_length=35)
@@ -163,6 +219,16 @@ class Vehicle(BaseModel):
     engine_number = models.CharField(max_length=25)
     chassis_number = models.CharField(max_length=17)
 
+    # Only relevant if not the owner
+    owner_firstname = models.CharField(max_length=45, null=True, blank=True)
+    owner_middlename = models.CharField(max_length=45, null=True, blank=True)
+    owner_lastname = models.CharField(max_length=45, null=True, blank=True)
+    owner_suffix = models.CharField(max_length=5, null=True, blank=True)
+    relationship_to_owner = models.CharField(max_length=15, null=True, blank=True)
+    contact_number = models.CharField(max_length=13, null=True, blank=True)
+    address = models.CharField(max_length=75, null=True, blank=True)
+
+
     def __str__(self):
         return f"{self.plate_number}"  
 
@@ -170,18 +236,23 @@ class Vehicle(BaseModel):
         if Vehicle.objects.filter(applicant=self.applicant).count() >= 2:
             raise ValidationError({'Applicant': 'You can only register up to two vehicles.'})
 
+        if self.is_owner:
+            if any([self.owner_firstname, self.owner_lastname, self.relationship_to_owner, self.contact_number]):
+                raise ValidationError("Owner fields should be empty if you are the vehicle owner.")
+        else:
+            if not all([self.owner_firstname, self.owner_lastname, self.relationship_to_owner, self.contact_number]):
+                raise ValidationError("Complete owner details are required if you're not the owner.")
+
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
-
-
 
 class Registration(BaseModel):
     STATUS_CHOICES = [
         ('no application', 'No Application'),
         ('application submitted', 'Application Submitted'),
         ('initial approval', 'Waiting for Approval by OIC'),
-        ('final approval', 'Waiting for Final Approval by GSO - Director')
+        ('final approval', 'Waiting for Final Approval by GSO - Director'),
         ('approved', 'Approved'),
         ('sticker released', 'Vehicle Pass Sticker Released'),
         ('rejected', 'Rejected')
@@ -190,7 +261,7 @@ class Registration(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE) 
     files = models.URLField(max_length=255)
-    status = models.CharField(max_length=60, choices=STATUS_CHOICES, default='no application')
+    status = models.CharField(max_length=85, choices=STATUS_CHOICES, default='no application')
     remarks = models.TextField(null=True)
     initial_approved_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True, blank=True)
     final_approved_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True, blank=True)
@@ -215,34 +286,130 @@ class VehiclePass(BaseModel):
         ('revoked', 'Revoked')
     ]
     vehicle = models.OneToOneField(Vehicle, on_delete=models.CASCADE)
-    passNumber = models.CharField(max_length=10)
-    passExpire = models.DateField()
+    pass_number = models.CharField(max_length=20)
+    pass_expire = models.DateField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="active")
 
-
     def __str__(self):
-        return f"{self.passNumber}"
+        return f"{self.pass_number}"
     
-
     @staticmethod
-    def generate_pass_number():
-        last_pass = VehiclePass.objects.order_by('-id').first()
-        last_number = int(last_pass.passNumber[-5:]) if last_pass else 0
-        new_number = str(last_number + 1).zfill(5)
-        return f"VRPSS{new_number}"
+    def generate_pass_number(user_school_role):
+        """
+        Generate pass number based on user's school role:
+        - Student: STUDENT001 (limit: 2500)
+        - University Official: UNIVERSITY OFFICIALS001 (limit: 500)  
+        - Faculty & Staff: FACULTY AND STAFF0001 (limit: 1000)
+        """
+        
+        if user_school_role == 'student':
+            # Get last student pass number
+            student_passes = VehiclePass.objects.filter(
+                pass_number__startswith='STUDENT'
+            ).order_by('-id')
+            
+            if student_passes.exists():
+                last_pass = student_passes.first()
+                # Extract number from format like "STUDENT001"
+                last_number = int(last_pass.pass_number.replace('STUDENT', ''))
+                new_number = last_number + 1
+            else:
+                new_number = 1
+                
+            if new_number > 2500:
+                raise ValueError("Student pass limit (2500) exceeded")
+                
+            return f"STUDENTS {str(new_number).zfill(3)}"
+            
+        elif user_school_role == 'university official':
+            # Get last university official pass number
+            official_passes = VehiclePass.objects.filter(
+                pass_number__startswith='UNIVERSITY OFFICIALS'
+            ).order_by('-id')
+            
+            if official_passes.exists():
+                last_pass = official_passes.first()
+                # Extract number from format like "UNIVERSITY OFFICIALS001"
+                last_number = int(last_pass.pass_number.replace('UNIVERSITY OFFICIALS', ''))
+                new_number = last_number + 1
+            else:
+                new_number = 1
+                
+            if new_number > 500:
+                raise ValueError("University Officials pass limit (500) exceeded")
+                
+            return f"UNIVERSITY OFFICIALS {str(new_number).zfill(3)}"
+            
+        elif user_school_role == 'faculty & staff':
+            # Get last faculty & staff pass number
+            faculty_passes = VehiclePass.objects.filter(
+                pass_number__startswith='FACULTY AND STAFF'
+            ).order_by('-id')
+            
+            if faculty_passes.exists():
+                last_pass = faculty_passes.first()
+                # Extract number from format like "FACULTY AND STAFF0001"
+                last_number = int(last_pass.pass_number.replace('FACULTY AND STAFF', ''))
+                new_number = last_number + 1
+            else:
+                new_number = 1
+                
+            if new_number > 1000:
+                raise ValueError("Faculty and Staff pass limit (1000) exceeded")
+                
+            return f"FACULTY AND STAFF {str(new_number).zfill(4)}"
+        else:
+            # Fallback to original format for unknown roles
+            last_pass = VehiclePass.objects.order_by('-id').first()
+            last_number = int(last_pass.pass_number[-5:]) if last_pass else 0
+            new_number = str(last_number + 1).zfill(5)
+            return f"VRPSS{new_number}"
 
     @classmethod
-    def create_from_inspection(cls, inspection_report):
-        if inspection_report.remarks == "sticker released" and inspection_report.is_approved:
-            vehicle = inspection_report.payment_number.registration.vehicle
+    def create_from_registration(cls, registration):
+        """
+        Create vehicle pass from registration when status is 'sticker released'
+        """
+        if registration.status == "sticker released":
+            vehicle = registration.vehicle
+            user_school_role = registration.user.school_role
             
+            # Check if vehicle pass already exists for this vehicle
             if not cls.objects.filter(vehicle=vehicle).exists():
-                return cls.objects.create(
+                vehicle_pass = cls.objects.create(
                     vehicle=vehicle,
-                    passNumber=cls.generate_pass_number(),
-                    passExpire=now().date() + timedelta(days=365),  # 1-year validity
+                    pass_number=cls.generate_pass_number(user_school_role),
+                    pass_expire=now().date() + timedelta(days=365),  # 1-year validity
                     status="active"
                 )
+                
+                # Update registration sticker_released_date if not already set
+                if not registration.sticker_released_date:
+                    registration.sticker_released_date = now().date()
+                    registration.save(update_fields=['sticker_released_date'])
+                
+                return vehicle_pass
+            else:
+                # If vehicle pass already exists, just return the existing one
+                return cls.objects.get(vehicle=vehicle)
+        else:
+            raise ValueError(f"Cannot create vehicle pass. Registration status is '{registration.status}', expected 'sticker released'")
+
+    @classmethod
+    def create_vehicle_pass(cls, vehicle, user_school_role):
+        """
+        Direct method to create vehicle pass with user school role
+        """
+        if not cls.objects.filter(vehicle=vehicle).exists():
+            return cls.objects.create(
+                vehicle=vehicle,
+                pass_number=cls.generate_pass_number(user_school_role),
+                pass_expire=now().date() + timedelta(days=365),
+                status="active"
+            )
+        else:
+            raise ValueError("Vehicle pass already exists for this vehicle")
+        
 
 class Notification(BaseModel):
     NOTIFICATION_TYPES = [
