@@ -73,6 +73,7 @@ h2 {
 }
 
 /* Form 1 Specific Styles */
+/* Form 1 Specific Styles */
 .form1-h2 {
   font-size: 22px;
 }
@@ -81,45 +82,49 @@ h2 {
   font-size: 14px;
 }
 
-
 .form1-form-group label {
   font-size: 14px;
+  display: block;
+  margin-bottom: 5px;
+  text-align: left; /* align labels neatly */
 }
 
 .form1-form-group input[type="text"],
-.form1-form-group input[type="email"] {
-  width: 100%;
-  padding: 8px 12px;
+.form1-form-group input[type="email"],
+.form1-form-group input[type="number"],
+.form1-form-group select {
+  width: 100%; /* take full width */
+  padding: 10px 14px;
   border: none;
   border-radius: 25px;
   background: white;
   color: black;
   font-size: 14px;
-  text-align: center;
   margin-bottom: 20px;
+  box-sizing: border-box;
 }
 
-.form1-name-group {
-  display: flex;
-  gap: 30px;
-}
-
-.form1-name-group .form-group {
-  flex: 1;
-}
-
+.form1-name-group,
 .form1-aligned-group {
   display: flex;
-  gap: 30px;
+  flex-wrap: wrap; /* allow wrapping on small screens */
+  gap: 20px;
+  width: 100%;
 }
 
+.form1-name-group .form-group,
 .form1-aligned-group .form-group {
-  flex: 1;
+  flex: 1;         /* share space equally */
+  min-width: 200px; /* prevent shrinking too small */
+}
+
+.suffix-custom-size {
+  max-width: 80px;
 }
 
 .form1-radio-group {
   display: flex;
-  gap: 80px;
+  gap: 30px;
   align-items: center;
   flex: 1;
 }
@@ -146,18 +151,6 @@ h2 {
   background: yellow;
 }
 
-.form1-form-group select {
-  width: 100%;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 25px;
-  background: white;
-  color: black;
-  font-size: 14px;
-  text-align: center;
-  margin-bottom: 20px;
-  max-width: 185px;
-}
 
 /* Form 2 Specific Styles */
 .form2-h2 {

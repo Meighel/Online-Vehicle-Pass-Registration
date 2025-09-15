@@ -1252,9 +1252,9 @@ def vehicle_registration_step_1(request):
             # Store data in session for later use
             step1_data = form.cleaned_data
             request.session['step1_data'] = {
+                'last_name': step1_data['last_name'],
                 'first_name': step1_data['first_name'],
                 'middle_name': step1_data['middle_name'],
-                'last_name': step1_data['last_name'],
                 'suffix': step1_data['suffix'],
                 'corporate_email': step1_data['corporate_email'],
                 'address': step1_data['address'],
@@ -1262,7 +1262,7 @@ def vehicle_registration_step_1(request):
                 'department_or_workplace': step1_data['department_or_workplace'],
                 'college': step1_data['college'],
                 'program': step1_data['program'],
-                'driver_license_number': step1_data['driver_license_number'],
+                # 'driver_license_number': step1_data['driver_license_number'],
                 'vehicle_type': step1_data['vehicle_type'],
                 'vehicle_color': step1_data['vehicle_color'],
                 'model': step1_data['model'],
@@ -1282,7 +1282,7 @@ def vehicle_registration_step_1(request):
             'corporate_email': user.corporate_email,
             'address': user.address,
             'role': user.school_role,
-            'driver_license_number': user.dl_number
+            # 'driver_license_number': user.dl_number
         }
         form = VehicleRegistrationStep1Form(initial=initial_data)
 
