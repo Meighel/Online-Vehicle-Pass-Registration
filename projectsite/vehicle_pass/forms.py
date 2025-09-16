@@ -13,7 +13,7 @@ class UserSignupForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['corporate_email', 'firstname', 'middle_name', 'lastname', 'school_role']
+        fields = ['corporate_email', 'firstname', 'middlename', 'lastname', 'school_role']
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -34,7 +34,6 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = '__all__' 
-
 
 class RegistrationForm(forms.ModelForm):
     class Meta:
@@ -85,20 +84,20 @@ class RegistrationForm(forms.ModelForm):
             instance.save()
         return instance
 
- #Persona Information Form 
+#Personal Information Form 
 class VehicleRegistrationStep1Form(forms.Form):
-    first_name = forms.CharField(
+    firstname = forms.CharField(
         max_length=100,
         label='First Name',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your first name'})
     )
-    middle_name = forms.CharField(
+    middlename = forms.CharField(
         max_length=100,
         required=False,
         label='Middle Name',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your middle name'})
     )
-    last_name = forms.CharField(
+    lastname = forms.CharField(
         max_length=100,
         label='Last Name',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your last name'})
@@ -114,7 +113,7 @@ class VehicleRegistrationStep1Form(forms.Form):
         label='Address',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. Escano St., Brgy Tiniguiban'})
     )  
-    contact = forms.Charfield(
+    contact = forms.CharField(
         label='Contact Number',
         widget=forms.TextInput(attrs={'placeholder': '+6391234567891'})
     )
@@ -137,11 +136,10 @@ class VehicleRegistrationStep1Form(forms.Form):
     position = forms.CharField(
         max_length=50,
         label="Position",
-        widget=forms.TextInput(attr={'placeholder':'e.g., dean, univeristy librarian, utility, etc.'})
+        widget=forms.TextInput(attrs={'placeholder':'e.g., dean, univeristy librarian, utility, etc.'})
     )
     workplace = forms.ChoiceField(
         choices = UserProfile.WORKPLACE_CHOICES,
-        max_length=100,
         required=False,
         label='Workplace',
         widget=forms.Select(attrs={'placeholder': 'Enter your college or workplace'})
@@ -150,7 +148,6 @@ class VehicleRegistrationStep1Form(forms.Form):
     #for student
     college = forms.ChoiceField(
         choices = UserProfile.COLLEGE_CHOICES,
-        max_length=150,
         required=False,
         label='College',
         widget=forms.Select(attrs={'placeholder': 'Enter your college'})
@@ -171,55 +168,55 @@ class VehicleRegistrationStep1Form(forms.Form):
         max_length=100,
         required = False,
         label='Father Name',
-        widget=forms.TextInput(attr={'placeholder': 'First Name MI. Surname'})
+        widget=forms.TextInput(attrs={'placeholder': 'First Name MI. Surname'})
     )
     father_contact = forms.CharField(
         max_length=100,
         required = False,
         label='Father Contact',
-        widget=forms.TextInput(attr={'placeholder': 'e.g., +6399876543210'})
+        widget=forms.TextInput(attrs={'placeholder': 'e.g., +6399876543210'})
     )
     father_address = forms.CharField(
         max_length = 150,
         required = False,
         label='Father Address',
-        widget=forms.TextInput(attr={'placeholder': 'Rizal St., Brgy. San Fernando, PPC'})
+        widget=forms.TextInput(attrs={'placeholder': 'Rizal St., Brgy. San Fernando, PPC'})
     )
     mother_name = forms.CharField(
         max_length=100,
         required = False,
         label='Mother Name',
-        widget=forms.TextInput(attr={'placeholder': 'First Name MI. Surname'})
+        widget=forms.TextInput(attrs={'placeholder': 'First Name MI. Surname'})
     )
     mother_contact = forms.CharField(
         max_length=100,
         required = False,
         label='Mother Contact',
-        widget=forms.TextInput(attr={'placeholder': 'e.g., +6399876543210'})
+        widget=forms.TextInput(attrs={'placeholder': 'e.g., +6399876543210'})
     )
     Mother_address = forms.CharField(
         max_length = 150,
         required = False,
         label='Mother Address',
-        widget=forms.TextInput(attr={'placeholder': 'Rizal St., Brgy. San Fernando, PPC'})
+        widget=forms.TextInput(attrs={'placeholder': 'Rizal St., Brgy. San Fernando, PPC'})
     )
     guardian_name = forms.CharField(
         max_length=100,
         required = False,
         label='Guardian Name',
-        widget=forms.TextInput(attr={'placeholder': 'First Name MI. Surname'})
+        widget=forms.TextInput(attrs={'placeholder': 'First Name MI. Surname'})
     )
     guardian_contact = forms.CharField(
         max_length=100,
         required = False,
         label='Guardian Contact',
-        widget=forms.TextInput(attr={'placeholder': 'e.g., +6399876543210'})
+        widget=forms.TextInput(attrs={'placeholder': 'e.g., +6399876543210'})
     )
     guardian_address = forms.CharField(
         max_length = 150,
         required = False,
         label='Guardian Address',
-        widget=forms.TextInput(attr={'placeholder': 'Rizal St., Brgy. San Fernando, PPC'})
+        widget=forms.TextInput(attrs={'placeholder': 'Rizal St., Brgy. San Fernando, PPC'})
     )
 
 class VehicleRegistrationStep2Form(forms.Form):
@@ -235,9 +232,8 @@ class VehicleRegistrationStep2Form(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'e.g. ABC-1234'})
     )
     year_model = forms.IntegerField(
-        max_length=4,
-        label='Year Model',
-        widget=forms.IntegerField(attr={'placeholder': 'e.g., 2023'})
+        label="Year Model",
+        widget=forms.NumberInput(attrs={'placeholder': 'e.g., 2023'})
     )
     color = forms.CharField(
         max_length=20,
@@ -249,7 +245,7 @@ class VehicleRegistrationStep2Form(forms.Form):
         label='Vehicle Type',
         widget=forms.Select(attrs={'placeholder': 'Choose type'})
     )
-    engine_number = forms.Charfield(
+    engine_number = forms.CharField(
         max_length=25,
         label='Engine Number',
         widget=forms.TextInput(attrs={'placeholder': 'Enter engine number'})
@@ -316,7 +312,7 @@ class VehicleRegistrationStep2Form(forms.Form):
         max_length=100,
         required = False,
         label="Owner's Address",
-        widget=forms.CharField(attrs={'placeholder':'Rizal Street, Brgy. San Fernando, PPC'})
+        widget=forms.TextInput(attrs={'placeholder':'Rizal Street, Brgy. San Fernando, PPC'})
     )
 
     
@@ -339,7 +335,7 @@ class VehicleRegistrationStep3Form(forms.Form):
     printed_name = forms.CharField(
         max_length = 125,
         label='Printed Name',
-        widget = forms.CharField(attr={'placeholder': 'First Name MI. Surname Suffix'})
+        widget = forms.TextInput(attrs={'placeholder': 'First Name MI. Surname Suffix'})
     )
     e_signature = forms.ImageField(
         label='E-signature',

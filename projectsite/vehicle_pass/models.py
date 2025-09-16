@@ -9,7 +9,6 @@ import random
 import string
 from datetime import timedelta
 
-
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -219,13 +218,13 @@ class Vehicle(BaseModel):
     applicant = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
     make_model = models.CharField(max_length=35)
     plate_number = models.CharField(max_length=10, unique=True)
-    year_model = models.IntegerField(max_length=4)
+    year_model = models.IntegerField()
     color = models.CharField(max_length=20)
     type = models.CharField(choices=VEHICLE_TYPE, max_length=5)
     engine_number = models.CharField(max_length=25)
     chassis_number = models.CharField(max_length=17)
     or_number = models.CharField(max_length=25)
-    cr_number = models.Charfield(max_length=25)
+    cr_number = models.CharField(max_length=25)
 
     # Only relevant if not the owner
     owner_firstname = models.CharField(max_length=45, null=True, blank=True)
@@ -271,15 +270,15 @@ class Registration(BaseModel):
     files = models.URLField(max_length=255)
     status = models.CharField(max_length=85, choices=STATUS_CHOICES, default='no application')
     remarks = models.TextField(null=True)
-    initial_approved_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True, blank=True)
-    final_approved_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, null=True, blank=True)
+    initial_approved_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, related_name='initial_approval', null=True, blank=True)
+    final_approved_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, related_name='final_approval', null=True, blank=True)
     date_of_filing = models.DateTimeField(auto_now_add=True)
     sticker_released_date = models.DateField(blank=True, null=True)
 
     # E-signature fields
     e_signature = models.ImageField(upload_to='signature/')
     printed_name = models.CharField(max_length=125)
-    signature_date = models.DateTimeField(auto_add_now=True)
+    signature_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Registration {self.registration_number} for {self.user.lastname}, {self.user.firstname}"
