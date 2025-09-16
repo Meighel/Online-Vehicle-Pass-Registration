@@ -344,13 +344,6 @@ body {
     font-size: 14px;
 }
 
-/* Enlarged search icon */
-.dataTables_filter label::before {
-    content: "🔍";
-    font-size: 20px;
-    display: inline-block;
-}
-
 /* Longer search box */
 .dataTables_filter input {
     width: 220px; /* make search bar longer */

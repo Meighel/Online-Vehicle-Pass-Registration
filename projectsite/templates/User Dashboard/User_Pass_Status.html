@@ -6,21 +6,36 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/user-dashboard-style.css' %}">
 <link rel="icon" href="{% static 'images/favicon.png' %}">
+<style>
+        /* Ensure main content shifts to the right of sidebar */
+    .dashboard-wrapper {
+        display: flex;
+    }
+    .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        margin-left: auto;
+    }
+    /* Ensure cards and table have proper spacing */
+    .dashboard-card {
+        min-height: 140px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="main-content flex-grow-1 ms-uto">
   <div class="container py-1">
     <!-- Title & Top Bar -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-      <h2 class="title mb-3 mb-md-0">Pass Status</h2>
-      <div class="d-flex align-items-center gap-3">
-        <!-- Notification Bell -->
-        <a href="Announcements.html" class="text-decoration-none text-light position-relative">
-          <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
-          <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
-        </a>
-      </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="title mb-3 mb-md-0">Pass Status</h2>
+        <div class="d-flex align-items-center gap-3">
+            <!-- Notification Bell -->
+            <a href="Announcements.html" class="text-decoration-none position-relative">
+                <img src="{% static 'images/notification.png' %}" alt="Notifications" width="30" height="30">
+                <div class="notification-badge"></div>
+            </a>
+        </div>
     </div>
 
     <hr class="border-secondary">

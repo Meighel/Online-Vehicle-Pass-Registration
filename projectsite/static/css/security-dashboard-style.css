@@ -361,7 +361,81 @@ body {
     padding-right: 15px;
 }
 
-/* ========== Responsive Design for User Settings ========== */
+.dataTables_wrapper .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.dataTables_wrapper .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.dataTables_paginate {
+    margin-left: auto;
+}
+
+.dataTables_info {
+    margin-right: auto;
+    color: #ccc;
+}
+
+/* Adjust "Show entries" dropdown */
+.dataTables_length label {
+    color: white;
+    font-size: 14px;
+}
+
+.dataTables_length select {
+    background-color: #000;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 4px 6px;
+}
+
+/* Adjust search input */
+.dataTables_filter {
+    text-align: right;
+}
+
+.dataTables_filter label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 14px;
+}
+
+
+/* Longer search box */
+.dataTables_filter input {
+    width: 220px; /* make search bar longer */
+    background-color: #1e1e1e;
+    color: white;
+    border: 2px solid yellow;
+    border-radius: 4px;
+    padding: 6px 10px;
+}
+
+.dataTables_paginate a {
+    background-color: #292929;
+    color: yellow !important;
+    border: 1px solid #444;
+    margin: 2px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+.dataTables_paginate .current {
+    background-color: yellow;
+    color: black !important;
+    font-weight: bold;
+}
 
 /* Extra Large screens (1200px and up) */
 @media (min-width: 1200px) {

@@ -11,12 +11,19 @@
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
     <style>
-
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-            margin-left: 120px;
-        }
+        /* Ensure main content shifts to the right of sidebar */
+    .dashboard-wrapper {
+        display: flex;
+    }
+    .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        margin-left: auto;
+    }
+    /* Ensure cards and table have proper spacing */
+    .dashboard-card {
+        min-height: 140px;
+    }
     </style>
 {% endblock %}
 
@@ -86,84 +93,85 @@
     <script src="{% static 'javascript/base.js' %}"></script>
     <script src="{% static 'javascript/Admin_User.js' %}"></script>
     <script src="{% static 'javascript/Security_Dashboard.js' %}"></script>
+
+    
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-
     <script>
-        $(document).ready(function () {
-            // Initialize DataTable
-            var table = $('#myTable').DataTable({
-                // Basic configuration
-                autoWidth: false,
-                responsive: true,
-                
-                // Custom DOM layout for better control
-                dom: '<"top"<"dataTables_length"l><"dataTables_filter"f>>rt<"bottom"<"dataTables_info"i><"dataTables_paginate"p>>',
-                
-                // Custom language settings
-                language: {
-                    search: "",
-                    lengthMenu: "Show _MENU_ entries",
-                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                    infoFiltered: "(filtered from _MAX_ total entries)",
-                    paginate: {
-                        first: "First",
-                        previous: "Prev",
-                        next: "Next",
-                        last: "Last"
-                    }
-                },
-                
-                // Pagination settings
-                pageLength: 10,
-                lengthMenu: [5, 10, 25, 50],
-                
-                // Dark theme adjustment
-                drawCallback: function() {
-                    // Ensure consistent styling after draw
-                    $('.dataTables_filter input').css({
-                        'background-color': 'white',
-                        'color': 'black',
-                        'border': '2px solid yellow'
-                    });
+            $(document).ready(function () {
+                // Initialize DataTable
+                var table = $('#myTable').DataTable({
+                    // Basic configuration
+                    autoWidth: false,
+                    responsive: true,
                     
-                    $('.dataTables_length select').css({
-                        'background-color': '#000',
-                        'color': 'white',
-                        'border': '1px solid #444'
-                    });
-                }
-            });
-            
-            // Date range filtering
-            $.fn.dataTable.ext.search.push(
-                function(settings, data, dataIndex) {
-                    var startDate = $('#start-date').val();
-                    var endDate = $('#end-date').val();
-                    var dateApplied = data[0]; // Date column is the first
-
-                    if (!startDate && !endDate) return true;
-
-                    var dateObj = new Date(dateApplied);
-                    var startDateObj = startDate ? new Date(startDate) : null;
-                    var endDateObj = endDate ? new Date(endDate) : null;
-
-                    if (startDateObj && endDateObj) {
-                        return dateObj >= startDateObj && dateObj <= endDateObj;
-                    } else if (startDateObj) {
-                        return dateObj >= startDateObj;
-                    } else if (endDateObj) {
-                        return dateObj <= endDateObj;
+                    // Custom DOM layout for better control
+                    dom: '<"top"<"dataTables_length"l><"dataTables_filter"f>>rt<"bottom"<"dataTables_info"i><"dataTables_paginate"p>>',
+                    
+                    // Custom language settings
+                    language: {
+                        search: "",
+                        lengthMenu: "Show _MENU_ entries",
+                        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                        infoFiltered: "(filtered from _MAX_ total entries)",
+                        paginate: {
+                            first: "First",
+                            previous: "Prev",
+                            next: "Next",
+                            last: "Last"
+                        }
+                    },
+                    
+                    // Pagination settings
+                    pageLength: 10,
+                    lengthMenu: [5, 10, 25, 50],
+                    
+                    // Dark theme adjustment
+                    drawCallback: function() {
+                        // Ensure consistent styling after draw
+                        $('.dataTables_filter input').css({
+                            'background-color': 'white',
+                            'color': 'black',
+                            'border': '2px solid yellow'
+                        });
+                        
+                        $('.dataTables_length select').css({
+                            'background-color': '#000',
+                            'color': 'white',
+                            'border': '1px solid #444'
+                        });
                     }
-                    return true;
-                }
-            );
-            
-            // Apply date filters when date inputs change
-            $('#start-date, #end-date').on('change', function() {
-                table.draw();
+                });
+                
+                // Date range filtering
+                $.fn.dataTable.ext.search.push(
+                    function(settings, data, dataIndex) {
+                        var startDate = $('#start-date').val();
+                        var endDate = $('#end-date').val();
+                        var dateApplied = data[0]; // Date column is the first
+
+                        if (!startDate && !endDate) return true;
+
+                        var dateObj = new Date(dateApplied);
+                        var startDateObj = startDate ? new Date(startDate) : null;
+                        var endDateObj = endDate ? new Date(endDate) : null;
+
+                        if (startDateObj && endDateObj) {
+                            return dateObj >= startDateObj && dateObj <= endDateObj;
+                        } else if (startDateObj) {
+                            return dateObj >= startDateObj;
+                        } else if (endDateObj) {
+                            return dateObj <= endDateObj;
+                        }
+                        return true;
+                    }
+                );
+                
+                // Apply date filters when date inputs change
+                $('#start-date, #end-date').on('change', function() {
+                    table.draw();
+                });
             });
-        });
-    </script>
+        </script>
 {% endblock %}
