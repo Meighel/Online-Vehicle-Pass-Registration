@@ -24,20 +24,26 @@ class UserProfile(BaseModel):
         ]
     
     SCHOOL_ROLE_CHOICES = [('student', 'Student'),
-                   ('faculty & staff', 'Faculty and Staff'),
-                   ('university official', 'University Personnel')
-                   ]
+                           ('faculty & staff', 'Faculty and Staff'),
+                           ('university official', 'University Official')
+    ]
     
-    COLLEGE_CHOICES = [
-        ('CAD', 'College of Architecture and Design'),
-        ('CAH', 'College of Arts and Humanities'),
-        ('CBA', 'College of Business and Accountancy'),
-        ('CCJE', 'College of Criminal Justice and Education'),
-        ('CoE', 'College of Engineering'),
-        ('CHTM', 'College of Hospitality Management and Tourism'),
-        ('CNHS', 'College of Nursing and Health Sciences'),
-        ('CS', 'College of Sciences'),
-        ('CTE', 'College of Teacher Education'),
+    COLLEGE_CHOICES = [('CAD', 'College of Architecture and Design'),
+                       ('CAH', 'College of Arts and Humanities'),
+                       ('CBA', 'College of Business and Accountancy'),
+                       ('CCJE', 'College of Criminal Justice and Education'),
+                       ('CoE', 'College of Engineering'),
+                       ('CHTM', 'College of Hospitality Management and Tourism'),
+                       ('CNHS', 'College of Nursing and Health Sciences'),
+                       ('CS', 'College of Sciences'),
+                       ('CTE', 'College of Teacher Education'),
+    ]
+
+    YEAR_LEVEL_CHOICES = [('first year', 'First Year'),
+                          ('second year', 'Second Year'),
+                          ('third year', 'Thord Year'),
+                          ('fourth year', 'Fourth year'),
+                          ('fifth year', 'Fifth Year')
     ]
 
     OFFICE_CHOICES = [
@@ -111,7 +117,6 @@ class UserProfile(BaseModel):
     WORKPLACE_CHOICES = OFFICE_CHOICES + COLLEGE_CHOICES    
 
     # PERSONAL INFORMATION
-        
     corporate_email = models.EmailField(max_length=50, unique=True)
     password = models.CharField(max_length=128)
     contact = models.CharField(max_length=14)
@@ -120,18 +125,20 @@ class UserProfile(BaseModel):
     middlename = models.CharField(max_length=25, blank=True, null=True)
     suffix = models.CharField(max_length=5, blank=True, null=True)
     address = models.CharField(max_length=100, blank=True, null=True)
+    dl_number = models.CharField(max_length=25)
 
     # FOR STUDENT
     college = models.CharField(max_length=100, choices=COLLEGE_CHOICES ,blank=True, null=True)
     program = models.CharField(max_length=100, blank=True, null=True)
+    year_level = models.CharField(choices=YEAR_LEVEL_CHOICES, blank=True, null=True)
     father_name = models.CharField(max_length=100, blank=True, null=True)
-    father_contact = models.CharField(max_length=13, blank=True, null=True)
+    father_contact = models.CharField(max_length=14, blank=True, null=True)
     father_address = models.CharField(max_length=150, blank=True, null=True)
     mother_name = models.CharField(max_length=100, blank=True, null=True)
-    mother_contact =models.CharField(max_length=13, blank=True, null=True)
+    mother_contact =models.CharField(max_length=14, blank=True, null=True)
     mother_address = models.CharField(max_length=150, blank=True, null=True)
     guardian_name = models.CharField(max_length=100, blank=True, null=True)
-    guardian_contact = models.CharField(max_length=13, blank=True, null=True)
+    guardian_contact = models.CharField(max_length=14, blank=True, null=True)
     guardian_address = models.CharField(max_length=150, blank=True, null=True)
 
 
@@ -175,7 +182,7 @@ class SecurityProfile(BaseModel):
 
 class AdminProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    admin_id = models.CharField(max_length=10)
+    admin_id = models.IntegerField(primary_key=True)
 
     def __str__(self):
         return f"Admin: {self.user.firstname} {self.user.lastname} ({self.admin_id})"
@@ -204,7 +211,6 @@ class PasswordResetCode(BaseModel):
         """Check if the code is still valid (not expired and not used)"""
         return not self.is_used and timezone.now() < self.expires_at
     
-
 class Vehicle(BaseModel):
     VEHICLE_TYPE = [('motor', 'Motor'),
                     ('car', 'Car'),
@@ -218,6 +224,8 @@ class Vehicle(BaseModel):
     type = models.CharField(choices=VEHICLE_TYPE, max_length=5)
     engine_number = models.CharField(max_length=25)
     chassis_number = models.CharField(max_length=17)
+    or_number = models.CharField(max_length=25)
+    cr_number = models.Charfield(max_length=25)
 
     # Only relevant if not the owner
     owner_firstname = models.CharField(max_length=45, null=True, blank=True)
@@ -225,8 +233,8 @@ class Vehicle(BaseModel):
     owner_lastname = models.CharField(max_length=45, null=True, blank=True)
     owner_suffix = models.CharField(max_length=5, null=True, blank=True)
     relationship_to_owner = models.CharField(max_length=15, null=True, blank=True)
-    contact_number = models.CharField(max_length=13, null=True, blank=True)
-    address = models.CharField(max_length=75, null=True, blank=True)
+    contact_number = models.CharField(max_length=14, null=True, blank=True)
+    address = models.CharField(max_length=100, null=True, blank=True)
 
 
     def __str__(self):
@@ -269,9 +277,9 @@ class Registration(BaseModel):
     sticker_released_date = models.DateField(blank=True, null=True)
 
     # E-signature fields
-    e_signature = models.TextField(blank=True, null=True)  # Store signature as base64 data
-    printed_name = models.CharField(max_length=255, blank=True, null=True)
-    signature_date = models.DateTimeField(blank=True, null=True)
+    e_signature = models.ImageField(upload_to='signature/')
+    printed_name = models.CharField(max_length=125)
+    signature_date = models.DateTimeField(auto_add_now=True)
 
     def __str__(self):
         return f"Registration {self.registration_number} for {self.user.lastname}, {self.user.firstname}"
@@ -410,7 +418,6 @@ class VehiclePass(BaseModel):
         else:
             raise ValueError("Vehicle pass already exists for this vehicle")
         
-
 class Notification(BaseModel):
     NOTIFICATION_TYPES = [
         ('system', 'System'),
