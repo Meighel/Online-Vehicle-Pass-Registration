@@ -97,7 +97,7 @@ class VehicleAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Vehicle Information', {
-            'fields': ('applicant', 'make_model', 'plate_number', 'year_model', 'color', 'type', 'engine_number', 'chassis_number')
+            'fields': ('applicant', 'make_model', 'plate_number', 'year_model', 'color', 'type', 'engine_number', 'chassis_number', 'or_number', 'cr_number')
         }),
         ('Owner Information (if not applicant)', {
             'fields': ('owner_firstname', 'owner_middlename', 'owner_lastname', 'owner_suffix', 'relationship_to_owner', 'contact_number', 'address'),
@@ -127,7 +127,7 @@ class RegistrationAdmin(admin.ModelAdmin):
     list_display = ('registration_number', 'get_user_name', 'get_vehicle_plate', 'status', 'date_of_filing', 'get_initial_approver', 'get_final_approver')
     search_fields = ('registration_number', 'user__firstname', 'user__lastname', 'vehicle__plate_number')
     list_filter = ('status', 'date_of_filing', 'user__school_role')
-    readonly_fields = ('registration_number', 'date_of_filing', 'created_at', 'updated_at')
+    readonly_fields = ('registration_number', 'date_of_filing', 'created_at', 'updated_at', 'signature_date')
     
     fieldsets = (
         ('Registration Information', {
