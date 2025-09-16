@@ -13,7 +13,7 @@ class UserSignupForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['corporate_email', 'firstname', 'middle_name', 'lastname', 'school_role']
+        fields = ['corporate_email', 'firstname', 'middlename', 'lastname', 'school_role']
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -97,7 +97,7 @@ class VehicleRegistrationStep1Form(forms.Form):
         label='First Name',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your first name'})
     )
-    middle_name = forms.CharField(
+    middlename = forms.CharField(
         max_length=100,
         required=False,
         label='Middle Name',
@@ -113,6 +113,11 @@ class VehicleRegistrationStep1Form(forms.Form):
         max_length=105,
         label='Address',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. Escano St., Brgy Tiniguiban'})
+    )
+    dl_number = forms.CharField(
+        max_length=20,
+        label='Driver\'s License Number',
+        widget=forms.TextInput(attrs={'placeholder': 'e.g. NO3-12-123456'})
     )
     contact = forms.CharField(
         max_length=15,
@@ -143,6 +148,12 @@ class VehicleRegistrationStep1Form(forms.Form):
         widget=forms.Select()
     )
     
+    year_level = forms.ChoiceField(
+        choices=UserProfile.YEAR_LEVEL_CHOICES,
+        required=False,
+        label='Year Level',
+        widget=forms.Select()
+    )
     #For Student
     college = forms.ChoiceField(
         choices=UserProfile.COLLEGE_CHOICES,
@@ -213,42 +224,6 @@ class VehicleRegistrationStep1Form(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': "Enter guardian's address"})
     )
 
-    # vehicle_type = forms.ChoiceField(
-    #     choices=[('car', 'Car'), ('motorcycle', 'Motorcycle')],
-    #     label='Vehicle Type',
-    #     widget=forms.RadioSelect(attrs={'placeholder': 'Choose type'})
-    # )
-    # vehicle_color = forms.CharField(
-    #     max_length=100,
-    #     label='Vehicle Color',
-    #     widget=forms.TextInput(attrs={'placeholder': 'Enter vehicle color'})
-    # )
-    # model = forms.CharField(
-    #     max_length=100,
-    #     label='Vehicle Model',
-    #     widget=forms.TextInput(attrs={'placeholder': 'e.g. Toyota Vios'})
-    # )
-    # plate_number = forms.CharField(
-    #     max_length=100,
-    #     label='Plate Number',
-    #     widget=forms.TextInput(attrs={'placeholder': 'e.g. ABC-1234'})
-    # )
-    # chassis_number = forms.CharField(
-    #     max_length=100,
-    #     label='Chassis Number',
-    #     widget=forms.TextInput(attrs={'placeholder': 'Enter chassis number'})
-    # )
-    # or_number = forms.CharField(
-    #     max_length=100,
-    #     label='OR Number',
-    #     widget=forms.TextInput(attrs={'placeholder': 'Official Receipt Number'})
-    # )
-    # cr_number = forms.CharField(
-    #     max_length=100,
-    #     label='CR Number',
-    #     widget=forms.TextInput(attrs={'placeholder': 'Certificate of Registration Number'})
-    # )
-
 class VehicleRegistrationStep2Form(forms.Form):
     # Vehicle Information
     make_model = forms.CharField(
@@ -270,7 +245,7 @@ class VehicleRegistrationStep2Form(forms.Form):
         label="Color",
         widget=forms.TextInput(attrs={'placeholder': 'e.g. Red'})
     )
-    vehicle_type = forms.ChoiceField(
+    type = forms.ChoiceField(
         choices=Vehicle.VEHICLE_TYPE,
         label="Vehicle Type",
         widget=forms.Select()
@@ -284,6 +259,16 @@ class VehicleRegistrationStep2Form(forms.Form):
         max_length=17,
         label="Chassis Number",
         widget=forms.TextInput(attrs={'placeholder': 'Enter chassis number'})
+    )
+    or_number = forms.CharField(
+        max_length=20,
+        label='Official Receipt',
+        widget=forms.TextInput(attrs={'placeholder': 'Enter OR Number'})
+    )
+    cr_number = forms.CharField(
+        max_length=20,
+        label='Certificate of Registration',
+        widget=forms.TextInput(attrs={'placeholder': 'Enter CR Number'})
     )
 
     # Owner Information
@@ -342,7 +327,7 @@ class VehicleRegistrationStep2Form(forms.Form):
         is_owner = cleaned_data.get("owner") == "yes"
 
         if not is_owner:
-            required_fields = ["owner_first_name", "owner_last_name", "relationship_to_owner", "owner_contact_number"]
+            required_fields = ["owner_firstname", "owner_lastname", "relationship_to_owner", "contact_number"]
             for field in required_fields:
                 if not cleaned_data.get(field):
                     self.add_error(field, "This field is required if you're not the owner.")
