@@ -7,7 +7,7 @@ For more information on this file, see
 https://docs.djangoproject.com/en/5.1/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/5.1/ref/settings/
+https://docs.djangmediaoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
@@ -139,7 +139,7 @@ STATICFILES_DIRS = [
 
 # Media files (user-uploaded)
 MEDIA_URL = '/media/'  # URL to access media in the browser
-MEDIA_ROOT = BASE_DIR / 'static/media'  # Where files are stored on disk
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = "/login" 
 LOGOUT_REDIRECT_URL = '/login'

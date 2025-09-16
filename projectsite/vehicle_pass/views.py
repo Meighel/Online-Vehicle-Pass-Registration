@@ -2,16 +2,10 @@ from django.shortcuts import render, redirect
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 from django.http import HttpResponse
-from .forms import (UserSignupForm, UserProfileForm, 
-                    PaymentTransactionForm,
-                    ApplicationForm,
-                    InspectionApprovalForm, PasswordUpdateForm,
-                    VehicleRegistrationStep1Form, VehicleRegistrationStep2Form, VehicleRegistrationStep3Form,
-                    FinalDateInspectionForm,
-)
-from .models import UserProfile, SecurityProfile, CashierProfile, AdminProfile
-from .models import Vehicle, Registration, VehiclePass, PaymentTransaction
-from .models import InspectionReport, Notification, Announcement, PasswordResetCode, LoginActivity, SiteVisit
+from .forms import UserSignupForm, UserProfileForm, RegistrationForm, PasswordUpdateForm, VehicleRegistrationStep1Form, VehicleRegistrationStep2Form, VehicleRegistrationStep3Form
+from .models import UserProfile, SecurityProfile, AdminProfile
+from .models import Vehicle, Registration, VehiclePass
+from .models import Notification, Announcement, PasswordResetCode, LoginActivity, SiteVisit
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
@@ -75,7 +69,6 @@ def login_view(request):
 
     return render(request, "login.html")
 
-
 def logout_view(request):
     logout(request)
     return redirect("login") 
@@ -84,8 +77,6 @@ def redirect_user_dashboard(user):
     """Redirects the user based on their role."""
     if SecurityProfile.objects.filter(user=user).exists():
         return redirect("security_dashboard")
-    elif CashierProfile.objects.filter(user=user).exists():
-        return redirect("cashier_dashboard")
     elif AdminProfile.objects.filter(user=user).exists():
         return redirect("admin_dashboard")
     
@@ -252,18 +243,10 @@ def default_dashboard(request):
     # Get application history
     history = Registration.objects.filter(user=profile).order_by('-created_at')
 
-    # Fix: Avoid accessing userprofile on AnonymousUser
-    inspection = None
-    if profile:
-        inspection = InspectionReport.objects.filter(
-            payment_number__registration__user=profile
-        ).last()  # Get latest one (if any)
-
     context = {
         'profile': profile,
         'registration': registration,
         'history': history,
-        'inspection': inspection,
     }
 
     return render(request, "User Dashboard/User_Dashboard.html", context)
@@ -276,44 +259,68 @@ def user_application(request):
 def vehicle_registration_step_1(request):
     user_id = request.session.get("user_id")
     user = UserProfile.objects.get(id=user_id)
-    
+
     if request.method == 'POST':
         form = VehicleRegistrationStep1Form(request.POST)
         if form.is_valid():
-            # Store data in session for later use
             step1_data = form.cleaned_data
+            # Save Step 1 data into session
             request.session['step1_data'] = {
-                'first_name': step1_data['first_name'],
+                # Personal Information
+                'lastname': step1_data['lastname'],
+                'firstname': step1_data['firstname'],
                 'middle_name': step1_data['middle_name'],
-                'last_name': step1_data['last_name'],
                 'suffix': step1_data['suffix'],
-                'corporate_email': step1_data['corporate_email'],
                 'address': step1_data['address'],
-                'role': step1_data['role'],
-                'department_or_workplace': step1_data['department_or_workplace'],
+                'contact': step1_data['contact'],
+                'corporate_email': step1_data['corporate_email'],
+                'school_role': step1_data['school_role'],
+
+                # Employees
+                'position': step1_data['position'],
+                'workplace': step1_data['workplace'],
+
+                # Students
                 'college': step1_data['college'],
                 'program': step1_data['program'],
-                'driver_license_number': step1_data['driver_license_number'],
-                'vehicle_type': step1_data['vehicle_type'],
-                'vehicle_color': step1_data['vehicle_color'],
-                'model': step1_data['model'],
-                'plate_number': step1_data['plate_number'],
-                'chassis_number': step1_data['chassis_number'],
-                'or_number': step1_data['or_number'],
-                'cr_number': step1_data['cr_number']
+
+                # Family Info
+                'father_name': step1_data['father_name'],
+                'father_contact': step1_data['father_contact'],
+                'father_address': step1_data['father_address'],
+                'mother_name': step1_data['mother_name'],
+                'mother_contact': step1_data['mother_contact'],
+                'mother_address': step1_data['mother_address'],
+                'guardian_name': step1_data['guardian_name'],
+                'guardian_contact': step1_data['guardian_contact'],
+                'guardian_address': step1_data['guardian_address'],
             }
             return redirect('vehicle_registration_step_2')
     else:
-        # Pre-fill form with user data if available
+        # Pre-fill form with user profile data if available
         initial_data = {
-            'first_name': user.firstname,
+            'firstname': user.firstname,
             'middle_name': user.middle_name,
-            'last_name': user.lastname,
+            'lastname': user.lastname,
             'suffix': user.suffix,
-            'corporate_email': user.corporate_email,
             'address': user.address,
-            'role': user.school_role,
-            'driver_license_number': user.dl_number
+            'contact': user.contact,
+            'corporate_email': user.corporate_email,
+            'school_role': user.school_role,
+            'position': getattr(user, 'position', ''),
+            'workplace': getattr(user, 'workplace', ''),
+            'college': getattr(user, 'college', ''), 
+            'program': getattr(user, 'program', ''),
+            # Family info may be blank initially
+            'father_name': getattr(user, 'father_name', ''),
+            'father_contact': getattr(user, 'father_contact', ''),
+            'father_address': getattr(user, 'father_address', ''),
+            'mother_name': getattr(user, 'mother_name', ''),
+            'mother_contact': getattr(user, 'mother_contact', ''),
+            'mother_address': getattr(user, 'mother_address', ''),
+            'guardian_name': getattr(user, 'guardian_name', ''),
+            'guardian_contact': getattr(user, 'guardian_contact', ''),
+            'guardian_address': getattr(user, 'guardian_address', ''),
         }
         form = VehicleRegistrationStep1Form(initial=initial_data)
 
@@ -327,21 +334,33 @@ def vehicle_registration_step_1(request):
 def vehicle_registration_step_2(request):
     user_id = request.session.get("user_id")
     user = UserProfile.objects.get(id=user_id)
-    
+
     if request.method == 'POST':
         form = VehicleRegistrationStep2Form(request.POST)
         if form.is_valid():
-            # Store owner data in session
             step2_data = form.cleaned_data
+
+            # Save Step 2 data into session
             request.session['step2_data'] = {
-                'is_owner': step2_data['owner'] == 'yes',
-                'owner_first_name': step2_data.get('owner_first_name', ''),
-                'owner_middle_name': step2_data.get('owner_middle_name', ''),
-                'owner_last_name': step2_data.get('owner_last_name', ''),
+                # Vehicle Information
+                'make_model': step2_data['make_model'],
+                'plate_number': step2_data['plate_number'],
+                'year_model': step2_data['year_model'],
+                'color': step2_data['color'],
+                'type': step2_data['type'],
+                'engine_number': step2_data['engine_number'],
+                'chassis_number': step2_data['chassis_number'],
+
+                # Owner Information (if not the applicant)
+                'owner_firstname': step2_data.get('owner_firstname', ''),
+                'owner_middlename': step2_data.get('owner_middlename', ''),
+                'owner_lastname': step2_data.get('owner_lastname', ''),
                 'owner_suffix': step2_data.get('owner_suffix', ''),
                 'relationship_to_owner': step2_data.get('relationship_to_owner', ''),
-                'owner_contact_number': step2_data.get('owner_contact_number', '')
+                'contact_number': step2_data.get('contact_number', ''),
+                'address': step2_data.get('address', ''),
             }
+
             return redirect('vehicle_registration_step_3')
     else:
         form = VehicleRegistrationStep2Form()
@@ -453,7 +472,6 @@ def admin_dashboard(request):
     # Total users by role
     total_students = UserProfile.objects.filter(school_role='student').count()
     total_security = UserProfile.objects.filter(role='security').count()
-    total_cashier = UserProfile.objects.filter(role='cashier').count()
     total_admin = UserProfile.objects.filter(role='admin').count()
 
     # Account growth calculation
@@ -481,23 +499,12 @@ def admin_dashboard(request):
         monthly_totals[month_num] = entry['total']
     monthly_chart_data = list(monthly_totals.values())
 
-    # Chart Data for Transactions by Status
-    chart_data = PaymentTransaction.objects.values('status').annotate(count=Count('id'))
-
-    # Fetch all transactions for the table
-    transaction_list = PaymentTransaction.objects.select_related(
-        'registration__user', 'cashier__user'
-    ).all().order_by('-date_processed')  # Order newest first (optional)
-
     context = {
         "total_students": total_students,
         "total_security": total_security,
-        "total_cashier": total_cashier,
         "total_admin": total_admin,
         "growth_percent": growth_percent,
         "monthly_chart_data": monthly_chart_data,
-        "chart_data": chart_data,
-        "transaction_list": transaction_list,  # Add this for your table
     }
 
     return render(request, "Admin Dashboard/Admin_Dashboard.html", context)
@@ -542,32 +549,6 @@ class AdminViewSpecificUser(CustomLoginRequiredMixin, DetailView):
 def admin_manage_application(request):
     return render(request, "Admin Dashboard/Admin_Application.html")
 
-
-# CRUD AND VIEW OF TRANSACTION AND PAYMENT
-class adminViewPayment(ListView):
-    model = PaymentTransaction
-    template_name = "Admin Dashboard/Admin_Manage_Payment.html"
-    context_object_name = 'payment_list'
-    paginate_by = 20
-
-    def get_queryset(self):
-        return PaymentTransaction.objects.filter(status='pending')
-    
-class adminViewTransaction(ListView):
-    model = PaymentTransaction
-    template_name = "Admin Dashboard/Admin_Transaction.html"
-    context_object_name = 'transaction_list'
-    paginate_by = 20
-
-    def get_queryset(self):
-        return PaymentTransaction.objects.exclude(status='pending')
-    
-class adminUpdatePayment(UpdateView):
-    model = PaymentTransaction
-    form_class = PaymentTransactionForm
-    template_name ="Admin Dashboard/Admin_Payment_Update.html"
-    success_url = reverse_lazy("admin_payments")
-
 @login_required
 def admin_manage_passes(request):
     vehicle_passes = VehiclePass.objects.select_related(
@@ -608,120 +589,9 @@ class AdminViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
 
 class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     model = Registration
-    form_class = ApplicationForm
+    form_class = RegistrationForm
     template_name = 'Admin Dashboard/Admin Application CRUD/Admin_Update_Application.html'
     success_url = reverse_lazy('admin_manage_application')
-
-
-# Cashier Page View @login_required
-@login_required
-def cashier_dashboard(request):
-    today = now().date()
-
-    # Total student accounts
-    total_accounts = UserProfile.objects.filter(school_role='student').count()
-
-    # Account growth: this month vs last month
-    current_month_start = now().replace(day=1)
-    last_month_start = (current_month_start - timedelta(days=30)).replace(day=1)
-
-    current_month_users = UserProfile.objects.filter(
-        created_at__gte=current_month_start,
-        school_role='student'
-    ).count()
-
-    last_month_users = UserProfile.objects.filter(
-        created_at__gte=last_month_start,
-        created_at__lt=current_month_start,
-        school_role='student'
-    ).count()
-
-    account_growth_percent = round(((current_month_users - last_month_users) / last_month_users) * 100, 1) if last_month_users else 0
-
-    # Pending payments (as of today)
-    pending_payments = PaymentTransaction.objects.filter(
-        status='pending', created_at__date=today
-    ).count()
-
-    # Total paid clients
-    paid_clients = PaymentTransaction.objects.filter(status='paid').values('registration__user').distinct().count()
-
-    # Paid clients by month (for chart)
-    paid_clients_monthly = (
-        PaymentTransaction.objects.filter(status='paid')
-        .annotate(month=TruncMonth('created_at'))
-        .values('month')
-        .annotate(total=Count('id'))
-        .order_by('month')
-    )
-
-    # Format for chart.js (ensure 12 months)
-    monthly_paid_totals = {month: 0 for month in range(1, 13)}
-    for entry in paid_clients_monthly:
-        if entry['month']:
-            month_number = entry['month'].month
-            monthly_paid_totals[month_number] = entry['total']
-    paid_clients_data = list(monthly_paid_totals.values())
-
-    # Payments table
-    payment_list = PaymentTransaction.objects.select_related(
-        'registration__user'
-    ).order_by('-created_at')[:20]
-
-    context = {
-        'total_accounts': total_accounts,
-        'account_growth_percent': account_growth_percent,
-        'pending_payments': pending_payments,
-        'paid_clients': paid_clients,
-        'paid_clients_data': paid_clients_data,
-        'payment_list': payment_list,
-        'current_date': today.strftime("%B %d, %Y")
-    }
-
-    return render(request, 'Cashier Dashboard/Cashier_Dashboard.html', context)
-
-class cashierViewPayment(CustomLoginRequiredMixin, ListView):
-    model = PaymentTransaction
-    template_name = "Cashier Dashboard/Cashier_Payment.html"
-    context_object_name = 'payment_list'
-    paginate_by = 20
-
-    def get_queryset(self):
-        return PaymentTransaction.objects.filter(status='pending')
-    
-class cashierViewTransaction(CustomLoginRequiredMixin, ListView):
-    model = PaymentTransaction
-    template_name = "Cashier Dashboard/Cashier_Transaction.html"
-    context_object_name = 'transaction_list'
-    paginate_by = 20
-
-    def get_queryset(self):
-        return PaymentTransaction.objects.exclude(status='pending')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        # Get the user ID from the session
-        user_id = self.request.session.get('user_id')
-        
-        # Get the actual UserProfile instance
-        if user_id:
-            user_profile = UserProfile.objects.get(id=user_id)
-            context['form'] = PaymentTransactionForm(user=user_profile)
-        else:
-            context['form'] = PaymentTransactionForm()
-        
-        return context
-
-class cashierUpdatePayment(CustomLoginRequiredMixin, UpdateView):
-    model = PaymentTransaction
-    form_class = PaymentTransactionForm
-    template_name ="Cashier Dashboard/Cashier_Payment_Update.html"
-    success_url = reverse_lazy("cashier_payments")
-
-@login_required
-def cashier_report(request):
-    return render(request, "Cashier Dashboard/Cashier_Reports.html")
 
 # Security Page Views
 @login_required
@@ -754,73 +624,9 @@ class SecurityViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
 
 class SecurityUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     model = Registration
-    form_class = ApplicationForm
+    form_class = RegistrationForm
     template_name = 'Security Dashboard/Security Application CRUD/Security_Update_Application.html'
     success_url = reverse_lazy('security_manage_application')
-
-@login_required
-def security_manage_inspection(request):
-    return render(request, "Security Dashboard/Security_Inspection.html")
-
-class SecurityViewInspectionReports(CustomLoginRequiredMixin, ListView):
-    model = InspectionReport
-    template_name = 'Security Dashboard/Security_Inspection.html'
-    context_object_name = 'inspections'
-    paginate_by = 20
-
-    def get_queryset(self):
-        return InspectionReport.objects.exclude(remarks='sticker_released')
-    
-class SecurityUpdateFinalInspectionDate(CustomLoginRequiredMixin, UpdateView):
-    model = InspectionReport
-    form_class = FinalDateInspectionForm
-    template_name = 'Security Dashboard/Security Application CRUD/Security_Update_Final_Inspection_Date.html'
-    success_url = reverse_lazy('security_manage_inspection')
-
-def handle_inspection_action(request):
-    if request.method == "POST":
-        # Debug information
-        print("POST data received:", request.POST)
-        
-        inspection_id = request.POST.get('inspection_id')
-        action = request.POST.get('action')
-        additional_notes = request.POST.get('additional_notes', '')
-        
-        print(f"Extracted values - inspection_id: {inspection_id}, action: {action}, notes: {additional_notes}")
-        
-        if inspection_id and action:
-            try:
-                # Check that ID is valid before attempting to get object
-                if not inspection_id.isdigit():
-                    messages.error(request, f"Invalid inspection ID format: {inspection_id}")
-                    return redirect('security_manage_inspection')
-                
-                inspection = InspectionReport.objects.get(id=inspection_id)
-                inspection.additional_notes = additional_notes
-                
-                if action == 'approve':
-                    inspection.is_approved = True
-                    inspection.remarks = 'sticker released'
-                elif action == 'reject':
-                    inspection.is_approved = False
-                    inspection.remarks = 'application declined'
-                else:
-                    messages.error(request, f"Invalid action: {action}")
-                    return redirect('security_manage_inspection')
-                    
-                inspection.save()
-                messages.success(request, f"Inspection {action}d successfully.")
-            except InspectionReport.DoesNotExist:
-                messages.error(request, f"Inspection record not found for ID: {inspection_id}")
-            except Exception as e:
-                messages.error(request, f"Error: {str(e)}")
-                print(f"Exception details: {type(e).__name__}, {str(e)}")
-        else:
-            messages.error(request, f"Missing required parameters. Got inspection_id={inspection_id}, action={action}")
-    else:
-        messages.error(request, "This endpoint only accepts POST requests.")
-    
-    return redirect('security_manage_inspection')
 
 class SecurityViewStickers(CustomLoginRequiredMixin, ListView):
     model = VehiclePass
@@ -891,8 +697,6 @@ def settings_view(request):
     if user.role == 'admin':
         context['all_vehicles'] = Vehicle.objects.select_related('self_owner').all()
         template_name = 'Settings/admin_settings.html'
-    elif user.role == 'cashier':
-        template_name = 'Settings/cashier_settings.html'
     elif user.role == 'security':
         context['all_vehicles'] = Vehicle.objects.select_related('self_owner').all()
         template_name = 'Settings/security_settings.html'
@@ -904,34 +708,6 @@ def settings_view(request):
         return redirect('home')
 
     return render(request, template_name, context)
-
-def report_dashboard(request):
-    payments = PaymentTransaction.objects.select_related('registration__user')
-
-    # Filters
-    status_filter = request.GET.get('status')
-    deadline_filter = request.GET.get('nearing_deadline')
-
-    if status_filter:
-        payments = payments.filter(status=status_filter)
-
-    if deadline_filter == 'true':
-        payments = payments.filter(due_date__lte=now() + timedelta(days=3))
-
-    context = {
-        'payments_by_college': payments.values('registration__user__college').annotate(count=Count('id')).order_by('-count'),
-        'payments_by_program': payments.values('registration__user__program').annotate(count=Count('id')).order_by('-count'),
-        'payments_by_department': payments.values('registration__user__department').annotate(count=Count('id')).order_by('-count'),
-        'payments_by_school_role': payments.values('registration__user__school_role').annotate(count=Count('id')).order_by('-count'),
-        'payments_by_role': payments.values('registration__user__role').annotate(count=Count('id')).order_by('-count'),
-        'transactions_by_college': Registration.objects.values('user__college').annotate(count=Count('id')).order_by('-count'),
-        'transactions_by_program': Registration.objects.values('user__program').annotate(count=Count('id')).order_by('-count'),
-        'transactions_by_department': Registration.objects.values('user__department').annotate(count=Count('id')).order_by('-count'),
-        'transactions_by_school_role': Registration.objects.values('user__school_role').annotate(count=Count('id')).order_by('-count'),
-        'transactions_by_role': Registration.objects.values('user__role').annotate(count=Count('id')).order_by('-count'),
-        'filtered_payments': payments,
-    }
-    return render(request, 'report_dashboard.html', context)
 
 def faq(request):
     return render(request, "Settings/FAQ.html")

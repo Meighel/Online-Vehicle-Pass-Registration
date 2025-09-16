@@ -1,10 +1,7 @@
 from django import forms
 from .models import (UserProfile,
-                     PaymentTransaction,
                      Registration,
                      Vehicle,
-                     InspectionReport,
-                     CashierProfile,
                      SecurityProfile
 )
 from django.contrib.auth.hashers import make_password
@@ -16,7 +13,7 @@ class UserSignupForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['corporate_email', 'firstname', 'middle_name', 'lastname', 'school_role']
+        fields = ['corporate_email', 'firstname', 'middlename', 'lastname', 'school_role']
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -38,63 +35,12 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = '__all__' 
 
-class PaymentTransactionForm(forms.ModelForm):
-    class Meta:
-        model = PaymentTransaction
-        fields = ['status', 'cashier']
-        labels = {
-            'cashier': 'Cashier'
-        }
-
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
-
-        if self.user:
-            try:
-                # Get UserProfile instance
-                if isinstance(self.user, str):
-                    user_profile = UserProfile.objects.get(id=self.user)
-                else:
-                    user_profile = self.user
-                
-                # Get cashier profile
-                cashier_profile = CashierProfile.objects.get(user=user_profile)
-                
-                # Restrict choices to ONLY this cashier - this is the key change
-                self.fields['cashier'].queryset = CashierProfile.objects.filter(id=cashier_profile.id)
-                
-                # Set the initial value to the current cashier
-                self.fields['cashier'].initial = cashier_profile
-                
-            except CashierProfile.DoesNotExist:
-                self.fields['cashier'].initial = None
-
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-        # Make absolutely sure the cashier is set
-        if hasattr(self, 'user') and self.user and not instance.cashier:
-            try:
-                if isinstance(self.user, str):
-                    user_profile = UserProfile.objects.get(id=self.user)
-                else:
-                    user_profile = self.user
-                cashier_profile = CashierProfile.objects.get(user=user_profile)
-                instance.cashier = cashier_profile
-            except (UserProfile.DoesNotExist, CashierProfile.DoesNotExist):
-                pass
-        
-        if commit:
-            instance.save()
-        return instance
-
-
-class ApplicationForm(forms.ModelForm):
+class RegistrationForm(forms.ModelForm):
     class Meta:
         model = Registration
-        fields = ['status', 'remarks', 'document_reviewed_by']
+        fields = ['status', 'remarks', 'initial_approved_by']
         labels = {
-            'document_reviewed_by': 'Security Personnel'
+            'initial_approved_by': 'Security Personnel'
         }
 
     def __init__(self, *args, **kwargs):
@@ -138,20 +84,20 @@ class ApplicationForm(forms.ModelForm):
             instance.save()
         return instance
 
-  
+#Personal Information Form 
 class VehicleRegistrationStep1Form(forms.Form):
-    first_name = forms.CharField(
+    firstname = forms.CharField(
         max_length=100,
         label='First Name',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your first name'})
     )
-    middle_name = forms.CharField(
+    middlename = forms.CharField(
         max_length=100,
         required=False,
         label='Middle Name',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your middle name'})
     )
-    last_name = forms.CharField(
+    lastname = forms.CharField(
         max_length=100,
         label='Last Name',
         widget=forms.TextInput(attrs={'placeholder': 'Enter your last name'})
@@ -161,32 +107,50 @@ class VehicleRegistrationStep1Form(forms.Form):
         required=False,
         label='Suffix',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. Jr'})
-    )  
-    corporate_email = forms.EmailField(
-        label='Corporate Email',
-        widget=forms.EmailInput(attrs={'placeholder': '20228000X@psu.edu.ph'})
     )
     address = forms.CharField(
         max_length=105,
         label='Address',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. Escano St., Brgy Tiniguiban'})
+    )  
+    contact = forms.CharField(
+        label='Contact Number',
+        widget=forms.TextInput(attrs={'placeholder': '+6391234567891'})
+    )
+    corporate_email = forms.EmailField(
+        label='Corporate Email',
+        widget=forms.EmailInput(attrs={'placeholder': '20228000X@psu.edu.ph'})
+    )
+    driver_license_number = forms.CharField(
+        max_length=25,
+        label="Driver's License Number",
+        widget=forms.TextInput(attrs={'placeholder': 'N03-12-123456'})
     )
     role = forms.ChoiceField(
-        choices=[('student', 'Student'), ('faculty', 'Faculty'), ('university personnel', 'University Personnel')],
+        choices=[('student', 'Student'), ('faculty & staff', 'Faculty/Staff'), ('university official', 'University Official')],
         label='School Role',
-        widget=forms.Select(attrs={'placeholder': 'Select your role'})
+        widget=forms.Select(attrs={'placeholder': 'Select role'})
     )
-    department_or_workplace = forms.CharField(
-        max_length=100,
+
+    #for employee
+    position = forms.CharField(
+        max_length=50,
+        label="Position",
+        widget=forms.TextInput(attrs={'placeholder':'e.g., dean, univeristy librarian, utility, etc.'})
+    )
+    workplace = forms.ChoiceField(
+        choices = UserProfile.WORKPLACE_CHOICES,
         required=False,
-        label='Department/Workplace',
-        widget=forms.TextInput(attrs={'placeholder': 'Enter your college or workplace'})
+        label='Workplace',
+        widget=forms.Select(attrs={'placeholder': 'Enter your college or workplace'})
     )
-    college = forms.CharField(
-        max_length=100,
+
+    #for student
+    college = forms.ChoiceField(
+        choices = UserProfile.COLLEGE_CHOICES,
         required=False,
         label='College',
-        widget=forms.TextInput(attrs={'placeholder': 'Enter your college'})
+        widget=forms.Select(attrs={'placeholder': 'Enter your college'})
     )
     program = forms.CharField(
         max_length=100,
@@ -194,22 +158,70 @@ class VehicleRegistrationStep1Form(forms.Form):
         label='Program',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. BS Computer Science'})
     )
-    driver_license_number = forms.CharField(
+    year_level = forms.ChoiceField(
+        choices = UserProfile.YEAR_LEVEL_CHOICES,
+        required=False,
+        label='Year Level',
+        widget=forms.Select(attrs={'placeholder': 'Select Year Level'})
+    )
+    father_name = forms.CharField(
         max_length=100,
-        label="Driver's License Number",
-        widget=forms.TextInput(attrs={'placeholder': 'N03-12-123456'})
+        required = False,
+        label='Father Name',
+        widget=forms.TextInput(attrs={'placeholder': 'First Name MI. Surname'})
     )
-    vehicle_type = forms.ChoiceField(
-        choices=[('car', 'Car'), ('motorcycle', 'Motorcycle')],
-        label='Vehicle Type',
-        widget=forms.RadioSelect(attrs={'placeholder': 'Choose type'})
-    )
-    vehicle_color = forms.CharField(
+    father_contact = forms.CharField(
         max_length=100,
-        label='Vehicle Color',
-        widget=forms.TextInput(attrs={'placeholder': 'Enter vehicle color'})
+        required = False,
+        label='Father Contact',
+        widget=forms.TextInput(attrs={'placeholder': 'e.g., +6399876543210'})
     )
-    model = forms.CharField(
+    father_address = forms.CharField(
+        max_length = 150,
+        required = False,
+        label='Father Address',
+        widget=forms.TextInput(attrs={'placeholder': 'Rizal St., Brgy. San Fernando, PPC'})
+    )
+    mother_name = forms.CharField(
+        max_length=100,
+        required = False,
+        label='Mother Name',
+        widget=forms.TextInput(attrs={'placeholder': 'First Name MI. Surname'})
+    )
+    mother_contact = forms.CharField(
+        max_length=100,
+        required = False,
+        label='Mother Contact',
+        widget=forms.TextInput(attrs={'placeholder': 'e.g., +6399876543210'})
+    )
+    Mother_address = forms.CharField(
+        max_length = 150,
+        required = False,
+        label='Mother Address',
+        widget=forms.TextInput(attrs={'placeholder': 'Rizal St., Brgy. San Fernando, PPC'})
+    )
+    guardian_name = forms.CharField(
+        max_length=100,
+        required = False,
+        label='Guardian Name',
+        widget=forms.TextInput(attrs={'placeholder': 'First Name MI. Surname'})
+    )
+    guardian_contact = forms.CharField(
+        max_length=100,
+        required = False,
+        label='Guardian Contact',
+        widget=forms.TextInput(attrs={'placeholder': 'e.g., +6399876543210'})
+    )
+    guardian_address = forms.CharField(
+        max_length = 150,
+        required = False,
+        label='Guardian Address',
+        widget=forms.TextInput(attrs={'placeholder': 'Rizal St., Brgy. San Fernando, PPC'})
+    )
+
+class VehicleRegistrationStep2Form(forms.Form):
+    #Vehicle Information
+    make_model = forms.CharField(
         max_length=100,
         label='Vehicle Model',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. Toyota Vios'})
@@ -218,6 +230,25 @@ class VehicleRegistrationStep1Form(forms.Form):
         max_length=100,
         label='Plate Number',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. ABC-1234'})
+    )
+    year_model = forms.IntegerField(
+        label="Year Model",
+        widget=forms.NumberInput(attrs={'placeholder': 'e.g., 2023'})
+    )
+    color = forms.CharField(
+        max_length=20,
+        label='Color',
+        widget=forms.TextInput(attrs={'placeholder': 'Enter vehicle color'})
+    )
+    type = forms.ChoiceField(
+        choices= Vehicle.VEHICLE_TYPE,
+        label='Vehicle Type',
+        widget=forms.Select(attrs={'placeholder': 'Choose type'})
+    )
+    engine_number = forms.CharField(
+        max_length=25,
+        label='Engine Number',
+        widget=forms.TextInput(attrs={'placeholder': 'Enter engine number'})
     )
     chassis_number = forms.CharField(
         max_length=100,
@@ -235,7 +266,6 @@ class VehicleRegistrationStep1Form(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'Certificate of Registration Number'})
     )
 
-class VehicleRegistrationStep2Form(forms.Form):
     owner = forms.ChoiceField(
         choices=[('yes', 'Yes, I am the owner of the vehicle'), 
                  ('no', 'No, I am registering on behalf of the owner')],
@@ -248,19 +278,19 @@ class VehicleRegistrationStep2Form(forms.Form):
         label='Relationship to Owner',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. Father, Mother, etc.'})
     )
-    owner_first_name = forms.CharField(
+    owner_firstname = forms.CharField(
         max_length=100,
         required=False,
         label="Owner's First Name",
         widget=forms.TextInput(attrs={'placeholder': "Enter owner's first name"})
     )
-    owner_middle_name = forms.CharField(
+    owner_middlename = forms.CharField(
         max_length=100,
         required=False,
         label="Owner's Middle Name",
         widget=forms.TextInput(attrs={'placeholder': "Enter owner's middle name (optional)"})
     )
-    owner_last_name = forms.CharField(
+    owner_lastname = forms.CharField(
         max_length=100,
         label="Owner's Last Name",
         required=False,
@@ -272,19 +302,26 @@ class VehicleRegistrationStep2Form(forms.Form):
         label="Owner's Suffix",
         widget=forms.TextInput(attrs={'placeholder': "e.g. Jr"})
     )
-    owner_contact_number = forms.CharField(
-        max_length=15,
+    contact_number = forms.CharField(
+        max_length=14,
         required=False,
         label="Owner's Contact Number",
-        widget=forms.TextInput(attrs={'placeholder': "e.g. 09123456789"})
+        widget=forms.TextInput(attrs={'placeholder': "e.g. +639123456789"})
     )
+    address = forms.CharField(
+        max_length=100,
+        required = False,
+        label="Owner's Address",
+        widget=forms.TextInput(attrs={'placeholder':'Rizal Street, Brgy. San Fernando, PPC'})
+    )
+
     
     def clean(self):
         cleaned_data = super().clean()
         is_owner = cleaned_data.get("owner") == "yes"
 
         if not is_owner:
-            required_fields = ["owner_first_name", "owner_last_name", "relationship_to_owner", "owner_contact_number"]
+            required_fields = ["owner_firstname", "ownerlast_name", "relationship_to_owner", "contact_number", "address"]
             for field in required_fields:
                 if not cleaned_data.get(field):
                     self.add_error(field, "This field is required if you're not the owner.")
@@ -295,11 +332,15 @@ class VehicleRegistrationStep3Form(forms.Form):
         label='Google Folder Link',
         widget=forms.URLInput(attrs={'placeholder': 'Paste the link of your Google Drive folder'}) 
     )
-
-class InspectionApprovalForm(forms.ModelForm):
-    class Meta:
-        model = InspectionReport
-        fields = ['remarks', 'additional_notes', 'is_approved']
+    printed_name = forms.CharField(
+        max_length = 125,
+        label='Printed Name',
+        widget = forms.TextInput(attrs={'placeholder': 'First Name MI. Surname Suffix'})
+    )
+    e_signature = forms.ImageField(
+        label='E-signature',
+        required=True
+    )
 
 class PasswordUpdateForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput, label='Old Password')
@@ -314,15 +355,4 @@ class PasswordUpdateForm(forms.Form):
 class VehicleForm(forms.ModelForm):
     class Meta:
         model = Vehicle
-        fields = '__all__'  # Changed from 'exclude' to 'fields' as the original had an incorrect usage
-
-class FinalDateInspectionForm(forms.ModelForm):
-    class Meta:
-        model = InspectionReport
-        fields = ['physical_final_inspection_date', ]
-        widgets = {
-            'physical_final_inspection_date': forms.DateInput(attrs={
-                'type': 'date', 
-                'class': 'form-control',
-            }),
-        }
+        fields = '__all__' 

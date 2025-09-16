@@ -20,43 +20,92 @@
 
     <form method="POST">
       {% csrf_token %}
-      
+
+      <h3>Vehicle Information</h3>
+      <hr>
+      <br>
+
+      <div class="form1-aligned-group">
+        <div class="form-group form1-form-group">
+          <label for="{{ form.make_model.id_for_label }}">Vehicle Make and Model</label>
+          {{ form.make_model }}
+        </div>
+        <div class="form-group form1-form-group">
+          <label for="{{ form.plate_number.id_for_label }}">Plate Number</label>
+          {{ form.plate_number }}
+        </div>
+        <div class="form-group form1-form-group">
+          <label for="{{ form.year_model.id_for_label }}">Year Model</label>
+          {{ form.year_model }}
+        </div>
+      </div>
+
+      <div class="form1-aligned-group">
+        <div class="form-group form1-form-group">
+          <label for="{{ form.color.id_for_label }}">Color</label>
+          {{ form.color }}
+        </div>
+        <div class="form-group form1-form-group">
+          <label for="{{ form.vehicle_type.id_for_label }}">Vehicle Type</label>
+          {{ form.vehicle_type }}
+        </div>
+        <div class="form-group form1-form-group">
+          <label for="{{ form.engine_number.id_for_label }}">Motor/Engine Number</label>
+          {{ form.engine_number }}
+        </div>
+      </div>
+
+      <div class="form1-aligned-group">
+        <div class="form-group form1-form-group">
+          <label for="{{ form.chassis_number.id_for_label }}">Chassis Number</label>
+          {{ form.chassis_number }}
+        </div>
+      </div>
+
+      <h3>Owner Information</h3>
+      <hr>
+      <br>
+
       <div class="form-group form2-form-group">
         <label for="{{ form.owner.id_for_label }}">Are you the owner of this vehicle?</label>
         {{ form.owner }}
       </div>
 
       <div id="owner-details" class="form2-owner-details" style="display: none;">
-        <h2>Owner Details</h2>
-        <hr>
-        <div class="form2-aligned-group">
-          <div class="form-group form2-form-group">
-            <label for="{{ form.owner_first_name.id_for_label }}">First Name</label>
-            {{ form.owner_first_name }}
+        <div class="form1-aligned-group">
+          <div class="form-group form1-form-group">
+            <label for="{{ form.owner_firstname.id_for_label }}">Owner's First Name</label>
+            {{ form.owner_firstname }}
           </div>
-          <div class="form-group form2-form-group">
-            <label for="{{ form.owner_middle_name.id_for_label }}">Middle Name</label>
-            {{ form.owner_middle_name }}
+          <div class="form-group form1-form-group">
+            <label for="{{ form.owner_middlename.id_for_label }}">Owner's Middle Name</label>
+            {{ form.owner_middlename }}
           </div>
-          <div class="form-group form2-form-group">
-            <label for="{{ form.owner_last_name.id_for_label }}">Last Name</label>
-            {{ form.owner_last_name }}
+          <div class="form-group form1-form-group">
+            <label for="{{ form.owner_lastname.id_for_label }}">Owner's Last Name</label>
+            {{ form.owner_lastname }}
           </div>
-          <div class="form-group form2-form-group" style="max-width: 85px">
-            <label for="{{ form.owner_suffix.id_for_label }}">Suffix</label>
-            {{ form.owner_suffix }}
-          </div> 
         </div>
 
-        <div class="form2-aligned-group">
-          <div class="form-group form2-form-group">
+        <div class="form1-aligned-group">
+          <div class="form-group form1-form-group" style="max-width:100px;">
+            <label for="{{ form.owner_suffix.id_for_label }}">Owner's Suffix</label>
+            {{ form.owner_suffix }}
+          </div>
+          <div class="form-group form1-form-group">
             <label for="{{ form.relationship_to_owner.id_for_label }}">Relationship to Owner</label>
             {{ form.relationship_to_owner }}
-          </div> 
+          </div>
+          <div class="form-group form1-form-group">
+            <label for="{{ form.contact_number.id_for_label }}">Owner's Contact Number</label>
+            {{ form.contact_number }}
+          </div>
+        </div>
 
-          <div class="form-group form2-form-group">
-            <label for="{{ form.owner_contact_number.id_for_label }}">Owner's Contact Number</label>
-            {{ form.owner_contact_number }}
+        <div class="form1-aligned-group">
+          <div class="form-group form1-form-group">
+            <label for="{{ form.address.id_for_label }}">Owner's Address</label>
+            {{ form.address }}
           </div>
         </div>
       </div>
