@@ -61,13 +61,18 @@ def login_view(request):
             return redirect("login")
 
         if user.check_password(password):
-            request.session["user_id"] = user.id
+            # 🔑 Important fixes
+            request.session.flush()               # clear any old session
+            request.session["user_id"] = user.id  # set current user
+            request.session.cycle_key()           # rotate session key (security)
+            
             return redirect_user_dashboard(user)
         else:
             messages.error(request, "Invalid email or password.")
             return redirect("login")
 
     return render(request, "login.html")
+
 
 def logout_view(request):
     logout(request)
