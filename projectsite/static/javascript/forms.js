@@ -203,3 +203,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
   init();
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const schoolRoleRadios = document.querySelectorAll('input[name="school_role"]');
+    const employeeFields = document.getElementById("employee-fields");
+    const studentFields = document.getElementById("student-fields");
+    const familyInfoSection = document.getElementById("family-info-section");
+
+    function updateFields() {
+        let value = "";
+        schoolRoleRadios.forEach(radio => {
+            if (radio.checked) value = radio.value.toLowerCase();
+        });
+
+        if (value === "student") {
+            if (studentFields) studentFields.style.display = "flex";
+            if (employeeFields) employeeFields.style.display = "none";
+            if (familyInfoSection) familyInfoSection.style.display = "block";
+        } else if (value === "faculty & staff" || value === "university official") {
+            if (employeeFields) employeeFields.style.display = "flex";
+            if (studentFields) studentFields.style.display = "none";
+            if (familyInfoSection) familyInfoSection.style.display = "none";
+        } else {
+            if (employeeFields) employeeFields.style.display = "none";
+            if (studentFields) studentFields.style.display = "none";
+            if (familyInfoSection) familyInfoSection.style.display = "none";
+        }
+    }
+
+    if (schoolRoleRadios.length) {
+        schoolRoleRadios.forEach(radio => {
+            radio.addEventListener("change", updateFields);
+        });
+        updateFields(); // Initial call
+    }
+});

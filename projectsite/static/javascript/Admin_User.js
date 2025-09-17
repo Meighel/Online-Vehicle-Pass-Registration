@@ -9,13 +9,6 @@ $(document).ready(function () {
         return new Date(parts[2], parts[0] - 1, parts[1]); // MM/DD/YYYY format
     }
 
-    /**
-     * ========== FILTERING FUNCTION ==========
-     * Filters based on:
-     * - Username
-     * - Application ID
-     * - Date Range (Start & End Date)
-     */
     function filterRows() {
         let searchText = $("#search-bar").val().toLowerCase().trim();
         let startDate = $("#start-date").val() ? new Date($("#start-date").val()) : null;

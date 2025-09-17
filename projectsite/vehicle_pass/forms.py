@@ -126,10 +126,11 @@ class VehicleRegistrationStep1Form(forms.Form):
         label="Driver's License Number",
         widget=forms.TextInput(attrs={'placeholder': 'N03-12-123456'})
     )
-    role = forms.ChoiceField(
+    
+    school_role = forms.ChoiceField(
         choices=[('student', 'Student'), ('faculty & staff', 'Faculty/Staff'), ('university official', 'University Official')],
         label='School Role',
-        widget=forms.Select(attrs={'placeholder': 'Select role'})
+        widget=forms.RadioSelect
     )
 
     #for employee
@@ -194,7 +195,7 @@ class VehicleRegistrationStep1Form(forms.Form):
         label='Mother Contact',
         widget=forms.TextInput(attrs={'placeholder': 'e.g., +6399876543210'})
     )
-    Mother_address = forms.CharField(
+    mother_address = forms.CharField(
         max_length = 150,
         required = False,
         label='Mother Address',

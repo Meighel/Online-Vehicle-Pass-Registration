@@ -6,24 +6,25 @@
 {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/admin-dashboard-style.css' %}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="{% static 'css/security-dashboard-style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-            /* Ensure main content shifts to the right of sidebar */
-        .dashboard-wrapper {
-            display: auto;
-        }
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-            margin-left: 120px;
-        }
-        /* Ensure cards and table have proper spacing */
-        .dashboard-card {
-            min-height: 140px;
-        }
+        /* Ensure main content shifts to the right of sidebar */
+    .dashboard-wrapper {
+        display: flex;
+    }
+    .main-content {
+        flex-grow: 1;
+        padding: 20px;
+        margin-left: auto;
+    }
+    /* Ensure cards and table have proper spacing */
+    .dashboard-card {
+        min-height: 140px;
+    }
     </style>
 {% endblock %}
 
@@ -36,25 +37,24 @@
 <!-- Sidebar Overlay -->
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-<div class="dashboard-wrapper d-flex">
-    <!-- Main Content -->
-    <div class="main-content flex-grow-1 ms-uto">
+<div class="main-content flex-grow-1 ms-uto">
+    <div class="container-fluid py-1">
             <!-- Title & Top Bar -->
-        <div class="d-flex justify-content-between align-items-center">
-            <h2 class="title mb-3 mb-md-0">Reports</h2>
-            <div class="d-flex align-items-center gap-3">
-                <!-- Notification Bell -->
-                <a href="Announcements.html" class="text-decoration-none position-relative">
-                    <img src="{% static 'images/notification.png' %}" alt="Notifications" width="30" height="30">
-                    <div class="notification-badge"></div>
-                </a>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+                <h2 class="title mb-3 mb-md-0">Reports</h2>
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Notification Bell -->
+                    <a href="Announcements.html" class="text-decoration-none text-light position-relative">
+                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
+                    </a>
+                </div>
             </div>
-        </div>
 
         <hr>
         <small><span id="date"></span></small>
         <br>
-        <div class="reports-container py-5">
+        <div class="container py-5 bg-dark">
             <h1 class="mb-4 text-light">Payment & Transaction Reports</h1>
 
             <!-- Filter Form -->
@@ -206,10 +206,9 @@
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'javascript/base.js' %}"></script>
-    <script src="{% static 'javascript/Admin_Dashboard.js' %}"></script>
-
-
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="{% static 'javascript/base.js' %}"></script>
+    <script src="{% static 'javascript/Security_Dashboard.js' %}"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 {% endblock %}

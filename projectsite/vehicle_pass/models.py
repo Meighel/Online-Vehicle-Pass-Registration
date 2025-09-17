@@ -235,6 +235,17 @@ class Vehicle(BaseModel):
     contact_number = models.CharField(max_length=14, null=True, blank=True)
     address = models.CharField(max_length=100, null=True, blank=True)
 
+    @property
+    def is_owner(self):
+        return not any([
+            self.owner_firstname,
+            self.owner_middlename,
+            self.owner_lastname,
+            self.owner_suffix,
+            self.relationship_to_owner,
+            self.contact_number,
+            self.address
+        ])
 
     def __str__(self):
         return f"{self.plate_number}"  

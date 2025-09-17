@@ -66,12 +66,14 @@
         </div>
       </div>
 
-      <div class="form1-aligned-group">
-        <div class="form-group form1-form-group">
-          <label for="{{ form.school_role.id_for_label }}">School Role</label>
+      <div class="form-group form1-form-group">
+        <label for="{{ form.school_role.id_for_label }}">School Role</label>
+        <div class="form1-radio-group">
           {{ form.school_role }}
         </div>
+      </div>
 
+      <div class="form1-aligned-group" id="employee-fields" style="display: none;">
         <div class="form-group form1-form-group">
           <label for="{{ form.position.id_for_label }}">Position (Employees Only)</label>
           {{ form.position }}
@@ -83,7 +85,7 @@
         </div>
       </div>
 
-      <div class="form1-aligned-group">
+      <div class="form1-aligned-group" id="student-fields" style="display: none;">
         <div class="form-group form1-form-group">
           <label for="{{ form.college.id_for_label }}">College</label>
           {{ form.college }}
@@ -92,53 +94,59 @@
           <label for="{{ form.program.id_for_label }}">Program</label>
           {{ form.program }}
         </div>
-      </div>
-
-      <h3>Family Information</h3>
-      <hr>
-      <br>
-      <div class="form1-aligned-group">
-        <div class="form-group form1-form-group">
-          <label for="{{ form.father_name.id_for_label }}">Father's Name</label>
-          {{ form.father_name }}
-        </div>
-        <div class="form-group form1-form-group">
-          <label for="{{ form.father_contact.id_for_label }}">Father's Contact</label>
-          {{ form.father_contact }}
-        </div>
-        <div class="form-group form1-form-group">
-          <label for="{{ form.father_address.id_for_label }}">Father's Address</label>
-          {{ form.father_address }}
+        <div>
+          <label for="{{ form.year_level.id_for_label }}">Year Level</label>
+          {{ form.year_level }}
         </div>
       </div>
 
-      <div class="form1-aligned-group">
-        <div class="form-group form1-form-group">
-          <label for="{{ form.mother_name.id_for_label }}">Mother's Name</label>
-          {{ form.mother_name }}
+      <div id="family-info-section">
+        <h3>Family Information</h3>
+        <hr>
+        <br>
+        <div class="form1-aligned-group">
+          <div class="form-group form1-form-group">
+            <label for="{{ form.father_name.id_for_label }}">Father's Name</label>
+            {{ form.father_name }}
+          </div>
+          <div class="form-group form1-form-group">
+            <label for="{{ form.father_contact.id_for_label }}">Father's Contact</label>
+            {{ form.father_contact }}
+          </div>
+          <div class="form-group form1-form-group">
+            <label for="{{ form.father_address.id_for_label }}">Father's Address</label>
+            {{ form.father_address }}
+          </div>
         </div>
-        <div class="form-group form1-form-group">
-          <label for="{{ form.mother_contact.id_for_label }}">Mother's Contact</label>
-          {{ form.mother_contact }}
-        </div>
-        <div class="form-group form1-form-group">
-          <label for="{{ form.mother_address.id_for_label }}">Mother's Address</label>
-          {{ form.mother_address }}
-        </div>
-      </div>
 
-      <div class="form1-aligned-group">
-        <div class="form-group form1-form-group">
-          <label for="{{ form.guardian_name.id_for_label }}">Guardian's Name</label>
-          {{ form.guardian_name }}
+        <div class="form1-aligned-group">
+          <div class="form-group form1-form-group">
+            <label for="{{ form.mother_name.id_for_label }}">Mother's Name</label>
+            {{ form.mother_name }}
+          </div>
+          <div class="form-group form1-form-group">
+            <label for="{{ form.mother_contact.id_for_label }}">Mother's Contact</label>
+            {{ form.mother_contact }}
+          </div>
+          <div class="form-group form1-form-group">
+            <label for="{{ form.mother_address.id_for_label }}">Mother's Address</label>
+            {{ form.mother_address }}
+          </div>
         </div>
-        <div class="form-group form1-form-group">
-          <label for="{{ form.guardian_contact.id_for_label }}">Guardian's Contact</label>
-          {{ form.guardian_contact }}
-        </div>
-        <div class="form-group form1-form-group">
-          <label for="{{ form.guardian_address.id_for_label }}">Guardian's Address</label>
-          {{ form.guardian_address }}
+
+        <div class="form1-aligned-group">
+          <div class="form-group form1-form-group">
+            <label for="{{ form.guardian_name.id_for_label }}">Guardian's Name</label>
+            {{ form.guardian_name }}
+          </div>
+          <div class="form-group form1-form-group">
+            <label for="{{ form.guardian_contact.id_for_label }}">Guardian's Contact</label>
+            {{ form.guardian_contact }}
+          </div>
+          <div class="form-group form1-form-group">
+            <label for="{{ form.guardian_address.id_for_label }}">Guardian's Address</label>
+            {{ form.guardian_address }}
+          </div>
         </div>
       </div>
 

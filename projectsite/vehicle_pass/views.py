@@ -249,11 +249,11 @@ def default_dashboard(request):
         'history': history,
     }
 
-    return render(request, "User Dashboard/User_Dashboard.html", context)
+    return render(request, "User/User_Dashboard.html", context)
 
 @login_required
 def user_application(request):
-    return render(request, "User Dashboard/User_Application.html")
+    return render(request, "User/User_Application.html")
 
 @login_required
 def vehicle_registration_step_1(request):
@@ -269,7 +269,7 @@ def vehicle_registration_step_1(request):
                 # Personal Information
                 'lastname': step1_data['lastname'],
                 'firstname': step1_data['firstname'],
-                'middle_name': step1_data['middle_name'],
+                'middlename': step1_data['middlename'],
                 'suffix': step1_data['suffix'],
                 'address': step1_data['address'],
                 'contact': step1_data['contact'],
@@ -300,7 +300,7 @@ def vehicle_registration_step_1(request):
         # Pre-fill form with user profile data if available
         initial_data = {
             'firstname': user.firstname,
-            'middle_name': user.middle_name,
+            'middlename': user.middlename,
             'lastname': user.lastname,
             'suffix': user.suffix,
             'address': user.address,
@@ -455,15 +455,15 @@ def vehicle_registration_step_3(request):
 
 
 def registration_complete(request):
-    return render(request, 'User Dashboard/User_Pass_Status')
+    return render(request, 'User/User_Pass_Status.html')
 
 @login_required
 def user_pass_status(request):
-    return render(request, "User Dashboard/User_Pass_Status.html")
+    return render(request, "User/User_Pass_Status.html")
 
 @login_required
 def user_settings(request):
-    return render(request, "User Dashboard/User_Settings.html")
+    return render(request, "User/User_Settings.html")
 
 # Admin Page View
 
@@ -507,31 +507,31 @@ def admin_dashboard(request):
         "monthly_chart_data": monthly_chart_data,
     }
 
-    return render(request, "Admin Dashboard/Admin_Dashboard.html", context)
+    return render(request, "Admin/Admin_Dashboard.html", context)
 
 
 
 class AdminViewUser(CustomLoginRequiredMixin, ListView):
     model = UserProfile
     context_object_name = "users"
-    template_name = 'Admin Dashboard/Admin_Manage_User.html'
+    template_name = 'Admin/Admin_Manage_User.html'
     paginate_by = 20
 
 class AdminCreateUser(CustomLoginRequiredMixin, CreateView):
     model = UserProfile
     form_class = UserProfileForm
-    template_name = "Admin Dashboard/Admin User CRUD/Admin_Create_User.html" 
+    template_name = "Admin/Admin User CRUD/Admin_Create_User.html" 
     success_url  = reverse_lazy("admin_manage_user")
     
 class AdminUpdateUser(CustomLoginRequiredMixin, UpdateView):
     model = UserProfile
     form_class = UserProfileForm
-    template_name = "Admin Dashboard/Admin User CRUD/Admin_Update_User.html"
+    template_name = "Admin/Admin User CRUD/Admin_Update_User.html"
     success_url  = reverse_lazy("admin_manage_user")
     
 class AdminDeleteUser(CustomLoginRequiredMixin, DeleteView):
     model = UserProfile
-    template_name = "Admin Dashboard/Admin User CRUD/Admin_Delete_User.html"
+    template_name = "Admin/Admin User CRUD/Admin_Delete_User.html"
     success_url = reverse_lazy('admin_manage_user')
 
     def form_valid(self, form):
@@ -540,14 +540,14 @@ class AdminDeleteUser(CustomLoginRequiredMixin, DeleteView):
 
 class AdminViewSpecificUser(CustomLoginRequiredMixin, DetailView):
     model = UserProfile
-    template_name = 'Admin Dashboard/Admin User CRUD/Admin_View_Specific_User.html'
+    template_name = 'Admin/Admin User CRUD/Admin_View_Specific_User.html'
     context_object_name = 'user'
     
 
 
 @login_required
 def admin_manage_application(request):
-    return render(request, "Admin Dashboard/Admin_Application.html")
+    return render(request, "Admin/Admin_Application.html")
 
 @login_required
 def admin_manage_passes(request):
@@ -559,16 +559,16 @@ def admin_manage_passes(request):
     context = {
         'vehicle_passes': vehicle_passes,
     }
-    return render(request, "Admin Dashboard/Admin_Manage_Passes.html", context)
+    return render(request, "Admin/Admin_Manage_Passes.html", context)
 
 
 @login_required
 def admin_report(request):
-    return render (request, "Admin Dashboard/Admin_Reports.html")
+    return render (request, "Admin/Admin_Reports.html")
 
 class AdminViewApplication(CustomLoginRequiredMixin, ListView):
     model = Registration
-    template_name = 'Admin Dashboard/Admin_Application.html'
+    template_name = 'Admin/Admin_Application.html'
     context_object_name = 'applications'
     paginate_by = 20
 
@@ -583,28 +583,28 @@ class AdminViewApplication(CustomLoginRequiredMixin, ListView):
 
 class AdminViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
     model = Registration
-    template_name = 'Admin Dashboard/Admin Application CRUD/Admin_View_Specific_Application.html'
+    template_name = 'Admin/Admin Application CRUD/Admin_View_Specific_Application.html'
     context_object_name = 'applications'
 
 
 class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     model = Registration
     form_class = RegistrationForm
-    template_name = 'Admin Dashboard/Admin Application CRUD/Admin_Update_Application.html'
+    template_name = 'Admin/Admin Application CRUD/Admin_Update_Application.html'
     success_url = reverse_lazy('admin_manage_application')
 
 # Security Page Views
 @login_required
 def security_dashboard(request):
-    return render(request, "Security Dashboard/security_dashboard.html")
+    return render(request, "Security/security_dashboard.html")
 
 @login_required
 def security_manage_application(request):
-    return render(request, "Security Dashboard/Security_Application.html")
+    return render(request, "Security/Security_Application.html")
 
 class SecurityViewApplication(CustomLoginRequiredMixin, ListView):
     model = Registration
-    template_name = 'Security Dashboard/Security_Application.html'
+    template_name = 'Security/Security_Application.html'
     context_object_name = 'applications'
     paginate_by = 20
 
@@ -618,25 +618,25 @@ class SecurityViewApplication(CustomLoginRequiredMixin, ListView):
 
 class SecurityViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
     model = Registration
-    template_name = 'Security Dashboard/Security Application CRUD/Security_View_Specific_Application.html'
+    template_name = 'Security/Security Application CRUD/Security_View_Specific_Application.html'
     context_object_name = 'registration'
 
 
 class SecurityUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     model = Registration
     form_class = RegistrationForm
-    template_name = 'Security Dashboard/Security Application CRUD/Security_Update_Application.html'
+    template_name = 'Security/Security Application CRUD/Security_Update_Application.html'
     success_url = reverse_lazy('security_manage_application')
 
 class SecurityViewStickers(CustomLoginRequiredMixin, ListView):
     model = VehiclePass
-    template_name = 'Security Dashboard/Security_Release_Stickers.html'
+    template_name = 'Security/Security_Release_Stickers.html'
     context_object_name = 'stickers'
     paginate_by = 20
 
 @login_required
 def security_report(request):
-    return render(request, "Security Dashboard/Security_History.html")
+    return render(request, "Security/Security_Reports.html")
 
 
 @login_required
