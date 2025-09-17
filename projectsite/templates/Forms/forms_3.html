@@ -19,6 +19,7 @@
       <div class="progress-bar" style="width: 100%;"></div> <!-- Adjust width for each step -->
     </div>
 
+    
     <div class="form3-note">
       <p><strong>Please upload the required documents in a Google Drive folder and follow these instructions:</strong></p>
       <ul>
@@ -47,10 +48,36 @@
       </div>
 
       <p><strong>Share Google Folder Link:</strong></p>
-      <form method="POST">
+
+      <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+        
         <div class="form-group form3-form-group">
           {{ form.google_drive_link }}
+        </div>
+
+        <div class="form-group form3-form-group">
+          <label for="{{ form.printed_name.id_for_label }}">Printed Name</label>
+          {{ form.printed_name }}
+          {% if form.printed_name.errors %}
+            <div class="field-error">{{ form.printed_name.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group form3-form-group">
+          <label for="{{ form.e_signature.id_for_label }}">E-signature</label>
+          {{ form.e_signature }}
+          {% if form.e_signature.errors %}
+            <div class="field-error">{{ form.e_signature.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group form3-form-group">
+          <label for="{{ form.signature_date.id_for_label }}">Signature Date</label>
+          {{ form.signature_date }}
+          {% if form.signature_date.errors %}
+            <div class="field-error">{{ form.signature_date.errors }}</div>
+          {% endif %}
         </div>
 
         <div class="form-navigation">

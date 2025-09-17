@@ -380,6 +380,10 @@ def vehicle_registration_step_3(request):
         form = VehicleRegistrationStep3Form(request.POST)
         if form.is_valid():
             google_folder_link = form.cleaned_data['google_drive_link']
+            printed_name = form.cleaned_data['printed_name']
+            e_signature = form.cleaned_data['e_signature']
+            signature_date = form.cleaned_data['signature_date']
+
 
             try:
                 # Get data from previous steps
@@ -428,6 +432,9 @@ def vehicle_registration_step_3(request):
                     user=user,
                     vehicle=vehicle,
                     files=google_folder_link,
+                    printed_name=printed_name,
+                    e_signature=e_signature,
+                    signature_date=signature_date,
                     status='pending'
                 )
 
@@ -440,7 +447,6 @@ def vehicle_registration_step_3(request):
 
             except Exception as e:
                 messages.error(request, f"Error saving registration: {str(e)}")
-
         # If form is invalid or exception occurred, fall through to render again
 
     else:
@@ -451,7 +457,6 @@ def vehicle_registration_step_3(request):
         'user': user
     }
     return render(request, 'Forms/forms_3.html', context)
-
 
 
 def registration_complete(request):

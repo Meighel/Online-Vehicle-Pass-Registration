@@ -263,6 +263,23 @@ h2 {
   margin-top: 15px;
 }
 
+.form2-form-group.relationship-to-owner input[type="text"] {
+  width: 100%;
+  max-width: 48vw;
+  min-width: 200px;
+  margin-right: 24px;
+}
+
+.form2-form-group.owner-contact {
+  margin-left: 24px;
+}
+
+.form2-form-group.owner-address input[type="text"] {
+  width: 100%;
+  max-width: 48vw;
+  min-width: 200px;
+}
+
 /* Form 3 Specific Styles */
 .form3-h2 {
   font-size: 28px;
@@ -273,22 +290,40 @@ h2 {
 }
 
 
-.form3-form-group label {
-  font-size: 16px;
+.form3-form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Aligns all children to the left */
+  margin-bottom: 20px;
 }
 
-.form3-form-group input[type="text"],
-.form3-form-group input[type="url"] {
+.form3-form-group label {
+  text-align: left;
   width: 100%;
-  max-width: 250px;
-  padding: 10px 15px;
-  border: none;
+  margin-bottom: 6px;
+}
+.form3-form-group input[type="url"],
+.form3-form-group input[type="text"],
+.form3-form-group input[type="date"],
+.form3-form-group input[type="file"] {
+  width: 100%;
+  max-width: 300px;
   border-radius: 25px;
+  padding: 10px 15px;
+  font-size: 16px;
+  margin-bottom: 0;
+  text-align: left;
   background: white;
   color: black;
-  font-size: 16px;
-  text-align: center;
-  margin-bottom: 20px;
+  border: none;
+}
+
+.form3-form-group input[type="file"] {
+  padding: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
 }
 
 .form3-note {
