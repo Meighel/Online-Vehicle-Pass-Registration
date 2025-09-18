@@ -273,12 +273,6 @@ class VehicleRegistrationStep2Form(forms.Form):
         label='Are you the owner of this vehicle?',
         widget=forms.RadioSelect()
     )
-    relationship_to_owner = forms.CharField(
-        max_length=100,
-        required=False,
-        label='Relationship to Owner',
-        widget=forms.TextInput(attrs={'placeholder': 'e.g. Father, Mother, etc.'})
-    )
     owner_firstname = forms.CharField(
         max_length=100,
         required=False,
@@ -303,6 +297,12 @@ class VehicleRegistrationStep2Form(forms.Form):
         label="Owner's Suffix",
         widget=forms.TextInput(attrs={'placeholder': "e.g. Jr"})
     )
+    relationship_to_owner = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Relationship to Owner',
+        widget=forms.TextInput(attrs={'placeholder': 'e.g. Father, Mother, etc.'})
+    )
     contact_number = forms.CharField(
         max_length=14,
         required=False,
@@ -322,7 +322,7 @@ class VehicleRegistrationStep2Form(forms.Form):
         is_owner = cleaned_data.get("owner") == "yes"
 
         if not is_owner:
-            required_fields = ["owner_firstname", "ownerlast_name", "relationship_to_owner", "contact_number", "address"]
+            required_fields = ["owner_firstname", "owner_lastname", "relationship_to_owner", "contact_number", "address"]
             for field in required_fields:
                 if not cleaned_data.get(field):
                     self.add_error(field, "This field is required if you're not the owner.")

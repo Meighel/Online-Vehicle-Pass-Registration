@@ -11,6 +11,13 @@
   <link rel="icon" href="{% static 'images/favicon.png' %}">
   <script src="{% static 'javascript/forms.js' %}" defer></script>
 </head>
+<!-- {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+      <p class="message {{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+  </div> -->
+{% endif %}
 <body>
   <div class="container">
     <h2 class="form3-h2">Registration for Vehicle Pass (3/3)</h2>
@@ -51,21 +58,6 @@
 
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-
-        {% if form.errors %}
-          <div class="form-errors">
-            <ul>
-              {% for field in form %}
-                {% for error in field.errors %}
-                  <li>{{ field.label }}: {{ error }}</li>
-                {% endfor %}
-              {% endfor %}
-              {% for error in form.non_field_errors %}
-                <li>{{ error }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-        {% endif %} 
         
         <div class="form-group form3-form-group">
           {{ form.google_drive_link }}

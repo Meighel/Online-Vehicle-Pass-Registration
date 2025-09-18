@@ -366,6 +366,7 @@ def vehicle_registration_step_2(request):
                 'chassis_number': step2_data['chassis_number'],
                 'or_number': step2_data['or_number'],
                 'cr_number': step2_data['cr_number'],
+                'is_owner': True if step2_data['owner'] == 'yes' else False,
 
                 # Owner Information (if not the applicant)
                 'owner_firstname': step2_data.get('owner_firstname', ''),
@@ -414,30 +415,37 @@ def vehicle_registration_step_3(request):
                 if step1_data.get('lastname'):
                     user.lastname = step1_data['lastname']   
                 if step1_data.get('suffix'):
-                    user.lastname = step1_data['suffix'] 
+                    user.suffix = step1_data['suffix'] 
                 if step1_data.get('address'):
                     user.address = step1_data['address']
                 if step1_data.get('dl_number'):
                     user.dl_number = step1_data['dl_number']
                 if step1_data.get('contact'):
-                    user.dl_number = step1_data['contact']
+                    user.contact = step1_data['contact']
                 if step1_data.get('corporate_email'):
-                    user.dl_number = step1_data['corporate_email']         
+                    user.corporate_email = step1_data['corporate_email']         
                 if step1_data.get('school_role'):
                     user.school_role = step1_data['school_role']
                 
                 # employees
                 if step1_data.get('position'):
-                    user.workplace = step1_data['position']
+                    user.position = step1_data['position']
                 if step1_data.get('workplace'):
                     user.workplace = step1_data['workplace']
                     
+                #student
                 if step1_data.get('college'):
                     user.college = step1_data['college']
                 if step1_data.get('program'):
                     user.program = step1_data['program']
                 if step1_data.get('year_level'):
                     user.year_level = step1_data['year_level']
+                    
+                for field in ['father_name','father_contact','father_address',
+                            'mother_name','mother_contact','mother_address',
+                            'guardian_name','guardian_contact','guardian_address']:
+                    if step1_data.get(field):
+                        setattr(user, field, step1_data[field])
                 user.save()
 
                 # Create Vehicle object
@@ -482,6 +490,8 @@ def vehicle_registration_step_3(request):
                 return redirect('user_pass_status')
 
             except Exception as e:
+                import traceback
+                print("DEBUG ERROR:", traceback.format_exc())  # logs full error in console
                 messages.error(request, f"Error saving registration: {str(e)}")
         # If form is invalid or exception occurred, fall through to render again
 
