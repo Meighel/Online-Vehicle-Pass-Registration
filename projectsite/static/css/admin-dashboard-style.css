@@ -216,9 +216,7 @@ body {
 /* Base table styles that apply to all tables */
 .application-table,
 .passes-table,
-.users-table,
-.payments-table,
-.transaction-table {
+.users-table {
     width: 100%;
     border-collapse: separate;
     border-radius: 5px;
@@ -230,9 +228,7 @@ body {
 
 .application-table th,
 .passes-table th,
-.users-table th,
-.payments-table th,
-.transaction-table th {
+.users-table th {
     font-weight: bold;
     padding: 14px;
     color: yellow;
@@ -242,9 +238,7 @@ body {
 
 .application-table td,
 .passes-table td,
-.users-table td,
-.payments-table td,
-.transaction-table td {
+.users-table td {
     padding: 12px;
     font-size: 15px;
     vertical-align: middle;
@@ -252,34 +246,26 @@ body {
 
 .application-table tr,
 .passes-table tr,
-.users-table tr,
-.payments-table tr,
-.transaction-table tr {
+.users-table tr {
     color: white;
 }
 
 .application-table tbody tr:nth-child(odd),
 .passes-table tbody tr:nth-child(odd),
-.users-table tbody tr:nth-child(odd),
-.payments-table tbody tr:nth-child(odd),
-.transaction-table tbody tr:nth-child(odd) {
+.users-table tbody tr:nth-child(odd) {
     background-color: #1e1e1e !important;
 }
 
 .application-table tbody tr:nth-child(even),
 .passes-table tbody tr:nth-child(even),
-.users-table tbody tr:nth-child(even),
-.payments-table tbody tr:nth-child(even),
-.transaction-table tbody tr:nth-child(even) {
+.users-table tbody tr:nth-child(even) {
     background-color: #1e1e1e !important; 
 }
 
 /* Action column styling */
 .application-table td:last-child,
 .passes-table td:last-child,
-.users-table td:last-child,
-.payments-table td:last-child,
-.transaction-table td:last-child {
+.users-table td:last-child {
     display: flex;
     justify-content: flex-end;
     gap: 5px; 

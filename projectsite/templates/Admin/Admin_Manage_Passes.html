@@ -75,30 +75,29 @@
                 <tbody>
                     {% for pass in vehicle_passes %}
                     <tr>
-                        <td>{{ pass.id }}</td>
+                        <td>{{ pass.pass_number }}</td>
                         <td>
-                            {{ pass.vehicle.applicant.firstname|default:"N/A"|upper }},
-                            {{ pass.vehicle.applicant.lastname|default:"N/A"|upper }}
+                            {{ pass.vehicle.applicant.lastname|default:"N/A"|upper }},
+                            {{ pass.vehicle.applicant.firstname|default:"N/A"|upper }}
                         </td>
                         <td>
-                            {{ pass.vehicle.applicant.college|default:"N/A" }} /
-                            {{ pass.vehicle.applicant.department|default:"N/A" }} /
+                            {{ pass.vehicle.applicant.college|default:"N/A" }}/
                             {{ pass.vehicle.applicant.program|default:"N/A" }}
                         </td>
-                        <td>{{ pass.vehicle.plateNumber|default:"N/A" }}</td>
+                        <td>{{ pass.vehicle.plate_number|default:"N/A" }}</td>
                         <td>
                             {% if pass.vehicle.is_owner %}
-                                {{ pass.vehicle.applicant.firstname|default:"N/A"|upper }},
-                                {{ pass.vehicle.applicant.lastname|default:"N/A"|upper }}
+                                {{ pass.vehicle.applicant.lastname|default:"N/A"|upper }},
+                                {{ pass.vehicle.applicant.firstname|default:"N/A"|upper }}
                             {% else %}
-                                {{ pass.vehicle.owner_firstname|default:"N/A"|upper }},
-                                {{ pass.vehicle.owner_lastname|default:"N/A"|upper }}
+                                {{ pass.vehicle.owner_lastname|default:"N/A"|upper }},
+                                {{ pass.vehicle.owner_firstname|default:"N/A"|upper }}
                             {% endif %}
                         </td>
                         <td>{{ pass.vehicle.type|default:"N/A" }}</td>
                         <td>{{ pass.vehicle.created_at|date:"m/d/Y" }}</td>
                         <td>{{ pass.status|default:"N/A" }}</td>
-                        <td>{{ pass.passExpire|date:"m/d/Y" }}</td>
+                        <td>{{ pass.pass_expire|date:"m/d/Y" }}</td>
                     </tr>
                     {% empty %}
                     <tr>
@@ -126,17 +125,11 @@
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 
     <script>
-        $(document).ready(function () {
-            // Initialize DataTable
+       $(document).ready(function () {
             var table = $('#myTable').DataTable({
-                // Basic configuration
                 autoWidth: false,
                 responsive: true,
-                
-                // Custom DOM layout for better control
                 dom: '<"top"<"dataTables_length"l><"dataTables_filter"f>>rt<"bottom"<"dataTables_info"i><"dataTables_paginate"p>>',
-                
-                // Custom language settings
                 language: {
                     search: "",
                     lengthMenu: "Show _MENU_ entries",
@@ -149,20 +142,14 @@
                         last: "Last"
                     }
                 },
-                
-                // Pagination settings
                 pageLength: 10,
                 lengthMenu: [5, 10, 25, 50],
-                
-                // Dark theme adjustment
                 drawCallback: function() {
-                    // Ensure consistent styling after draw
                     $('.dataTables_filter input').css({
                         'background-color': 'white',
                         'color': 'black',
                         'border': '2px solid yellow'
                     });
-                    
                     $('.dataTables_length select').css({
                         'background-color': '#000',
                         'color': 'white',
@@ -171,6 +158,7 @@
                 }
             });
             
+            // Date range filtering
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
                     var startDate = $('#start-date').val();
@@ -193,7 +181,7 @@
                     return true;
                 }
             );
-            
+
             // Apply date filters when date inputs change
             $('#start-date, #end-date').on('change', function() {
                 table.draw();

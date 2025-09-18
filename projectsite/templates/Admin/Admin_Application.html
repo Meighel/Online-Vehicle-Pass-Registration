@@ -72,12 +72,14 @@
                 <tbody>
                     {% for applicant in applications %}
                         <tr>
-                            <td>{{ applicant.user.lastname }}, {{ applicant.user.firstname }} {{ applicant.user.middlename|default_if_none:""|slice:":1"}}</td>
-                            <td>{{ applicant.registrationNumber }}</td>
-                            <td>{{ applicant.vehicle.plateNumber }}</td>
+                            <td>
+                                {{ applicant.user.lastname }}, {{ applicant.user.firstname }} 
+                                {{ applicant.user.middlename|default_if_none:""|slice:":1" }}
+                            </td>
+                            <td>{{ applicant.registration_number }}</td>
+                            <td>{{ applicant.vehicle.plate_number }}</td>
                             <td>{{ applicant.created_at|date:"F d, Y" }}</td>
                             <td>{{ applicant.status }}</td>
-                            
                             <td>
                                 <a href="{% url 'admin_view_specific_application' applicant.pk %}" class="btn btn-secondary">View</a>
                                 <a href="{% url 'admin_update_application' applicant.pk %}" class="btn btn-primary">Update</a>
@@ -85,9 +87,9 @@
                         </tr>
                     {% empty %}
                         <tr>
-                        <td colspan="6" style="text-align: center">
-                            <p class="text-sm font-weight-bold mb-0">No Records Found</p>
-                        </td>
+                            <td colspan="6" style="text-align: center">
+                                <p class="text-sm font-weight-bold mb-0">No Records Found</p>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -107,17 +109,11 @@
      <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 
     <script>
-        $(document).ready(function () {
-            // Initialize DataTable
+       $(document).ready(function () {
             var table = $('#myTable').DataTable({
-                // Basic configuration
                 autoWidth: false,
                 responsive: true,
-                
-                // Custom DOM layout for better control
                 dom: '<"top"<"dataTables_length"l><"dataTables_filter"f>>rt<"bottom"<"dataTables_info"i><"dataTables_paginate"p>>',
-                
-                // Custom language settings
                 language: {
                     search: "",
                     lengthMenu: "Show _MENU_ entries",
@@ -130,20 +126,14 @@
                         last: "Last"
                     }
                 },
-                
-                // Pagination settings
                 pageLength: 10,
                 lengthMenu: [5, 10, 25, 50],
-                
-                // Dark theme adjustment
                 drawCallback: function() {
-                    // Ensure consistent styling after draw
                     $('.dataTables_filter input').css({
                         'background-color': 'white',
                         'color': 'black',
                         'border': '2px solid yellow'
                     });
-                    
                     $('.dataTables_length select').css({
                         'background-color': '#000',
                         'color': 'white',

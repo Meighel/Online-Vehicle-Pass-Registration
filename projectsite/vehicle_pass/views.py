@@ -277,6 +277,7 @@ def vehicle_registration_step_1(request):
                 'middlename': step1_data['middlename'],
                 'suffix': step1_data['suffix'],
                 'address': step1_data['address'],
+                'dl_number': step1_data['dl_number'],
                 'contact': step1_data['contact'],
                 'corporate_email': step1_data['corporate_email'],
                 'school_role': step1_data['school_role'],
@@ -288,6 +289,7 @@ def vehicle_registration_step_1(request):
                 # Students
                 'college': step1_data['college'],
                 'program': step1_data['program'],
+                'year_level': step1_data['year_level'],
 
                 # Family Info
                 'father_name': step1_data['father_name'],
@@ -304,18 +306,25 @@ def vehicle_registration_step_1(request):
     else:
         # Pre-fill form with user profile data if available
         initial_data = {
+            'lastname': user.lastname,
             'firstname': user.firstname,
             'middlename': user.middlename,
-            'lastname': user.lastname,
             'suffix': user.suffix,
             'address': user.address,
+            'dl_number': user.dl_number,
             'contact': user.contact,
             'corporate_email': user.corporate_email,
             'school_role': user.school_role,
+            
+            #employees
             'position': getattr(user, 'position', ''),
             'workplace': getattr(user, 'workplace', ''),
+            
+            #student
             'college': getattr(user, 'college', ''), 
             'program': getattr(user, 'program', ''),
+            'year_level': getattr(user, 'year_level', ''),
+            
             # Family info may be blank initially
             'father_name': getattr(user, 'father_name', ''),
             'father_contact': getattr(user, 'father_contact', ''),
@@ -355,6 +364,8 @@ def vehicle_registration_step_2(request):
                 'type': step2_data['type'],
                 'engine_number': step2_data['engine_number'],
                 'chassis_number': step2_data['chassis_number'],
+                'or_number': step2_data['or_number'],
+                'cr_number': step2_data['cr_number'],
 
                 # Owner Information (if not the applicant)
                 'owner_firstname': step2_data.get('owner_firstname', ''),
@@ -382,7 +393,7 @@ def vehicle_registration_step_3(request):
     user = UserProfile.objects.get(id=user_id)
 
     if request.method == 'POST':
-        form = VehicleRegistrationStep3Form(request.POST)
+        form = VehicleRegistrationStep3Form(request.POST, request.FILES)
         if form.is_valid():
             google_folder_link = form.cleaned_data['google_drive_link']
             printed_name = form.cleaned_data['printed_name']
@@ -395,41 +406,61 @@ def vehicle_registration_step_3(request):
                 step1_data = request.session.get('step1_data', {})
                 step2_data = request.session.get('step2_data', {})
 
-                # Update UserProfile with collected information
-                if step1_data.get('middle_name'):
-                    user.middle_name = step1_data['middle_name']
+                # Update UserProfile
+                if step1_data.get('firstname'):
+                    user.firstname = step1_data['firstname']
+                if step1_data.get('middlename'):
+                    user.middlename = step1_data['middlename']
+                if step1_data.get('lastname'):
+                    user.lastname = step1_data['lastname']   
+                if step1_data.get('suffix'):
+                    user.lastname = step1_data['suffix'] 
                 if step1_data.get('address'):
                     user.address = step1_data['address']
-                if step1_data.get('role'):
-                    user.school_role = step1_data['role']
-                if step1_data.get('department_or_workplace'):
-                    user.department = step1_data['department_or_workplace']
+                if step1_data.get('dl_number'):
+                    user.dl_number = step1_data['dl_number']
+                if step1_data.get('contact'):
+                    user.dl_number = step1_data['contact']
+                if step1_data.get('corporate_email'):
+                    user.dl_number = step1_data['corporate_email']         
+                if step1_data.get('school_role'):
+                    user.school_role = step1_data['school_role']
+                
+                # employees
+                if step1_data.get('position'):
+                    user.workplace = step1_data['position']
+                if step1_data.get('workplace'):
+                    user.workplace = step1_data['workplace']
+                    
                 if step1_data.get('college'):
                     user.college = step1_data['college']
                 if step1_data.get('program'):
                     user.program = step1_data['program']
-                if step1_data.get('driver_license_number'):
-                    user.dl_number = step1_data['driver_license_number']
-
+                if step1_data.get('year_level'):
+                    user.year_level = step1_data['year_level']
                 user.save()
 
                 # Create Vehicle object
                 vehicle = Vehicle.objects.create(
                     applicant=user,
-                    plateNumber=step1_data['plate_number'],
-                    type=step1_data['vehicle_type'],
-                    model=step1_data['model'],
-                    vehicle_color=step1_data['vehicle_color'],
-                    chassisNumber=step1_data['chassis_number'],
-                    OR_Number=step1_data['or_number'],
-                    CR_Number=step1_data['cr_number'],
-                    is_owner=step2_data.get('is_owner', False),
-                    owner_firstname=None if step2_data.get('is_owner', False) else step2_data.get('owner_first_name'),
-                    owner_middlename=None if step2_data.get('is_owner', False) else step2_data.get('owner_middle_name'),
-                    owner_lastname=None if step2_data.get('is_owner', False) else step2_data.get('owner_last_name'),
-                    owner_suffix=None if step2_data.get('is_owner', False) else step2_data.get('owner_suffix'),
-                    contact_number=None if step2_data.get('is_owner', False) else step2_data.get('owner_contact_number'),
-                    relationship_to_owner=None if step2_data.get('is_owner', False) else step2_data.get('relationship_to_owner')
+                    make_model=step2_data['make_model'],
+                    plate_number=step2_data['plate_number'],
+                    year_model=step2_data['year_model'],
+                    color=step2_data['color'],
+                    type=step2_data['type'],
+                    engine_number=step2_data['engine_number'],
+                    chassis_number=step2_data['chassis_number'],
+                    or_number=step2_data['or_number'],
+                    cr_number=step2_data['cr_number'],
+                    
+                    # Owner fields:
+                    owner_firstname=None if step2_data.get('is_owner', False) else step2_data.get('owner_firstname') or None,
+                    owner_middlename=None if step2_data.get('is_owner', False) else step2_data.get('owner_middlename') or None,
+                    owner_lastname=None if step2_data.get('is_owner', False) else step2_data.get('owner_lastname') or None,
+                    owner_suffix=None if step2_data.get('is_owner', False) else step2_data.get('owner_suffix') or None,
+                    relationship_to_owner=None if step2_data.get('is_owner', False) else step2_data.get('relationship_to_owner') or None,
+                    contact_number=None if step2_data.get('is_owner', False) else step2_data.get('contact_number') or None,
+                    address=None if step2_data.get('is_owner', False) else step2_data.get('address') or None,
                 )
 
                 # Create Registration object

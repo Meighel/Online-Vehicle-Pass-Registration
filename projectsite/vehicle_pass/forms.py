@@ -121,7 +121,7 @@ class VehicleRegistrationStep1Form(forms.Form):
         label='Corporate Email',
         widget=forms.EmailInput(attrs={'placeholder': '20228000X@psu.edu.ph'})
     )
-    driver_license_number = forms.CharField(
+    dl_number = forms.CharField(
         max_length=25,
         label="Driver's License Number",
         widget=forms.TextInput(attrs={'placeholder': 'N03-12-123456'})
