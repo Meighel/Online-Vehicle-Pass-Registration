@@ -10,6 +10,8 @@ from vehicle_pass.views import (
     admin_dashboard, AdminViewUser, AdminCreateUser, AdminUpdateUser, AdminDeleteUser, AdminViewSpecificUser,
     AdminViewApplication, AdminViewSpecificApplication, AdminUpdateApplication,
     admin_manage_application, admin_manage_passes, admin_report,
+    
+    initials_avatar,
 
     
     #settings_view
@@ -73,4 +75,7 @@ urlpatterns = [
     
     path("dashboard/admin/manage_passes/", admin_manage_passes, name="admin_manage_passes"),
     path("dashboard/admin/manage_report/", admin_report, name="admin_report"),    
+
+    path('avatar/', initials_avatar, name='initials_avatar'),
+
 ]
