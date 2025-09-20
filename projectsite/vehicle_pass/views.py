@@ -548,6 +548,14 @@ def admin_dashboard(request):
         "monthly_chart_data": monthly_chart_data,
     }
 
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    admin_profile = get_object_or_404(AdminProfile, user__id=user_id)
+    user_profile = UserProfile.objects.filter(id=user_id).first()
+    if user_profile:
+        context['profile'] = user_profile
+
     return render(request, "Admin/Admin_Dashboard.html", context)
 
 
@@ -784,4 +792,31 @@ def dashboard_view(request):
     stats = get_stats()
     return render(request, 'User Dashboard/User_Dashboard.html', {'stats': stats})
 
-
+def initials_avatar(request):
+    user = request.user
+    initials = ""
+    if hasattr(user, "firstname") and user.firstname:
+        initials += user.firstname[0].upper()
+    if hasattr(user, "lastname") and user.lastname:
+        initials += user.lastname[0].upper()
+    if not initials:
+        initials = "U"
+    # Cache path
+    cache_dir = os.path.join(settings.MEDIA_ROOT, "avatars")
+    os.makedirs(cache_dir, exist_ok=True)
+    cache_path = os.path.join(cache_dir, f"avatar_{user.id}.png")
+    if not os.path.exists(cache_path):
+        # Create image
+        img_size = (80, 80)
+        img = Image.new("RGB", img_size, color=(0, 0, 0))
+        draw = ImageDraw.Draw(img)
+        font_path = os.path.join(settings.BASE_DIR, "arial.ttf") # Use a valid font path
+        try:
+            font = ImageFont.truetype(font_path, 36)
+        except:
+            font = ImageFont.load_default()
+        w, h = draw.textsize(initials, font=font)
+        draw.text(((img_size[0]-w)/2, (img_size[1]-h)/2), initials, font=font, fill=(255, 215, 0))
+        img.save(cache_path)
+    with open(cache_path, "rb") as f:
+        return HttpResponse(f.read(), content_type="image/png")

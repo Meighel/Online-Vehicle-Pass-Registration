@@ -61,8 +61,14 @@
 
                 <!-- Profile Content -->
                 <div class="d-flex flex-row align-items-center">
-                    <div class="rounded-circle overflow-hidden border border-light" style="width: 100px; height: 100px;">
-                        <img src="{% static 'images/student.png' %}" class="w-100 h-100 object-fit-cover" alt="User">
+                    <div class="rounded-circle overflow-hidden border border-light d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; background: #111;">
+                        <span style="color: #FFD600; font-weight: bold; font-size: 2em;">
+                            {% if profile %}
+                                {{ profile.firstname|slice:":1"|upper }}{% if profile.middlename %}{{ profile.middlename|slice:":1"|upper }}{% endif %}{{ profile.lastname|slice:":1"|upper }}
+                            {% else %}
+                                ?
+                            {% endif %}
+                        </span>
                     </div>
                     <div class="profile-info ms-4">
                         <p class="fs-5 fw-bold">Name: {{ profile.firstname }} {{ profile.lastname }}</p>
