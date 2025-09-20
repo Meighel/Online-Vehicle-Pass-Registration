@@ -512,8 +512,13 @@ def user_settings(request):
 def admin_dashboard(request):
     # Total users by role
     total_students = UserProfile.objects.filter(school_role='student').count()
+    total_officials = UserProfile.objects.filter(role='user', school_role__in=['faculty & staff', 'university official']).count()
     total_security = UserProfile.objects.filter(role='security').count()
     total_admin = UserProfile.objects.filter(role='admin').count()
+    total_vehicles = Vehicle.objects.count() 
+    total_motor = Vehicle.objects.filter(type='motor').count()
+    total_car = Vehicle.objects.filter(type='car').count()
+    total_van = Vehicle.objects.filter(type='van').count()
 
     # Account growth calculation
     current_month_users = UserProfile.objects.filter(
@@ -542,10 +547,15 @@ def admin_dashboard(request):
 
     context = {
         "total_students": total_students,
+        "total_officials": total_officials,
         "total_security": total_security,
         "total_admin": total_admin,
         "growth_percent": growth_percent,
         "monthly_chart_data": monthly_chart_data,
+        "total_vehicles": total_vehicles,
+        'total_motor': total_motor,
+        'total_car': total_car,
+        'total_van': total_van,
     }
 
     user_id = request.session.get('user_id')
@@ -645,10 +655,32 @@ class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
 # Security Page Views
 @login_required
 def security_dashboard(request):
-    return render(request, "Security/security_dashboard.html")
+    # Fetch statistics
+    verified_count = Registration.objects.filter(status='approved').count()
+    rejected_count = Registration.objects.filter(status='rejected').count()
+    total_count = Registration.objects.exclude(status='no application').count()
+    percentage = round((verified_count / total_count * 100) if total_count else 0, 2)
+
+    unreleased_stickers = Registration.objects.filter(
+        status__in=['approved', 'final approval'],
+        sticker_released_date__isnull=True
+    ).select_related('user').order_by('-created_at')
+
+    context = {
+        'verified_count': verified_count,
+        'rejected_count': rejected_count,
+        'total_count': total_count,
+        'percentage': percentage,
+        'unreleased_stickers': unreleased_stickers,
+    }
+    return render(request, 'Security/security_dashboard.html', context)
 
 @login_required
 def security_manage_application(request):
+    applications = Registration.objects.select_related('user', 'initial_approved_by', 'final_approved_by').all().order_by('-created_at')
+    context = {
+        'applications': applications,
+    }
     return render(request, "Security/Security_Application.html")
 
 class SecurityViewApplication(CustomLoginRequiredMixin, ListView):
@@ -676,12 +708,11 @@ class SecurityUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     form_class = RegistrationForm
     template_name = 'Security/Security Application CRUD/Security_Update_Application.html'
     success_url = reverse_lazy('security_manage_application')
-
-class SecurityViewStickers(CustomLoginRequiredMixin, ListView):
-    model = VehiclePass
-    template_name = 'Security/Security_Release_Stickers.html'
-    context_object_name = 'stickers'
-    paginate_by = 20
+    
+@login_required
+def security_release_stickers(request):
+    stickers = VehiclePass.objects.select_related('vehicle__applicant').all().order_by('-created_at')
+    return render(request, 'Security/Security_Release_Stickers.html', {'stickers': stickers})
 
 @login_required
 def security_report(request):

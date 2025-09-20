@@ -6,6 +6,7 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/admin-dashboard-style.css' %}">
 <link rel="icon" href="{% static 'images/favicon.png' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
         /* Ensure main content shifts to the right of sidebar */
     .dashboard-wrapper {
@@ -54,77 +55,227 @@
 
             <!-- Statistic Boxes -->
             <div class="row g-4 mt-3">
+                <!-- Students Card -->
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                    <div class="p-3 border rounded shadow-sm dashboard-card">
-                        <h6>
-                            <img src="{% static 'images/student.png' %}" alt="Student Icon" width="25" height="25">
-                            Students Accounts
-                        </h6>
-                        <h5>{{ total_students }}</h5>
-                        <small><p class="text-success mb-0">+{{ growth_percent }}% than last month</p></small>
+                    <div class="dashboard-card-container">
+                        <div class="dashboard-card student p-4 h-100">
+                            <div class="card-content">
+                                <div class="card-left">
+                                    <div class="icon-wrapper">
+                                        <img src="{% static 'images/student.png' %}" alt="Student Icon" class="card-icon">
+                                    </div>
+                                    <div class="card-info">
+                                        <h6 class="card-title">Student Accounts</h6>
+                                        <small class="growth-text">
+                                            <i class="fas fa-arrow-up"></i>
+                                            {{ growth_percent }}%
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="card-right">
+                                    <h1 class="card-number">{{ total_students }}</h1>
+                                </div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ growth_percent }}%" aria-valuenow="{{ growth_percent }}" 
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- University Personnel Card -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="dashboard-card-container">
+                        <div class="dashboard-card personnel p-4 h-100">
+                            <div class="card-content">
+                                <div class="card-left">
+                                    <div class="icon-wrapper">
+                                        <img src="{% static 'images/admin.png' %}" alt="Personnel Icon" class="card-icon">
+                                    </div>
+                                    <div class="card-info">
+                                        <h6 class="card-title">University Personnel</h6>
+                                        <small class="growth-text">
+                                            <i class="fas fa-arrow-up"></i>
+                                            {{ growth_percent }}%
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="card-right">
+                                    <h1 class="card-number">{{ total_students }}</h1>
+                                </div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ growth_percent }}%" aria-valuenow="{{ growth_percent }}" 
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Security Card -->
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                    <div class="p-3 border rounded shadow-sm dashboard-card">
-                        <h6>
-                            <img src="{% static 'images/security.png' %}" alt="Security Icon" width="25" height="25">
-                            Security Accounts
-                        </h6>
-                        <h5>{{ total_security }}</h5>
+                    <div class="dashboard-card-container">
+                        <div class="dashboard-card security p-4 h-100">
+                            <div class="card-content">
+                                <div class="card-left">
+                                    <div class="icon-wrapper">
+                                        <img src="{% static 'images/security.png' %}" alt="Security Icon" class="card-icon">
+                                    </div>
+                                    <div class="card-info">
+                                        <h6 class="card-title">Security Accounts</h6>
+                                        <small class="growth-text">
+                                            <i class="fas fa-arrow-up"></i>
+                                            {{ growth_percent }}%
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="card-right">
+                                    <h1 class="card-number">{{ total_security }}</h1>
+                                </div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ growth_percent }}%" aria-valuenow="{{ growth_percent }}" 
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                    <div class="p-3 border rounded shadow-sm dashboard-card">
-                        <h6>
-                            <img src="{% static 'images/cashier.png' %}" alt="Cashier Icon" width="25" height="25">
-                            Cashier Accounts
-                        </h6>
-                        <h5>{{ total_cashier }}</h5>
-                    </div>
-                </div> -->
-
+                <!-- Admin Card -->
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                    <div class="p-3 border rounded shadow-sm dashboard-card">
-                        <h6>
-                            <img src="{% static 'images/admin.png' %}" alt="Admin Icon" width="25" height="25">
-                            Admin Accounts
-                        </h6>
-                        <h5>{{ total_admin }}</h5>
+                    <div class="dashboard-card-container">
+                        <div class="dashboard-card admin p-4 h-100">
+                            <div class="card-content">
+                                <div class="card-left">
+                                    <div class="icon-wrapper">
+                                        <img src="{% static 'images/admin.png' %}" alt="Admin Icon" class="card-icon">
+                                    </div>
+                                    <div class="card-info">
+                                        <h6 class="card-title">Admin Accounts</h6>
+                                        <small class="growth-text">
+                                            <i class="fas fa-arrow-up"></i>
+                                            {{ growth_percent }}%
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="card-right">
+                                    <h1 class="card-number">{{ total_admin }}</h1>
+                                </div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ growth_percent }}%" aria-valuenow="{{ growth_percent }}" 
+                                     aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <br>
-            
+            <!-- Vehicle Stats Section -->
+            <div class="row g-4 mt-4">
+                <div class="col-12">
+                    <div class="vehicle-stats-container">
+                        <div class="vehicle-hero-card p-5">
+                            <!-- Header Section -->
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="vehicle-header">
+                                    <div class="mb-2">
+                                        <h3 class="vehicle-main-title">Vehicle Management</h3>
+                                        <p class="vehicle-subtitle">Real-time vehicle statistics and insights</p>
+                                    </div>
+                                    <hr>
 
-            <!-- Transaction Record Table
-            <section class="table-container">
-                <table id="myTable" class="transaction-table">
-                    <thead>
-                        <caption style="caption-side: top; text-align: float; font-size: 20px; font-weight: bold; padding: 10px; color:white">
-                            Transaction Table
-                        </caption>
-                        <tr>
-                            <th>Date</th>
-                            <th>Username</th>
-                            <th>Status</th>
-                            <th>Processed By</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for transaction in transaction_list %}
-                            <tr>
-                                <td>{{ transaction.date_processed }}</td>
-                                <td>{{ transaction.registration.user.lastname }} , {{ transaction.registration.user.firstname }}</td>
-                                <td><button class="btn btn-success btn-sm">{{ transaction.status }}</button></td>
-                                <td>{{ transaction.cashier.user.firstname }} {{ transaction.cashier.user.lastname }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </section> -->
+                                    <div class="d-flex align-items-center gap-4" style="width: 100%;">
+                                        <!-- Vehicle Icon -->
+                                        <span class="vehicle-icon-large d-flex align-items-center justify-content-center" 
+                                            style="font-size: 6rem; color: #fff;">
+                                            <i class="fas fa-car-side"></i>
+                                        </span>
+                                        <!-- Vehicle Stats -->
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <div class="d-flex align-items-center">
+                                                <!-- Left: total vehicles -->
+                                                <span class="status-number me-3" 
+                                                    style="font-size: 2.5rem; font-weight: bold; letter-spacing: 2px;">
+                                                    {{ total_vehicles }}
+                                                </span>
+
+                                                <!-- Right: subtitle + update -->
+                                                <div class="d-flex flex-column">
+                                                    <span class="vehicle-subtitle" style="font-size: 1.2rem; color: #e2e2e2;">
+                                                        Total Registered Vehicles
+                                                    </span>
+                                                    <span class="vehicle-update-info" style="font-size: 0.95rem; color: #c2c2c2;">
+                                                        Last updated: {{ last_updated|default:'Today' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+
+                                    <!-- Main Stats Grid -->
+                                    <div class="row g-4">
+                                        <!-- Motor -->
+                                        <div class="col-md-4">
+                                            <div class="vehicle-stat-item">
+                                                <div class="stat-icon-wrapper motor">
+                                                    <i class="fas fa-motorcycle"></i>
+                                                </div>
+                                                <div class="stat-content">
+                                                    <h2 class="stat-number">{{ total_motor }}</h2>
+                                                    <p class="stat-label">Motorcycles</p>
+                                                    <div class="stat-growth">
+                                                        <i class="fas fa-arrow-up"></i>
+                                                        <span>+{{ growth_percent }}%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Car -->
+                                        <div class="col-md-4">
+                                            <div class="vehicle-stat-item">
+                                                <div class="stat-icon-wrapper car">
+                                                    <i class="fas fa-car"></i>
+                                                </div>
+                                                <div class="stat-content">
+                                                    <h2 class="stat-number">{{ total_car }}</h2>
+                                                    <p class="stat-label">Cars</p>
+                                                    <div class="stat-growth">
+                                                        <i class="fas fa-arrow-up"></i>
+                                                        <span>+{{ growth_percent }}%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Van -->
+                                        <div class="col-md-4">
+                                            <div class="vehicle-stat-item">
+                                                <div class="stat-icon-wrapper van">
+                                                    <i class="fas fa-shuttle-van"></i>
+                                                </div>
+                                                <div class="stat-content">
+                                                    <h2 class="stat-number">{{ total_van }}</h2>
+                                                    <p class="stat-label">Vans</p>
+                                                    <div class="stat-growth">
+                                                        <i class="fas fa-arrow-up"></i>
+                                                        <span>+{{ growth_percent }}%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div> <!-- End Main Content -->
 </div> <!-- End Dashboard Wrapper -->

@@ -41,14 +41,12 @@
     <!-- Main Content -->
     <div class="main-content flex-grow-1 ms-uto">
         <!-- Title & Top Bar -->
-        <!-- Title & Top Bar -->
         <div class="d-flex justify-content-between align-items-center">
             <h2 class="title mb-3 mb-md-0">Manage Application</h2>
             <div class="d-flex align-items-center gap-3">
                 <!-- Notification Bell -->
                 <a href="Announcements.html" class="text-decoration-none position-relative">
                     <img src="{% static 'images/notification.png' %}" alt="Notifications" width="30" height="30">
-
                 </a>
             </div>
         </div>
@@ -81,8 +79,8 @@
                             <td>{{ applicant.created_at|date:"F d, Y" }}</td>
                             <td>{{ applicant.status }}</td>
                             <td>
-                                <a href="{% url 'admin_view_specific_application' applicant.pk %}" class="btn btn-secondary">View</a>
-                                <a href="{% url 'admin_update_application' applicant.pk %}" class="btn btn-primary">Update</a>
+                                <a href="{% url 'admin_view_specific_application' applicant.pk %}" class="btn btn-info">View</a>
+                                <a href="{% url 'admin_update_application' applicant.pk %}" class="btn btn-success">Update</a>
                             </td>
                         </tr>
                     {% empty %}

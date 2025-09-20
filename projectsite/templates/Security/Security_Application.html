@@ -39,17 +39,16 @@
 
 <div class="main-content flex-grow-1 ms-uto">
     <div class="container-fluid py-1">
-            <!-- Title & Top Bar -->
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-                <h2 class="title mb-3 mb-md-0">Manage Application</h2>
-                <div class="d-flex align-items-center gap-3">
-                    <!-- Notification Bell -->
-                    <a href="Announcements.html" class="text-decoration-none text-light position-relative">
-                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
-                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
-                    </a>
-                </div>
+        <!-- Title & Top Bar -->
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="title mb-3 mb-md-0">Manage Application</h2>
+            <div class="d-flex align-items-center gap-3">
+                <!-- Notification Bell -->
+                <a href="Announcements.html" class="text-decoration-none position-relative">
+                    <img src="{% static 'images/notification.png' %}" alt="Notifications" width="30" height="30">
+                </a>
             </div>
+        </div>
 
         <hr>
         <small><span id="date"></span></small>
@@ -71,16 +70,25 @@
                 <tbody>
                 {% for applicant in applications %}
                     <tr>
-                        <td>{{ applicant.user.lastname }}, {{ applicant.user.firstname }} {{ applicant.user.middle_name|default_if_none:""|slice:":1" }} {{ registration.user.suffix|default_if_none:""}}</td>
+                        <td>{{ applicant.user.lastname }}, {{ applicant.user.firstname }} {{ applicant.user.middlename|default_if_none:""|slice:":1" }} {{ applicant.user.suffix|default_if_none:"" }}</td>
                         <td>{{ applicant.created_at|date:"F d, Y" }}</td>
                         <td>{{ applicant.status }}</td>
-                        <td>{{ applicant.document_reviewed_by.user.firstname }} {{ applicant.document_reviewed_by.user.middle_name|default_if_none:""|slice:":1" }} {{ applicant.document_reviewed_by.user.lastname }}  {{ applicant.document_reviewed_by.user.suffix|default_if_none:"" }}</td>
+                        <td>
+                            {% if applicant.initial_approved_by %}
+                                {{ applicant.initial_approved_by.user.firstname }} {{ applicant.initial_approved_by.user.middlename|default_if_none:""|slice:":1" }} {{ applicant.initial_approved_by.user.lastname }} {{ applicant.initial_approved_by.user.suffix|default_if_none:"" }}
+                            {% elif applicant.final_approved_by %}
+                                {{ applicant.final_approved_by.user.firstname }} {{ applicant.final_approved_by.user.middlename|default_if_none:""|slice:":1" }} {{ applicant.final_approved_by.user.lastname }} {{ applicant.final_approved_by.user.suffix|default_if_none:"" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
                         <td>{{ applicant.remarks|default_if_none:"no remarks" }}</td>
                         <td>
-                            <a href="{% url 'security_view_specific_application' applicant.pk %}" class="btn btn-secondary">View</a>
-                            <a href="{% url 'security_update_application' applicant.pk %}" class="btn btn-primary">Update</a>
+                            <a href="{% url 'security_view_specific_application' applicant.pk %}" class="btn btn-info">View</a>
+                            <a href="{% url 'security_update_application' applicant.pk %}" class="btn btn-success">Update</a>
                         </td>
-                {% endfor %} 
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </section>
@@ -99,79 +107,79 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
     <script>
-            $(document).ready(function () {
-                // Initialize DataTable
-                var table = $('#myTable').DataTable({
-                    // Basic configuration
-                    autoWidth: false,
-                    responsive: true,
-                    
-                    // Custom DOM layout for better control
-                    dom: '<"top"<"dataTables_length"l><"dataTables_filter"f>>rt<"bottom"<"dataTables_info"i><"dataTables_paginate"p>>',
-                    
-                    // Custom language settings
-                    language: {
-                        search: "",
-                        lengthMenu: "Show _MENU_ entries",
-                        info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                        infoFiltered: "(filtered from _MAX_ total entries)",
-                        paginate: {
-                            first: "First",
-                            previous: "Prev",
-                            next: "Next",
-                            last: "Last"
-                        }
-                    },
-                    
-                    // Pagination settings
-                    pageLength: 10,
-                    lengthMenu: [5, 10, 25, 50],
-                    
-                    // Dark theme adjustment
-                    drawCallback: function() {
-                        // Ensure consistent styling after draw
-                        $('.dataTables_filter input').css({
-                            'background-color': 'white',
-                            'color': 'black',
-                            'border': '2px solid yellow'
-                        });
-                        
-                        $('.dataTables_length select').css({
-                            'background-color': '#000',
-                            'color': 'white',
-                            'border': '1px solid #444'
-                        });
-                    }
-                });
+        $(document).ready(function () {
+            // Initialize DataTable
+            var table = $('#myTable').DataTable({
+                // Basic configuration
+                autoWidth: false,
+                responsive: true,
                 
-                // Date range filtering
-                $.fn.dataTable.ext.search.push(
-                    function(settings, data, dataIndex) {
-                        var startDate = $('#start-date').val();
-                        var endDate = $('#end-date').val();
-                        var dateApplied = data[0]; // Date column is the first
-
-                        if (!startDate && !endDate) return true;
-
-                        var dateObj = new Date(dateApplied);
-                        var startDateObj = startDate ? new Date(startDate) : null;
-                        var endDateObj = endDate ? new Date(endDate) : null;
-
-                        if (startDateObj && endDateObj) {
-                            return dateObj >= startDateObj && dateObj <= endDateObj;
-                        } else if (startDateObj) {
-                            return dateObj >= startDateObj;
-                        } else if (endDateObj) {
-                            return dateObj <= endDateObj;
-                        }
-                        return true;
-                    }
-                );
+                // Custom DOM layout for better control
+                dom: '<"top"<"dataTables_length"l><"dataTables_filter"f>>rt<"bottom"<"dataTables_info"i><"dataTables_paginate"p>>',
                 
-                // Apply date filters when date inputs change
-                $('#start-date, #end-date').on('change', function() {
-                    table.draw();
-                });
+                // Custom language settings
+                language: {
+                    search: "",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    paginate: {
+                        first: "First",
+                        previous: "Prev",
+                        next: "Next",
+                        last: "Last"
+                    }
+                },
+                
+                // Pagination settings
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50],
+                
+                // Dark theme adjustment
+                drawCallback: function() {
+                    // Ensure consistent styling after draw
+                    $('.dataTables_filter input').css({
+                        'background-color': 'white',
+                        'color': 'black',
+                        'border': '2px solid yellow'
+                    });
+                    
+                    $('.dataTables_length select').css({
+                        'background-color': '#000',
+                        'color': 'white',
+                        'border': '1px solid #444'
+                    });
+                }
             });
-        </script>
+            
+            // Date range filtering
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var startDate = $('#start-date').val();
+                    var endDate = $('#end-date').val();
+                    var dateApplied = data[0]; // Date column is the first
+
+                    if (!startDate && !endDate) return true;
+
+                    var dateObj = new Date(dateApplied);
+                    var startDateObj = startDate ? new Date(startDate) : null;
+                    var endDateObj = endDate ? new Date(endDate) : null;
+
+                    if (startDateObj && endDateObj) {
+                        return dateObj >= startDateObj && dateObj <= endDateObj;
+                    } else if (startDateObj) {
+                        return dateObj >= startDateObj;
+                    } else if (endDateObj) {
+                        return dateObj <= endDateObj;
+                    }
+                    return true;
+                }
+            );
+            
+            // Apply date filters when date inputs change
+            $('#start-date, #end-date').on('change', function() {
+                table.draw();
+            });
+        });
+    </script>
 {% endblock %}
