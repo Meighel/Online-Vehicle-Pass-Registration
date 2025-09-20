@@ -12,6 +12,8 @@
   <script src="{% static 'javascript/forms.js' %}" defer></script>
 </head>
 <body>
+  {% include 'includes/psu_gso_header.html' with page_no=3 %}
+
   <div class="container">
     <h2 class="form3-h2">Registration for Vehicle Pass (3/3)</h2>
 
@@ -105,5 +107,7 @@
       </form>
     </div>
   </div>
+  {% include 'includes/forms_footer.html' %}
+
 </body>
 </html>
