@@ -73,4 +73,9 @@ urlpatterns = [
     
     path("dashboard/admin/manage_passes/", admin_manage_passes, name="admin_manage_passes"),
     path("dashboard/admin/manage_report/", admin_report, name="admin_report"),    
+
+    path('api/notifications/', views.get_notifications_api, name='api_notifications'),
+    path('api/notifications/<int:notification_id>/mark-read/', views.mark_notification_read_api, name='mark_notification_read'),
+    path('api/notifications/mark-all-read/', views.mark_all_read_api, name='mark_all_notifications_read'),
+    path('api/notifications/count/', views.get_unread_count_api, name='unread_count'),
 ]

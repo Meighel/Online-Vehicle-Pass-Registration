@@ -408,6 +408,16 @@ class NotificationManager {
             `;
         }
     }
+
+    markVisibleNotificationsAsRead() {
+    const visibleNotifications = document.querySelectorAll('.notification-item.unread');
+    visibleNotifications.forEach(item => {
+        const id = item.getAttribute('data-notification-id');
+        if (id) {
+            this.markAsRead(id);
+        }
+    });
+}
 }
 
 // Initialize when DOM is ready

@@ -5,6 +5,8 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/user-dashboard-style.css' %}">
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="icon" href="{% static 'images/favicon.png' %}">
 <style>
     /* Ensure main content shifts to the right of sidebar */
@@ -40,11 +42,62 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h2 class="title mb-3 mb-md-0">Dashboard</h2>
                 <div class="d-flex align-items-center gap-3">
-                    <!-- Notification Bell -->
-                    <a href="Announcements.html" class="text-decoration-none position-relative">
-                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="30" height="30">
-                        <div class="notification-badge"></div>
-                    </a>
+                    <!-- Notification Bell Button with Bootstrap Dropdown -->
+                    <div class="dropdown" style="position: relative;">
+                        <!-- Notification Bell Button -->
+                        <button class="btn btn-outline-secondary position-relative" 
+                                type="button" 
+                                id="notificationDropdown" 
+                                data-bs-toggle="dropdown" 
+                                aria-expanded="false"
+                                title="Notifications">
+                            <i class="fas fa-bell" id="notification-bell"></i>
+                            <!-- Red badge for unread count -->
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+                                id="notification-badge" 
+                                style="display: none; font-size: 0.6rem;">
+                                0
+                            </span>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <ul class="dropdown-menu dropdown-menu-end shadow" 
+                            aria-labelledby="notificationDropdown" 
+                            style="min-width: 350px; max-height: 400px; overflow-y: auto;">
+                            
+                            <!-- Header -->
+                            <li class="dropdown-header d-flex justify-content-between align-items-center">
+                                <span class="fw-bold">Notifications</span>
+                                <button class="btn btn-sm btn-link text-decoration-none p-0" 
+                                        id="mark-all-read-btn" 
+                                        onclick="notificationManager.markAllAsRead()">
+                                    Mark all read
+                                </button>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <!-- Loading indicator -->
+                            <li id="notifications-loading" class="dropdown-item-text text-center text-muted">
+                                <div class="spinner-border spinner-border-sm" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                Loading notifications...
+                            </li>
+                            
+                            <!-- Notifications will be populated here -->
+                            <div id="notification-dropdown-list">
+                                <!-- Dynamic content -->
+                            </div>
+                            
+                            <!-- Footer -->
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-center small text-muted" href="/notifications/">
+                                    <i class="fas fa-list me-1"></i>View All Notifications
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -189,10 +242,14 @@
         </div> <!-- End Container -->
     </div> <!-- End Main Content -->
 </div> <!-- End Dashboard Wrapper -->
+
+<!-- Toast Container (for popup notifications) -->
+<div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;"></div>
 {% endblock %}
 
 {% block extra_js %}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script src="{% static 'javascript/User_Dashboard.js' %}"></script>
+    <script src="{% static 'javascript/notifications.js' %}"></script>
 {% endblock %}
