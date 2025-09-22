@@ -18,7 +18,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.urls import reverse
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_http_methods
 from datetime import timedelta 
 
@@ -28,6 +28,19 @@ import calendar
 from django.db.models.functions import TruncMonth
 from django.contrib.auth import update_session_auth_hash
 from .models import SiteVisit, LoginActivity
+
+import os
+from django.conf import settings
+from PIL import Image, ImageDraw, ImageFont
+
+# imports for notification
+from django.core.paginator import Paginator
+from .notification_utils import (
+    get_user_notifications,
+    mark_all_notifications_read,
+    create_announcement_notification
+)
+import json
 
 def home(request):
     return render(request, 'index.html')
@@ -568,8 +581,6 @@ def admin_dashboard(request):
 
     return render(request, "Admin/Admin_Dashboard.html", context)
 
-
-
 class AdminViewUser(CustomLoginRequiredMixin, ListView):
     model = UserProfile
     context_object_name = "users"
@@ -602,7 +613,6 @@ class AdminViewSpecificUser(CustomLoginRequiredMixin, DetailView):
     template_name = 'Admin/Admin User CRUD/Admin_View_Specific_User.html'
     context_object_name = 'user'
     
-
 
 @login_required
 def admin_manage_application(request):
@@ -639,12 +649,10 @@ class AdminViewApplication(CustomLoginRequiredMixin, ListView):
             print(f"First application: {applications[0]}")
         return context
 
-
 class AdminViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
     model = Registration
     template_name = 'Admin/Admin Application CRUD/Admin_View_Specific_Application.html'
     context_object_name = 'applications'
-
 
 class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     model = Registration
@@ -702,7 +710,6 @@ class SecurityViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
     template_name = 'Security/Security Application CRUD/Security_View_Specific_Application.html'
     context_object_name = 'registration'
 
-
 class SecurityUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     model = Registration
     form_class = RegistrationForm
@@ -717,7 +724,6 @@ def security_release_stickers(request):
 @login_required
 def security_report(request):
     return render(request, "Security/Security_Reports.html")
-
 
 @login_required
 def settings_view(request):
@@ -851,3 +857,172 @@ def initials_avatar(request):
         img.save(cache_path)
     with open(cache_path, "rb") as f:
         return HttpResponse(f.read(), content_type="image/png")
+    
+@login_required
+def get_notifications_api(request):
+    """API endpoint to get user notifications via AJAX"""
+    user_id = request.session.get("user_id")
+    user = get_object_or_404(UserProfile, id=user_id)
+    
+    # Parameters
+    page = int(request.GET.get('page', 1))
+    unread_only = request.GET.get('unread_only', 'false').lower() == 'true'
+    limit = int(request.GET.get('limit', 10))
+    
+    # Get notifications
+    notifications_qs = get_user_notifications(user, unread_only=unread_only)
+    
+    # Paginate
+    paginator = Paginator(notifications_qs, limit)
+    page_obj = paginator.get_page(page)
+    
+    # Serialize notifications
+    notifications_data = []
+    for notification in page_obj:
+        notifications_data.append({
+            'id': notification.id,
+            'title': notification.title,
+            'message': notification.message,
+            'type': notification.notification_type,
+            'is_read': notification.is_read,
+            'action_url': notification.action_url,
+            'created_at': notification.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'time_ago': get_time_ago(notification.created_at)
+        })
+    
+    # Get unread count
+    unread_count = Notification.objects.filter(
+        recipient=user,
+        is_read=False
+    ).count()
+    
+    return JsonResponse({
+        'success': True,
+        'notifications': notifications_data,
+        'unread_count': unread_count,
+        'pagination': {
+            'current_page': page_obj.number,
+            'total_pages': paginator.num_pages,
+            'has_next': page_obj.has_next(),
+            'has_previous': page_obj.has_previous(),
+        }
+    })
+
+@login_required
+@csrf_exempt
+@require_http_methods(["POST"])
+def mark_notification_read_api(request, notification_id):
+    """Mark a specific notification as read"""
+    user_id = request.session.get("user_id")
+    user = get_object_or_404(UserProfile, id=user_id)
+    
+    try:
+        notification = Notification.objects.get(
+            id=notification_id,
+            recipient=user
+        )
+        notification.mark_as_read()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Notification marked as read'
+        })
+        
+    except Notification.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'message': 'Notification not found'
+        }, status=404)
+
+@login_required
+@csrf_exempt
+@require_http_methods(["POST"])
+def mark_all_read_api(request):
+    """Mark all notifications as read"""
+    user_id = request.session.get("user_id")
+    user = get_object_or_404(UserProfile, id=user_id)
+    
+    count = mark_all_notifications_read(user)
+    
+    return JsonResponse({
+        'success': True,
+        'message': f'Marked {count} notifications as read',
+        'updated_count': count
+    })
+
+@login_required
+def get_unread_count_api(request):
+    """Get just the unread notification count"""
+    user_id = request.session.get("user_id")
+    user = get_object_or_404(UserProfile, id=user_id)
+    
+    unread_count = Notification.objects.filter(
+        recipient=user,
+        is_read=False
+    ).count()
+    
+    return JsonResponse({
+        'unread_count': unread_count
+    })
+
+def get_time_ago(datetime_obj):
+    """Helper function to get human readable time difference"""
+    from django.utils import timezone
+    import math
+    
+    now = timezone.now()
+    diff = now - datetime_obj
+    
+    if diff.days > 0:
+        return f"{diff.days} day{'s' if diff.days > 1 else ''} ago"
+    elif diff.seconds > 3600:
+        hours = math.floor(diff.seconds / 3600)
+        return f"{hours} hour{'s' if hours > 1 else ''} ago"
+    elif diff.seconds > 60:
+        minutes = math.floor(diff.seconds / 60)
+        return f"{minutes} minute{'s' if minutes > 1 else ''} ago"
+    else:
+        return "Just now"
+
+# Admin/Security views for creating announcements
+@login_required
+@csrf_exempt
+@require_http_methods(["POST"])
+def create_announcement_api(request):
+    """API to create announcements (admin/security only)"""
+    user_id = request.session.get("user_id")
+    user = get_object_or_404(UserProfile, id=user_id)
+    
+    # Check if user has permission (admin or security)
+    if not (user.role in ['admin', 'security']):
+        return JsonResponse({
+            'success': False,
+            'message': 'Permission denied'
+        }, status=403)
+    
+    try:
+        data = json.loads(request.body)
+        
+        announcement = Announcement.objects.create(
+            title=data['title'],
+            message=data['message'],
+            posted_by=user,
+            send_to_all=data.get('send_to_all', True),
+            target_roles=data.get('target_roles', []),
+            send_email=data.get('send_email', False)
+        )
+        
+        # Create notifications
+        notifications = create_announcement_notification(announcement)
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Announcement created and sent to {len(notifications)} users',
+            'announcement_id': announcement.id
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'Error creating announcement: {str(e)}'
+        }, status=400)

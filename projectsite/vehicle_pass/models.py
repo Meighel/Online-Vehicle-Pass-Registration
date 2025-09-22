@@ -295,7 +295,26 @@ class Registration(BaseModel):
         return f"Registration {self.registration_number} for {self.user.lastname}, {self.user.firstname}"
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)  
+        # Check if this is an update and status changed
+        if self.pk:
+            try:
+                old_instance = Registration.objects.get(pk=self.pk)
+                status_changed = old_instance.status != self.status
+            except Registration.DoesNotExist:
+                status_changed = False
+        else:
+            status_changed = True
+            
+        super().save(*args, **kwargs)
+        
+        # If status changed, create notification immediately
+        if status_changed:
+            self._create_status_notification()
+    
+    def _create_status_notification(self):
+        """Create notification when status changes"""
+        from .notification_utils import create_registration_notification
+        create_registration_notification(self)
 
 class VehiclePass(BaseModel):
     STATUS_CHOICES = [
@@ -428,17 +447,83 @@ class VehiclePass(BaseModel):
         else:
             raise ValueError("Vehicle pass already exists for this vehicle")
         
-class Notification(BaseModel):
-    NOTIFICATION_TYPES = [
-        ('system', 'System'),
-        ('user', 'User'),
-        ('alert', 'Alert'),
+class NotificationQueue(BaseModel):
+    """This is for the queue of pending notifications"""
+    STATUS_CHOICES=[
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('sent', 'Sent'),
+        ('failed', 'Failed'),
     ]
-    type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+
+    recipient = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    notification_type = models.CharField(max_length=50)
+    title = models.CharField(max_length=255)
     message = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
-    posted_by = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, related_name="notifications_posted")
+    email_subject = models.CharField(max_length=255)
+    email_body = models.TextField()
+
+    #Processing Status
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    attempts = models.PositiveIntegerField(default=0)
+    max_attempts = models.PositiveIntegerField(default=3)
+
+    #Timing
+    scheduled_for = models.DateTimeField(default=timezone.now)
+    processed_at = models.DateTimeField(null=True, blank=True)
+
+    #Metadata
+    related_object_type = models.CharField(max_length=50, null=True, blank=True)
+    related_object_id = models.PositiveIntegerField(null=True, blank=True)
+
+class Notification(BaseModel):
+    """In-app notifications for users"""
+    NOTIFICATION_TYPES = [
+        ('application update', 'Application Update'),
+        ('system announcement', 'System Announcement'),
+        ('reminder', 'Reminder'),
+    ]
+    
+    recipient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    message = models.TextField()
+    notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPES, default='application update')
+    
     is_read = models.BooleanField(default=False)
+    read_at = models.DateTimeField(null=True, blank=True)
+    is_email_sent = models.BooleanField(default=False)
+    
+    # Action URL for clickable notifications
+    action_url = models.CharField(max_length=255, blank=True, null=True)
+    
+    # Expiry for temporary notifications
+    expires_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['recipient', 'is_read']),
+            models.Index(fields=['created_at']),
+        ]
+    
+    def mark_as_read(self):
+        if not self.is_read:
+            self.is_read = True
+            self.read_at = timezone.now()
+            self.save(update_fields=['is_read', 'read_at'])
+
+class EmailTemplate(BaseModel):
+    """Email templates for different notification types"""
+    template_name = models.CharField(max_length=100, unique=True)
+    subject_template = models.CharField(max_length=255)
+    body_template = models.TextField()
+    is_active = models.BooleanField(default=True)
+    
+    def render_subject(self, context):
+        return self.subject_template.format(**context)
+    
+    def render_body(self, context):
+        return self.body_template.format(**context)
 
 class Announcement(BaseModel):
     title = models.CharField(max_length=50)

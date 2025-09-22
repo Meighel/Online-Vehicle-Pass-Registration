@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
     UserProfile, SecurityProfile, AdminProfile,
     Vehicle, Registration, VehiclePass,
-    Notification, Announcement, SiteVisit, LoginActivity, PasswordResetCode
+    Notification, NotificationQueue, EmailTemplate, Announcement, SiteVisit, LoginActivity, PasswordResetCode
 )
 
 
@@ -196,21 +196,36 @@ class VehiclePassAdmin(admin.ModelAdmin):
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('type', 'get_posted_by', 'message_preview', 'date', 'is_read')
-    search_fields = ('message', 'posted_by__corporate_email', 'posted_by__firstname', 'posted_by__lastname')
-    list_filter = ('type', 'is_read', 'date')
-    readonly_fields = ('date', 'created_at', 'updated_at')
+    list_display = ('notification_type', 'get_recipient', 'message_preview', 'created_at', 'is_read', 'read_at', 'is_email_sent')
+    search_fields = ('message', 'recipient__corporate_email', 'recipient__firstname', 'recipient__lastname')
+    list_filter = ('notification_type', 'is_read', 'is_email_sent', 'created_at')
+    readonly_fields = ('created_at', 'updated_at')
     
-    def get_posted_by(self, obj):
-        if obj.posted_by:
-            return f"{obj.posted_by.firstname} {obj.posted_by.lastname}"
+    def get_recipient(self, obj):
+        if obj.recipient:
+            return f"{obj.recipient.firstname} {obj.recipient.lastname}"
         return "System"
-    get_posted_by.short_description = 'Posted By'
-    get_posted_by.admin_order_field = 'posted_by__lastname'
+    get_recipient.short_description = 'Recipient'
+    get_recipient.admin_order_field = 'recipient__lastname'
     
     def message_preview(self, obj):
         return obj.message[:50] + "..." if len(obj.message) > 50 else obj.message
     message_preview.short_description = 'Message Preview'
+
+@admin.register(NotificationQueue)
+class NotificationQueueAdmin(admin.ModelAdmin):
+    list_display = ('recipient', 'notification_type', 'title', 'status', 'scheduled_for', 'attempts', 'max_attempts')
+    search_fields = ('title', 'message', 'recipient__corporate_email')
+    list_filter = ('status', 'scheduled_for')
+    readonly_fields = ('created_at', 'updated_at', 'processed_at')
+
+
+@admin.register(EmailTemplate)
+class EmailTemplateAdmin(admin.ModelAdmin):
+    list_display = ('template_name', 'is_active', 'created_at', 'updated_at')
+    search_fields = ('template_name', 'subject_template')
+    list_filter = ('is_active',)
+    readonly_fields = ('created_at', 'updated_at')
 
 
 @admin.register(Announcement)
