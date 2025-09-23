@@ -172,12 +172,36 @@ class UserProfile(BaseModel):
         return check_password(raw_password, self.password)  # Check password
 
 class SecurityProfile(BaseModel):
+    POSITION_CHOICES = [
+        ('security_guard', 'Security Guard'),
+        ('security_supervisor', 'Security Supervisor'),
+        ('security_oic', 'Security Officer-in-Charge (OIC)'),
+        ('gso_director', 'General Services Office Director'),
+    ]
+    
+    APPROVAL_PERMISSIONS = [
+        ('view_only', 'View Only'),
+        ('initial_approval', 'Initial Approval Authority'),
+        ('final_approval', 'Final Approval Authority'),
+        ('full_access', 'Full Access (Admin)'),
+    ]
+
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     badgeNumber = models.CharField(max_length=10)
     job_title = models.CharField(max_length=30)
+    position = models.CharField(max_length=30, choices=POSITION_CHOICES, default='security_guard')
+    approval_permission = models.CharField(max_length=20, choices=APPROVAL_PERMISSIONS, default='view_only')
 
     def __str__(self):
-        return f"Security Personnel: {self.user.firstname} {self.user.lastname} {self.badgeNumber}"  
+        return f"{self.position}: {self.user.firstname} {self.user.lastname}"
+    
+    @property
+    def can_initial_approve(self):
+        return self.approval_permission in ['initial_approval', 'full_access']
+    
+    @property 
+    def can_final_approve(self):
+        return self.approval_permission in ['final_approval', 'full_access'] 
 
 class AdminProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
@@ -281,8 +305,6 @@ class Registration(BaseModel):
     files = models.URLField(max_length=255)
     status = models.CharField(max_length=85, choices=STATUS_CHOICES, default='no application')
     remarks = models.TextField(null=True)
-    initial_approved_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, related_name='initial_approval', null=True, blank=True)
-    final_approved_by = models.ForeignKey(SecurityProfile, on_delete=models.CASCADE, related_name='final_approval', null=True, blank=True)
     date_of_filing = models.DateTimeField(auto_now_add=True)
     sticker_released_date = models.DateField(blank=True, null=True)
 
@@ -315,6 +337,133 @@ class Registration(BaseModel):
         """Create notification when status changes"""
         from .notification_utils import create_registration_notification
         create_registration_notification(self)
+
+    # Simplified approval tracking (no signature files per approval)
+    initial_approved_by = models.ForeignKey(
+        SecurityProfile, 
+        on_delete=models.SET_NULL, 
+        related_name='initial_approvals', 
+        null=True, blank=True
+    )
+    initial_approval_date = models.DateTimeField(null=True, blank=True)
+    initial_approval_remarks = models.TextField(blank=True, null=True)
+    
+    final_approved_by = models.ForeignKey(
+        SecurityProfile, 
+        on_delete=models.SET_NULL, 
+        related_name='final_approvals', 
+        null=True, blank=True
+    )
+    final_approval_date = models.DateTimeField(null=True, blank=True)
+    final_approval_remarks = models.TextField(blank=True, null=True)
+    
+    def approve_initially(self, security_profile, remarks=None):
+        """Simple initial approval - account access is authorization"""
+        if not security_profile.can_initial_approve:
+            raise ValidationError("User does not have initial approval permission")
+        
+        if self.status != 'application submitted':
+            raise ValidationError("Application is not in correct status for initial approval")
+        
+        self.status = 'initial approval'
+        self.initial_approved_by = security_profile
+        self.initial_approval_date = timezone.now()
+        self.initial_approval_remarks = remarks or ''
+        self.save()
+        
+        # Send notification
+        from .notification_utils import create_registration_notification
+        create_registration_notification(self)
+        
+        return True
+    
+    def approve_finally(self, security_profile, remarks=None):
+        """Simple final approval - account access is authorization"""
+        if not security_profile.can_final_approve:
+            raise ValidationError("User does not have final approval permission")
+        
+        if self.status != 'initial approval':
+            raise ValidationError("Application must have initial approval first")
+        
+        self.status = 'approved'
+        self.final_approved_by = security_profile
+        self.final_approval_date = timezone.now()
+        self.final_approval_remarks = remarks or ''
+        self.save()
+        
+        # Send notification
+        from .notification_utils import create_registration_notification
+        create_registration_notification(self)
+        
+        return True
+    
+    def reject_application(self, security_profile, remarks):
+        """Reject application with remarks"""
+        if not (security_profile.can_initial_approve or security_profile.can_final_approve):
+            raise ValidationError("User does not have approval permission")
+        
+        self.status = 'rejected'
+        self.remarks = remarks
+        
+        # Track who rejected it
+        if self.status == 'application submitted':
+            self.initial_approved_by = security_profile
+            self.initial_approval_date = timezone.now()
+        else:
+            self.final_approved_by = security_profile
+            self.final_approval_date = timezone.now()
+            
+        self.save()
+        
+        # Send notification
+        from .notification_utils import create_registration_notification
+        create_registration_notification(self)
+        
+        return True
+    
+    @property
+    def approval_history(self):
+        """Get complete approval history for audit trail"""
+        history = []
+        
+        if self.initial_approved_by:
+            action = "Approved Initially" if self.status != 'rejected' else "Rejected"
+            history.append({
+                'action': action,
+                'by': f"{self.initial_approved_by.user.firstname} {self.initial_approved_by.user.lastname}",
+                'position': self.initial_approved_by.get_position_display(),
+                'date': self.initial_approval_date,
+                'remarks': self.initial_approval_remarks or 'No remarks'
+            })
+        
+        if self.final_approved_by:
+            action = "Approved Finally" if self.status == 'approved' else "Rejected"
+            history.append({
+                'action': action,
+                'by': f"{self.final_approved_by.user.firstname} {self.final_approved_by.user.lastname}",
+                'position': self.final_approved_by.get_position_display(), 
+                'date': self.final_approval_date,
+                'remarks': self.final_approval_remarks or 'No remarks'
+            })
+        
+        return history
+
+class ApprovalLog(BaseModel):
+    """Optional: Detailed audit log for all approval actions"""
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name='approval_logs')
+    action = models.CharField(max_length=50)  # 'initial_approval', 'final_approval', 'rejection'
+    performed_by = models.ForeignKey(SecurityProfile, on_delete=models.SET_NULL, null=True)
+    old_status = models.CharField(max_length=50)
+    new_status = models.CharField(max_length=50)
+    remarks = models.TextField(blank=True, null=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(blank=True, null=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.action} on Registration {self.registration.registration_number} by {self.performed_by}"
 
 class VehiclePass(BaseModel):
     STATUS_CHOICES = [
