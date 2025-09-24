@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateFields() {
         let value = "";
         schoolRoleRadios.forEach(radio => {
-            if (radio.checked) value = radio.value.toLowerCase();
+            if (radio.checked) value = radio.value;
         });
 
         if (value === "student") {

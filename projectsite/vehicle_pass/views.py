@@ -745,36 +745,46 @@ def settings_view(request):
     user = get_object_or_404(UserProfile, id=user_id)
 
     if request.method == 'POST':
-        # Only allow if user is authenticated (should already be ensured by @login_required)
-        if not request.user.is_authenticated:
-            return redirect('login')  # or wherever your login page is
-
-        # === Handle profile update ===
-        corporate_email = request.POST.get('corporate_email')
+        # === Handle profile update (corporate_email and role are immutable) ===
         firstname = request.POST.get('firstname')
         lastname = request.POST.get('lastname')
-        middle_name = request.POST.get('middle_name')
+        middlename = request.POST.get('middlename')
         suffix = request.POST.get('suffix')
         address = request.POST.get('address')
-        profile_picture = request.FILES.get('profile_picture')
+        contact = request.POST.get('contact')
+        dl_number = request.POST.get('dl_number')
+        school_role = request.POST.get('school_role') or None
+        college = request.POST.get('college') or None
+        program = request.POST.get('program') or None
 
-        user.corporate_email = corporate_email
-        user.firstname = firstname
-        user.lastname = lastname
-        user.middle_name = middle_name
-        user.suffix = suffix
-        user.address = address
-
-        if profile_picture:
-            user.profile_picture = profile_picture
+        if firstname is not None:
+            user.firstname = firstname
+        if lastname is not None:
+            user.lastname = lastname
+        if middlename is not None:
+            user.middlename = middlename
+        if suffix is not None:
+            user.suffix = suffix
+        if address is not None:
+            user.address = address
+        if contact is not None:
+            user.contact = contact
+        if dl_number is not None:
+            user.dl_number = dl_number
+        if school_role in ['student', 'faculty & staff', 'university official', None, '']:
+            user.school_role = school_role or None
+        if college is not None:
+            user.college = college
+        if program is not None:
+            user.program = program
 
         # === Handle password update ===
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
 
-        if new_password and confirm_password:
-            if new_password == confirm_password:
-                user.password = new_password  # Save securely if you hash it manually
+        if new_password or confirm_password:
+            if new_password and confirm_password and new_password == confirm_password:
+                user.password = new_password
                 messages.success(request, "Password updated successfully.")
             else:
                 messages.error(request, "Passwords do not match.")
@@ -791,10 +801,10 @@ def settings_view(request):
 
     # Role-specific template and context
     if user.role == 'admin':
-        context['all_vehicles'] = Vehicle.objects.select_related('self_owner').all()
+        context['all_vehicles'] = Vehicle.objects.select_related('applicant').all()
         template_name = 'Settings/admin_settings.html'
     elif user.role == 'security':
-        context['all_vehicles'] = Vehicle.objects.select_related('self_owner').all()
+        context['all_vehicles'] = Vehicle.objects.select_related('applicant').all()
         template_name = 'Settings/security_settings.html'
     elif user.role == 'user':
         context['user_vehicle'] = Vehicle.objects.filter(applicant=user)

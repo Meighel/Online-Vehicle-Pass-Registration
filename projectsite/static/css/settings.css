@@ -1,0 +1,470 @@
+/* ========== General Reset & Global Styles ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+    display: flex;
+    transition: all 0.3s ease;
+    min-height: 100vh;
+}
+
+/* ========== Dashboard Layout ========== */
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    width: calc(100% - 250px);
+}
+
+.title {
+    margin: 0; 
+    font-size: 35px; 
+    display: flex;
+    align-items: center; 
+    font-weight: bold;
+    color: yellow;
+    justify-content: space-between;
+    padding: 5px 10px; 
+}
+
+
+#date {
+    font-size: 12px;
+    color: rgb(208, 206, 206) !important;
+    margin: 0;
+    display: flex;
+    align-items: center; 
+    margin-bottom: 5px;
+}
+
+.title {
+    font-size: 35px !important;
+    font-weight: bold;
+    color: #ffe600;
+    margin-bottom: 15px;
+}
+
+
+/* ========== Header Bar ========== */
+#date {
+    font-size: 14px;
+    color: #b0b0b0;
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Enhanced Cards */
+.card {
+    border-radius: 20px;
+    margin-bottom: 32px;
+    border: none;
+    background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+.card-header {
+    background: linear-gradient(135deg, #252525 0%, #1a1a1a 100%);
+    border-bottom: 1px solid rgba(255, 235, 59, 0.2);
+    padding: 24px 28px;
+    border-radius: 20px 20px 0 0 !important;
+    color: #ffeb3b;
+    position: relative;
+}
+
+.card-body {
+    padding: 28px;
+    background: rgba(26, 26, 26, 0.5);
+}
+
+/* Profile Section Enhancements */
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 32px;
+    position: relative;
+}
+
+.profile-picture-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid transparent;
+    background: linear-gradient(#1a1a1a, #1a1a1a) padding-box,
+                linear-gradient(135deg, #ffeb3b, #ffc107) border-box;
+    transition: all 0.3s ease;
+}
+
+.profile-picture:hover {
+    transform: scale(1.02);
+    box-shadow: 
+        0 12px 32px rgba(0, 0, 0, 0.5),
+        0 0 0 2px rgba(255, 235, 59, 0.4);
+}
+
+.profile-picture-overlay {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 
+        0 4px 16px rgba(255, 235, 59, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    border: 2px solid #1a1a1a;
+}
+
+.profile-picture-overlay:hover {
+    transform: scale(1.1);
+    box-shadow: 
+        0 6px 20px rgba(255, 235, 59, 0.4),
+        0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.profile-picture-overlay i {
+    color: #1a1a1a;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.upload-btn-wrapper input[type=file] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+/* Section Titles */
+.section-title {
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: transparent;
+    background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    font-size: 24px;
+    position: relative;
+    padding-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.section-title:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 60px;
+    background: linear-gradient(90deg, #ffeb3b, #ffc107);
+    border-radius: 2px;
+}
+
+/* Form Enhancements */
+.form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #ffeb3b;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-control, .form-select {
+    border-radius: 12px;
+    padding: 14px 18px;
+    border: 2px solid rgba(255, 235, 59, 0.2);
+    background: rgba(37, 37, 37, 0.8);
+    color: #e8e8e8;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #ffeb3b;
+    box-shadow: 
+        0 0 0 0.25rem rgba(255, 235, 59, 0.15),
+        0 4px 12px rgba(255, 235, 59, 0.1);
+    background: rgba(42, 42, 42, 0.9);
+    transform: translateY(-1px);
+}
+
+.form-control::placeholder {
+    color: rgba(232, 232, 232, 0.5);
+}
+
+.readonly-field {
+    background: rgba(20, 20, 20, 0.8) !important;
+    color: rgba(232, 232, 232, 0.7) !important;
+    cursor: not-allowed;
+    border-color: rgba(255, 235, 59, 0.1) !important;
+}
+
+/* Vehicles - simple layout */
+.vehicle-section-card {
+  border-radius: 12px;
+  background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+  border: 1px solid rgba(255, 235, 59, 0.15);
+  margin-bottom: 24px;
+  padding: 0; /* remove extra padding */
+}
+
+.vehicle-section-card .card-header {
+  padding: 16px 20px;
+  border-radius: 12px 12px 0 0;
+}
+
+.vehicle-section-card .card-body {
+  padding: 16px 20px;
+}
+
+/* Individual Vehicle Card */
+.vehicle-card {
+  background: #1f1f1f;
+  border: 1px solid rgba(255, 235, 59, 0.15);
+  border-left: 4px solid #ffeb3b;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  width: 100%;
+  max-width: 500px;   /* prevent stretching */
+}
+
+/* Vehicle Title */
+.vehicle-card .card-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #ffeb3b;
+}
+
+/* Info Layout */
+.vehicle-info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+
+.vehicle-info-item {
+  font-size: 13px;
+  color: #ccc;
+}
+
+.vehicle-info-item .fw-medium {
+  color: #eee;
+  font-weight: 600;
+  margin-right: 4px;
+}
+/* Alert Enhancements */
+.alert {
+    border-radius: 16px;
+    padding: 20px 24px;
+    border: 1px solid rgba(255, 235, 59, 0.2);
+    background: linear-gradient(135deg, rgba(255, 235, 59, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);
+    color: #e8e8e8;
+    backdrop-filter: blur(10px);
+}
+
+.alert-info {
+    border-color: rgba(33, 150, 243, 0.2);
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(33, 150, 243, 0.05) 100%);
+}
+
+/* Table Enhancements */
+.table {
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(145deg, #1e1e1e 0%, #141414 100%);
+    color: #e8e8e8;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.table thead th {
+    background: linear-gradient(135deg, #252525 0%, #1a1a1a 100%);
+    border-bottom: 2px solid #ffeb3b;
+    color: #ffeb3b;
+    font-weight: 700;
+    padding: 18px 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 13px;
+}
+
+.table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background: rgba(255, 235, 59, 0.05);
+    transform: scale(1.01);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background: rgba(255, 235, 59, 0.03);
+}
+
+/* XL Screens - Desktops (≥1200px) */
+@media (min-width: 1200px) {
+  .main-content {
+    margin-left: auto !important;
+    width: calc(100% - 250px) !important;
+    padding: 48px;
+  }
+  .title {
+    font-size: 42px !important;
+  }
+  .section-title {
+    font-size: 28px;
+    text-align: left;
+  }
+  .vehicle-info-row {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* LG Screens - Laptops (992px to 1199px) */
+@media (min-width: 1200px) and (max-width: px) {
+  .main-content {
+    margin-left: auto !important;
+    width: 100% !important;
+    padding: 40px;
+  }
+  .title {
+    font-size: 36px;
+  }
+  .section-title {
+    font-size: 24px;
+    text-align: left;
+  }
+  .vehicle-info-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* MD Screens - Tablets (768px to 991px) */
+@media (min-width: 991px) and (max-width: 768px) {
+    .main-content {
+        margin-left: auto !important;
+        width: calc(100% - 250px);
+        padding: 20px;
+    }
+    
+    .content {
+        width: calc(100% - 250px);
+        padding: 20px;
+    }
+    
+  .title {
+    font-size: 32px;
+    text-align: center;
+  }
+  .section-title {
+    font-size: 22px;
+    text-align: center;
+  }
+  .vehicle-info-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* SM Screens - Large Phones (<768px) */
+@media (max-width: 767px) {
+  .main-content,
+  .dashboard-wrapper {
+    position: relative;
+    z-index: 1;
+  }
+  .title {
+    font-size: 28px;
+    text-align: center;
+  }
+  .section-title {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .profile-container,
+  .password-section,
+  .vehicle-section {
+    width: 100% !important;
+    margin: 0 auto 20px auto !important;
+    display: block !important;
+  }
+  .profile-picture-container,
+  .profile-picture {
+    width: 100px;
+    height: 100px;
+  }
+  .vehicle-section,
+  .vehicle-card {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  .vehicle-info-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+/* XS Screens - Small Phones (<576px) */
+@media (max-width: 575px) {
+  .main-content {
+    padding: 12px 8px;
+  }
+  .title {
+    font-size: 22px;
+  }
+  .section-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .profile-picture-container,
+  .profile-picture {
+    width: 70px;
+    height: 70px;
+  }
+  .card-header {
+    padding: 8px;
+  }
+  .form-control,
+  .form-select {
+    padding: 8px 10px;
+  }
+  .btn-primary {
+    padding: 8px 12px;
+    width: 100%;
+  }
+  .vehicle-card {
+    padding: 12px;
+  }
+  .vehicle-info-item {
+    font-size: 0.9rem;
+    padding: 2px 0;
+  }
+}
+

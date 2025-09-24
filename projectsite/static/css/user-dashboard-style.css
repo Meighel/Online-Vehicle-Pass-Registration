@@ -1,34 +1,51 @@
-/* ========== General Reset & Global Styles ========== */
+/* Reset Default Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Set the entire page to have a black background */
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
-    background-color: #121212 !important;
-    color: #e0e0e0 !important;
     display: flex;
+    background-color: black !important;
+    color: white !important; 
     transition: all 0.3s ease;
-    min-height: 100vh;
 }
 
-/* ========== Dashboard Layout ========== */
-  .dashboard-wrapper {
-    width: 100%;
-    max-width: 1500px;  /* Adjust based on screen size preference */
-    margin: 0 auto;
 
-}
+/* ========================================= */
+/*         Dashboard MAIN CONTENT            */
+/* ========================================= */
 
-.main-content {
+
+.content {
     flex-grow: 1;
-    padding: 25px;
-    margin-left: 250px; /* Changed from 120px to 250px to match sidebar */
-    width: calc(100% - 250px); /* Fixed typo: was 110x */
-    overflow-x: hidden;
-    transition: margin-left 0.3s ease, width 0.3s ease; /* Added transition */
+    padding: 20px;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    width: calc(100% - 250px);
+}
+
+.title {
+    margin: 0; 
+    font-size: 35px; 
+    display: flex;
+    align-items: center; 
+    font-weight: bold;
+    color: yellow;
+    justify-content: space-between;
+    padding: 5px 10px; 
+}
+
+
+#date {
+    font-size: 12px;
+    color: rgb(208, 206, 206) !important;
+    margin: 0;
+    display: flex;
+    align-items: center; 
+    margin-bottom: 5px;
 }
 
 .title {
@@ -36,46 +53,6 @@ body {
     font-weight: bold;
     color: #ffe600;
     margin-bottom: 15px;
-}
-
-/* ========== Header Bar ========== */
-#date {
-    font-size: 14px;
-    color: #b0b0b0;
-    display: block;
-    margin-bottom: 15px;
-}
-
-.dashboard-search {
-    display: flex;
-    align-items: center;
-}
-
-#search-bar {
-    width: 275px;
-    height: 40px;
-    padding: 8px 12px;
-    border: 1px solid #444;
-    border-radius: 5px;
-    font-size: 14px;
-    outline: none;
-    background-color: #2a2a2a;
-    color: #fff;
-}
-
-.search-btn {
-    height: 40px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 5px;
-    padding: 5px 12px;
-    border: none;
-    background-color: #ffe600;
-    color: black;
-}
-
-.search-btn:hover {
-    background-color: #ffe100;
 }
 
 /* ========== Card Styling ========== */
