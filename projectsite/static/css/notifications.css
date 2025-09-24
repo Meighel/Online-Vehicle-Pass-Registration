@@ -1,0 +1,93 @@
+/* Notification Bell Animation */
+@keyframes shake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Notification Bell States */
+#notification-bell.has-notifications {
+    color: #ffc107 !important;
+}
+
+/* Notification Badge */
+#notification-badge {
+    min-width: 18px;
+    height: 18px;
+    font-size: 0.6rem;
+    line-height: 1;
+}
+
+/* Notification Dropdown */
+.dropdown-menu {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Individual Notification Items */
+.notification-item {
+    padding: 12px 16px;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.notification-item:hover {
+    background-color: #f8f9fa;
+}
+
+.notification-item.unread {
+    background-color: #f0f8ff;
+    border-left-color: #007bff;
+}
+
+.notification-item.unread .notification-title {
+    font-weight: bold;
+}
+
+/* Toast Notifications */
+.toast {
+    min-width: 300px;
+    margin-bottom: 10px;
+}
+
+.toast-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.toast-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.toast-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.toast-error {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dropdown-menu {
+        min-width: 280px !important;
+    }
+    
+    #toast-container {
+        left: 10px;
+        right: 10px;
+        top: 10px;
+    }
+    
+    .toast {
+        min-width: auto;
+        width: 100%;
+    }
+}

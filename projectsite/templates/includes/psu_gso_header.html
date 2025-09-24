@@ -1,0 +1,45 @@
+{% load static %}
+
+<div class="psu-gso-header" style="display: flex; justify-content: center; align-items: center; max-width: 1000px; margin: 0 auto;">
+  <div class="psu-logo" style="background: white; border-radius: 50%; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; width: 50px; height: 50px;">
+    <img src="{% static 'images/psu_logo.png' %}" alt="PSU Logo" style="height: 80px; background: none; box-shadow: none; border: none;">
+  </div>
+
+  <div class="psu-gso-titles">
+    <div class="republic">Republic of the Philippines</div>
+    <div class="univ">PALAWAN STATE UNIVERSITY</div>
+    <div class="office">GENERAL SERVICES OFFICE</div>
+    <div class="city">Puerto Princesa City</div>
+  </div>
+
+  <div class="gso-logo" style="background: white; border-radius: 50%; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; width: 50px; height: 50px;">
+    <img src="{% static 'images/gso_logo.png' %}" alt="GSO Logo" class="gso-logo" style="height: 80px; background: none; box-shadow: none; border: none;">
+  </div>
+
+  <div class="psu-gso-details" style="margin-left: auto;">
+    <table>
+      <tr><td>Doc. Ref. No.:</td><td>PSU-GSO-458</td></tr>
+      <tr><td>Effectivity Date:</td><td>August 2025</td></tr>
+      <tr><td>Revision No.:</td><td>2</td></tr>
+      <tr><td>Page No.:</td><td>Page {{ page_no }} of 3</td></tr>
+    </table>
+  </div>
+</div>
+
+<hr class="psu-gso-divider">
+
+<style>
+.psu-gso-header{background:#111;color:#fff;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:16px;padding:12px 16px;border:1px solid #444;border-radius:8px;max-width:1000px;margin:0 auto;}
+.psu-logo,.gso-logo{width:90px;height:90px;object-fit:contain}
+.psu-gso-titles{text-align:center}
+.psu-gso-titles .republic{font-size:12px;opacity:.8}
+.psu-gso-titles .univ{font-weight:700;letter-spacing:.5px}
+.psu-gso-titles .office{font-weight:600;font-size:14px}
+.psu-gso-titles .city{font-size:12px;opacity:.8}
+.psu-gso-divider{border:none;border-top:1px solid #444;margin:14px 0}
+@media (max-width:1200px){.psu-gso-header{max-width:900px;gap:12px;}.psu-logo,.gso-logo{width:auto;height:auto}}
+@media (max-width:900px){.psu-gso-header{max-width:700px;gap:8px;padding:8px 8px;}.psu-logo,.gso-logo{width:auto;height:auto}.psu-gso-titles{font-size:15px}}
+@media (max-width:600px){.psu-gso-header{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;max-width:98vw;gap:6px;padding:6px 2vw;}.psu-logo,.gso-logo{width:auto;height:auto}.psu-gso-titles{width:auto;text-align:center;position:relative;z-index:1;margin:0;}.psu-gso-details{width:auto;margin:0;text-align:center;}}
+@media (max-width:599px) {.psu-gso-header {display: flex;flex-direction: row;align-items: center;justify-content: center;max-width: 98vw;gap: 4px;padding: 4px 1vw;}.psu-logo, .gso-logo {width: auto;height: auto;flex-shrink: 0;display: flex;align-items: center;justify-content: center;}.psu-gso-titles {font-size: 13px;text-align: center;width: auto;flex-shrink: 1;}.psu-gso-details {font-size: 12px;}}
+@media (max-width:412px) {.psu-gso-header {display: flex;flex-direction: row;align-items: center;justify-content: center;max-width: 98vw;gap: 4px;padding: 4px 1vw;}.psu-logo, .gso-logo {width: auto;height: auto;flex-shrink: 0;display: flex;align-items: center;justify-content: center;}.psu-gso-titles {font-size: 13px;text-align: center;width: auto;flex-shrink: 1;}.psu-gso-details {font-size: 12px;}}
+</style>

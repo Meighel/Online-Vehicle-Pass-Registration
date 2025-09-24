@@ -4,7 +4,7 @@ from vehicle_pass import views
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
     default_dashboard, user_pass_status, user_application,
-    security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, SecurityViewStickers, 
+    security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, security_release_stickers, 
     SecurityUpdateApplication, security_report,
 
     admin_dashboard, AdminViewUser, AdminCreateUser, AdminUpdateUser, AdminDeleteUser, AdminViewSpecificUser,
@@ -50,7 +50,7 @@ urlpatterns = [
     path("dashboard/security/manage_application/", SecurityViewApplication.as_view(), name="security_manage_application"),
     path("dashboard/security/manage_application/<pk>/", SecurityUpdateApplication.as_view(), name="security_update_application"),
     path("dashboard/security/manage_application/view/<pk>", SecurityViewSpecificApplication.as_view(), name="security_view_specific_application"),
-    path("dashboard/security/manage_stickers", SecurityViewStickers.as_view() , name="security_manage_stickers"),
+    path("dashboard/security/manage_stickers", security_release_stickers, name="security_manage_stickers"),
     path("dashboard/security/manage_report/", security_report, name="security_report"),
     path('dashboard/security/settings/', views.settings_view, name='security_settings'),
 
@@ -73,4 +73,9 @@ urlpatterns = [
     
     path("dashboard/admin/manage_passes/", admin_manage_passes, name="admin_manage_passes"),
     path("dashboard/admin/manage_report/", admin_report, name="admin_report"),    
+
+    path('api/notifications/', views.get_notifications_api, name='api_notifications'),
+    path('api/notifications/<int:notification_id>/mark-read/', views.mark_notification_read_api, name='mark_notification_read'),
+    path('api/notifications/mark-all-read/', views.mark_all_read_api, name='mark_all_notifications_read'),
+    path('api/notifications/count/', views.get_unread_count_api, name='unread_count'),
 ]

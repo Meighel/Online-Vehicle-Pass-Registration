@@ -1,7 +1,7 @@
 {% extends 'includes/user_sidebar.html' %}
 {% load static %}
 
-{% block title %}Payment Required{% endblock %}
+{% block title %}Application Status{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/user-dashboard-style.css' %}">
@@ -14,7 +14,7 @@
     .main-content {
         flex-grow: 1;
         padding: 20px;
-        margin-left: auto;
+        margin-left: 120px;
     }
     /* Ensure cards and table have proper spacing */
     .dashboard-card {
@@ -24,53 +24,55 @@
 {% endblock %}
 
 {% block content %}
-<div class="main-content flex-grow-1 ms-uto">
-  <div class="container py-1">
-    <!-- Title & Top Bar -->
-    <div class="d-flex justify-content-between align-items-center">
-        <h2 class="title mb-3 mb-md-0">Pass Status</h2>
-        <div class="d-flex align-items-center gap-3">
-            <!-- Notification Bell -->
-            <a href="Announcements.html" class="text-decoration-none position-relative">
-                <img src="{% static 'images/notification.png' %}" alt="Notifications" width="30" height="30">
-                <div class="notification-badge"></div>
-            </a>
+<div class="dashboard-wrapper">
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container-fluid py-3">
+            <!-- Title & Top Bar -->
+            <div class="d-flex justify-content-between align-items-center">
+                <h2 class="title mb-3 mb-md-0">Pass Status</h2>
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Notification Bell -->
+                    <a href="Announcements.html" class="text-decoration-none position-relative">
+                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="30" height="30">
+                        <div class="notification-badge"></div>
+                    </a>
+                </div>
+            </div>
+
+            <hr class="border-secondary">
+            <small><span id="date" class="text-light"></span></small>
+
+            <!-- Dashboard Wrapper -->
+            <div class="dashboard-wrapper mx-auto" style="max-width: 1000px;">
+              <div class="payment-container p-4 bg-white shadow rounded">
+                <div class="payment-header mb-3">
+                  <h2>Payment Required Before Proceeding</h2>
+                  <div class="circles d-flex gap-2 mt-2">
+                    <div class="circle green"></div>
+                    <div class="circle yellow"></div>
+                    <div class="circle red"></div>
+                  </div>
+                </div>
+                <div class="payment-message">
+                  <p><strong>Important:</strong> Payment is required to proceed with your vehicle pass application.</p>
+                  <ul>
+                    <li>All applicants must pay the registration fee in person.</li>
+                    <li>Please make the payment within <strong>3 working days</strong> from the date of this notice.</li>
+                    <li>Payments are accepted only during official working days and hours.</li>
+                    <li>Once your payment is verified, you will receive a confirmation email with instructions for the next steps.</li>
+                  </ul>
+                  <p class="warning text-danger fw-bold">
+                    ⚠️ Failure to complete your payment on time will result in your application being cancelled.
+                  </p>
+                </div>
+                <p class="assistance mt-3">
+                  For assistance, please contact <a href="mailto:veripass@gmail.com">veripass@gmail.com</a>.
+                </p>
+              </div>
+            </div>
         </div>
     </div>
-
-    <hr class="border-secondary">
-    <small><span id="date" class="text-light"></span></small>
-    <br>
-
-    <!-- Dashboard Wrapper -->
-    <div class="dashboard-wrapper mx-auto" style="max-width: 1000px;">
-      <div class="payment-container p-4 bg-white shadow rounded">
-        <div class="payment-header mb-3">
-          <h2>Payment Required Before Proceeding</h2>
-          <div class="circles d-flex gap-2 mt-2">
-            <div class="circle green"></div>
-            <div class="circle yellow"></div>
-            <div class="circle red"></div>
-          </div>
-        </div>
-        <div class="payment-message">
-          <p><strong>Important:</strong> Payment is required to proceed with your vehicle pass application.</p>
-          <ul>
-            <li>All applicants must pay the registration fee in person.</li>
-            <li>Please make the payment within <strong>3 working days</strong> from the date of this notice.</li>
-            <li>Payments are accepted only during official working days and hours.</li>
-            <li>Once your payment is verified, you will receive a confirmation email with instructions for the next steps.</li>
-          </ul>
-          <p class="warning text-danger fw-bold">
-            ⚠️ Failure to complete your payment on time will result in your application being cancelled.
-          </p>
-        </div>
-        <p class="assistance mt-3">
-          For assistance, please contact <a href="mailto:veripass@gmail.com">veripass@gmail.com</a>.
-        </p>
-      </div>
-    </div>
-  </div>
 </div>
 {% endblock %}
 

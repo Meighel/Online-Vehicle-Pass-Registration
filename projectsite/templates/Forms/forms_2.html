@@ -11,6 +11,8 @@
   <script src="{% static 'javascript/forms.js' %}" defer></script>
 </head>
 <body>
+  {% include 'includes/psu_gso_header.html' with page_no=2 %}
+
   <div class="container">
     <h2 class="form2-h2">Registration for Vehicle Pass (2/3)</h2>
 
@@ -56,11 +58,11 @@
       </div>
 
       <div class="form1-aligned-group">
-                <div class="form-group form1-form-group">
+        <div class="form-group form2-form-group">
           <label for="{{ form.year_model.id_for_label }}">Year Model</label>
           {{ form.year_model }}
         </div>
-        <div class="form-group form1-form-group">
+        <div class="form-group form2-form-group">
           <label for="{{ form.type.id_for_label }}">Vehicle Type</label>
           {{ form.type }}
         </div>
@@ -94,7 +96,9 @@
 
       <div class="form-group form2-form-group">
         <label for="{{ form.owner.id_for_label }}">Are you the owner of this vehicle?</label>
-        {{ form.owner }}
+        <div class="form2-radio-group">
+          {{ form.owner }}
+        </div>
       </div>
 
       <div id="owner-details" class="form2-owner-details" style="display: none;">
@@ -135,6 +139,8 @@
           </div>
         </div>
       </div>
+      <br>
+      <br>
 
       <div class="form-navigation">
         <a href="{% url 'vehicle_registration_step_1' %}">
@@ -145,6 +151,6 @@
       </div>
     </form>
   </div>
-
+  {% include 'includes/forms_footer.html' %}
 </body>
 </html>

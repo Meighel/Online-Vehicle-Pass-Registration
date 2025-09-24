@@ -67,12 +67,23 @@
     </a>
 
     <!-- Profile Section -->
-    <div class="profile">
-        <img src="{% static 'images/profile-placeholder.png' %}" alt="Profile Picture"> 
-        <div class="profile-info">
-            <span class="name">{{ security_name }}</span>
-            <span class="position">Security</span>
+    <div class="profile" style="display:flex;flex-direction:column;align-items:center;">
+        <div style="width: 45px; height: 45px; background: black; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            {% if profile %}
+                {% with profile.firstname|default:''|slice:':1' as fi %}
+                {% with profile.middlename|default:''|slice:':1' as mi %}
+                {% with profile.lastname|default:''|slice:':1' as li %}
+                    {% with fi|add:mi|add:li as initials %}
+                        <span style="color:#FFD700;font-weight:bold;font-size:1rem;letter-spacing:1px;">
+                            {{ initials|default:'A' }}
+                        </span>
+                    {% endwith %}
+                {% endwith %}{% endwith %}{% endwith %}
+            {% else %}
+                <span style="color:#FFD700;font-weight:bold;font-size:1rem;letter-spacing:1px;">A</span>
+            {% endif %}
         </div>
+        <span class="position" style="color: #ffffff; font-size: 0.95em; margin-top: 4px; display: block; text-align: center;">Security</span>
     </div>
 </div>
 

@@ -633,3 +633,248 @@ body {
     }
 }
 
+/* Unreleased Stickers Table */
+.table-section {
+    background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+    border: 1px solid #404040;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.table-header {
+    background: linear-gradient(135deg, #333, #2a2a2a);
+    color: #ffffff;
+    padding: 20px 25px;
+    border-bottom: 1px solid #404040;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.table-header i {
+    color: #f0c419;
+}
+
+.table-container {
+    padding: 0;
+    overflow-x: auto;
+}
+
+.custom-table {
+    width: 100%;
+    background: transparent;
+    border-collapse: collapse;
+}
+
+.custom-table th {
+    background: #1f1f1f;
+    color: #f0c419;
+    padding: 15px 20px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #404040;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.custom-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #404040;
+    color: #ccc;
+}
+
+.custom-table tr:hover {
+    background: rgba(240, 196, 25, 0.05);
+}
+
+.custom-table tr:last-child td {
+    border-bottom: none;
+}
+
+.release-btn {
+    background: linear-gradient(135deg, #2ed573, #26d467);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.release-btn:hover {
+    background: linear-gradient(135deg, #26d467, #2ed573);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(46, 213, 115, 0.3);
+}
+
+.empty-state {
+    text-align: center;
+    color: #888;
+    padding: 40px;
+    font-style: italic;
+}
+
+ /* Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.dashboard-card-container {
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-card {
+    background: #2d2d2d;
+    border: none;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 140px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    padding: 20px !important;
+}
+
+
+.card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+.card-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.card-right {
+    flex-shrink: 0;
+}
+
+.icon-wrapper {
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.dashboard-card.verified .icon-wrapper {
+    background: rgba(46, 213, 115, 0.2);
+}
+
+.dashboard-card.rejected .icon-wrapper {
+    background: rgba(255, 71, 87, 0.2);
+}
+
+.dashboard-card.total .icon-wrapper {
+    background: rgba(255, 255, 0, 0.2);
+}
+
+.card-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--text);
+}
+
+.dashboard-card.verified .card-icon {
+    color: var(--success);
+}
+
+.dashboard-card.rejected .card-icon {
+    color: var(--danger);
+}
+
+.dashboard-card.total .card-icon {
+    color: var(--yellow);
+}
+
+.card-title {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text);
+    margin: 0 0 5px 0;
+    line-height: 1.2;
+}
+
+.card-number {
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0;
+    color: var(--text);
+}
+
+.dashboard-card.verified .card-number {
+    color: var(--success);
+}
+
+.dashboard-card.rejected .card-number {
+    color: var(--danger);
+}
+
+.dashboard-card.total .card-number {
+    color: var(--yellow);
+}
+
+.growth-text {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--orange);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.growth-text i {
+    font-size: 0.7rem;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.progress {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.dashboard-card.verified .progress-bar {
+    background: linear-gradient(90deg, var(--success), rgba(46, 213, 115, 0.7));
+}
+
+.dashboard-card.rejected .progress-bar {
+    background: linear-gradient(90deg, var(--danger), rgba(255, 71, 87, 0.7));
+}
+
+.dashboard-card.total .progress-bar {
+    background: linear-gradient(90deg, var(--yellow), var(--yellow-2));
+}

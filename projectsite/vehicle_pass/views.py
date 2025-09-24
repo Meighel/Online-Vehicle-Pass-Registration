@@ -18,7 +18,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.urls import reverse
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_http_methods
 from datetime import timedelta 
 
@@ -28,6 +28,19 @@ import calendar
 from django.db.models.functions import TruncMonth
 from django.contrib.auth import update_session_auth_hash
 from .models import SiteVisit, LoginActivity
+
+import os
+from django.conf import settings
+from PIL import Image, ImageDraw, ImageFont
+
+# imports for notification
+from django.core.paginator import Paginator
+from .notification_utils import (
+    get_user_notifications,
+    mark_all_notifications_read,
+    create_announcement_notification
+)
+import json
 
 def home(request):
     return render(request, 'index.html')
@@ -522,8 +535,13 @@ def user_settings(request):
 def admin_dashboard(request):
     # Total users by role
     total_students = UserProfile.objects.filter(school_role='student').count()
+    total_officials = UserProfile.objects.filter(role='user', school_role__in=['faculty & staff', 'university official']).count()
     total_security = UserProfile.objects.filter(role='security').count()
     total_admin = UserProfile.objects.filter(role='admin').count()
+    total_vehicles = Vehicle.objects.count() 
+    total_motor = Vehicle.objects.filter(type='motor').count()
+    total_car = Vehicle.objects.filter(type='car').count()
+    total_van = Vehicle.objects.filter(type='van').count()
 
     # Account growth calculation
     current_month_users = UserProfile.objects.filter(
@@ -552,15 +570,26 @@ def admin_dashboard(request):
 
     context = {
         "total_students": total_students,
+        "total_officials": total_officials,
         "total_security": total_security,
         "total_admin": total_admin,
         "growth_percent": growth_percent,
         "monthly_chart_data": monthly_chart_data,
+        "total_vehicles": total_vehicles,
+        'total_motor': total_motor,
+        'total_car': total_car,
+        'total_van': total_van,
     }
 
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+    admin_profile = get_object_or_404(AdminProfile, user__id=user_id)
+    user_profile = UserProfile.objects.filter(id=user_id).first()
+    if user_profile:
+        context['profile'] = user_profile
+
     return render(request, "Admin/Admin_Dashboard.html", context)
-
-
 
 class AdminViewUser(CustomLoginRequiredMixin, ListView):
     model = UserProfile
@@ -594,7 +623,6 @@ class AdminViewSpecificUser(CustomLoginRequiredMixin, DetailView):
     template_name = 'Admin/Admin User CRUD/Admin_View_Specific_User.html'
     context_object_name = 'user'
     
-
 
 @login_required
 def admin_manage_application(request):
@@ -631,12 +659,10 @@ class AdminViewApplication(CustomLoginRequiredMixin, ListView):
             print(f"First application: {applications[0]}")
         return context
 
-
 class AdminViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
     model = Registration
     template_name = 'Admin/Admin Application CRUD/Admin_View_Specific_Application.html'
     context_object_name = 'applications'
-
 
 class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     model = Registration
@@ -647,10 +673,32 @@ class AdminUpdateApplication(CustomLoginRequiredMixin, UpdateView):
 # Security Page Views
 @login_required
 def security_dashboard(request):
-    return render(request, "Security/security_dashboard.html")
+    # Fetch statistics
+    verified_count = Registration.objects.filter(status='approved').count()
+    rejected_count = Registration.objects.filter(status='rejected').count()
+    total_count = Registration.objects.exclude(status='no application').count()
+    percentage = round((verified_count / total_count * 100) if total_count else 0, 2)
+
+    unreleased_stickers = Registration.objects.filter(
+        status__in=['approved', 'final approval'],
+        sticker_released_date__isnull=True
+    ).select_related('user').order_by('-created_at')
+
+    context = {
+        'verified_count': verified_count,
+        'rejected_count': rejected_count,
+        'total_count': total_count,
+        'percentage': percentage,
+        'unreleased_stickers': unreleased_stickers,
+    }
+    return render(request, 'Security/security_dashboard.html', context)
 
 @login_required
 def security_manage_application(request):
+    applications = Registration.objects.select_related('user', 'initial_approved_by', 'final_approved_by').all().order_by('-created_at')
+    context = {
+        'applications': applications,
+    }
     return render(request, "Security/Security_Application.html")
 
 class SecurityViewApplication(CustomLoginRequiredMixin, ListView):
@@ -672,23 +720,20 @@ class SecurityViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
     template_name = 'Security/Security Application CRUD/Security_View_Specific_Application.html'
     context_object_name = 'registration'
 
-
 class SecurityUpdateApplication(CustomLoginRequiredMixin, UpdateView):
     model = Registration
     form_class = RegistrationForm
     template_name = 'Security/Security Application CRUD/Security_Update_Application.html'
     success_url = reverse_lazy('security_manage_application')
-
-class SecurityViewStickers(CustomLoginRequiredMixin, ListView):
-    model = VehiclePass
-    template_name = 'Security/Security_Release_Stickers.html'
-    context_object_name = 'stickers'
-    paginate_by = 20
+    
+@login_required
+def security_release_stickers(request):
+    stickers = VehiclePass.objects.select_related('vehicle__applicant').all().order_by('-created_at')
+    return render(request, 'Security/Security_Release_Stickers.html', {'stickers': stickers})
 
 @login_required
 def security_report(request):
     return render(request, "Security/Security_Reports.html")
-
 
 @login_required
 def settings_view(request):
@@ -794,4 +839,200 @@ def dashboard_view(request):
     stats = get_stats()
     return render(request, 'User Dashboard/User_Dashboard.html', {'stats': stats})
 
+def initials_avatar(request):
+    user = request.user
+    initials = ""
+    if hasattr(user, "firstname") and user.firstname:
+        initials += user.firstname[0].upper()
+    if hasattr(user, "lastname") and user.lastname:
+        initials += user.lastname[0].upper()
+    if not initials:
+        initials = "U"
+    # Cache path
+    cache_dir = os.path.join(settings.MEDIA_ROOT, "avatars")
+    os.makedirs(cache_dir, exist_ok=True)
+    cache_path = os.path.join(cache_dir, f"avatar_{user.id}.png")
+    if not os.path.exists(cache_path):
+        # Create image
+        img_size = (80, 80)
+        img = Image.new("RGB", img_size, color=(0, 0, 0))
+        draw = ImageDraw.Draw(img)
+        font_path = os.path.join(settings.BASE_DIR, "arial.ttf") # Use a valid font path
+        try:
+            font = ImageFont.truetype(font_path, 36)
+        except:
+            font = ImageFont.load_default()
+        w, h = draw.textsize(initials, font=font)
+        draw.text(((img_size[0]-w)/2, (img_size[1]-h)/2), initials, font=font, fill=(255, 215, 0))
+        img.save(cache_path)
+    with open(cache_path, "rb") as f:
+        return HttpResponse(f.read(), content_type="image/png")
+    
+@login_required
+def get_notifications_api(request):
+    """API endpoint to get user notifications via AJAX"""
+    user_id = request.session.get("user_id")
+    user = get_object_or_404(UserProfile, id=user_id)
+    
+    # Parameters
+    page = int(request.GET.get('page', 1))
+    unread_only = request.GET.get('unread_only', 'false').lower() == 'true'
+    limit = int(request.GET.get('limit', 10))
+    
+    # Get notifications
+    notifications_qs = get_user_notifications(user, unread_only=unread_only)
+    
+    # Paginate
+    paginator = Paginator(notifications_qs, limit)
+    page_obj = paginator.get_page(page)
+    
+    # Serialize notifications
+    notifications_data = []
+    for notification in page_obj:
+        notifications_data.append({
+            'id': notification.id,
+            'title': notification.title,
+            'message': notification.message,
+            'type': notification.notification_type,
+            'is_read': notification.is_read,
+            'action_url': notification.action_url,
+            'created_at': notification.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'time_ago': get_time_ago(notification.created_at)
+        })
+    
+    # Get unread count
+    unread_count = Notification.objects.filter(
+        recipient=user,
+        is_read=False
+    ).count()
+    
+    return JsonResponse({
+        'success': True,
+        'notifications': notifications_data,
+        'unread_count': unread_count,
+        'pagination': {
+            'current_page': page_obj.number,
+            'total_pages': paginator.num_pages,
+            'has_next': page_obj.has_next(),
+            'has_previous': page_obj.has_previous(),
+        }
+    })
 
+@login_required
+@csrf_exempt
+@require_http_methods(["POST"])
+def mark_notification_read_api(request, notification_id):
+    """Mark a specific notification as read"""
+    user_id = request.session.get("user_id")
+    user = get_object_or_404(UserProfile, id=user_id)
+    
+    try:
+        notification = Notification.objects.get(
+            id=notification_id,
+            recipient=user
+        )
+        notification.mark_as_read()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Notification marked as read'
+        })
+        
+    except Notification.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'message': 'Notification not found'
+        }, status=404)
+
+@login_required
+@csrf_exempt
+@require_http_methods(["POST"])
+def mark_all_read_api(request):
+    """Mark all notifications as read"""
+    user_id = request.session.get("user_id")
+    user = get_object_or_404(UserProfile, id=user_id)
+    
+    count = mark_all_notifications_read(user)
+    
+    return JsonResponse({
+        'success': True,
+        'message': f'Marked {count} notifications as read',
+        'updated_count': count
+    })
+
+@login_required
+def get_unread_count_api(request):
+    """Get just the unread notification count"""
+    user_id = request.session.get("user_id")
+    user = get_object_or_404(UserProfile, id=user_id)
+    
+    unread_count = Notification.objects.filter(
+        recipient=user,
+        is_read=False
+    ).count()
+    
+    return JsonResponse({
+        'unread_count': unread_count
+    })
+
+def get_time_ago(datetime_obj):
+    """Helper function to get human readable time difference"""
+    from django.utils import timezone
+    import math
+    
+    now = timezone.now()
+    diff = now - datetime_obj
+    
+    if diff.days > 0:
+        return f"{diff.days} day{'s' if diff.days > 1 else ''} ago"
+    elif diff.seconds > 3600:
+        hours = math.floor(diff.seconds / 3600)
+        return f"{hours} hour{'s' if hours > 1 else ''} ago"
+    elif diff.seconds > 60:
+        minutes = math.floor(diff.seconds / 60)
+        return f"{minutes} minute{'s' if minutes > 1 else ''} ago"
+    else:
+        return "Just now"
+
+# Admin/Security views for creating announcements
+@login_required
+@csrf_exempt
+@require_http_methods(["POST"])
+def create_announcement_api(request):
+    """API to create announcements (admin/security only)"""
+    user_id = request.session.get("user_id")
+    user = get_object_or_404(UserProfile, id=user_id)
+    
+    # Check if user has permission (admin or security)
+    if not (user.role in ['admin', 'security']):
+        return JsonResponse({
+            'success': False,
+            'message': 'Permission denied'
+        }, status=403)
+    
+    try:
+        data = json.loads(request.body)
+        
+        announcement = Announcement.objects.create(
+            title=data['title'],
+            message=data['message'],
+            posted_by=user,
+            send_to_all=data.get('send_to_all', True),
+            target_roles=data.get('target_roles', []),
+            send_email=data.get('send_email', False)
+        )
+        
+        # Create notifications
+        notifications = create_announcement_notification(announcement)
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Announcement created and sent to {len(notifications)} users',
+            'announcement_id': announcement.id
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'Error creating announcement: {str(e)}'
+        }, status=400)

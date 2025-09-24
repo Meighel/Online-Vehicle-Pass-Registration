@@ -14,6 +14,24 @@ body {
     transition: all 0.3s ease;
 }
 
+/* THEME VARIABLES */
+:root {
+    --bg: #000000;
+    --text: #ffffff;
+    --muted-text: #d5d5d5;
+    --panel: #292929;
+    --panel-dark: #1e1e1e;
+    --panel-darker: #111111;
+    --border: #444444;
+
+    --yellow: yellow;     
+    --yellow-2: #ffd54f;   
+    --orange: #ff9800;      
+    --orange-2: #ff6d00;    
+    --gray: #333333;
+    --gray-2: #555555;
+}
+
 /* ========================================= */
 /*         Dashboard MAIN CONTENT            */
 /* ========================================= */
@@ -895,3 +913,423 @@ body {
         font-size: 1.8rem;
     }
 }
+
+
+/* ========================================= */
+/*          DASHBOARD CARD STYLES            */
+/* ========================================= */
+
+.dashboard-card-container {
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-card {
+    background: #2d2d2d;
+    border: none;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 140px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
+
+.card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0;
+}
+
+.card-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.card-right {
+    flex-shrink: 0;
+}
+
+.icon-wrapper {
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.card-icon {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
+}
+
+.card-title {
+    font-weight: 600;
+    font-size: 1rem;
+    color: white;
+    margin: 0 0 5px 0;
+    line-height: 1.2;
+}
+
+.card-number {
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0;
+}
+
+.growth-text {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--orange);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.growth-text i {
+    font-size: 0.7rem;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Color Variants (re-themed) */
+.dashboard-card.student .icon-wrapper {
+    background: linear-gradient(135deg, var(--yellow), var(--yellow-2));
+}
+
+.dashboard-card.student .card-number {
+    color: var(--yellow);
+}
+
+.dashboard-card.personnel .icon-wrapper {
+    background: linear-gradient(135deg, var(--orange), var(--orange-2));
+}
+
+.dashboard-card.personnel .card-number {
+    color: var(--orange);
+}
+
+.dashboard-card.security .icon-wrapper {
+    background: linear-gradient(135deg, #555555, #2e2e2e);
+}
+
+.dashboard-card.security .card-number {
+    color: #cfcfcf;
+}
+
+.dashboard-card.admin .icon-wrapper {
+    background: linear-gradient(135deg, var(--yellow), var(--orange));
+}
+
+.dashboard-card.admin .card-number {
+    color: var(--yellow);
+}
+
+/* ========================================= */
+/*          VEHICLE STATS SECTION           */
+/* ========================================= */
+
+.vehicle-stats-container {
+    margin-top: 2rem;
+}
+
+.vehicle-hero-card {
+    background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%);
+    border-radius: 25px;
+    border: 1px solid #404040;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+}
+
+.vehicle-hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #000000, var(--yellow), var(--orange), #666666);
+}
+
+.vehicle-header {
+    flex: 1;
+}
+
+.vehicle-main-title {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(45deg, var(--yellow), var(--orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.vehicle-subtitle {
+    color: #888;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.vehicle-icon-large {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--orange), var(--orange-2));
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(255, 191, 95, 0.4);
+}
+
+.vehicle-icon-large i {
+    font-size: 2.2rem;
+    color: white;
+}
+
+.vehicle-stat-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 18px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.stat-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+
+.stat-icon-wrapper.maintenance,
+.stat-icon-wrapper.active,
+.stat-icon-wrapper.total  {
+    background: linear-gradient(135deg, #4f4f4f, #2e2e2e);
+}
+
+.stat-icon-wrapper i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    margin: 0;
+    line-height: 1;
+}
+
+.stat-label {
+    color: #bbb;
+    font-size: 0.9rem;
+    margin: 0.5rem 0 1rem;
+    font-weight: 500;
+}
+
+.stat-growth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    color: var(--orange);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.stat-growth.maintenance-text {
+    color: var(--orange-2);
+}
+
+.stat-growth i {
+    font-size: 0.75rem;
+}
+
+.vehicle-status-bar {
+    background: rgba(255,255,255,0.03);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.status-text {
+    color: #bbb;
+    font-weight: 600;
+}
+
+.status-percentage {
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.fleet-progress-bar {
+    height: 8px;
+    background: #333;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.fleet-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--yellow), var(--orange));
+    border-radius: 4px;
+    transition: width 1s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.fleet-progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Responsive adjustments for vehicle section */
+@media (max-width: 768px) {
+    .vehicle-hero-card {
+        padding: 2rem !important;
+    }
+    
+    .vehicle-main-title {
+        font-size: 1.5rem;
+    }
+    
+    .vehicle-icon-large {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .vehicle-icon-large i {
+        font-size: 1.8rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .vehicle-stat-item {
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* Progress Bar */
+.progress {
+    height: 3px;
+    background-color: #404040;
+    border-radius: 2px;
+    margin-top: 15px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    transition: width 0.8s ease;
+    background: linear-gradient(90deg, var(--yellow), var(--orange));
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 15px;
+    }
+    
+    .card-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .card-left {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .card-number {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-number {
+        font-size: 2rem;
+    }
+    
+    .dashboard-card {
+        min-height: 120px;
+        border-radius: 15px;
+    }
+    
+    .icon-wrapper {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+    }
+    
+    .card-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Animation */
+@keyframes slideInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.dashboard-card {
+    animation: slideInUp 0.6s ease-out;
+}
+
+/* Stagger animation for cards */
+.dashboard-card:nth-child(1) { animation-delay: 0.1s; }
+.dashboard-card:nth-child(2) { animation-delay: 0.2s; }
+.dashboard-card:nth-child(3) { animation-delay: 0.3s; }
+.dashboard-card:nth-child(4) { animation-delay: 0.4s; }
+.dashboard-card:nth-child(5) { animation-delay: 0.5s; }

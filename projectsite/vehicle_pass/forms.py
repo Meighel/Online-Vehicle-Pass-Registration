@@ -234,7 +234,7 @@ class VehicleRegistrationStep2Form(forms.Form):
     )
     year_model = forms.IntegerField(
         label="Year Model",
-        widget=forms.NumberInput(attrs={'placeholder': 'e.g., 2023'})
+        widget=forms.TextInput(attrs={'placeholder': 'e.g., 2023'})
     )
     color = forms.CharField(
         max_length=20,
