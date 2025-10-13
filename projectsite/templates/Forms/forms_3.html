@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{% static 'css/forms_style.css' %}">
   <link rel="icon" href="{% static 'images/favicon.png' %}">
   <script src="{% static 'javascript/forms.js' %}" defer></script>
+  <script src="{% static 'javascript/signature.js' %}" defer></script>
 </head>
 <body>
   {% include 'includes/psu_gso_header.html' with page_no=3 %}
@@ -82,11 +83,20 @@
         </div>
 
         <div class="form-group form3-form-group">
-          <label for="{{ form.e_signature.id_for_label }}">E-signature</label>
-          {{ form.e_signature }}
+          <label for="signature-canvas">E-signature (Draw your signature below)</label>
+          <div class="signature-container">
+            <canvas id="signature-canvas" width="400" height="200"></canvas>
+          </div>
+          <div class="signature-controls">
+            <button type="button" id="clear-signature" class="clear-btn">Clear</button>
+            <button type="button" id="save-signature" class="save-btn">Save</button>
+          </div>
+
+          <!-- {{ form.e_signature }}
+          <div id="signature-preview"></div>
           {% if form.e_signature.errors %}
             <div class="field-error">{{ form.e_signature.errors }}</div>
-          {% endif %}
+          {% endif %} -->
         </div>
 
         <div class="form-group form3-form-group">

@@ -423,6 +423,58 @@ button.btn:hover, .back-btn:hover {
   margin-top: 4px;
 }
 
+
+/* Signature Pad Styles */
+.signature-container {
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    display: inline-block;
+    margin: 10px 0;
+    background-color: white;
+}
+
+#signature-canvas {
+    display: block;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.signature-controls {
+    margin: 10px 0;
+    display: flex;
+    gap: 10px;
+}
+
+.clear-btn, .save-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.clear-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.save-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+#signature-preview img {
+    max-width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+/* Hide the default file input */
+#id_e_signature {
+    display: none;
+}
+
 /* Responsive Styles */
 @media (max-width: 1200px) {
   .psu-gso-header, .container {
