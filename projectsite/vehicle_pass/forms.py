@@ -112,14 +112,14 @@ class VehicleRegistrationStep1Form(forms.Form):
         max_length=105,
         label='Address',
         widget=forms.TextInput(attrs={'placeholder': 'e.g. Escano St., Brgy Tiniguiban'})
-    )  
+    )
     contact = forms.CharField(
         label='Contact Number',
         widget=forms.TextInput(attrs={'placeholder': '+6391234567891'})
     )
     corporate_email = forms.EmailField(
         label='Corporate Email',
-        widget=forms.EmailInput(attrs={'placeholder': '20228000X@psu.edu.ph'})
+        widget=forms.EmailInput(attrs={'placeholder': '2022X000X@psu.edu.ph'})
     )
     dl_number = forms.CharField(
         max_length=25,

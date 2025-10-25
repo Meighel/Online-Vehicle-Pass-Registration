@@ -40,7 +40,7 @@ class UserProfile(BaseModel):
 
     YEAR_LEVEL_CHOICES = [('first year', 'First Year'),
                           ('second year', 'Second Year'),
-                          ('third year', 'Thord Year'),
+                          ('third year', 'Third Year'),
                           ('fourth year', 'Fourth year'),
                           ('fifth year', 'Fifth Year')
     ]

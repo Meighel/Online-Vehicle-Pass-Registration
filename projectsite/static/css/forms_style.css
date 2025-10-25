@@ -423,6 +423,19 @@ button.btn:hover, .back-btn:hover {
   margin-top: 4px;
 }
 
+/* Validation error element created by JS */
+.validation-error {
+  color: #b71c1c; /* strong red */
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+
+/* Invalid input focus state */
+input.invalid:focus, textarea.invalid:focus, select.invalid:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(183,28,28,0.12);
+}
+
 
 /* Signature Pad Styles */
 .signature-container {
