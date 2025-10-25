@@ -289,7 +289,7 @@ class Registration(BaseModel):
     # E-signature fields
     e_signature = models.ImageField(upload_to='signature/')
     printed_name = models.CharField(max_length=125)
-    signature_date = models.DateTimeField(auto_now_add=True)
+    signature_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"Registration {self.registration_number} for {self.user.lastname}, {self.user.firstname}"

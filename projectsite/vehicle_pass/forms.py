@@ -345,14 +345,6 @@ class VehicleRegistrationStep3Form(forms.Form):
             'accept': 'image/*'
         })
     )
-    signature_date = forms.DateField(
-        label='Signature Date',
-        widget=forms.DateInput(attrs={
-            'type': 'date',
-            'placeholder': 'e.g. 2023-01-01'
-        }),
-        input_formats=['%Y-%m-%d', '%d/%m/%Y']
-    )
 
 class PasswordUpdateForm(forms.Form):
     old_password = forms.CharField(widget=forms.PasswordInput, label='Old Password')

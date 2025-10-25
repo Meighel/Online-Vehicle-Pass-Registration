@@ -105,14 +105,6 @@
 
         </div>
 
-        <div class="form-group form3-form-group">
-          <label for="{{ form.signature_date.id_for_label }}">Signature Date</label>
-          {{ form.signature_date }}
-          {% if form.signature_date.errors %}
-            <div class="field-error">{{ form.signature_date.errors }}</div>
-          {% endif %}
-        </div>
-
         <div class="form-navigation">
           <a href="{% url 'vehicle_registration_step_2' %}">
             <button class="back-btn form3-back-btn" type="button">Back</button>

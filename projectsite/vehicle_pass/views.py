@@ -412,7 +412,6 @@ def vehicle_registration_step_3(request):
             google_folder_link = form.cleaned_data['google_drive_link']
             printed_name = form.cleaned_data['printed_name']
             e_signature = form.cleaned_data['e_signature']
-            signature_date = form.cleaned_data['signature_date']
 
 
             try:
@@ -491,7 +490,7 @@ def vehicle_registration_step_3(request):
                     files=google_folder_link,
                     printed_name=printed_name,
                     e_signature=e_signature,
-                    signature_date=signature_date,
+                    signature_date=timezone.now(),
                     status='pending'
                 )
 
