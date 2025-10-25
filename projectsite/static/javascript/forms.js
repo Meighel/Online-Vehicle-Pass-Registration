@@ -210,23 +210,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const ownerDetails = $("#owner-details");
 
     const toggleOwnerDetails = () => {
-      const selected = $('input[name="owner"]:checked');
-      if (!ownerDetails || !selected) return;
+        const selected = $('input[name="owner"]:checked');
+        if (!ownerDetails || !selected) return;
 
-      if (selected.value === "no") {
-        ownerDetails.style.display = "block";
-        ownerDetails.querySelectorAll("input").forEach(input => input.required = true);
-      } else {
-        ownerDetails.style.display = "none";
-        ownerDetails.querySelectorAll("input").forEach(input => {
-          input.value = "";
-          input.required = false;
-          input.classList.remove("invalid");
-          // FIX: Added backticks (``)
-          const errorEl = document.getElementById(`${input.id}_error`);
-          if (errorEl) errorEl.textContent = "";
-        });
-      }
+        if (selected.value === "no") {
+            ownerDetails.style.display = "block";
+            // Only make specific fields required
+            const requiredFields = [
+                'owner_firstname',
+                'owner_lastname',
+                'relationship_to_owner',
+                'contact_number',
+                'address'
+            ];
+            
+            ownerDetails.querySelectorAll("input").forEach(input => {
+                input.required = requiredFields.includes(input.name);
+            });
+        } else {
+            ownerDetails.style.display = "none";
+            ownerDetails.querySelectorAll("input").forEach(input => {
+                input.value = "";
+                input.required = false;
+                input.classList.remove("invalid");
+                const errorEl = document.getElementById(`${input.id}_error`);
+                if (errorEl) errorEl.textContent = "";
+            });
+        }
     };
 
     if (ownerRadios.length) {
