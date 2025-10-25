@@ -427,10 +427,9 @@ button.btn:hover, .back-btn:hover {
 /* Signature Pad Styles */
 .signature-container {
     border: 2px solid #ddd;
-    border-radius: 25px;
     display: inline-block;
     margin: 10px 0;
-    background-color: white;
+    overflow: hidden;
 }
 
 #signature-canvas {

@@ -92,11 +92,17 @@
             <button type="button" id="save-signature" class="save-btn">Save</button>
           </div>
 
-          <!-- {{ form.e_signature }}
+          
+          <div style="display: none;">
+            {{ form.e_signature }}
+          </div>
+
           <div id="signature-preview"></div>
-          {% if form.e_signature.errors %}
-            <div class="field-error">{{ form.e_signature.errors }}</div>
-          {% endif %} -->
+        
+            {% if form.e_signature.errors %}
+              <div class="field-error">{{ form.e_signature.errors }}</div>
+            {% endif %}
+
         </div>
 
         <div class="form-group form3-form-group">

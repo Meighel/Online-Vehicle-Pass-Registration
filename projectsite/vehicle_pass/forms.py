@@ -342,8 +342,7 @@ class VehicleRegistrationStep3Form(forms.Form):
         label='E-signature',
         required=True,
         widget=forms.FileInput(attrs={
-            'accept': 'image/*',
-            'id':'e-signature'
+            'accept': 'image/*'
         })
     )
     signature_date = forms.DateField(
