@@ -98,21 +98,17 @@
 
       <div class="form1-aligned-group" id="employee-fields" style="display: none;">
         <div class="form-group form1-form-group">
-          {% if form.school_role.value == 'faculty & staff' or form.school_role.value == 'university official' %}
           <div class="form-group">
               <label for="{{ form.position.id_for_label }}">Position (Employees Only)</label>
               {{ form.position }}
           </div>
-          {% endif %}
         </div>
 
         <div class="form-group form1-form-group">
-          {% if form.school_role.value == 'faculty & staff' or form.school_role.value == 'university official' %}
           <div class="form-group">
               <label for="{{ form.workplace.id_for_label }}">Workplace/College</label>
               {{ form.workplace }}
           </div>
-          {% endif %}
         </div>
       </div>
 

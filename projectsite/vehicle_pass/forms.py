@@ -136,6 +136,7 @@ class VehicleRegistrationStep1Form(forms.Form):
     #for employee
     position = forms.CharField(
         max_length=50,
+        required=False,
         label="Position",
         widget=forms.TextInput(attrs={'placeholder':'e.g., dean, univeristy librarian, utility, etc.'})
     )
@@ -287,8 +288,8 @@ class VehicleRegistrationStep2Form(forms.Form):
     )
     owner_lastname = forms.CharField(
         max_length=100,
-        label="Owner's Last Name",
         required=False,
+        label="Owner's Last Name",
         widget=forms.TextInput(attrs={'placeholder': "Enter owner's last name"})
     )
     owner_suffix = forms.CharField(
@@ -311,7 +312,7 @@ class VehicleRegistrationStep2Form(forms.Form):
     )
     address = forms.CharField(
         max_length=100,
-        required = False,
+        required=False,
         label="Owner's Address",
         widget=forms.TextInput(attrs={'placeholder':'Rizal Street, Brgy. San Fernando, PPC'})
     )

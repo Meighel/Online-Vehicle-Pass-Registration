@@ -1,5 +1,4 @@
-from django.shortcuts import render, redirect
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import HttpResponse
 from .forms import UserSignupForm, UserProfileForm, RegistrationForm, PasswordUpdateForm, VehicleRegistrationStep1Form, VehicleRegistrationStep2Form, VehicleRegistrationStep3Form
@@ -362,6 +361,10 @@ def vehicle_registration_step_2(request):
     user_id = request.session.get("user_id")
     user = UserProfile.objects.get(id=user_id)
 
+    if 'step1_data' not in request.session:
+        messages.error(request, "Please complete the form step by step.")
+        return redirect('vehicle_registration_step_1')
+
     if request.method == 'POST':
         form = VehicleRegistrationStep2Form(request.POST)
         if form.is_valid():
@@ -393,6 +396,10 @@ def vehicle_registration_step_2(request):
 
             return redirect('vehicle_registration_step_3')
     else:
+        if 'step1_data' not in request.session:
+            messages.error(request, "Please complete the form step by step.")
+            return redirect('vehicle_registration_step_1')
+        
         form = VehicleRegistrationStep2Form()
 
     context = {
@@ -405,6 +412,17 @@ def vehicle_registration_step_2(request):
 def vehicle_registration_step_3(request):
     user_id = request.session.get("user_id")
     user = UserProfile.objects.get(id=user_id)
+
+    # --- ADD THESE CHECKS ---
+    # Ensure step 1 data exists
+    if 'step1_data' not in request.session:
+        messages.error(request, "Please complete Step 1 first.")
+        return redirect('vehicle_registration_step_1')
+    # Ensure step 2 data exists
+    if 'step2_data' not in request.session:
+        messages.error(request, "Please complete Step 2 first.")
+        return redirect('vehicle_registration_step_2')
+    # --------------------------
 
     if request.method == 'POST':
         form = VehicleRegistrationStep3Form(request.POST, request.FILES)
@@ -495,8 +513,8 @@ def vehicle_registration_step_3(request):
                 )
 
                 # Clear session data
-                for key in ['step1_data', 'step2_data']:
-                    request.session.pop(key, None)
+                request.session.pop('step1_data', None)
+                request.session.pop('step2_data', None)
 
                 messages.success(request, "Vehicle registration submitted successfully!")
                 return redirect('user_pass_status')
@@ -508,6 +526,14 @@ def vehicle_registration_step_3(request):
         # If form is invalid or exception occurred, fall through to render again
 
     else:
+        if 'step1_data' not in request.session:
+            messages.error(request, "Please complete Step 1 first.")
+            return redirect('vehicle_registration_step_1')
+        if 'step2_data' not in request.session:
+            messages.error(request, "Please complete Step 2 first.")
+            return redirect('vehicle_registration_step_2')
+        
+        
         form = VehicleRegistrationStep3Form()
 
     context = {
