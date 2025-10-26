@@ -155,22 +155,43 @@ document.addEventListener("DOMContentLoaded", () => {
     const familyInfoSection = $("#family-info-section");
 
     const updateFieldsVisibility = () => {
-      let selectedRole = $('input[name="school_role"]:checked')?.value;
+          let selectedRole = "";
+          schoolRoleRadios.forEach(radio => {
+            if (radio.checked) selectedRole = radio.value;
+          });
 
-      if (selectedRole === "student") {
-        if (studentFields) studentFields.style.display = "flex";
-        if (employeeFields) employeeFields.style.display = "none";
-        if (familyInfoSection) familyInfoSection.style.display = "block";
-      } else if (selectedRole === "faculty & staff" || selectedRole === "university official") {
-        if (employeeFields) employeeFields.style.display = "flex";
-        if (studentFields) studentFields.style.display = "none";
-        if (familyInfoSection) familyInfoSection.style.display = "none";
-      } else {
-        if (employeeFields) employeeFields.style.display = "none";
-        if (studentFields) studentFields.style.display = "none";
-        if (familyInfoSection) familyInfoSection.style.display = "none";
-      }
-    };
+          // Get the input elements
+          const positionInput = $("#id_position");
+          const workplaceSelect = $("#id_workplace");
+
+          if (selectedRole === "student") {
+            if (studentFields) studentFields.style.display = "flex";
+            if (employeeFields) employeeFields.style.display = "none";
+            if (familyInfoSection) familyInfoSection.style.display = "block";
+            
+            // --- ADD THIS: Clear employee fields when student is selected ---
+            if (positionInput) positionInput.value = "";
+            if (workplaceSelect) workplaceSelect.value = ""; // Reset dropdown
+            // -----------------------------------------------------------------
+
+          } else if (selectedRole === "faculty & staff" || selectedRole === "university official") {
+            if (employeeFields) employeeFields.style.display = "flex";
+            if (studentFields) studentFields.style.display = "none";
+            if (familyInfoSection) familyInfoSection.style.display = "none";
+            // No need to clear student fields here unless you want to,
+            // as they might share some fields or pre-fill logic
+          } else {
+            if (employeeFields) employeeFields.style.display = "none";
+            if (studentFields) studentFields.style.display = "none";
+            if (familyInfoSection) familyInfoSection.style.display = "none";
+
+            // --- ADD THIS: Clear fields if NO role is selected (or an unexpected one) ---
+            if (positionInput) positionInput.value = "";
+            if (workplaceSelect) workplaceSelect.value = "";
+            // -----------------------------------------------------------------------------
+          }
+        };
+
 
     if (schoolRoleRadios.length) {
       schoolRoleRadios.forEach(radio => radio.addEventListener("change", updateFieldsVisibility));
