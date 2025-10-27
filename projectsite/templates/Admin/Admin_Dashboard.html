@@ -176,98 +176,80 @@
                 </div>
             </div>
 
-            <!-- Vehicle Stats Section -->
+             <!-- Vehicle Stats Section -->
             <div class="row g-4 mt-4">
                 <div class="col-12">
                     <div class="vehicle-stats-container">
                         <div class="vehicle-hero-card p-5">
                             <!-- Header Section -->
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <div class="vehicle-header">
-                                    <div class="mb-2">
-                                        <h3 class="vehicle-main-title">Vehicle Management</h3>
-                                        <p class="vehicle-subtitle">Real-time vehicle statistics and insights</p>
+                            <div class="vehicle-stats-header">
+                                <div class="d-flex align-items-center gap-4">
+                                    <!-- Vehicle Icon (Large) -->
+                                    <div class="vehicle-icon-large">
+                                        <i class="fas fa-car-side"></i>
                                     </div>
-                                    <hr>
-
-                                    <div class="d-flex align-items-center gap-4" style="width: 100%;">
-                                        <!-- Vehicle Icon -->
-                                        <span class="vehicle-icon-large d-flex align-items-center justify-content-center" 
-                                            style="font-size: 6rem; color: #fff;">
-                                            <i class="fas fa-car-side"></i>
-                                        </span>
-                                        <!-- Vehicle Stats -->
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <div class="d-flex align-items-center">
-                                                <!-- Left: total vehicles -->
-                                                <span class="status-number me-3" 
-                                                    style="font-size: 2.5rem; font-weight: bold; letter-spacing: 2px;">
-                                                    {{ total_vehicles }}
+                                    <!-- Vehicle Stats Overview -->
+                                    <div>
+                                        <h3 class="vehicle-main-title">Vehicle Management Overview</h3>
+                                        <div class="d-flex align-items-center mt-2">
+                                            <span class="status-number me-3" 
+                                                style="font-size: 2.5rem; font-weight: bold; letter-spacing: 2px;">
+                                                {{ total_vehicles }}
+                                            </span>
+                                            <div>
+                                                <span class="vehicle-subtitle" style="font-size: 1.2rem; color: var(--muted-text);">
+                                                    Total Registered Vehicles
                                                 </span>
-
-                                                <!-- Right: subtitle + update -->
-                                                <div class="d-flex flex-column">
-                                                    <span class="vehicle-subtitle" style="font-size: 1.2rem; color: #e2e2e2;">
-                                                        Total Registered Vehicles
-                                                    </span>
-                                                    <span class="vehicle-update-info" style="font-size: 0.95rem; color: #c2c2c2;">
-                                                        Last updated: {{ last_updated|default:'Today' }}
-                                                    </span>
-                                                </div>
+                                                <span class="vehicle-update-info" style="font-size: 0.95rem; color: var(--muted-text);">
+                                                    Last updated: {{ last_updated|default:'Today' }}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
-                                    <br>
-
-                                    <!-- Main Stats Grid -->
-                                    <div class="row g-4">
-                                        <!-- Motor -->
-                                        <div class="col-md-4">
-                                            <div class="vehicle-stat-item">
-                                                <div class="stat-icon-wrapper motor">
-                                                    <i class="fas fa-motorcycle"></i>
-                                                </div>
-                                                <div class="stat-content">
-                                                    <h2 class="stat-number">{{ total_motor }}</h2>
-                                                    <p class="stat-label">Motorcycles</p>
-                                                    <div class="stat-growth">
-                                                        <i class="fas fa-arrow-up"></i>
-                                                        <span>+{{ growth_percent }}%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Main Stats Grid -->
+                            <div class="vehicle-stats-grid">
+                                <!-- Motor -->
+                                <div class="vehicle-stat-item">
+                                    <div class="stat-icon-wrapper motor">
+                                        <i class="fas fa-motorcycle"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h2 class="stat-number">{{ total_motor }}</h2>
+                                        <p class="stat-label">Motorcycles</p>
+                                        <div class="stat-growth">
+                                            <i class="fas fa-arrow-up"></i>
+                                            <span>+{{ growth_percent }}%</span>
                                         </div>
-                                        <!-- Car -->
-                                        <div class="col-md-4">
-                                            <div class="vehicle-stat-item">
-                                                <div class="stat-icon-wrapper car">
-                                                    <i class="fas fa-car"></i>
-                                                </div>
-                                                <div class="stat-content">
-                                                    <h2 class="stat-number">{{ total_car }}</h2>
-                                                    <p class="stat-label">Cars</p>
-                                                    <div class="stat-growth">
-                                                        <i class="fas fa-arrow-up"></i>
-                                                        <span>+{{ growth_percent }}%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    </div>
+                                </div>
+                                <!-- Car -->
+                                <div class="vehicle-stat-item">
+                                    <div class="stat-icon-wrapper car">
+                                        <i class="fas fa-car"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h2 class="stat-number">{{ total_car }}</h2>
+                                        <p class="stat-label">Cars</p>
+                                        <div class="stat-growth">
+                                            <i class="fas fa-arrow-up"></i>
+                                            <span>+{{ growth_percent }}%</span>
                                         </div>
-                                        <!-- Van -->
-                                        <div class="col-md-4">
-                                            <div class="vehicle-stat-item">
-                                                <div class="stat-icon-wrapper van">
-                                                    <i class="fas fa-shuttle-van"></i>
-                                                </div>
-                                                <div class="stat-content">
-                                                    <h2 class="stat-number">{{ total_van }}</h2>
-                                                    <p class="stat-label">Vans</p>
-                                                    <div class="stat-growth">
-                                                        <i class="fas fa-arrow-up"></i>
-                                                        <span>+{{ growth_percent }}%</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    </div>
+                                </div>
+                                <!-- Van -->
+                                <div class="vehicle-stat-item">
+                                    <div class="stat-icon-wrapper van">
+                                        <i class="fas fa-shuttle-van"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h2 class="stat-number">{{ total_van }}</h2>
+                                        <p class="stat-label">Vans</p>
+                                        <div class="stat-growth">
+                                            <i class="fas fa-arrow-up"></i>
+                                            <span>+{{ growth_percent }}%</span>
                                         </div>
                                     </div>
                                 </div>
