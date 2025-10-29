@@ -1,7 +1,8 @@
+from multiprocessing import context
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.http import HttpResponse
-from .forms import UserSignupForm, UserProfileForm, RegistrationForm, PasswordUpdateForm, VehicleRegistrationStep1Form, VehicleRegistrationStep2Form, VehicleRegistrationStep3Form
+from django.http import HttpResponse, HttpResponseRedirect
+from .forms import UserSignupForm, UserProfileForm, RegistrationForm, PasswordUpdateForm, VehicleRegistrationStep1Form, VehicleRegistrationStep2Form, VehicleRegistrationStep3Form, OICRecommendForm, DirectorApproveForm
 from .models import UserProfile, SecurityProfile, AdminProfile
 from .models import Vehicle, Registration, VehiclePass
 from .models import Notification, Announcement, PasswordResetCode, LoginActivity, SiteVisit
@@ -29,6 +30,9 @@ from django.contrib.auth import update_session_auth_hash
 from .models import SiteVisit, LoginActivity
 
 import os
+import csv
+import pytz
+
 from django.conf import settings
 from PIL import Image, ImageDraw, ImageFont
 
@@ -773,8 +777,6 @@ def build_reports_context(request):
 
     return context
 
-
-
 @login_required
 def reports_view(request):
     """Role-detecting reports view.
@@ -951,6 +953,53 @@ def security_manage_application(request):
     }
     return render(request, "Security/Security_Application.html")
 
+class OICRequiredMixin:
+    """
+    Verify that the current user is an OIC.
+    This runs *after* CustomLoginRequiredMixin.
+    """
+    def dispatch(self, request, *args, **kwargs):
+        # We can assume user_id exists because CustomLoginRequiredMixin already checked it
+        user_id = request.session.get("user_id") 
+        
+        try:
+            # Get the security profile linked to the logged-in user
+            security_profile = SecurityProfile.objects.get(user__id=user_id)
+        except SecurityProfile.DoesNotExist:
+            # User is logged in, but is not a security officer at all
+            messages.error(request, "You do not have permission to perform this action.")
+            return redirect('default_dashboard') # Send them to their own dashboard
+
+        # The actual role check
+        if security_profile.level != 'oic':
+            messages.error(request, "Only the OIC can perform this action.")
+            return redirect('security_manage_application') # Send back to list
+        
+        # If check passes, continue to the view
+        return super().dispatch(request, *args, **kwargs)
+
+class DirectorRequiredMixin:
+    """
+    Verify that the current user is a Director.
+    This runs *after* CustomLoginRequiredMixin.
+    """
+    def dispatch(self, request, *args, **kwargs):
+        user_id = request.session.get("user_id")
+        
+        try:
+            security_profile = SecurityProfile.objects.get(user__id=user_id)
+        except SecurityProfile.DoesNotExist:
+            messages.error(request, "You do not have permission to perform this action.")
+            return redirect('default_dashboard')
+
+        # The actual role check
+        if security_profile.level != 'director':
+            messages.error(request, "Only the GSO Director can perform this action.")
+            return redirect('security_manage_application')
+            
+        # If check passes, continue to the view
+        return super().dispatch(request, *args, **kwargs)
+
 class SecurityViewApplication(CustomLoginRequiredMixin, ListView):
     model = Registration
     template_name = 'Security/Security_Application.html'
@@ -959,10 +1008,8 @@ class SecurityViewApplication(CustomLoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        applications = context['applications']
-        print(f"Applications count: {len(applications)}")
-        if applications:
-            print(f"First application: {applications[0]}")
+        context['oic_form'] = OICRecommendForm()
+        context['director_form'] = DirectorApproveForm()
         return context
 
 class SecurityViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
@@ -970,12 +1017,60 @@ class SecurityViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
     template_name = 'Security/Security Application CRUD/Security_View_Specific_Application.html'
     context_object_name = 'registration'
 
-class SecurityUpdateApplication(CustomLoginRequiredMixin, UpdateView):
+# class SecurityUpdateApplication(CustomLoginRequiredMixin, UpdateView):
+#     model = Registration
+#     form_class = RegistrationForm
+#     template_name = 'Security/Security Application CRUD/Security_Update_Application.html'
+#     success_url = reverse_lazy('security_manage_application')
+
+class SecurityRecommendView(CustomLoginRequiredMixin, OICRequiredMixin, UpdateView):
+    """
+    View for the OIC to recommend or reject an application.
+    Checks: 1. Logged in (CustomLogin) 2. Is OIC (OICRequired)
+    """
     model = Registration
-    form_class = RegistrationForm
-    template_name = 'Security/Security Application CRUD/Security_Update_Application.html'
+    form_class = OICRecommendForm
+    template_name = 'Security/Security_Application.html' # On error, re-renders the list
     success_url = reverse_lazy('security_manage_application')
-    
+
+    def get_object(self, queryset=None):
+        # Only allow updates on applications in the correct state
+        obj = super().get_object(queryset)
+        if obj.status != 'application submitted':
+            messages.error(self.request, "This application is not ready for recommendation.")
+            return None 
+        return obj
+
+    def form_valid(self, form):
+        messages.success(self.request, f"Application for {self.object.user.get_full_name()} has been updated.")
+        # Set the approver to the current user's security profile
+        form.instance.initial_approved_by = self.request.user_profile.securityprofile
+        return super().form_valid(form)
+
+class SecurityApproveView(CustomLoginRequiredMixin, DirectorRequiredMixin, UpdateView):
+    """
+    View for the Director to give final approval or reject.
+    Checks: 1. Logged in (CustomLogin) 2. Is Director (DirectorRequired)
+    """
+    model = Registration
+    form_class = DirectorApproveForm
+    template_name = 'Security/Security_Application.html' # On error, re-renders the list
+    success_url = reverse_lazy('security_manage_application')
+
+    def get_object(self, queryset=None):
+        # Only allow updates on applications in the correct state
+        obj = super().get_object(queryset)
+        if obj.status != 'initial approval':
+            messages.error(self.request, "This application is not ready for final approval.")
+            return None
+        return obj
+
+    def form_valid(self, form):
+        messages.success(self.request, f"Application for {self.object.user.get_full_name()} has been approved.")
+        # Set the final approver to the current user's security profile
+        form.instance.final_approved_by = self.request.user_profile.securityprofile
+        return super().form_valid(form)
+
 @login_required
 def security_release_stickers(request):
     stickers = VehiclePass.objects.select_related('vehicle__applicant').all().order_by('-created_at')

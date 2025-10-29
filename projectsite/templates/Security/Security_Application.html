@@ -68,26 +68,102 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for applicant in applications %}
+                {% for application in applications %}
                     <tr>
-                        <td>{{ applicant.user.lastname }}, {{ applicant.user.firstname }} {{ applicant.user.middlename|default_if_none:""|slice:":1" }} {{ applicant.user.suffix|default_if_none:"" }}</td>
-                        <td>{{ applicant.created_at|date:"F d, Y" }}</td>
-                        <td>{{ applicant.status }}</td>
-                        <td>
-                            {% if applicant.initial_approved_by %}
-                                {{ applicant.initial_approved_by.user.firstname }} {{ applicant.initial_approved_by.user.middlename|default_if_none:""|slice:":1" }} {{ applicant.initial_approved_by.user.lastname }} {{ applicant.initial_approved_by.user.suffix|default_if_none:"" }}
-                            {% elif applicant.final_approved_by %}
-                                {{ applicant.final_approved_by.user.firstname }} {{ applicant.final_approved_by.user.middlename|default_if_none:""|slice:":1" }} {{ applicant.final_approved_by.user.lastname }} {{ applicant.final_approved_by.user.suffix|default_if_none:"" }}
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </td>
-                        <td>{{ applicant.remarks|default_if_none:"no remarks" }}</td>
-                        <td>
-                            <a href="{% url 'security_view_specific_application' applicant.pk %}" class="btn btn-info">View</a>
-                            <a href="{% url 'security_update_application' applicant.pk %}" class="btn btn-success">Update</a>
+                    <td>{{ application.user.lastname }}, {{ application.user.firstname }} {{ application.user.middlename|default_if_none:""|slice:":1" }} {{ application.user.suffix|default_if_none:"" }}</td>
+                    <td>{{ application.created_at|date:"F d, Y" }}</td>
+                    <td>{{ application.get_status_display }}</td> {# Use get_status_display for better readability #}
+                    <td>
+                        {% if application.initial_approved_by %}
+                            {{ application.initial_approved_by.user.get_full_name }} (OIC)
+                        {% elif application.final_approved_by %}
+                            {{ application.final_approved_by.user.get_full_name }} (Director)
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>{{ application.remarks|default_if_none:"no remarks" }}</td>
+                    <td>
+                        <a href="{% url 'security_view_specific_application' application.pk %}" class="btn btn-sm btn-info">View</a>
+
+                        {% if request.user_profile.securityprofile.level == 'oic' and application.status == 'application submitted' %}
+                        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#recommendModal-{{ application.pk }}">
+                            Recommend
+                        </button>
+                        {% endif %}
+
+                        {% if request.user_profile.securityprofile.level == 'director' and application.status == 'initial approval' %}
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#approveModal-{{ application.pk }}">
+                            Final Approval
+                        </button>
+                        {% endif %}
+
                         </td>
                     </tr>
+
+                    <div class="modal fade" id="recommendModal-{{ application.pk }}" tabindex="-1" aria-labelledby="recommendModalLabel-{{ application.pk }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <form action="{% url 'security_recommend_application' application.pk %}" method="POST">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="recommendModalLabel-{{ application.pk }}">Recommend Application</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <p><strong>Applicant:</strong> {{ application.user.get_full_name }}</p>
+                            <p><strong>Vehicle:</strong> {{ application.vehicle.plate_number }}</p>
+                            <hr>
+                            <div class="mb-3">
+                                <label class="form-label">Action:</label>
+                                {{ oic_form.status }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_remarks_oic_{{ application.pk }}" class="form-label">Remarks:</label>
+                                <textarea name="remarks" class="form-control" rows="3" id="id_remarks_oic_{{ application.pk }}"></textarea>
+                            </div>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit Recommendation</button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                    </div>
+
+                    <div class="modal fade" id="approveModal-{{ application.pk }}" tabindex="-1" aria-labelledby="approveModalLabel-{{ application.pk }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <form action="{% url 'security_approve_application' application.pk %}" method="POST">
+                            {% csrf_token %}
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="approveModalLabel-{{ application.pk }}">Final Approval</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <p><strong>Applicant:</strong> {{ application.user.get_full_name }}</p>
+                            <p><strong>Vehicle:</strong> {{ application.vehicle.plate_number }}</p>
+                            <p><strong>OIC Remarks:</strong> {{ application.remarks|default:"N/A" }}</p>
+                            <hr>
+                            <div class="mb-3">
+                                <label class="form-label">Action:</label>
+                                {{ director_form.status }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_remarks_dir_{{ application.pk }}" class="form-label">Final Remarks (Optional):</label>
+                                <textarea name="remarks" class="form-control" rows="3" id="id_remarks_dir_{{ application.pk }}"></textarea>
+                            </div>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit Final Decision</button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                    </div>
+
                 {% endfor %}
                 </tbody>
             </table>

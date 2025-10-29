@@ -5,7 +5,7 @@ from vehicle_pass.views import (
     login_view, logout_view, signup_view,
     default_dashboard, user_pass_status, user_application,
     security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, security_release_stickers, 
-    SecurityUpdateApplication, security_report,
+    SecurityRecommendView, SecurityApproveView, security_report,
 
     admin_dashboard, AdminViewUser, AdminCreateUser, AdminUpdateUser, AdminDeleteUser, AdminViewSpecificUser,
     AdminViewApplication, AdminViewSpecificApplication, AdminUpdateApplication,
@@ -48,7 +48,8 @@ urlpatterns = [
     
     path("dashboard/security/", security_dashboard, name="security_dashboard"),
     path("dashboard/security/manage_application/", SecurityViewApplication.as_view(), name="security_manage_application"),
-    path("dashboard/security/manage_application/<pk>/", SecurityUpdateApplication.as_view(), name="security_update_application"),
+    path('security/application/<int:pk>/recommend/', views.SecurityRecommendView.as_view(), name='security_recommend_application'),
+    path('security/application/<int:pk>/approve/', views.SecurityApproveView.as_view(), name='security_approve_application'),
     path("dashboard/security/manage_application/view/<pk>", SecurityViewSpecificApplication.as_view(), name="security_view_specific_application"),
     path("dashboard/security/manage_stickers", security_release_stickers, name="security_manage_stickers"),
     path("dashboard/security/manage_report/", security_report, name="security_report"),

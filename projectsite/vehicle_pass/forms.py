@@ -36,53 +36,92 @@ class UserProfileForm(forms.ModelForm):
         fields = '__all__' 
 
 class RegistrationForm(forms.ModelForm):
+    pass
+    # class Meta:
+    #     model = Registration
+    #     fields = ['status', 'remarks', 'initial_approved_by', 'final_approved_by']
+    #     labels = {
+    #         'initial_approved_by': 'Security Personnel (OIC)',
+    #         'final_approved_by': 'GSO Director',
+    #     }
+
+    # def __init__(self, *args, **kwargs):
+    #     self.user = kwargs.pop('user', None)
+    #     super().__init__(*args, **kwargs)
+
+    #     security_profile = getattr(self.user, 'securityprofile', None)
+
+    #     application = self.instance
+
+    #     if security_profile.level == 'guard':
+    #         for field in self.fields:
+    #             self.fields[field].disabled = True
+        
+    #     elif security_profile.level == 'oic':
+    #         self.fields['final_approved_by'].disabled = True
+
+    #     if self.user:
+    #         try:
+    #             # Get UserProfile instance
+    #             if isinstance(self.user, str):
+    #                 user_profile = UserProfile.objects.get(id=self.user)
+    #             else:
+    #                 user_profile = self.user
+                
+    #             security_profile = SecurityProfile.objects.get(user=user_profile)
+                
+    #             # Restrict choices to ONLY this security profile - this is the key change
+    #             self.fields['document_reviewed_by'].queryset = SecurityProfile.objects.filter(id=security_profile.id)
+                
+    #             # Set the initial value
+    #             self.fields['document_reviewed_by'].initial = security_profile
+                
+    #         except SecurityProfile.DoesNotExist:
+    #             self.fields['document_reviewed_by'].initial = None
+
+    # def save(self, commit=True):
+    #     instance = super().save(commit=False)
+    #     # Make absolutely sure the reviewer is set
+    #     if hasattr(self, 'user') and self.user and not instance.document_reviewed_by:
+    #         try:
+    #             if isinstance(self.user, str):
+    #                 user_profile = UserProfile.objects.get(id=self.user)
+    #             else:
+    #                 user_profile = self.user
+    #             security_profile = SecurityProfile.objects.get(user=user_profile)
+    #             instance.document_reviewed_by = security_profile
+    #         except (UserProfile.DoesNotExist, SecurityProfile.DoesNotExist):
+    #             pass
+        
+    #     if commit:
+    #         instance.save()
+    #     return instance
+
+class OICRecommendForm(forms.ModelForm):
+    STATUS_CHOICES = [
+        ('initial approval', 'Recommend for Approval'),
+        ('rejected', 'Rejected')
+        ]
+    
+    status = forms.ChoiceField(choices=STATUS_CHOICES, widget=forms.RadioSelect, label='Recommendation')
+    remarks = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False)
+
     class Meta:
         model = Registration
-        fields = ['status', 'remarks', 'initial_approved_by']
-        labels = {
-            'initial_approved_by': 'Security Personnel'
-        }
+        fields = ['status', 'remarks']
 
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
+class DirectorApproveForm(forms.ModelForm):
+    STATUS_CHOICES = [
+        ('final approval', 'Final Approval (Ready to Release)'),
+        ('rejected', 'Rejected')
+        ]
+    
+    status = forms.ChoiceField(choices=STATUS_CHOICES, widget=forms.RadioSelect, label='Recommendation')
+    remarks = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False)
 
-        if self.user:
-            try:
-                # Get UserProfile instance
-                if isinstance(self.user, str):
-                    user_profile = UserProfile.objects.get(id=self.user)
-                else:
-                    user_profile = self.user
-                
-                security_profile = SecurityProfile.objects.get(user=user_profile)
-                
-                # Restrict choices to ONLY this security profile - this is the key change
-                self.fields['document_reviewed_by'].queryset = SecurityProfile.objects.filter(id=security_profile.id)
-                
-                # Set the initial value
-                self.fields['document_reviewed_by'].initial = security_profile
-                
-            except SecurityProfile.DoesNotExist:
-                self.fields['document_reviewed_by'].initial = None
-
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-        # Make absolutely sure the reviewer is set
-        if hasattr(self, 'user') and self.user and not instance.document_reviewed_by:
-            try:
-                if isinstance(self.user, str):
-                    user_profile = UserProfile.objects.get(id=self.user)
-                else:
-                    user_profile = self.user
-                security_profile = SecurityProfile.objects.get(user=user_profile)
-                instance.document_reviewed_by = security_profile
-            except (UserProfile.DoesNotExist, SecurityProfile.DoesNotExist):
-                pass
-        
-        if commit:
-            instance.save()
-        return instance
+    class Meta:
+        model = Registration
+        fields = ['status', 'remarks']
 
 #Personal Information Form 
 class VehicleRegistrationStep1Form(forms.Form):

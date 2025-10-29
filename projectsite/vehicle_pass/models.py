@@ -172,12 +172,18 @@ class UserProfile(BaseModel):
         return check_password(raw_password, self.password)  # Check password
 
 class SecurityProfile(BaseModel):
+    SECURITY_LEVEL_CHOICES = [('guard', 'Security Guard/Personnel'),
+                      ('oic', 'Security OIC'),
+                      ('gso director', 'GSO - Director')]
+
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     badgeNumber = models.CharField(max_length=10)
     job_title = models.CharField(max_length=30)
 
+    level = models.CharField(max_length=20, choices=SECURITY_LEVEL_CHOICES, default='guard')
+
     def __str__(self):
-        return f"Security Personnel: {self.user.firstname} {self.user.lastname} {self.badgeNumber}"  
+        return f"{self.user.firstname} {self.user.lastname} ({self.get_level_display()})" 
 
 class AdminProfile(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
