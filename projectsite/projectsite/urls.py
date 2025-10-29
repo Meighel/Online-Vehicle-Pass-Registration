@@ -78,4 +78,7 @@ urlpatterns = [
     path('api/notifications/<int:notification_id>/mark-read/', views.mark_notification_read_api, name='mark_notification_read'),
     path('api/notifications/mark-all-read/', views.mark_all_read_api, name='mark_all_notifications_read'),
     path('api/notifications/count/', views.get_unread_count_api, name='unread_count'),
+        
+    #reports: security & admin
+    path('download_reports_csv/', views.download_reports_csv, name='download_reports_csv'),
 ]

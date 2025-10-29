@@ -348,7 +348,7 @@ body {
 }
 
 /* LG Screens - Laptops (992px to 1199px) */
-@media (min-width: 1200px) and (max-width: px) {
+@media (min-width: 992px) and (max-width: 1199px) {
   .main-content {
     margin-left: auto !important;
     width: 100% !important;
@@ -367,7 +367,7 @@ body {
 }
 
 /* MD Screens - Tablets (768px to 991px) */
-@media (min-width: 991px) and (max-width: 768px) {
+@media (min-width: 768px) and (max-width: 991px) {
     .main-content {
         margin-left: auto !important;
         width: calc(100% - 250px);

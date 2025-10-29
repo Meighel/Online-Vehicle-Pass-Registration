@@ -667,8 +667,233 @@ def admin_manage_passes(request):
 
 
 @login_required
+def get_filtered_registrations(request):
+    """
+    Helper function to get the base queryset based on URL filters.
+    Used by both report views and the CSV download function.
+    """
+    # New: support report_type (status | annual | semester), and backwards compatible with old 'status' param
+    report_type = request.GET.get('report_type') or request.GET.get('status', 'completed')
+    # Treat 'payment_deadline' report_type as requesting the nearing-deadline filter
+    nearing_deadline = (request.GET.get('nearing_deadline') == 'true') or (report_type == 'payment_deadline')
+    year = request.GET.get('year')
+    semester = request.GET.get('semester')
+
+    # Base queryset: Filter registrations that are beyond initial status
+    base_queryset = Registration.objects.exclude(status='no application')
+
+    # If report_type is status-like, apply status filtering logic
+    if report_type in ['pending', 'completed', 'all', 'status']:
+        status_filter = request.GET.get('status', report_type if report_type != 'status' else 'completed')
+        if status_filter == 'pending':
+            # pending-ish states
+            base_queryset = base_queryset.filter(status__in=['application submitted', 'initial approval', 'final approval', 'pending'])
+        elif status_filter == 'completed':
+            base_queryset = base_queryset.filter(status__in=['approved', 'sticker released', 'final approval'])
+        elif status_filter == 'all':
+            pass
+
+    # Apply year filter if provided (works for annual/payment/transaction reports)
+    if year:
+        try:
+            y = int(year)
+            base_queryset = base_queryset.filter(created_at__year=y)
+        except ValueError:
+            pass
+
+    # Apply semester filter if provided (1 => Jan-Jun, 2 => Jul-Dec)
+    if semester:
+        try:
+            sem = str(semester).strip()
+            if sem == '1' or sem.lower() in ['first', '1st']:
+                base_queryset = base_queryset.filter(created_at__month__gte=1, created_at__month__lte=6)
+            elif sem == '2' or sem.lower() in ['second', '2nd']:
+                base_queryset = base_queryset.filter(created_at__month__gte=7, created_at__month__lte=12)
+        except Exception:
+            pass
+
+    # Apply nearing deadline filter (if requested)
+    if nearing_deadline:
+        five_days_ago = now() - timedelta(days=5)
+        three_days_ago = now() - timedelta(days=3)
+
+        base_queryset = base_queryset.filter(
+            status='initial approval',
+            created_at__lte=five_days_ago,
+            created_at__gt=three_days_ago
+        )
+
+    # Pre-fetch related data for efficient reporting
+    base_queryset = base_queryset.select_related('user', 'vehicle')
+
+    return base_queryset
+
+
+def build_reports_context(request):
+    """Builds the common reports context used by both admin and security views.
+    This centralizes aggregation logic so a single role-detecting view can render
+    the appropriate template while keeping behavior consistent.
+    """
+    # expose new report params to template so selected values persist
+    report_type = request.GET.get('report_type') or request.GET.get('status', 'completed')
+    year = request.GET.get('year')
+    semester = request.GET.get('semester')
+
+    # Validate required params for certain report types
+    if report_type in ['annual', 'semester'] and not year:
+        # server-side validation message and empty queryset to avoid accidental full dataset
+        messages.error(request, 'Please select a Year when using Annual or Semester reports.')
+        base_queryset = Registration.objects.none()
+    else:
+        base_queryset = get_filtered_registrations(request)
+
+    # --- Aggregation Queries ---
+    reports = {
+        'registrations_by_college': base_queryset.exclude(user__college__isnull=True).exclude(user__college='').values('user__college').annotate(count=Count('registration_number')).order_by('-count'),
+        'registrations_by_program': base_queryset.exclude(user__program__isnull=True).exclude(user__program='').values('user__program').annotate(count=Count('registration_number')).order_by('-count'),
+        'registrations_by_workplace': base_queryset.exclude(user__workplace__isnull=True).exclude(user__workplace='').values('user__workplace').annotate(count=Count('registration_number')).order_by('-count'),
+        'registrations_by_school_role': base_queryset.exclude(user__school_role__isnull=True).exclude(user__school_role='').values('user__school_role').annotate(count=Count('registration_number')).order_by('-count'),
+        'registrations_by_system_role': base_queryset.values('user__role').annotate(count=Count('registration_number')).order_by('-count'),
+    }
+
+    context = {
+        'report_type': report_type,
+        'report_year': year or '',
+        'report_semester': semester or '',
+        'status_filter': request.GET.get('status', 'completed'),
+        'nearing_deadline': (request.GET.get('nearing_deadline') == 'true') or (report_type == 'payment_deadline'),
+
+        # Pass the aggregated results to the template
+        'registrations_by_college': reports['registrations_by_college'],
+        'registrations_by_program': reports['registrations_by_program'],
+        'registrations_by_workplace': reports['registrations_by_workplace'],
+        'registrations_by_school_role': reports['registrations_by_school_role'],
+        'registrations_by_system_role': reports['registrations_by_system_role'],
+    }
+
+    return context
+
+
+
+@login_required
+def reports_view(request):
+    """Role-detecting reports view.
+    Chooses the correct template for admin or security users while sharing
+    the same aggregation/context-building logic.
+    """
+    # Resolve user profile using session (preferred) then Django auth fallback
+    user_id = request.session.get('user_id')
+    user_profile = None
+    if user_id:
+        user_profile = UserProfile.objects.filter(id=user_id).first()
+
+    if not user_profile and getattr(request, 'user', None) and request.user.is_authenticated:
+        user_profile = UserProfile.objects.filter(corporate_email=getattr(request.user, 'email', '')).first()
+
+    if not user_profile or user_profile.role not in ('admin', 'security'):
+        # unauthorized - redirect to login to preserve previous behavior
+        return HttpResponseRedirect(reverse('login'))
+
+    context = build_reports_context(request)
+    context['profile'] = user_profile
+
+    # Pick template based on role
+    if user_profile.role == 'admin':
+        template_name = 'Admin/Admin_Reports.html'
+    else:
+        template_name = 'Security/Security_Reports.html'
+
+    return render(request, template_name, context)
+
+
+@login_required
 def admin_report(request):
-    return render (request, "Admin/Admin_Reports.html")
+    """
+    Generates and displays various reports based on Registration data.
+    Defaults to completed applications for accomplishment reporting.
+    """
+    # Delegate to the shared role-detecting reports view
+    return reports_view(request)
+
+@login_required
+def download_reports_csv(request):
+    """
+    Generates a CSV file for all filtered registration records.
+    Accessible to both Admin and Security roles.
+    """
+    # Support session-based auth used in this app: prefer session user_id when available
+    user_id = request.session.get('user_id')
+    user_profile = None
+    if user_id:
+        user_profile = UserProfile.objects.filter(id=user_id).first()
+
+    # If no session user, fall back to Django auth user if present
+    if not user_profile:
+        if getattr(request, 'user', None) and request.user.is_authenticated:
+            # attempt to resolve to our UserProfile model
+            user_profile = UserProfile.objects.filter(corporate_email=getattr(request.user, 'email', '')).first()
+
+    if not user_profile or user_profile.role not in ('admin', 'security'):
+        return HttpResponseRedirect(reverse('login'))  # Redirect unauthorized users
+
+    registrations = get_filtered_registrations(request)
+
+    response = HttpResponse(content_type='text/csv')
+    
+    # Determine filename based on report params
+    report_type = request.GET.get('report_type') or request.GET.get('status', 'completed')
+    year = request.GET.get('year', '')
+    semester = request.GET.get('semester', '')
+    suffix = f"_{year}" if year else ""
+    if semester:
+        suffix += f"_sem{semester}"
+
+    filename = f"vehicle_registrations_{report_type}{suffix}_export_{timezone.now().strftime('%Y%m%d')}.csv"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    writer = csv.writer(response)
+
+    # 1. Write Header Row (include report year/semester)
+    writer.writerow([
+        'Registration ID', 'Status', 'Date Filed',
+        'Applicant Last Name', 'Applicant First Name', 'Applicant Email',
+        'Institutional Role', 'College/Workplace',
+        'Vehicle Type', 'Plate Number', 'Make & Model',
+        'Initial Approved By', 'Final Approved By', 'Remarks',
+        'Report Year', 'Semester'
+    ])
+
+    # 2. Write Data Rows
+    for reg in registrations:
+        # compute report year/semester based on created_at
+        try:
+            created = reg.created_at.astimezone(pytz.timezone(settings.TIME_ZONE))
+            reg_year = created.year
+            reg_semester = '1' if created.month <= 6 else '2'
+        except Exception:
+            reg_year = ''
+            reg_semester = ''
+
+        writer.writerow([
+            reg.registration_number,
+            reg.status.title(),
+            getattr(reg, 'date_of_filing', reg.created_at).astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%Y-%m-%d %H:%M") if getattr(reg, 'date_of_filing', None) or getattr(reg, 'created_at', None) else '',
+            reg.user.lastname if getattr(reg, 'user', None) else '',
+            reg.user.firstname if getattr(reg, 'user', None) else '',
+            reg.user.corporate_email if getattr(reg, 'user', None) else '',
+            reg.user.school_role.title() if getattr(reg, 'user', None) and reg.user.school_role else 'N/A',
+            reg.user.college if getattr(reg, 'user', None) and reg.user.college else (reg.user.workplace if getattr(reg, 'user', None) else ''),
+            reg.vehicle.type.title() if getattr(reg, 'vehicle', None) and reg.vehicle.type else '',
+            reg.vehicle.plate_number if getattr(reg, 'vehicle', None) else '',
+            reg.vehicle.make_model if getattr(reg, 'vehicle', None) else '',
+            f"{reg.initial_approved_by.user.firstname} {reg.initial_approved_by.user.lastname}" if getattr(reg, 'initial_approved_by', None) else '',
+            f"{reg.final_approved_by.user.firstname} {reg.final_approved_by.user.lastname}" if getattr(reg, 'final_approved_by', None) else '',
+            reg.remarks if reg.remarks else '',
+            reg_year,
+            reg_semester
+        ])
+
+    return response
 
 class AdminViewApplication(CustomLoginRequiredMixin, ListView):
     model = Registration
@@ -758,7 +983,12 @@ def security_release_stickers(request):
 
 @login_required
 def security_report(request):
-    return render(request, "Security/Security_Reports.html")
+    """
+    Generates and displays various reports based on Registration data.
+    Defaults to completed applications for accomplishment reporting.
+    """
+    # Delegate to the shared role-detecting reports view
+    return reports_view(request)
 
 @login_required
 def settings_view(request):

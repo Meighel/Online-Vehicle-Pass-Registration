@@ -1,0 +1,467 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+    display: flex;
+    background-color: black !important;
+    color: white !important; 
+    transition: all 0.3s ease;
+}
+
+/* ========== THEME PALLETE ========== */
+:root {
+    --bg: #000000;
+    --text: #ffffff;
+    --muted-text: #d5d5d5;
+    --panel: #292929;
+    --panel-dark: #1e1e1e;
+    --panel-darker: #111111;
+    --border: #444444;
+
+    --primary-highlight: #FFD700;
+    --secondary-highlight: #ff9800;
+    --success: #2ed573;
+    --danger: #ff4757; 
+    --info: #0dcaf0; 
+    --admin-bg: #4f4f4f;
+}
+/* ========================================= */
+/* Dashboard MAIN CONTENT            */
+/* ========================================= */
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    width: calc(100% - 250px);
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: auto !important;
+    background-color: var(--bg);
+    transition: margin-left 0.3s ease, width 0.3s ease;
+
+.title {
+    margin: 0; 
+    font-size: 35px; 
+    display: flex;
+    align-items: center; 
+    font-weight: bold;
+    color: var(--primary-highlight);
+    justify-content: space-between;
+    padding: 5px 10px; 
+}
+
+#date {
+    font-size: 12px;
+    color: var(--muted-text);
+    margin: 0;
+    display: flex;
+
+    /* Ensure the filter row aligns items and controls share same heights */
+    .report-filter-form .row {
+        align-items: center;
+    }
+
+    .report-filter-form .form-select,
+    .report-filter-form .btn {
+        height: 40px;
+    }
+
+    .report-filter-form .col-md-2,
+    .report-filter-form .col-md-3,
+    .report-filter-form .col-md-5 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .report-filter-form .d-flex.align-items-end.h-100 {
+        align-items: center;
+    }
+    align-items: center; 
+    margin-bottom: 5px;
+}
+
+.left-align-title {
+    text-align: left !important;
+    width: 100%;
+    display: block;
+}
+
+.reports-container {
+    background-color: #1a1a1a;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    border: 1px solid #333;
+    margin: 20px 0;
+}
+.reports-container h1 {
+    color: #ffd700;
+    text-align: left;
+    border-bottom: 2px solid #333;
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+    font-size: 1.75rem;
+}
+.report-filter-form {
+    background-color: #242424;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    border: 1px solid #333;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.form-label {
+    color: #aaa;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+    display: block;
+}
+.form-select {
+    color: #fff;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    height: auto;
+    min-height: 40px;
+    width: 100%;
+    border-radius: 6px;
+    margin-top: auto;
+}
+
+.form-select optgroup {
+    color: var(--primary-highlight);
+    font-weight: 600;
+    padding: 8px 4px;
+    background-color: #1a1a1a;
+}
+
+.form-select option {
+    color: #fff;
+    padding: 8px 12px;
+    background-color: #1a1a1a;
+}
+
+.form-select option:hover {
+    background-color: var(--primary-highlight);
+    color: #000;
+}
+
+.form-select:disabled {
+    background-color: #151515;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.75;
+}
+
+/* Semester label styling */
+.semester-label {
+    transition: opacity 0.2s ease;
+}
+
+#report_semester:disabled + .semester-label {
+    opacity: 0.5;
+}
+
+.form-check-label {
+    color: #fff;
+    font-size: 0.9rem;
+    padding-left: 8px;
+    white-space: nowrap;
+}
+
+.form-check-input {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #333;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-highlight);
+    border-color: var(--primary-highlight);
+}
+.form-select:focus {
+    border-color: var(--primary-highlight);
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.15);
+    outline: none;
+}
+.report-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+.report-card {
+    background: linear-gradient(145deg, #1c1c1c, #1a1a1a);
+    border: 1px solid #333;
+    border-left: 5px solid; /* Dynamic border for color coding */
+    border-radius: 12px;
+    padding: 25px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+}
+.report-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    background: #242424;
+}
+.card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+}
+.card-text-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 10px 0;
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+}
+.card-text-number::after {
+    content: 'entries';
+    font-size: 0.9rem;
+    color: var(--muted-text);
+    margin-left: 8px;
+    font-weight: 400;
+}
+/* Custom Colors for Report Cards */
+.card-primary { border-left-color: #ffd700; }
+.card-secondary { border-left-color: #c0c0c0; }
+.card-info-color { border-left-color: #00bfff; }
+.card-success-color { border-left-color: #32cd32; }
+.card-danger-color { border-left-color: #ff4444; }
+.card-muted-color { border-left-color: #888; }
+
+.text-primary-color { color: #ffd700 !important; }
+.text-secondary-color { color: #c0c0c0 !important; }
+.text-info-color { color: #00bfff !important; }
+.text-success-color { color: #32cd32 !important; }
+.text-danger-color { color: #ff4444 !important; }
+.text-muted-color { color: #888 !important; }
+
+@media (max-width: 768px) {
+    .reports-container {
+        padding: 20px;
+        margin: 10px;
+    }
+    .reports-container h1 {
+        font-size: 1.25rem;
+        text-align: center;
+    }
+    .report-card-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .report-filter-form {
+        padding: 20px;
+    }
+    .report-filter-form .row {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .report-filter-form .col-md-3,
+    .report-filter-form .col-md-2 {
+        width: 100%;
+    }
+    .form-check {
+        margin: 15px 0;
+        height: auto;
+    }
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        margin: 5px 0 !important;
+    }
+    .card-text-number {
+        font-size: 2rem;
+    }
+}
+}
+
+/* Toast styling to match system palette */
+.custom-toast {
+    border-radius: 8px;
+    min-width: 320px;
+    max-width: 420px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    overflow: hidden;
+}
+.custom-toast .toast-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+}
+.custom-toast .toast-body {
+    padding: 12px;
+    font-size: 0.95rem;
+}
+
+/* Button tweaks to match palette */
+.btn-primary {
+    background-color: var(--primary-highlight) !important;
+    color: #000 !important;
+    border: none !important;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.2s;
+    height: 40px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+.btn-primary:hover {
+    filter: brightness(0.95);
+    transform: translateY(-1px);
+}
+.btn-secondary {
+    background-color: #444 !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.2s;
+    height: 40px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    margin-left: 8px;
+}
+.btn-secondary:hover {
+    filter: brightness(0.95);
+    transform: translateY(-1px);
+}
+
+/* Filter form layout improvements */
+.report-filter-form .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 0;
+}
+
+.report-filter-form .col-md-2,
+.report-filter-form .col-md-3,
+.report-filter-form .col-md-5 {
+    padding: 0;
+    min-height: 85px;
+    display: flex;
+    flex-direction: column;
+}
+
+.report-filter-form .form-check {
+    margin: 0;
+    padding: 0;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.report-filter-form .d-flex {
+    gap: 10px;
+}
+
+.form-check-input {
+    margin-top: 0;
+    margin-right: 6px;
+}
+
+/* Improve section headers */
+.left-align-title {
+    margin: 40px 0 25px;
+    font-size: 1.4rem !important;
+    position: relative;
+}
+
+/* Slight spacing for controls */
+.report-filter-form .form-select,
+.report-filter-form .form-control,
+.report-filter-form .form-check-label {
+    padding: 10px 12px;
+}
+
+/* Improve card readability on small screens */
+@media (max-width: 420px) {
+    .custom-toast { min-width: 260px; max-width: 320px; }
+    .title { font-size: 24px; }
+}
+
+
+/* ----- Additional responsive rules for many screen sizes ----- */
+/* Ensure form fields and report cards adapt fluidly across breakpoints */
+
+/* Large desktops (1200px+) - give slightly larger paddings */
+@media (min-width: 1200px) {
+    .reports-container { padding: 48px; }
+    .report-card { padding: 28px; }
+    .card-text-number { font-size: 3rem; }
+}
+
+/* Laptops / small desktops (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .reports-container { padding: 36px; }
+    .report-filter-form { padding: 26px; }
+    .report-card-grid { gap: 20px; }
+    .report-card { padding: 22px; }
+}
+
+/* Tablets (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .report-filter-form .row { flex-direction: row; flex-wrap: wrap; }
+    .report-filter-form .col-md-3,
+    .report-filter-form .col-md-2,
+    .report-filter-form .col-md-5 { width: 48%; min-height: auto; }
+    .report-filter-form .col-md-5 { width: 100%; }
+    .report-filter-form .d-flex { justify-content: flex-start; }
+    .report-card-grid { grid-template-columns: repeat(2, 1fr); }
+    .report-card { padding: 20px; }
+}
+
+/* Large phones & small tablets (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .report-filter-form .row { flex-direction: column; }
+    .report-filter-form .col-md-3,
+    .report-filter-form .col-md-2,
+    .report-filter-form .col-md-5 { width: 100%; min-height: auto; }
+    .report-filter-form .form-select,
+    .report-filter-form .form-control { width: 100%; }
+    .report-filter-form .d-flex { flex-direction: column; gap: 8px; }
+    .btn-primary, .btn-secondary { width: 100%; }
+    .report-card-grid { grid-template-columns: 1fr; }
+}
+
+/* Small phones (<576px) - stack everything, increase tappable sizes */
+@media (max-width: 575px) {
+    .reports-container { padding: 16px; margin: 10px; }
+    .report-filter-form { padding: 14px; }
+    .report-filter-form .col-md-3,
+    .report-filter-form .col-md-2,
+    .report-filter-form .col-md-5 { width: 100%; min-height: auto; }
+    .form-select, .form-control { padding: 12px; font-size: 1rem; }
+    .btn-primary, .btn-secondary { height: 48px; font-size: 1rem; }
+    .card-text-number { font-size: 1.6rem; }
+    .report-card { padding: 16px; }
+}
+
+/* Generic adjustments: ensure form controls always fill available width */
+.report-filter-form .form-select,
+.report-filter-form .form-control,
+.report-filter-form .btn { width: 100%; box-sizing: border-box; }

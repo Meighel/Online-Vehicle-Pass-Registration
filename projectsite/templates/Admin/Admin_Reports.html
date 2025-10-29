@@ -7,19 +7,19 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
-    <link rel="stylesheet" href="{% static 'css/security-dashboard-style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reports.css' %}">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Ensure main content shifts to the right of sidebar */
+    /* Ensure main content shifts to the right of sidebar */
     .dashboard-wrapper {
         display: flex;
     }
     .main-content {
         flex-grow: 1;
         padding: 20px;
-        margin-left: auto;
+        margin-left: 120px;
     }
     /* Ensure cards and table have proper spacing */
     .dashboard-card {
@@ -39,176 +39,257 @@
 
 <div class="main-content flex-grow-1 ms-uto">
     <div class="container-fluid py-1">
-            <!-- Title & Top Bar -->
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-                <h2 class="title mb-3 mb-md-0">Reports</h2>
-                <div class="d-flex align-items-center gap-3">
-                    <!-- Notification Bell -->
-                    <a href="Announcements.html" class="text-decoration-none text-light position-relative">
-                        <img src="{% static 'images/notification.png' %}" alt="Notifications" width="35" height="35">
-                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-circle p-1"></span>
-                    </a>
-                </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="title mb-3 mb-md-0">Reports & Analytics</h2>
+            <div class="d-flex align-items-center gap-3">
+                <!-- Notification Bell -->
+                <a href="Announcements.html" class="text-decoration-none position-relative">
+                    <img src="{% static 'images/notification.png' %}" alt="Notifications" width="30" height="30">
+                </a>
             </div>
+        </div>
 
         <hr>
         <small><span id="date"></span></small>
         <br>
-        <div class="container py-5 bg-dark">
-            <h1 class="mb-4 text-light">Payment & Transaction Reports</h1>
-
-            <!-- Filter Form -->
-            <form method="get" class="row g-3 mb-4">
-                <div class="col-md-3">
-                    <label for="status" class="form-label">Status</label>
-                    <select name="status" id="status" class="form-select">
-                        <option value="">All</option>
-                        <option value="pending">Pending</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="nearingDeadline" name="nearing_deadline" value="true">
-                        <label class="form-check-label" for="nearingDeadline">Nearing Deadline (3 days)</label>
+        
+        <div class="reports-container">
+            <!-- Filter Form Section -->
+            <form method="get" class="report-filter-form" id="report-filter-form">
+                <div class="row g-3">
+                    <!-- Report Type -->
+                    <div class="col-md-3">
+                        <label for="report_type" class="form-label">Report Type</label>
+                        <select name="report_type" id="report_type" class="form-select">
+                            <optgroup label="Payment Reports">
+                                <option value="payment_college" {% if report_type == 'payment_college' %}selected{% endif %}>Payment by College</option>
+                                <option value="payment_program" {% if report_type == 'payment_program' %}selected{% endif %}>Payment by Program</option>
+                                <option value="payment_department" {% if report_type == 'payment_department' %}selected{% endif %}>Payment by Department</option>
+                                <option value="payment_personnel" {% if report_type == 'payment_personnel' %}selected{% endif %}>Payment by University Personnel</option>
+                                <option value="payment_faculty" {% if report_type == 'payment_faculty' %}selected{% endif %}>Payment by Faculty</option>
+                                <option value="payment_role" {% if report_type == 'payment_role' %}selected{% endif %}>Payment by Role</option>
+                            </optgroup>
+                            <optgroup label="Transaction Reports">
+                                <option value="trans_college" {% if report_type == 'trans_college' %}selected{% endif %}>Transactions by College</option>
+                                <option value="trans_program" {% if report_type == 'trans_program' %}selected{% endif %}>Transactions by Program</option>
+                                <option value="trans_department" {% if report_type == 'trans_department' %}selected{% endif %}>Transactions by Department</option>
+                                <option value="trans_personnel" {% if report_type == 'trans_personnel' %}selected{% endif %}>Transactions by University Personnel</option>
+                                <option value="trans_faculty" {% if report_type == 'trans_faculty' %}selected{% endif %}>Transactions by Faculty</option>
+                                <option value="trans_role" {% if report_type == 'trans_role' %}selected{% endif %}>Transactions by Role</option>
+                            </optgroup>
+                            <optgroup label="Status Reports">
+                                <option value="payment_status" {% if report_type == 'payment_status' %}selected{% endif %}>Payment by Status</option>
+                                <option value="trans_status" {% if report_type == 'trans_status' %}selected{% endif %}>Transactions by Status</option>
+                                <option value="payment_deadline" {% if report_type == 'payment_deadline' %}selected{% endif %}>Payments Nearing Deadline</option>
+                            </optgroup>
+                        </select>
                     </div>
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+
+                    <!-- Year Selection -->
+                    <div class="col-md-2">
+                        <label for="report_year" class="form-label">Year</label>
+                        <select name="year" id="report_year" class="form-select">
+                            {% if report_year %}
+                                <option value="{{ report_year }}" selected>{{ report_year }}</option>
+                            {% endif %}
+                            <!-- JS will populate recent years automatically -->
+                        </select>
+                    </div>
+
+                    <!-- Semester Selection -->
+                    <div class="col-md-2">
+                        <label for="report_semester" class="form-label">Semester</label>
+                        <select name="semester" id="report_semester" class="form-select">
+                            <option value="">All Semesters</option>
+                            <option value="1" {% if report_semester == '1' %}selected{% endif %}>1 (Jan - Jun)</option>
+                            <option value="2" {% if report_semester == '2' %}selected{% endif %}>2 (Jul - Dec)</option>
+                        </select>
+                    </div>
+
+                    <!-- Actions Column -->
+                    <div class="col-md-5">
+                        <div class="d-flex align-items-end h-100">
+                            <!-- Action Buttons -->
+                            <div class="d-flex">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-filter me-1"></i> Apply Filters
+                                </button>
+
+                                <a href="{% url 'download_reports_csv' %}?report_type={{ report_type|default:'status' }}&year={{ report_year }}&semester={{ report_semester }}" 
+                                   class="btn btn-secondary ms-2" id="download-csv-btn">
+                                    <i class="fas fa-download me-1"></i> CSV
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
 
-            <!-- Report Cards Grid -->
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <!-- Payment by College -->
-                {% for item in payments_by_college %}
+            <!-- ============================================== -->
+            <!--             REGISTRATION BREAKDOWN             -->
+            <!-- ============================================== -->
+            <h2 class="left-align-title title mb-4" style="text-align: left; font-size: 1.5rem; border-left: 4px solid var(--primary-highlight); padding-left: 10px;">
+                <i class="fas fa-file-alt me-2 text-primary-color"></i> Registration Counts by Applicant Grouping
+            </h2>
+            
+            <div class="row g-4 report-card-grid">
+                
+                <!-- Grouping 1: College/Program (Student Focus) -->
+                {% for item in registrations_by_college %}
                 <div class="col">
-                    <div class="card border-primary h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">College: {{ item.registration__user__college }}</h5>
-                            <p class="card-text fs-4 text-primary">{{ item.count }} Payments</p>
+                    <div class="report-card card-primary">
+                        <div class="card-body p-0">
+                            <h5 class="card-title">College/Unit: {{ item.user__college|default:"N/A or Other" }}</h5>
+                            <p class="card-text-number text-primary-color">{{ item.count }}</p>
+                            <p class="small text-muted-color m-0">Total Registrations</p>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
 
-                <!-- Payment by Program -->
-                {% for item in payments_by_program %}
+                {% for item in registrations_by_program %}
                 <div class="col">
-                    <div class="card border-success h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Program: {{ item.registration__user__program }}</h5>
-                            <p class="card-text fs-4 text-success">{{ item.count }} Payments</p>
+                    <div class="report-card card-success-color">
+                        <div class="card-body p-0">
+                            <h5 class="card-title">Program/Course: {{ item.user__program|default:"N/A or Other" }}</h5>
+                            <p class="card-text-number text-success-color">{{ item.count }}</p>
+                            <p class="small text-muted-color m-0">Total Registrations</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <!-- Grouping 2: Department/Workplace (Staff Focus) -->
+                {% for item in registrations_by_workplace %}
+                <div class="col">
+                    <div class="report-card card-secondary">
+                        <div class="card-body p-0">
+                            <h5 class="card-title">Department/Office: {{ item.user__workplace|default:"N/A or Other" }}</h5>
+                            <p class="card-text-number text-secondary-color">{{ item.count }}</p>
+                            <p class="small text-muted-color m-0">Total Registrations</p>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
 
-                <!-- Payment by Department -->
-                {% for item in payments_by_department %}
+                <!-- Grouping 3: Institutional Role -->
+                {% for item in registrations_by_school_role %}
                 <div class="col">
-                    <div class="card border-warning h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Department: {{ item.registration__user__department }}</h5>
-                            <p class="card-text fs-4 text-warning">{{ item.count }} Payments</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-
-                <!-- Payment by Personnel -->
-                {% for item in payments_by_school_role %}
-                <div class="col">
-                    <div class="card border-info h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Personnel: {{ item.registration__user__school_role }}</h5>
-                            <p class="card-text fs-4 text-info">{{ item.count }} Payments</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-
-                <!-- Payment by Role -->
-                {% for item in payments_by_role %}
-                <div class="col">
-                    <div class="card border-secondary h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">User Role: {{ item.registration__user__role }}</h5>
-                            <p class="card-text fs-4 text-secondary">{{ item.count }} Payments</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-
-                <!-- Transactions by College -->
-                {% for item in transactions_by_college %}
-                <div class="col">
-                    <div class="card border-primary h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">College: {{ item.user__college }}</h5>
-                            <p class="card-text fs-4 text-primary">{{ item.count }} Transactions</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-
-                <!-- Transactions by Program -->
-                {% for item in transactions_by_program %}
-                <div class="col">
-                    <div class="card border-success h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Program: {{ item.user__program }}</h5>
-                            <p class="card-text fs-4 text-success">{{ item.count }} Transactions</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-
-                <!-- Transactions by Department -->
-                {% for item in transactions_by_department %}
-                <div class="col">
-                    <div class="card border-warning h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Department: {{ item.user__department }}</h5>
-                            <p class="card-text fs-4 text-warning">{{ item.count }} Transactions</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-
-                <!-- Transactions by Personnel -->
-                {% for item in transactions_by_school_role %}
-                <div class="col">
-                    <div class="card border-info h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Personnel: {{ item.user__school_role }}</h5>
-                            <p class="card-text fs-4 text-info">{{ item.count }} Transactions</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-
-                <!-- Transactions by Role -->
-                {% for item in transactions_by_role %}
-                <div class="col">
-                    <div class="card border-dark h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">User Role: {{ item.user__role }}</h5>
-                            <p class="card-text fs-4 text-dark">{{ item.count }} Transactions</p>
+                    <div class="report-card card-info-color">
+                        <div class="card-body p-0">
+                            <h5 class="card-title">Applicant Role: {{ item.user__school_role|default:"N/A" }}</h5>
+                            <p class="card-text-number text-info-color">{{ item.count }}</p>
+                            <p class="small text-muted-color m-0">Total Registrations</p>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
+
+            <!-- Empty State for Registration Reports -->
+            {% if not registrations_by_college and not registrations_by_program and not registrations_by_workplace %}
+                <div class="alert alert-warning mt-4">
+                    No matching registration records found for the current filter settings.
+                </div>
+            {% endif %}
+
+
+            <!-- ============================================== -->
+            <!--            SYSTEM ROLE BREAKDOWN               -->
+            <!-- ============================================== -->
+            <h2 class="left-align-title title mb-4 mt-5" style="font-size: 1.5rem; border-left: 4px solid var(--danger); padding-left: 10px;">
+                <i class="fas fa-user-shield me-2 text-danger-color"></i> System Role Counts (Total Accounts)
+            </h2>
+
+            <div class="row g-4 report-card-grid">
+                {% for item in registrations_by_system_role %}
+                <div class="col">
+                    <div class="report-card card-muted-color">
+                        <div class="card-body p-0">
+                            <h5 class="card-title">System Role: {{ item.user__role|default:"N/A"|title }}</h5>
+                            <p class="card-text-number text-muted-color">{{ item.count }}</p>
+                            <p class="small text-muted-color m-0">Total Accounts</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Note to Admin -->
+            <div class="alert alert-info mt-5" role="alert">
+                <h4 class="alert-heading text-info-color" style="font-size: 1.2rem;">Report Note</h4>
+                <p style="color: var(--bg);">
+                    By default, this report displays <strong>Completed Applications</strong> (either Approved or Sticker Released), providing a summary of accomplishments for the selected period.<br>
+                    To view pending or all applications, use the <strong>Report Focus Status</strong> filter above.<br>
+                    The <strong>CSV Export</strong> button will download a detailed list of all registration records that match your current filter settings.
+                </p>
+            </div>
         </div>
     </div>
 </div>
+    <!-- include toast partial for Django messages -->
+    {% include 'includes/toast.html' %}
 {% endblock %}
 
 {% block extra_js %}
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" xintegrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" xintegrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <script src="{% static 'javascript/base.js' %}"></script>
-    <script src="{% static 'javascript/Security_Dashboard.js' %}"></script>
+    <script src="{% static 'javascript/Admin_Dashboard.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+    <script>
+        // Enhance UX: auto-populate Year dropdown, disable Semester unless report_type == 'semester', and keep CSV link updated
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('report-filter-form');
+            const downloadButton = document.getElementById('download-csv-btn');
+            const reportTypeEl = document.getElementById('report_type');
+            const yearEl = document.getElementById('report_year');
+            const semesterEl = document.getElementById('report_semester');
+
+            // Populate year select with recent years (current down to -5)
+            const populateYears = (selectEl) => {
+                if (!selectEl) return;
+                const current = new Date().getFullYear();
+                const existing = selectEl.querySelector('option[selected]') ? selectEl.querySelector('option[selected]').value : selectEl.value;
+                // if server provided an initial year as selected option, keep it
+                for (let y = current; y >= current - 5; y--) {
+                    // don't duplicate if option for this year already exists
+                    if (!selectEl.querySelector(`option[value="${y}"]`)) {
+                        const opt = document.createElement('option');
+                        opt.value = String(y);
+                        opt.text = String(y);
+                        selectEl.appendChild(opt);
+                    }
+                }
+                // If there's no selected value, set to current year
+                if (!selectEl.value && existing) selectEl.value = existing;
+                if (!selectEl.value) selectEl.value = String(current);
+            };
+
+            const updateDownloadLink = () => {
+                const reportType = reportTypeEl ? reportTypeEl.value : '';
+                const year = yearEl ? yearEl.value : '';
+                const semester = semesterEl && !semesterEl.disabled ? semesterEl.value : '';
+                const params = new URLSearchParams({
+                    report_type: reportType,
+                    year: year,
+                    semester: semester
+                }).toString();
+
+                if (downloadButton) downloadButton.href = "{% url 'download_reports_csv' %}" + '?' + params;
+            };
+
+            // initial setup
+            populateYears(yearEl);
+            updateDownloadLink();
+
+            // attach listeners
+            if (reportTypeEl) reportTypeEl.addEventListener('change', updateDownloadLink);
+            if (yearEl) yearEl.addEventListener('change', updateDownloadLink);
+            if (semesterEl) semesterEl.addEventListener('change', updateDownloadLink);
+
+        });
+    </script>
 {% endblock %}
