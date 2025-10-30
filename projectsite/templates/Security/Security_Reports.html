@@ -109,14 +109,14 @@
                     <!-- Actions Column -->
                     <div class="col-md-5">
                         <div class="d-flex align-items-end h-100">
-                            <!-- Action Buttons -->
                             <div class="d-flex">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" style="background-color: var(--primary-highlight); color: black; border: none;">
                                     <i class="fas fa-filter me-1"></i> Apply Filters
                                 </button>
 
                                 <a href="{% url 'download_reports_csv' %}?report_type={{ report_type|default:'status' }}&year={{ report_year }}&semester={{ report_semester }}" 
-                                   class="btn btn-secondary ms-2" id="download-csv-btn">
+                                    class="btn btn-secondary ms-2" id="download-csv-btn-security" 
+                                    style="background-color: var(--muted-text); color: black; border: none;">
                                     <i class="fas fa-download me-1"></i> CSV
                                 </a>
                             </div>

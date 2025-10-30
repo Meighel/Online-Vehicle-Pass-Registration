@@ -21,6 +21,8 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_http_methods
 from datetime import timedelta 
+import pytz
+import csv
 
 from django.db.models import Count, Q
 from django.utils.timezone import now
@@ -673,85 +675,76 @@ def admin_manage_passes(request):
 @login_required
 def get_filtered_registrations(request):
     """
-    Helper function to get the base queryset based on URL filters.
+    Helper function to get the base queryset based on URL filters including time and status.
     Used by both report views and the CSV download function.
     """
-    # New: support report_type (status | annual | semester), and backwards compatible with old 'status' param
-    report_type = request.GET.get('report_type') or request.GET.get('status', 'completed')
-    # Treat 'payment_deadline' report_type as requesting the nearing-deadline filter
-    nearing_deadline = (request.GET.get('nearing_deadline') == 'true') or (report_type == 'payment_deadline')
-    year = request.GET.get('year')
-    semester = request.GET.get('semester')
-
-    # Base queryset: Filter registrations that are beyond initial status
+    report_type = request.GET.get('report_type', 'status_summary')
+    status_filter = request.GET.get('status', 'completed')
+    nearing_deadline = request.GET.get('nearing_deadline') == 'true'
+    report_year = request.GET.get('year')
+    report_semester = request.GET.get('semester')
+    
     base_queryset = Registration.objects.exclude(status='no application')
-
-    # If report_type is status-like, apply status filtering logic
-    if report_type in ['pending', 'completed', 'all', 'status']:
-        status_filter = request.GET.get('status', report_type if report_type != 'status' else 'completed')
+    
+    # --- 1. Apply Status/Deadline Filters (For status_summary reports) ---
+    if report_type == 'status_summary':
         if status_filter == 'pending':
-            # pending-ish states
-            base_queryset = base_queryset.filter(status__in=['application submitted', 'initial approval', 'final approval', 'pending'])
+            base_queryset = base_queryset.filter(
+                status__in=['application submitted', 'initial approval', 'final approval']
+            )
         elif status_filter == 'completed':
-            base_queryset = base_queryset.filter(status__in=['approved', 'sticker released', 'final approval'])
-        elif status_filter == 'all':
-            pass
+            base_queryset = base_queryset.filter(
+                status__in=['approved', 'sticker released']
+            )
+            
+        if nearing_deadline and status_filter == 'pending':
+            five_days_ago = now() - timedelta(days=5)
+            three_days_ago = now() - timedelta(days=3)
+            
+            base_queryset = base_queryset.filter(
+                status='initial approval',
+                created_at__lte=five_days_ago, 
+                created_at__gt=three_days_ago
+            )
 
-    # Apply year filter if provided (works for annual/payment/transaction reports)
-    if year:
+    # --- 2. Apply Date Filters (For annual/semester reports) ---
+    if report_year:
         try:
-            y = int(year)
-            base_queryset = base_queryset.filter(created_at__year=y)
+            year = int(report_year)
+            start_date = timezone.datetime(year, 1, 1).replace(tzinfo=pytz.utc)
+            end_date = timezone.datetime(year + 1, 1, 1).replace(tzinfo=pytz.utc)
+
+            if report_type == 'semester' and report_semester:
+                semester = int(report_semester)
+                if semester == 1:
+                    start_date = timezone.datetime(year, 1, 1).replace(tzinfo=pytz.utc)
+                    end_date = timezone.datetime(year, 7, 1).replace(tzinfo=pytz.utc)
+                elif semester == 2:
+                    start_date = timezone.datetime(year, 7, 1).replace(tzinfo=pytz.utc)
+                    end_date = timezone.datetime(year + 1, 1, 1).replace(tzinfo=pytz.utc)
+            
+            base_queryset = base_queryset.filter(date_of_filing__gte=start_date, date_of_filing__lt=end_date)
+            
         except ValueError:
             pass
 
-    # Apply semester filter if provided (1 => Jan-Jun, 2 => Jul-Dec)
-    if semester:
-        try:
-            sem = str(semester).strip()
-            if sem == '1' or sem.lower() in ['first', '1st']:
-                base_queryset = base_queryset.filter(created_at__month__gte=1, created_at__month__lte=6)
-            elif sem == '2' or sem.lower() in ['second', '2nd']:
-                base_queryset = base_queryset.filter(created_at__month__gte=7, created_at__month__lte=12)
-        except Exception:
-            pass
-
-    # Apply nearing deadline filter (if requested)
-    if nearing_deadline:
-        five_days_ago = now() - timedelta(days=5)
-        three_days_ago = now() - timedelta(days=3)
-
-        base_queryset = base_queryset.filter(
-            status='initial approval',
-            created_at__lte=five_days_ago,
-            created_at__gt=three_days_ago
-        )
-
+    # Ensure we only consider successfully completed transactions for date-based reports
+    if report_type in ['annual', 'semester']:
+        base_queryset = base_queryset.filter(status__in=['approved', 'sticker released'])
+        
     # Pre-fetch related data for efficient reporting
     base_queryset = base_queryset.select_related('user', 'vehicle')
-
+    
     return base_queryset
 
 
-def build_reports_context(request):
-    """Builds the common reports context used by both admin and security views.
-    This centralizes aggregation logic so a single role-detecting view can render
-    the appropriate template while keeping behavior consistent.
+@login_required
+def get_report_aggregates(request):
     """
-    # expose new report params to template so selected values persist
-    report_type = request.GET.get('report_type') or request.GET.get('status', 'completed')
-    year = request.GET.get('year')
-    semester = request.GET.get('semester')
-
-    # Validate required params for certain report types
-    if report_type in ['annual', 'semester'] and not year:
-        # server-side validation message and empty queryset to avoid accidental full dataset
-        messages.error(request, 'Please select a Year when using Annual or Semester reports.')
-        base_queryset = Registration.objects.none()
-    else:
-        base_queryset = get_filtered_registrations(request)
-
-    # --- Aggregation Queries ---
+    Helper to calculate the aggregation counts for the on-screen report cards.
+    """
+    base_queryset = get_filtered_registrations(request)
+    
     reports = {
         'registrations_by_college': base_queryset.exclude(user__college__isnull=True).exclude(user__college='').values('user__college').annotate(count=Count('registration_number')).order_by('-count'),
         'registrations_by_program': base_queryset.exclude(user__program__isnull=True).exclude(user__program='').values('user__program').annotate(count=Count('registration_number')).order_by('-count'),
@@ -759,18 +752,26 @@ def build_reports_context(request):
         'registrations_by_school_role': base_queryset.exclude(user__school_role__isnull=True).exclude(user__school_role='').values('user__school_role').annotate(count=Count('registration_number')).order_by('-count'),
         'registrations_by_system_role': base_queryset.values('user__role').annotate(count=Count('registration_number')).order_by('-count'),
     }
+    return reports
+
+
+@login_required
+def admin_report(request):
+    """
+    Generates and displays various reports based on Registration data.
+    """
+    reports = get_report_aggregates(request)
 
     context = {
-        'report_type': report_type,
-        'report_year': year or '',
-        'report_semester': semester or '',
+        'report_type': request.GET.get('report_type', 'status_summary'),
         'status_filter': request.GET.get('status', 'completed'),
-        'nearing_deadline': (request.GET.get('nearing_deadline') == 'true') or (report_type == 'payment_deadline'),
+        'nearing_deadline': request.GET.get('nearing_deadline') == 'true',
+        'report_year': request.GET.get('year'),
+        'report_semester': request.GET.get('semester'),
 
-        # Pass the aggregated results to the template
         'registrations_by_college': reports['registrations_by_college'],
         'registrations_by_program': reports['registrations_by_program'],
-        'registrations_by_workplace': reports['registrations_by_workplace'],
+        'registrations_by_workplace': reports['registrations_by_workplace'], 
         'registrations_by_school_role': reports['registrations_by_school_role'],
         'registrations_by_system_role': reports['registrations_by_system_role'],
     }
@@ -778,122 +779,131 @@ def build_reports_context(request):
     return context
 
 @login_required
-def reports_view(request):
-    """Role-detecting reports view.
-    Chooses the correct template for admin or security users while sharing
-    the same aggregation/context-building logic.
-    """
-    # Resolve user profile using session (preferred) then Django auth fallback
-    user_id = request.session.get('user_id')
-    user_profile = None
-    if user_id:
-        user_profile = UserProfile.objects.filter(id=user_id).first()
-
-    if not user_profile and getattr(request, 'user', None) and request.user.is_authenticated:
-        user_profile = UserProfile.objects.filter(corporate_email=getattr(request.user, 'email', '')).first()
-
-    if not user_profile or user_profile.role not in ('admin', 'security'):
-        # unauthorized - redirect to login to preserve previous behavior
-        return HttpResponseRedirect(reverse('login'))
-
-    context = build_reports_context(request)
-    context['profile'] = user_profile
-
-    # Pick template based on role
-    if user_profile.role == 'admin':
-        template_name = 'Admin/Admin_Reports.html'
-    else:
-        template_name = 'Security/Security_Reports.html'
-
-    return render(request, template_name, context)
-
-
-@login_required
-def admin_report(request):
-    """
-    Generates and displays various reports based on Registration data.
-    Defaults to completed applications for accomplishment reporting.
-    """
-    # Delegate to the shared role-detecting reports view
-    return reports_view(request)
-
-@login_required
 def download_reports_csv(request):
     """
-    Generates a CSV file for all filtered registration records.
-    Accessible to both Admin and Security roles.
+    Generates a CSV file for filtered registration records with columns specific
+    to the chosen report type. Payment reports have a concise structure.
     """
-    # Support session-based auth used in this app: prefer session user_id when available
-    user_id = request.session.get('user_id')
-    user_profile = None
-    if user_id:
-        user_profile = UserProfile.objects.filter(id=user_id).first()
+    # Authorization Check (Keep the corrected version from previous step)
+    user_id = request.session.get("user_id")
+    if not user_id:
+        return HttpResponseRedirect(reverse('login'))
+    try:
+        user_profile = UserProfile.objects.get(id=user_id)
+        if user_profile.role not in ['admin', 'security']:
+            messages.error(request, "Permission denied.")
+            return redirect('default_dashboard' if user_profile.role == 'user' else 'login')
+    except UserProfile.DoesNotExist:
+        request.session.flush()
+        return HttpResponseRedirect(reverse('login'))
 
-    # If no session user, fall back to Django auth user if present
-    if not user_profile:
-        if getattr(request, 'user', None) and request.user.is_authenticated:
-            # attempt to resolve to our UserProfile model
-            user_profile = UserProfile.objects.filter(corporate_email=getattr(request.user, 'email', '')).first()
-
-    if not user_profile or user_profile.role not in ('admin', 'security'):
-        return HttpResponseRedirect(reverse('login'))  # Redirect unauthorized users
-
+    # Get filtered data using the existing helper function
     registrations = get_filtered_registrations(request)
+    report_type = request.GET.get('report_type', 'status_summary')
 
     response = HttpResponse(content_type='text/csv')
-    
-    # Determine filename based on report params
-    report_type = request.GET.get('report_type') or request.GET.get('status', 'completed')
-    year = request.GET.get('year', '')
-    semester = request.GET.get('semester', '')
-    suffix = f"_{year}" if year else ""
-    if semester:
-        suffix += f"_sem{semester}"
-
-    filename = f"vehicle_registrations_{report_type}{suffix}_export_{timezone.now().strftime('%Y%m%d')}.csv"
+    filename = f"vehicle_registrations_{report_type}_export_{timezone.now().strftime('%Y%m%d_%H%M%S')}.csv"
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
     writer = csv.writer(response)
 
-    # 1. Write Header Row (include report year/semester)
-    writer.writerow([
-        'Registration ID', 'Status', 'Date Filed',
-        'Applicant Last Name', 'Applicant First Name', 'Applicant Email',
-        'Institutional Role', 'College/Workplace',
-        'Vehicle Type', 'Plate Number', 'Make & Model',
-        'Initial Approved By', 'Final Approved By', 'Remarks',
-        'Report Year', 'Semester'
-    ])
+    # --- Define Report Structure based on report_type ---
 
-    # 2. Write Data Rows
-    for reg in registrations:
-        # compute report year/semester based on created_at
-        try:
-            created = reg.created_at.astimezone(pytz.timezone(settings.TIME_ZONE))
-            reg_year = created.year
-            reg_semester = '1' if created.month <= 6 else '2'
-        except Exception:
-            reg_year = ''
-            reg_semester = ''
-
-        writer.writerow([
+    # Helper for common fields (Used by Transaction & Default reports)
+    def get_common_trans_fields(reg):
+        return [
             reg.registration_number,
             reg.status.title(),
-            getattr(reg, 'date_of_filing', reg.created_at).astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%Y-%m-%d %H:%M") if getattr(reg, 'date_of_filing', None) or getattr(reg, 'created_at', None) else '',
-            reg.user.lastname if getattr(reg, 'user', None) else '',
-            reg.user.firstname if getattr(reg, 'user', None) else '',
-            reg.user.corporate_email if getattr(reg, 'user', None) else '',
-            reg.user.school_role.title() if getattr(reg, 'user', None) and reg.user.school_role else 'N/A',
-            reg.user.college if getattr(reg, 'user', None) and reg.user.college else (reg.user.workplace if getattr(reg, 'user', None) else ''),
-            reg.vehicle.type.title() if getattr(reg, 'vehicle', None) and reg.vehicle.type else '',
-            reg.vehicle.plate_number if getattr(reg, 'vehicle', None) else '',
-            reg.vehicle.make_model if getattr(reg, 'vehicle', None) else '',
-            f"{reg.initial_approved_by.user.firstname} {reg.initial_approved_by.user.lastname}" if getattr(reg, 'initial_approved_by', None) else '',
-            f"{reg.final_approved_by.user.firstname} {reg.final_approved_by.user.lastname}" if getattr(reg, 'final_approved_by', None) else '',
-            reg.remarks if reg.remarks else '',
-            reg_year,
-            reg_semester
-        ])
+            reg.date_of_filing.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%Y-%m-%d %H:%M"),
+            f"{reg.user.firstname} {reg.user.lastname}",
+        ]
+
+    # --- Payment Reports (Concise Columns) ---
+    if report_type.startswith('payment_') and report_type != 'payment_deadline':
+        # Define base payment columns
+        header = ['Registration ID', 'Applicant Name', 'Date Filed', 'Status']
+        # Add the specific grouping column header based on report_type
+        if 'college' in report_type: header.append('College')
+        elif 'program' in report_type: header.append('Program')
+        elif 'department' in report_type: header.append('Department/Workplace')
+        elif 'personnel' in report_type or 'faculty' in report_type: header.append('Institutional Role')
+        elif 'role' in report_type: header.append('System Role')
+
+        # Define the data mapping function for payment reports
+        def payment_mapper(reg):
+            base_data = [
+                reg.registration_number,
+                f"{reg.user.firstname} {reg.user.lastname}",
+                reg.date_of_filing.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%Y-%m-%d %H:%M"),
+                reg.status.title(),
+            ]
+            # Add the specific grouping data
+            if 'college' in report_type: base_data.append(reg.user.college or 'N/A')
+            elif 'program' in report_type: base_data.append(reg.user.program or 'N/A')
+            elif 'department' in report_type: base_data.append(reg.user.workplace or 'N/A')
+            elif 'personnel' in report_type or 'faculty' in report_type: base_data.append((reg.user.school_role or 'N/A').title())
+            elif 'role' in report_type: base_data.append(reg.user.role.title())
+            return base_data
+        data_mapper = payment_mapper
+
+    # --- Transaction Reports (Slightly more detail than Payment) ---
+    elif report_type.startswith('trans_'):
+        # Base transaction columns
+        header = ['Registration ID', 'Status', 'Date Filed', 'Applicant Name']
+        # Add grouping and vehicle columns
+        if 'college' in report_type: header.extend(['College', 'Program'])
+        elif 'program' in report_type: header.extend(['College', 'Program'])
+        elif 'department' in report_type: header.extend(['Department/Workplace', 'Institutional Role'])
+        elif 'personnel' in report_type or 'faculty' in report_type: header.extend(['Department/Workplace', 'Institutional Role'])
+        elif 'role' in report_type: header.extend(['System Role', 'Institutional Role'])
+        header.extend(['Vehicle Type', 'Plate Number']) # Common vehicle info for transactions
+
+        # Define the data mapping function for transaction reports
+        def transaction_mapper(reg):
+            base_data = get_common_trans_fields(reg)
+            # Add grouping data
+            if 'college' in report_type: base_data.extend([reg.user.college or 'N/A', reg.user.program or 'N/A'])
+            elif 'program' in report_type: base_data.extend([reg.user.college or 'N/A', reg.user.program or 'N/A'])
+            elif 'department' in report_type: base_data.extend([reg.user.workplace or 'N/A', (reg.user.school_role or 'N/A').title()])
+            elif 'personnel' in report_type or 'faculty' in report_type: base_data.extend([reg.user.workplace or 'N/A', (reg.user.school_role or 'N/A').title()])
+            elif 'role' in report_type: base_data.extend([reg.user.role.title(), (reg.user.school_role or 'N/A').title()])
+            # Add vehicle data
+            base_data.extend([reg.vehicle.type.title(), reg.vehicle.plate_number])
+            return base_data
+        data_mapper = transaction_mapper
+
+    # --- Default/Comprehensive (Status Summary, Annual, Semester, Deadline) ---
+    else:
+        header = [
+            'Registration ID', 'Status', 'Date Filed', 'Applicant Last Name', 'Applicant First Name',
+            'Applicant Email', 'Institutional Role', 'College/Workplace', 'Vehicle Type', 'Plate Number',
+            'Initial Approved By', 'Final Approved By', 'Remarks'
+        ]
+        data_mapper = lambda reg: [
+            reg.registration_number,
+            reg.status.title(),
+            reg.date_of_filing.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%Y-%m-%d %H:%M"),
+            reg.user.lastname,
+            reg.user.firstname,
+            reg.user.corporate_email,
+            (reg.user.school_role or 'N/A').title(),
+            reg.user.college if reg.user.college else reg.user.workplace or 'N/A',
+            reg.vehicle.type.title(),
+            reg.vehicle.plate_number,
+            f"{reg.initial_approved_by.user.firstname} {reg.initial_approved_by.user.lastname}" if reg.initial_approved_by else '',
+            f"{reg.final_approved_by.user.firstname} {reg.final_approved_by.user.lastname}" if reg.final_approved_by else '', # Corrected access
+            reg.remarks if reg.remarks else ''
+        ]
+
+    # --- Write CSV ---
+    writer.writerow(header)
+
+    for reg in registrations:
+        try:
+             writer.writerow(data_mapper(reg))
+        except Exception as e:
+             print(f"Error writing row for registration {reg.registration_number}: {e}")
+             writer.writerow([reg.registration_number, "Error writing row", str(e)] + [''] * (len(header) - 3))
 
     return response
 
@@ -1079,11 +1089,25 @@ def security_release_stickers(request):
 @login_required
 def security_report(request):
     """
-    Generates and displays various reports based on Registration data.
-    Defaults to completed applications for accomplishment reporting.
+    Generates and displays various reports based on Registration data for Security role.
     """
-    # Delegate to the shared role-detecting reports view
-    return reports_view(request)
+    reports = get_report_aggregates(request)
+
+    context = {
+        'report_type': request.GET.get('report_type', 'status_summary'),
+        'status_filter': request.GET.get('status', 'completed'),
+        'nearing_deadline': request.GET.get('nearing_deadline') == 'true',
+        'report_year': request.GET.get('year'),
+        'report_semester': request.GET.get('semester'),
+        
+        'registrations_by_college': reports['registrations_by_college'],
+        'registrations_by_program': reports['registrations_by_program'],
+        'registrations_by_workplace': reports['registrations_by_workplace'], 
+        'registrations_by_school_role': reports['registrations_by_school_role'],
+        'registrations_by_system_role': reports['registrations_by_system_role'],
+    }
+
+    return render(request, "Security/Security_Reports.html", context)
 
 @login_required
 def settings_view(request):
