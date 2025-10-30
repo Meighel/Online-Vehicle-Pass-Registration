@@ -97,43 +97,68 @@
                     {% endif %}
                 </div>
             </div>
-            
-            <!-- Application History -->
-            {% if history %}
-            <div class="card mt-4 border-secondary shadow-sm">
-                <div class="card-header bg-dark">
-                    <h5 class="mb-0">Application History</h5>
-                </div>
+    
+            <!-- {% if is_rejected %}
+            <div class="card status-card status-rejected border-danger shadow-sm mt-4">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle text-center">
-                            <thead>
-                                <tr>
-                                    <th>Application No.</th>
-                                    <th>Vehicle Type</th>
-                                    <th>Applied Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for app in history %}
-                                <tr>
-                                    <td>{{ app.registrationNumber }}</td>
-                                    <td>{{ app.vehicle.type }}</td>
-                                    <td>{{ app.created_at|date:"Y-m-d" }}</td>
-                                    <td>
-                                        <span class="badge bg-{{ app.status|slugify }}">
-                                            {{ app.status|title }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <h5 class="card-title d-flex align-items-center mb-3">
+                        <i class="fas fa-times-circle fs-3 me-3 text-danger"></i>
+                        Application Rejected
+                    </h5>
+                    <p class="text-white mb-1"><strong>Reason:</strong></p>
+                    <p class="text-white mb-3">"{{ registration.remarks|default:'No remarks provided. Please contact the GSO.' }}"</p>
+                    <a href="{% url 'user_application' %}" class="btn btn-primary mt-2" style="background-color: var(--primary-highlight); color: #000; border:0;">
+                        Start New Application
+                    </a>
+                </div>
+            </div>
+            {% endif %} -->
+
+            <div class="container-fluid py-4">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card data-card">
+                            <div class="card-header">
+                                <h4 class="card-title"><i class="fas fa-history me-2"></i>Application History</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Reg. ID</th>
+                                                <th>Vehicle</th>
+                                                <th>Date Filed</th>
+                                                <th>Status</th>
+                                                <th>Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in history %}
+                                            <tr>
+                                                <td>{{ item.registration_number }}</td>
+                                                <td>{{ item.vehicle.make_model|default:'N/A' }} ({{ item.vehicle.plate_number|default:'N/A' }})</td>
+                                                <td>{{ item.date_of_filing|date:"M. d, Y" }}</td>
+                                                <td>
+                                                    <span class="status-badge status-{{ item.status|slugify }}">
+                                                        {{ item.status|title }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ item.remarks|default:'-' }}</td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="5" class="text-center">No application history found.</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            {% endif %}
         </div>
     </div>
 </div>

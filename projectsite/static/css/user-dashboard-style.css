@@ -84,33 +84,168 @@ body {
 /* Profile Card */
 .profile-card {
     display: flex;
+    flex-direction: column;
+    background: linear-gradient(90deg, #232526 0%, #414345 100%);
+    border: 1px solid #333;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.profile-card-inner {
+    display: flex;
     flex-direction: row;
     align-items: center;
-    background-color: #1e1e1e;
-    border: 1px solid #333;
+    width: 100%;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    background: #111;
+    border: 2px solid #ffe600;
+    margin-right: 24px;
+    flex-shrink: 0;
+}
+
+.profile-initials {
+    color: #FFD600;
+    font-weight: bold;
+    font-size: 2.5em;
 }
 
 .profile-info {
     color: #e0e0e0;
+    flex: 1;
 }
 
 .profile-info p {
     margin-bottom: 8px;
+    font-size: 1em;
 }
 
-/* Status Card */
-.status-card {
-    border-left: 4px solid #dc3545 !important;
+/* Status Timeline Styles */
+.status-timeline {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 0;
+    position: relative;
+    background-color: transparent !important;
 }
 
-.status-box {
-    background-color: #dc3545;
-    border-radius: 6px;
+
+.timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+    z-index: 2;
 }
 
-.status-card text {
+.timeline-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #333;
+    border: 3px solid #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 24px;
+    transition: all 0.3s ease;
+}
+
+.timeline-step.ongoing .timeline-icon {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.timeline-step.completed .timeline-icon {
+    background-color: #198754;
+    border-color: #198754;
     color: white;
 }
+
+.timeline-content {
+    text-align: center;
+    margin-top: 15px;
+    max-width: 150px;
+}
+
+.timeline-content h6 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.timeline-step.active .timeline-content h6 {
+    color: #0d6efd;
+    font-weight: 700;
+}
+
+.timeline-step.completed .timeline-content h6 {
+    color: #198754;
+}
+
+.timeline-connector {
+    position: absolute;
+    top: 45px; /* vertically aligns with the center of the icons */
+    left: 0;
+    right: 0;
+    height: 6px;
+    background-color: #555; /* default bridge color */
+    z-index: 1;
+    margin-left: 70px; /* space from the left step */
+    margin-right: 70px; /* space from the right step */
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+.timeline-connector.completed {
+    background-color: #198754; /* green for completed bridge */
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-application-submitted {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.status-initial-approval {
+    background-color: transparent !important;
+    color: #000;
+}
+
+.status-final-approval {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.status-approved {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-sticker-released {
+    background-color: #6f42c1;
+    color: white;
+}
+
+
+
 
 /* Quick Access Card */
 .quick-access-card {
@@ -318,7 +453,56 @@ body {
     .title {
         font-size: 26px !important;
     }
+    .profile-card-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    .profile-avatar {
+        margin-right: 0;
+        margin-bottom: 16px;
+    }
+    .profile-info {
+        margin-left: 0 !important;
+        width: 100%;
+    }
+    .status-timeline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .timeline-step {
+        flex-direction: row;
+        margin-bottom: 30px;
+    }
+    
+    .timeline-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+    
+    .timeline-content {
+        text-align: left;
+        margin-top: 0;
+        margin-left: 20px;
+        max-width: none;
+    }
+    
+    .status-timeline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .timeline-step {
+        flex-direction: row;
+        margin-bottom: 30px;
+    }
+    .timeline-connector {
+        display: none; /* Hide bridges on mobile for vertical layout */
+    }
 }
+
 
 /* Small screens (576px to 767px) - Mobile */
 @media (max-width: 767px) {
@@ -388,6 +572,17 @@ body {
     .title {
         font-size: 20px !important;
         text-align: center;
+    }
+        .profile-card {
+        padding: 12px;
+    }
+    .profile-avatar {
+        width: 70px;
+        height: 70px;
+        font-size: 1.5em;
+    }
+    .profile-initials {
+        font-size: 1.5em;
     }
     
     .payment-container {

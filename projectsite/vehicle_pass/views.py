@@ -260,8 +260,21 @@ def default_dashboard(request):
     # Get the latest registration
     try:
         registration = Registration.objects.filter(user=profile).latest('created_at')
+        # DEBUG: Print the actual status value
+        print(f"DEBUG: Registration status = '{registration.status}'")
+        print(f"DEBUG: Registration status type = {type(registration.status)}")
     except Registration.DoesNotExist:
         registration = None
+
+    # Get inspection data (if exists)
+    inspection = None
+    # Note: You don't have an InspectionReport model in your current code
+    # If you have it, uncomment and adjust:
+    # if registration:
+    #     try:
+    #         inspection = InspectionReport.objects.filter(registration=registration).first()
+    #     except InspectionReport.DoesNotExist:
+    #         inspection = None
 
     # Get application history
     history = Registration.objects.filter(user=profile).order_by('-created_at')
@@ -269,6 +282,7 @@ def default_dashboard(request):
     context = {
         'profile': profile,
         'registration': registration,
+        'inspection': inspection,
         'history': history,
     }
 
@@ -276,7 +290,20 @@ def default_dashboard(request):
 
 @login_required
 def user_application(request):
-    return render(request, "User/User_Application.html")
+    user_id = request.session.get("user_id")
+
+    try:
+        profile = UserProfile.objects.get(id=user_id)
+    except UserProfile.DoesNotExist:
+        profile = None
+
+    # Get application history
+    history = Registration.objects.filter(user=profile).order_by('-created_at')
+
+    context = {
+        'history': history,
+    }
+    return render(request, "User/User_Application.html", context)
 
 @login_required
 def vehicle_registration_step_1(request):
@@ -515,7 +542,7 @@ def vehicle_registration_step_3(request):
                     printed_name=printed_name,
                     e_signature=e_signature,
                     signature_date=timezone.now(),
-                    status='pending'
+                    status='application submitted'
                 )
 
                 # Clear session data
@@ -549,12 +576,62 @@ def vehicle_registration_step_3(request):
     return render(request, 'Forms/forms_3.html', context)
 
 
+@login_required
 def registration_complete(request):
-    return render(request, 'User/User_Pass_Status.html')
+    user_id = request.session.get("user_id")
+    try:
+        profile = UserProfile.objects.get(id=user_id)
+    except UserProfile.DoesNotExist:
+        profile = None
+
+    try:
+        registration = Registration.objects.filter(user=profile).latest('created_at')
+    except Registration.DoesNotExist:
+        registration = None
+
+    inspection = None
+    # If you have InspectionReport, fetch it here
+    # if registration:
+    #     try:
+    #         inspection = InspectionReport.objects.filter(registration=registration).first()
+    #     except InspectionReport.DoesNotExist:
+    #         inspection = None
+
+    context = {
+        'profile': profile,
+        'registration': registration,
+        'inspection': inspection,
+    }
+    return render(request, "User/User_Pass_Status.html", context)
+
 
 @login_required
 def user_pass_status(request):
-    return render(request, "User/User_Pass_Status.html")
+    user_id = request.session.get("user_id")
+    try:
+        profile = UserProfile.objects.get(id=user_id)
+    except UserProfile.DoesNotExist:
+        profile = None
+
+    try:
+        registration = Registration.objects.filter(user=profile).latest('created_at')
+    except Registration.DoesNotExist:
+        registration = None
+
+    inspection = None
+    # If you have InspectionReport, fetch it here
+    # if registration:
+    #     try:
+    #         inspection = InspectionReport.objects.filter(registration=registration).first()
+    #     except InspectionReport.DoesNotExist:
+    #         inspection = None
+
+    context = {
+        'profile': profile,
+        'registration': registration,
+        'inspection': inspection,
+    }
+    return render(request, "User/User_Pass_Status.html", context)
 
 @login_required
 def user_settings(request):

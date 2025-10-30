@@ -368,17 +368,11 @@ body {
 
 /* MD Screens - Tablets (768px to 991px) */
 @media (min-width: 768px) and (max-width: 991px) {
-    .main-content {
-        margin-left: auto !important;
-        width: calc(100% - 250px);
-        padding: 20px;
-    }
-    
-    .content {
-        width: calc(100% - 250px);
-        padding: 20px;
-    }
-    
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 20px;
+  }
   .title {
     font-size: 32px;
     text-align: center;
@@ -390,14 +384,25 @@ body {
   .vehicle-info-row {
     grid-template-columns: 1fr 1fr;
   }
+  .profile-container,
+  .password-section,
+  .vehicle-section {
+    width: 100% !important;
+    margin: 0 auto 20px auto !important;
+    display: block !important;
+  }
 }
 
 /* SM Screens - Large Phones (<768px) */
 @media (max-width: 767px) {
-  .main-content,
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 12px 8px;
+  }
   .dashboard-wrapper {
-    position: relative;
-    z-index: 1;
+    flex-direction: column !important;
+    padding: 0 !important;
   }
   .title {
     font-size: 28px;
@@ -434,7 +439,7 @@ body {
 /* XS Screens - Small Phones (<576px) */
 @media (max-width: 575px) {
   .main-content {
-    padding: 12px 8px;
+    padding: 8px 4px;
   }
   .title {
     font-size: 22px;
@@ -467,4 +472,3 @@ body {
     padding: 2px 0;
   }
 }
-

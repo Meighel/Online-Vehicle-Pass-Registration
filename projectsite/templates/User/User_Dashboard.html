@@ -107,10 +107,10 @@
             <!-- Profile Card -->
             <div class="card profile-card p-4 mt-4 shadow-sm position-relative">
 
-                <!-- Edit Button in the upper right -->
+                <!-- Edit Button in the upper right
                 <a href="#" class="btn btn-sm btn-primary position-absolute top-0 end-0 m-3">
                     Edit Profile
-                </a>
+                </a> -->
 
                 <!-- Profile Content -->
                 <div class="d-flex flex-row align-items-center">
@@ -148,40 +148,122 @@
                     </div>
                 </div>
             </div>
-
-
-
-            <!-- Status & Quick Access -->
+            
+            <!-- Application Tracker -->
             <div class="row mt-4 g-4">
-                <div class="col-md-6">
-                    <div class="card status-card h-100 border-danger shadow-sm">
+                <div class="col-12">
+                    <div class="card status-card border-primary shadow-sm">
                         <div class="card-body">
-                            <h5 class="card-title d-flex align-items-center">
-                                <span class="text-danger fs-3">🚗</span>
-                                <span class="ms-2">Application Status</span>
+                            <h5 class="card-title d-flex align-items-center mb-4">
+                                <span class="text-primary fs-3">🚗</span>
+                                <span class="ms-2">Application Status Tracker</span>
                             </h5>
-                            <div class="status-box p-3 rounded mt-3">
-                                <p class="fs-4 fw-bold">
-                                    {{ registration.status|default:"No Application Found" }}
-                                </p>
+                            
+                            <!-- Status Timeline -->
+                            <div class="status-timeline">
+                                <!-- Step 1: Application Submitted - Always completed once submitted -->
+                                <div class="timeline-step completed">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Application Submitted</h6>
+                                        <small class="text-muted" style="color: rgb(93, 93, 93)  !important;">{{ registration.created_at|date:"M d, Y" }}</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-connector {% if registration.status == 'initial approval' or registration.status == 'final approval' or registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}"></div>
+                                
+                                <!-- Step 2: Initial Approval - Active while pending/application submitted -->
+                                <div class="timeline-step {% if registration.status == 'pending' or registration.status == 'application submitted' %}active{% elif registration.status == 'initial approval' or registration.status == 'final approval' or registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Initial Approval</h6>
+                                        <small class="text-muted" style="color: rgb(93, 93, 93) !important;">Security Review</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-connector {% if registration.status == 'final approval' or registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}"></div>
+                                
+                                <!-- Step 3: Final Approval - Active when initial approval done -->
+                                <div class="timeline-step {% if registration.status == 'initial approval' %}active{% elif registration.status == 'final approval' or registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-check-double"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Final Approval</h6>
+                                        <small style="color: rgb(111, 112, 112) !important;">Security Verification</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-connector {% if registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}"></div>
+                                
+                                <!-- Step 4: Approved - Active when final approval done, ready for inspection -->
+                                <div class="timeline-step {% if registration.status == 'final approval' %}active{% elif registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Ready for Inspection</h6>
+                                        <small style="color: rgb(93, 93, 93) !important;">Physical Inspection Required</small>
+                                        {% if inspection %}
+                                            <div class="mt-2 small text-info">
+                                                <i class="fas fa-calendar-alt me-1"></i>
+                                                Inspection: {{ inspection.physical_final_inspection_date|date:"M d, Y" }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-connector {% if registration.status == 'sticker released' %}completed{% endif %}"></div>
+                                
+                                <!-- Step 5: Sticker Released - Final completed state -->
+                                <div class="timeline-step {% if registration.status == 'approved' %}active{% elif registration.status == 'sticker released' %}completed{% endif %}">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-id-card"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Sticker Released</h6>
+                                        <small style="color: rgb(93, 93, 93) !important;">Process Complete</small>
+                                    </div>
+                                </div>
                             </div>
-                            <p class="text small mt-3">
-                                Date Applied: {{ registration.created_at|date:"F j, Y" }} 
-                            </p>
-                            {% if inspection %}
-                                <p class="text small mt-3">
-                                    Physical Inspection Date: {{ inspection.physical_final_inspection_date|date:"F j, Y" }}
-                                </p>
-                            {% else %}
-                                <p class="text small mt-3 text-muted">
-                                    Physical Inspection Date: N/A
-                                </p>
-                            {% endif %}
+                            
+                            <!-- Current Status Box -->
+                            <div class="alert alert-info mt-4 d-flex align-items-center">
+                                <i class="fas fa-info-circle fs-4 me-3"></i>
+                                <div>
+                                    <strong>Current Status:</strong> 
+                                    <span class="fs-5 ms-2">
+                                        {% if registration.status == 'pending' or registration.status == 'application submitted' %}
+                                            Waiting for Security Review
+                                        {% elif registration.status == 'initial approval' %}
+                                            Under Final Security Verification
+                                        {% elif registration.status == 'final approval' %}
+                                            Ready for Physical Inspection
+                                        {% elif registration.status == 'approved' %}
+                                            Processing Sticker Release
+                                        {% elif registration.status == 'sticker released' %}
+                                            Complete - Sticker Released
+                                        {% else %}
+                                            {{ registration.status|title }}
+                                        {% endif %}
+                                    </span>
+                                    {% if registration.remarks %}
+                                        <div class="mt-2 small">
+                                            <strong>Remarks:</strong> {{ registration.remarks }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-6">
+                
+                <!-- Quick Access Card -->
+                <div class="col-md-12">
                     <div class="card quick-access-card h-100 border-info shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title d-flex align-items-center">
@@ -194,51 +276,52 @@
                 </div>
             </div>
 
-            <!-- Application History -->
-            <div class="card mt-4 border-secondary shadow-sm">
-                <div class="card-header bg-dark">
-                    <h5 class="mb-0">Application History</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle text-center">
-                            <thead>
-                                <tr>
-                                    <th>Application No.</th>
-                                    <th>Vehicle Type</th>
-                                    <th>Approval Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% if history %}
-                                    {% for app in history %}
-                                    <tr>
-                                        <td>{{ app.registrationNumber }}</td>
-                                        <td>{{ app.vehicle.type }}</td>
-                                        <td>
-                                            {% if app.status == 'approved' %}
-                                                {{ app.updated_at|date:"Y-m-d" }}
-                                            {% else %}
-                                                <span class="text-success">Pending</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-{{ app.status|slugify }}" style="color:black">
-                                                {{ app.status|title }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr><td colspan="4" class="text-center py-3">No history found.</td></tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
+            <!-- <div class="container-fluid py-4">
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card data-card">
+                            <div class="card-header">
+                                <h4 class="card-title"><i class="fas fa-history me-2"></i>Application History</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Reg. ID</th>
+                                                <th>Vehicle</th>
+                                                <th>Date Filed</th>
+                                                <th>Status</th>
+                                                <th>Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in history %}
+                                            <tr>
+                                                <td>{{ item.registration_number }}</td>
+                                                <td>{{ item.vehicle.make_model|default:'N/A' }} ({{ item.vehicle.plate_number|default:'N/A' }})</td>
+                                                <td>{{ item.date_of_filing|date:"M. d, Y" }}</td>
+                                                <td>
+                                                    <span class="status-badge status-{{ item.status|slugify }}">
+                                                        {{ item.status|title }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ item.remarks|default:'-' }}</td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="5" class="text-center">No application history found.</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
+            </div> -->
         </div> <!-- End Container -->
     </div> <!-- End Main Content -->
 </div> <!-- End Dashboard Wrapper -->

@@ -4,26 +4,35 @@
 {% block title %}Application Status{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/user-dashboard-style.css' %}">
-<link rel="icon" href="{% static 'images/favicon.png' %}">
-<style>
-        /* Ensure main content shifts to the right of sidebar */
-    .dashboard-wrapper {
-        display: flex;
-    }
-    .main-content {
-        flex-grow: 1;
-        padding: 20px;
-        margin-left: 120px;
-    }
-    /* Ensure cards and table have proper spacing */
-    .dashboard-card {
-        min-height: 140px;
-    }
-</style>
+  <link rel="stylesheet" href="{% static 'css/user-dashboard-style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" href="{% static 'images/favicon.png' %}">
+  <style>
+          /* Ensure main content shifts to the right of sidebar */
+      .dashboard-wrapper {
+          display: flex;
+      }
+      .main-content {
+          flex-grow: 1;
+          padding: 20px;
+          margin-left: 120px;
+      }
+      /* Ensure cards and table have proper spacing */
+      .dashboard-card {
+          min-height: 140px;
+      }
+  </style>
 {% endblock %}
 
 {% block content %}
+<!-- Mobile Menu Toggle Button -->
+<button class="mobile-menu-toggle" id="mobile-menu-toggle">
+    ☰
+</button>
+
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
 <div class="dashboard-wrapper">
     <!-- Main Content -->
     <div class="main-content">
@@ -43,34 +52,123 @@
             <hr class="border-secondary">
             <small><span id="date" class="text-light"></span></small>
 
-            <!-- Dashboard Wrapper -->
-            <div class="dashboard-wrapper mx-auto" style="max-width: 1000px;">
-              <div class="payment-container p-4 bg-white shadow rounded">
-                <div class="payment-header mb-3">
-                  <h2>Payment Required Before Proceeding</h2>
-                  <div class="circles d-flex gap-2 mt-2">
-                    <div class="circle green"></div>
-                    <div class="circle yellow"></div>
-                    <div class="circle red"></div>
-                  </div>
+            <!-- Application Tracker -->
+            {% if registration %}
+            <div class="row mt-4 g-4">
+                <div class="col-12">
+                    <div class="card status-card border-primary shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title d-flex align-items-center mb-4">
+                                <span class="text-primary fs-3">🚗</span>
+                                <span class="ms-2">Application Status Tracker</span>
+                            </h5>
+                            
+                            <!-- Status Timeline -->
+                            <div class="status-timeline">
+                                <!-- Step 1: Application Submitted - Always completed once submitted -->
+                                <div class="timeline-step completed">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Application Submitted</h6>
+                                        <small class="text-muted" style="color: rgb(93, 93, 93)  !important;">{{ registration.created_at|date:"M d, Y" }}</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-connector {% if registration.status == 'initial approval' or registration.status == 'final approval' or registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}"></div>
+                                
+                                <!-- Step 2: Initial Approval - Active while pending/application submitted -->
+                                <div class="timeline-step {% if registration.status == 'pending' or registration.status == 'application submitted' %}active{% elif registration.status == 'initial approval' or registration.status == 'final approval' or registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Initial Approval</h6>
+                                        <small class="text-muted" style="color: rgb(93, 93, 93) !important;">Security Review</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-connector {% if registration.status == 'final approval' or registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}"></div>
+                                
+                                <!-- Step 3: Final Approval - Active when initial approval done -->
+                                <div class="timeline-step {% if registration.status == 'initial approval' %}active{% elif registration.status == 'final approval' or registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-check-double"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Final Approval</h6>
+                                        <small style="color: rgb(111, 112, 112) !important;">Security Verification</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-connector {% if registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}"></div>
+                                
+                                <!-- Step 4: Approved - Active when final approval done, ready for inspection -->
+                                <div class="timeline-step {% if registration.status == 'final approval' %}active{% elif registration.status == 'approved' or registration.status == 'sticker released' %}completed{% endif %}">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Ready for Inspection</h6>
+                                        <small style="color: rgb(93, 93, 93) !important;">Physical Inspection Required</small>
+                                        {% if inspection %}
+                                            <div class="mt-2 small text-info">
+                                                <i class="fas fa-calendar-alt me-1"></i>
+                                                Inspection: {{ inspection.physical_final_inspection_date|date:"M d, Y" }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-connector {% if registration.status == 'sticker released' %}completed{% endif %}"></div>
+                                
+                                <!-- Step 5: Sticker Released - Final completed state -->
+                                <div class="timeline-step {% if registration.status == 'approved' %}active{% elif registration.status == 'sticker released' %}completed{% endif %}">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-id-card"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Sticker Released</h6>
+                                        <small style="color: rgb(93, 93, 93) !important;">Process Complete</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Current Status Box -->
+                            <div class="alert alert-info mt-4 d-flex align-items-center">
+                                <i class="fas fa-info-circle fs-4 me-3"></i>
+                                <div>
+                                    <strong>Current Status:</strong> 
+                                    <span class="fs-5 ms-2">
+                                        {% if registration.status == 'pending' or registration.status == 'application submitted' %}
+                                            Waiting for Security Review
+                                        {% elif registration.status == 'initial approval' %}
+                                            Under Final Security Verification
+                                        {% elif registration.status == 'final approval' %}
+                                            Ready for Physical Inspection
+                                        {% elif registration.status == 'approved' %}
+                                            Processing Sticker Release
+                                        {% elif registration.status == 'sticker released' %}
+                                            Complete - Sticker Released
+                                        {% else %}
+                                            {{ registration.status|title }}
+                                        {% endif %}
+                                    </span>
+                                    {% if registration.remarks %}
+                                        <div class="mt-2 small">
+                                            <strong>Remarks:</strong> {{ registration.remarks }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="payment-message">
-                  <p><strong>Important:</strong> Payment is required to proceed with your vehicle pass application.</p>
-                  <ul>
-                    <li>All applicants must pay the registration fee in person.</li>
-                    <li>Please make the payment within <strong>3 working days</strong> from the date of this notice.</li>
-                    <li>Payments are accepted only during official working days and hours.</li>
-                    <li>Once your payment is verified, you will receive a confirmation email with instructions for the next steps.</li>
-                  </ul>
-                  <p class="warning text-danger fw-bold">
-                    ⚠️ Failure to complete your payment on time will result in your application being cancelled.
-                  </p>
-                </div>
-                <p class="assistance mt-3">
-                  For assistance, please contact <a href="mailto:veripass@gmail.com">veripass@gmail.com</a>.
-                </p>
-              </div>
             </div>
+            {% else %}
+                <div class="alert alert-warning">No registration found!</div>
+            {% endif %}
         </div>
     </div>
 </div>
