@@ -1,11 +1,12 @@
 from multiprocessing import context
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden 
 from .forms import UserSignupForm, UserProfileForm, RegistrationForm, PasswordUpdateForm, VehicleRegistrationStep1Form, VehicleRegistrationStep2Form, VehicleRegistrationStep3Form, OICRecommendForm, DirectorApproveForm
 from .models import UserProfile, SecurityProfile, AdminProfile
 from .models import Vehicle, Registration, VehiclePass
 from .models import Notification, Announcement, PasswordResetCode, LoginActivity, SiteVisit
+from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
@@ -1087,7 +1088,7 @@ class DirectorRequiredMixin:
         # If check passes, continue to the view
         return super().dispatch(request, *args, **kwargs)
 
-class SecurityViewApplication(CustomLoginRequiredMixin, ListView):
+class SecurityAllApplicationsView(CustomLoginRequiredMixin, ListView):
     model = Registration
     template_name = 'Security/Security_Application.html'
     context_object_name = 'applications'
@@ -1095,9 +1096,70 @@ class SecurityViewApplication(CustomLoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['oic_form'] = OICRecommendForm()
-        context['director_form'] = DirectorApproveForm()
+        context['page_title'] = "All Applications"
         return context
+
+class SecurityInitialApprovalView(CustomLoginRequiredMixin, ListView):
+    model = Registration
+    template_name = 'Security/Security_Initial_Approval.html'
+    context_object_name = 'applications'
+    paginate_by = 20
+
+    def get_queryset(self):
+        # Only show applications waiting for the OIC
+        return Registration.objects.filter(status='application submitted')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pass the OIC form to the modal
+        context['oic_form'] = OICRecommendForm() 
+        context['page_title'] = 'For Initial Approval'
+        return context
+    
+class SecurityFinalApprovalView(CustomLoginRequiredMixin, ListView):
+    model = Registration
+    template_name = 'Security/Security_Final_Approval.html'
+    context_object_name = 'applications'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return Registration.objects.filter(status='initial approval')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pass the Director form to the modal
+        context['director_form'] = DirectorApproveForm() 
+        context['page_title'] = 'For Final Approval'
+        return context
+
+class SecurityBatchApproveView(CustomLoginRequiredMixin, DirectorRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        application_ids = request.POST.getlist('application_ids')
+        if not application_ids:
+            messages.error(request, "No applications selected.")
+            return redirect('security_final_approvals')
+
+        # Find all valid applications to be approved
+        applications_to_approve = Registration.objects.filter(
+            pk__in=application_ids,
+            status='initial approval' # Only approve ones in the correct state
+        )
+
+        count = applications_to_approve.count()
+
+        # Update them all
+        applications_to_approve.update(
+            status='final approval',
+            final_approved_by=request.user_profile.securityprofile,
+            remarks=f"Batch approved on {timezone.now().strftime('%Y-%m-%d')}"
+        )
+
+        if count > 0:
+            messages.success(request, f"Successfully batch-approved {count} application(s).")
+        else:
+            messages.warning(request, "No valid applications were approved.")
+            
+        return redirect('security_final_approvals')
 
 class SecurityViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
     model = Registration

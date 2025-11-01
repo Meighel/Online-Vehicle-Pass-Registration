@@ -176,7 +176,7 @@ class SecurityProfile(BaseModel):
                       ('oic', 'Security OIC'),
                       ('gso director', 'GSO - Director')]
 
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
     badgeNumber = models.CharField(max_length=10)
     job_title = models.CharField(max_length=30)
 

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-        All Applications
+        Initial Approval
 {% endblock %}
 
 {% block extra_css %}
@@ -68,26 +68,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for application in applications %}
-                    <tr>
-                    <td>{{ application.user.lastname }}, {{ application.user.firstname }} {{ application.user.middlename|default_if_none:""|slice:":1" }} {{ application.user.suffix|default_if_none:"" }}</td>
-                    <td>{{ application.created_at|date:"F d, Y" }}</td>
-                    <td>{{ application.get_status_display }}</td> {# Use get_status_display for better readability #}
-                    <td>
-                        {% if application.initial_approved_by %}
-                            {{ application.initial_approved_by.user.get_full_name }} (OIC)
-                        {% elif application.final_approved_by %}
-                            {{ application.final_approved_by.user.get_full_name }} (Director)
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </td>
-                    <td>{{ application.remarks|default_if_none:"no remarks" }}</td>
-                    <td>
-                        <a href="{% url 'security_view_specific_application' application.pk %}" class="btn btn-sm btn-info">View</a>
-                        </td>
-                    </tr>
-                {% endfor %}
+                    {% for application in applications %}
+                        <tr>
+                            {# ... (keep all <td> cells for user, date, status, etc.) ... #}
+                            <td>
+                                <a href="{% url 'security_view_specific_application' application.pk %}" class="btn btn-sm btn-info">View</a>
+                                
+                                {% if user_profile.securityprofile.level == 'oic' %}
+                                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#recommendModal-{{ application.pk }}">
+                                    Recommend
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <div class="modal fade" id="recommendModal-{{ application.pk }}" ...>
+                            </div>
+
+                    {% endfor %}
                 </tbody>
             </table>
         </section>

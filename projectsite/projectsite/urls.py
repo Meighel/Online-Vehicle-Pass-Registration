@@ -4,8 +4,8 @@ from vehicle_pass import views
 from vehicle_pass.views import (
     login_view, logout_view, signup_view,
     default_dashboard, user_pass_status, user_application,
-    security_dashboard, SecurityViewApplication, SecurityViewSpecificApplication, security_release_stickers, 
-    SecurityRecommendView, SecurityApproveView, security_report,
+    security_dashboard, SecurityAllApplicationsView, SecurityViewSpecificApplication, security_release_stickers, 
+    SecurityInitialApprovalView, SecurityFinalApprovalView, SecurityBatchApproveView, security_report,
 
     admin_dashboard, AdminViewUser, AdminCreateUser, AdminUpdateUser, AdminDeleteUser, AdminViewSpecificUser,
     AdminViewApplication, AdminViewSpecificApplication, AdminUpdateApplication,
@@ -47,7 +47,10 @@ urlpatterns = [
     
     
     path("dashboard/security/", security_dashboard, name="security_dashboard"),
-    path("dashboard/security/manage_application/", SecurityViewApplication.as_view(), name="security_manage_application"),
+    path('dashboard/security/manage_application/', views.SecurityAllApplicationsView.as_view(), name='security_manage_application'),
+    path('dashboard/security/initial-approvals/', views.SecurityInitialApprovalView.as_view(), name='security_initial_approvals'),
+    path('dashboard/security/final-approvals/', views.SecurityFinalApprovalView.as_view(), name='security_final_approvals'),
+    path('dashboard/security/batch-approve/', views.SecurityBatchApproveView.as_view(), name='security_batch_approve'),
     path('security/application/<int:pk>/recommend/', views.SecurityRecommendView.as_view(), name='security_recommend_application'),
     path('security/application/<int:pk>/approve/', views.SecurityApproveView.as_view(), name='security_approve_application'),
     path("dashboard/security/manage_application/view/<pk>", SecurityViewSpecificApplication.as_view(), name="security_view_specific_application"),
