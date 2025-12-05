@@ -1068,7 +1068,7 @@ class OICRequiredMixin:
 
 class DirectorRequiredMixin:
     """
-    Verify that the current user is a Director.
+    Verify that the current user is a GSO Director.
     This runs *after* CustomLoginRequiredMixin.
     """
     def dispatch(self, request, *args, **kwargs):
@@ -1080,8 +1080,8 @@ class DirectorRequiredMixin:
             messages.error(request, "You do not have permission to perform this action.")
             return redirect('default_dashboard')
 
-        # The actual role check
-        if security_profile.level != 'director':
+        # The actual role check: Corrected 'director' to 'gso director'
+        if security_profile.level != 'gso director':
             messages.error(request, "Only the GSO Director can perform this action.")
             return redirect('security_manage_application')
             

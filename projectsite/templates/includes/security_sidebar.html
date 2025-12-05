@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Security Sidebar{% endblock %}</title>
 
-    <!-- Link to External CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     {% block extra_css %}{% endblock %}
@@ -17,14 +16,11 @@
     ☰
 </button>
 
-<!-- Sidebar -->
-
 <div class="sidebar" id="sidebar">
     <a href="#">
         <img src="{% static 'images/navbar-brand img.png' %}" class="img-fluid" style="width: 100px; margin-left: 75px;">
     </a>
     <br>
-    <!-- Main Menu -->
     <p>Main Menu</p>
 
     <ul>
@@ -72,13 +68,11 @@
         </li>
     </ul>
 
-    <!-- Logout -->
     <a href="{% url 'logout' %}" id="logout">
         <img src="{% static 'images/power-off.png' %}" alt="Logout" width="25">
         <span>Logout</span>
     </a>
 
-    <!-- Profile Section -->
     <div class="profile" style="display:flex;flex-direction:column;align-items:center;">
         <div style="width: 45px; height: 45px; background: black; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
             {% if profile %}
@@ -99,7 +93,6 @@
     </div>
 </div>
 
-<!-- Main content container -->
 <div class="main-content">
     {% block content %}{% endblock %}
 </div>
