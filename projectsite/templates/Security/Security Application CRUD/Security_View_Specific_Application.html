@@ -54,33 +54,99 @@
                 <h2>Vehicle Information</h2>
                 <div class="list-group-item bg-dark border-secondary mb-2">
                     <strong style="color: #FFD700;">Type:</strong> 
-                    <span class="float-end text-white">{{ registration.vehicle.type }}</span>
+                    <span class="float-end text-white">{{ registration.vehicle.get_type_display|title }}</span>
                 </div>
                 <div class="list-group-item bg-dark border-secondary mb-2">
                     <strong style="color: #FFD700;">Color:</strong> 
-                    <span class="float-end text-white">{{ registration.vehicle.vehicle_color }}</span>
+                    <span class="float-end text-white">{{ registration.vehicle.color }}</span>
                 </div>
                 <div class="list-group-item bg-dark border-secondary mb-2">
                     <strong style="color: #FFD700;">Model:</strong> 
-                    <span class="float-end text-white">{{ registration.vehicle.model }}</span>
+                    <span class="float-end text-white">{{ registration.vehicle.make_model }}</span>
                 </div>
                 <div class="list-group-item bg-dark border-secondary mb-2">
                     <strong style="color: #FFD700;">Plate Number:</strong> 
-                    <span class="float-end text-white">{{ registration.vehicle.plateNumber }}</span>
+                    <span class="float-end text-white">{{ registration.vehicle.plate_number }}</span>
                 </div>
                 <div class="list-group-item bg-dark border-secondary mb-2">
                     <strong style="color: #FFD700;">Chassis Number:</strong> 
-                    <span class="float-end text-white">{{ registration.vehicle.chassisNumber }}</span>
+                    <span class="float-end text-white">{{ registration.vehicle.chassis_number }}</span>
                 </div>
                 <div class="list-group-item bg-dark border-secondary mb-2">
-                    <strong style="color: #FFD700;">OR/CR Number:</strong> 
-                    <span class="float-end text-white">{{ registration.vehicle.OR_Number }} -- {{ registration.vehicle.CR_Number }}</span>
+                    <strong style="color: #FFD700;">OR Number:</strong> 
+                    <span class="float-end text-white">{{ registration.vehicle.or_number }}</span>
+                </div>
+                <div class="list-group-item bg-dark border-secondary mb-2">
+                    <strong style="color: #FFD700;">CR Number:</strong> 
+                    <span class="float-end text-white">{{ registration.vehicle.cr_number }}</span>
                 </div>
             </div>
 
-            <div class="text-center mt-4">
-                <a href="{% url 'security_manage_application' %}" class="btn btn-primary" style="background-color: #FFD700; color: #000; border: none; border-radius: 20px; padding: 0.5rem 1.5rem; font-weight: bold;">Back to Applications</a>
-            </div>
+            <div class="d-flex justify-content-center gap-3 mt-4 mb-3">
+                            <a href="{% url 'security_initial_approvals' %}" class="btn btn-primary" style="background-color: #FFD700; color: #000; border: none; border-radius: 20px; padding: 0.5rem 1.5rem; font-weight: bold;">
+                                Return
+                            </a>
+
+                            {# Only show Review button if user is OIC and Status is 'application submitted' #}
+                            {% if profile.securityprofile.level == 'oic' and registration.status == 'application submitted' %}
+                            <button type="button" class="btn btn-success fw-bold" style="border-radius: 20px; padding: 0.5rem 2rem;" data-bs-toggle="modal" data-bs-target="#actionModal">
+                                Review Application
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-light text-dark">
+                            <div class="modal-header border-bottom-0">
+                                <h5 class="modal-title fw-bold" id="actionModalLabel">Application Review #{{ registration.registration_number }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            
+                            <form method="post" action="{% url 'security_recommend_application' registration.pk %}">
+                                {% csrf_token %}
+                                <div class="modal-body">
+                                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                        <div class="me-2">⚠️</div>
+                                        <div>
+                                            You are reviewing <strong>{{ registration.vehicle.plate_number }}</strong>
+                                            <div class="small">{{ registration.user.firstname }} {{ registration.user.lastname }}</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <hr class="my-3">
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">OIC Decision</label>
+                                        <div class="d-flex flex-column gap-2">
+                                            {% for radio in oic_form.status %}
+                                                <div class="form-check p-3 border bg-white rounded shadow-sm">
+                                                    {{ radio.tag }}
+                                                    <label class="form-check-label w-100 fw-bold {% if 'rejected' in radio.choice_label|lower %}text-danger{% else %}text-success{% endif %}" for="{{ radio.id_for_label }}" style="cursor: pointer;">
+                                                        {{ radio.choice_label }}
+                                                    </label>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Remarks / Notes</label>
+                                        {{ oic_form.remarks }} 
+                                        <div class="form-text">Required if rejecting.</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal-footer border-top-0">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary px-4">Submit Decision</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
 

@@ -1166,6 +1166,12 @@ class SecurityViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
     template_name = 'Security/Security Application CRUD/Security_View_Specific_Application.html'
     context_object_name = 'registration'
 
+    def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            # Pass the forms so they can be used in the modal
+            context['oic_form'] = OICRecommendForm()
+            return context
+
 # class SecurityUpdateApplication(CustomLoginRequiredMixin, UpdateView):
 #     model = Registration
 #     form_class = RegistrationForm
