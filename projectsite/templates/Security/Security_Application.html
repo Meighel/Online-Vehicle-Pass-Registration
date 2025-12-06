@@ -41,7 +41,7 @@
     <div class="container-fluid py-1">
         <!-- Title & Top Bar -->
         <div class="d-flex justify-content-between align-items-center">
-            <h2 class="title mb-3 mb-md-0">Manage Application</h2>
+            <h2 class="title mb-3 mb-md-0">List of Applications</h2>
             <div class="d-flex align-items-center gap-3">
                 <!-- Notification Bell -->
                 <a href="Announcements.html" class="text-decoration-none position-relative">
@@ -59,36 +59,74 @@
             <table id="myTable" class="users-table">
                 <thead>
                     <tr>
-                        <th>Username</th>
-                        <th>Date</th>
+                        <th>Ref ID</th>
+                        <th>Applicant</th>
+                        <th>Date Filed</th>
                         <th>Status</th>
-                        <th>Document reviewed by</th>
-                        <th>Additional Notes</th>
-                        <th>Action</th>
+                        <th>Reviewed By (OIC)</th>
+                        <th>Approved By (GSO)</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for application in applications %}
                     <tr>
-                    <td>{{ application.user.lastname }}, {{ application.user.firstname }} {{ application.user.middlename|default_if_none:""|slice:":1" }} {{ application.user.suffix|default_if_none:"" }}</td>
-                    <td>{{ application.created_at|date:"F d, Y" }}</td>
-                    <td>{{ application.get_status_display }}</td> {# Use get_status_display for better readability #}
-                    <td>
-                        {% if application.initial_approved_by %}
-                            {{ application.initial_approved_by.user.get_full_name }} (OIC)
-                        {% elif application.final_approved_by %}
-                            {{ application.final_approved_by.user.get_full_name }} (Director)
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </td>
-                    <td>{{ application.remarks|default_if_none:"no remarks" }}</td>
-                    <td>
-                        <a href="{% url 'security_view_specific_application' application.pk %}" class="btn btn-sm btn-info">View</a>
+                        <td><span class="fw-bold">#{{ application.registration_number }}</span></td>
+
+                        <td>
+                            <div class="d-flex flex-column">
+                                <span class="fw-bold">{{ application.user.firstname }} {{ application.user.lastname }}</span>
+                                <small class="text-secondary">
+                                    {# Tries to show 'Student', 'Faculty', etc. Falls back to system role if empty #}
+                                    {{ application.user.get_school_role_display|default:application.user.role|title }}
+                                </small>
+                            </div>
                         </td>
+
+                        <td>{{ application.date_of_filing|date:"M d, Y" }}</td>
+
+                        <td>
+                            <span class="badge rounded-pill 
+                                {% if 'approved' in application.status or 'released' in application.status %}bg-success
+                                {% elif 'rejected' in application.status %}bg-danger
+                                {% elif 'submitted' in application.status %}bg-secondary
+                                {% else %}bg-warning text-dark{% endif %}">
+                                {{ application.get_status_display }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {% if application.initial_approved_by %}
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold">
+                                        {{ application.initial_approved_by.user.firstname }} {{ application.initial_approved_by.user.lastname }}
+                                    </span>
+                                    <small class="text-secondary">{{ application.initial_approved_by.get_level_display }}</small>
+                                </div>
+                            {% else %}
+                                <span class="text-secondary fst-italic">- Pending -</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if application.final_approved_by %}
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold">
+                                        {{ application.final_approved_by.user.firstname }} {{ application.final_approved_by.user.lastname }}
+                                    </span>
+                                    <small class="text-secondary">{{ application.final_approved_by.get_level_display }}</small>
+                                </div>
+                            {% else %}
+                                <span class="text-secondary fst-italic">- Pending -</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-secondary">No applications found.</td>
                     </tr>
                 {% endfor %}
                 </tbody>
+
             </table>
         </section>
         {% include 'includes/pagination.html' %}
