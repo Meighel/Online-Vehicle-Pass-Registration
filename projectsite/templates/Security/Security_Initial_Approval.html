@@ -72,18 +72,18 @@
                         <td>
                             <div class="d-flex flex-column">
                                 <span class="fw-bold">{{ application.user.firstname }} {{ application.user.lastname }}</span>
-                                <small class="text-muted">{{ application.user.get_school_role_display|default:application.user.role|title }}</small>
+                                <small class="text-secondary">{{ application.user.get_school_role_display|default:application.user.role|title }}</small>
                             </div>
                         </td>
 
                         <td>
                             <div class="d-flex flex-column">
                                 <span class="fw-bold text-uppercase">{{ application.vehicle.plate_number }}</span>
-                                <small class="text-muted">{{ application.vehicle.make_model }} ({{ application.vehicle.type|title }})</small>
+                                <small class="text-secondary">{{ application.vehicle.make_model }} ({{ application.vehicle.type|title }})</small>
                             </div>
                         </td>
 
-                        <td>{{ application.date_of_filing|date:"M d, Y" }} <small class="text-muted">({{ application.date_of_filing|timesince }} ago)</small></td>
+                        <td>{{ application.date_of_filing|date:"M d, Y" }} <small class="text-secondary">({{ application.date_of_filing|timesince }} ago)</small></td>
 
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">

@@ -155,3 +155,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'veripassofficial@gmail.com'
 EMAIL_HOST_PASSWORD = 'mdrbvsiffehvsuec'
 DEFAULT_FROM_EMAIL = 'veripassofficial@gmail.com'
+
+SITE_URL = 'http://127.0.0.1:8000'

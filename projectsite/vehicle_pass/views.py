@@ -1197,7 +1197,12 @@ class SecurityRecommendView(CustomLoginRequiredMixin, OICRequiredMixin, UpdateVi
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, f"Application for {self.object.user.get_full_name()} has been updated.")
+        # FIX: Changed .get_full_name() to simple f-string using existing fields
+        messages.success(
+            self.request, 
+            f"Application for {self.object.user.firstname} {self.object.user.lastname} has been updated."
+        )
+        
         # Set the approver to the current user's security profile
         form.instance.initial_approved_by = self.request.user_profile.securityprofile
         return super().form_valid(form)
@@ -1221,7 +1226,12 @@ class SecurityApproveView(CustomLoginRequiredMixin, DirectorRequiredMixin, Updat
         return obj
 
     def form_valid(self, form):
-        messages.success(self.request, f"Application for {self.object.user.get_full_name()} has been approved.")
+        # FIX: Changed .get_full_name() to simple f-string using existing fields
+        messages.success(
+            self.request, 
+            f"Application for {self.object.user.firstname} {self.object.user.lastname} has been approved."
+        )
+        
         # Set the final approver to the current user's security profile
         form.instance.final_approved_by = self.request.user_profile.securityprofile
         return super().form_valid(form)
