@@ -1185,26 +1185,24 @@ class SecurityRecommendView(CustomLoginRequiredMixin, OICRequiredMixin, UpdateVi
     """
     model = Registration
     form_class = OICRecommendForm
-    template_name = 'Security/Security_Application.html' # On error, re-renders the list
+    template_name = 'Security/Security_Application.html'
     success_url = reverse_lazy('security_manage_application')
 
-    def get_object(self, queryset=None):
-        # Only allow updates on applications in the correct state
-        obj = super().get_object(queryset)
-        if obj.status != 'application submitted':
-            messages.error(self.request, "This application is not ready for recommendation.")
-            return None 
-        return obj
-
     def form_valid(self, form):
-        # FIX: Changed .get_full_name() to simple f-string using existing fields
+        # 1. Safety Check: Ensure application is in the correct stage
+        if self.object.status != 'application submitted':
+            messages.error(self.request, "This application is not ready for recommendation.")
+            return redirect('security_manage_application')
+
+        # 2. Use simple fields for the name to avoid 'get_full_name' error
         messages.success(
             self.request, 
             f"Application for {self.object.user.firstname} {self.object.user.lastname} has been updated."
         )
         
-        # Set the approver to the current user's security profile
+        # 3. Set the approver to the current user's security profile
         form.instance.initial_approved_by = self.request.user_profile.securityprofile
+        
         return super().form_valid(form)
 
 class SecurityApproveView(CustomLoginRequiredMixin, DirectorRequiredMixin, UpdateView):
@@ -1214,28 +1212,30 @@ class SecurityApproveView(CustomLoginRequiredMixin, DirectorRequiredMixin, Updat
     """
     model = Registration
     form_class = DirectorApproveForm
-    template_name = 'Security/Security_Application.html' # On error, re-renders the list
-    success_url = reverse_lazy('security_manage_application')
-
-    def get_object(self, queryset=None):
-        # Only allow updates on applications in the correct state
-        obj = super().get_object(queryset)
-        if obj.status != 'initial approval':
-            messages.error(self.request, "This application is not ready for final approval.")
-            return None
-        return obj
+    template_name = 'Security/Security_Application.html'
+    success_url = reverse_lazy('security_final_approvals')
 
     def form_valid(self, form):
-        # FIX: Changed .get_full_name() to simple f-string using existing fields
+        # 1. Safety Check: Ensure application is in the correct stage
+        if self.object.status != 'initial approval':
+            messages.error(self.request, "This application is not ready for final approval.")
+            return redirect('security_manage_application')
+
+        # 2. Use simple fields for the name to avoid 'get_full_name' error
         messages.success(
             self.request, 
-            f"Application for {self.object.user.firstname} {self.object.user.lastname} has been approved."
+            f"Application for {self.object.user.firstname} {self.object.user.lastname} has been processed."
         )
         
-        # Set the final approver to the current user's security profile
+        # 3. Set the final approver to the current user's security profile
         form.instance.final_approved_by = self.request.user_profile.securityprofile
-        return super().form_valid(form)
+        
+        # 4. (Optional) Auto-convert 'final approval' to 'approved' if that's your workflow preference
+        # If you want the status to strictly be 'approved' after this step:
+        if form.cleaned_data['status'] == 'final approval':
+             form.instance.status = 'approved'
 
+        return super().form_valid(form)
 @login_required
 def security_release_stickers(request):
     stickers = VehiclePass.objects.select_related('vehicle__applicant').all().order_by('-created_at')

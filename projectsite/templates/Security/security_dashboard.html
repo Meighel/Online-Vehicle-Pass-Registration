@@ -171,13 +171,22 @@
                             <tr>
                                 <td>{{ sticker.registration_number }}</td>
                                 <td>{{ sticker.user.firstname }} {{ sticker.user.lastname }}</td>
+                                
                                 <td>
-                                    <!-- Example action, adjust as needed -->
-                                    <a href="{% url 'release_sticker' sticker.registration_number %}" class="btn btn-success btn-sm">Release</a>
+                                    <span class="badge rounded-pill 
+                                    {% if sticker.status == 'approved' %}bg-success
+                                    {% elif sticker.status == 'final approval' %}bg-primary
+                                    {% else %}bg-secondary{% endif %}">
+                                        {{ sticker.get_status_display }}
+                                    </span>
+                                </td>
+                                
+                                <td>
+                                    <a href="{% url 'security_view_specific_application' pk=sticker.registration_number %}" class="btn btn-success btn-sm">View/Release</a>
                                 </td>
                             </tr>
                             {% empty %}
-                            <tr><td colspan="3">No unreleased stickers found.</td></tr>
+                            <tr><td colspan="4">No unreleased stickers found.</td></tr>
                             {% endfor %}
                         </tbody>
                     </table>
