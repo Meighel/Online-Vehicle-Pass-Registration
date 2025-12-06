@@ -91,10 +91,10 @@
                                         View
                                     </a>
                                     
-                                    {% if user_profile.securityprofile.level == 'oic' %}
-                                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#recommendModal-{{ application.pk }}">
-                                        Recommend
-                                    </button>
+                                    {% if profile.securityprofile.level == 'oic' %}
+                                        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#recommendModal-{{ application.pk }}">
+                                            Recommend
+                                        </button>
                                     {% endif %}
                                 </div>
 
