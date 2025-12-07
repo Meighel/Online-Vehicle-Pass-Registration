@@ -41,73 +41,54 @@
             <table id="myTable" class="users-table">
                 <thead>
                     <tr>
+                        {% if request.user_profile.securityprofile.level == 'gso director' %}
+                        <th>
+                            Select
+                        </th>
+                        {% endif %}
+                        
                         <th>Ref ID</th>
                         <th>Applicant</th>
-                        <th>Vehicle</th>
-                        <th>Verified By (OIC)</th> <th class="text-center">Action</th>
+                        <th>Vehicle</th>      <th>Date Filed</th>   <th>OIC Verified By</th>
+                        <th>OIC Remarks</th>  <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for application in applications %}
                     <tr>
-                        {% if user_profile.securityprofile.level == 'director' %}
+                        {% if request.user_profile.securityprofile.level == 'gso director' %}
                         <td>
                             <input type="checkbox" class="application-checkbox" name="application_ids" value="{{ application.pk }}" form="batch-approve-form">
                         </td>
                         {% endif %}
                         
-                        <td>{{ application.user.lastname }}, {{ application.user.firstname }} {{ application.user.middlename|default_if_none:""|slice:":1" }} {{ application.user.suffix|default_if_none:"" }}</td>
+                        <td>{{ application.registration_number }}</td>
+
+                        <td>{{ application.user.lastname }}, {{ application.user.firstname }}</td>
+
+                        <td>{{ application.vehicle.plate_number }}</td>
+
                         <td>{{ application.created_at|date:"F d, Y" }}</td>
-                        <td>{{ application.get_status_display }}</td> 
-                        <td>
-                            {% if application.initial_approved_by %}
-                                {{ application.initial_approved_by.user.get_full_name }} (OIC)
-                            {% elif application.final_approved_by %}
-                                {{ application.final_approved_by.user.get_full_name }} (Director)
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </td>
-                        <td>{{ application.remarks|default_if_none:"no remarks" }}</td>
                         
                         <td>
-                            <a href="{% url 'security_view_specific_application' application.pk %}" class="btn btn-sm btn-info">View</a>
-
-                            {% if user_profile.securityprofile.level == 'director' %}
-                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#approveModal-{{ application.pk }}">
-                                Final Approval
-                            </button>
+                            {% if application.initial_approved_by %}
+                                {{ application.initial_approved_by.user.firstname }} {{ application.initial_approved_by.user.lastname }}
+                            {% else %}
+                                <span class="text-muted">Pending</span>
                             {% endif %}
+                        </td>
 
-                            <div class="modal fade" id="recommendModal-{{ application.pk }}" tabindex="-1" aria-labelledby="recommendModalLabel-{{ application.pk }}" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <form action="{% url 'security_recommend_application' application.pk %}" method="POST">
-                                            {% csrf_token %}
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="recommendModalLabel-{{ application.pk }}">Recommend Application</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p><strong>Applicant:</strong> {{ application.user.get_full_name }}</p>
-                                                <p><strong>Vehicle:</strong> {{ application.vehicle.plate_number }}</p>
-                                                <hr>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Action:</label>
-                                                    {{ oic_form.status }}
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="id_remarks_oic_{{ application.pk }}" class="form-label">Remarks:</label>
-                                                    <textarea name="remarks" class="form-control" rows="3" id="id_remarks_oic_{{ application.pk }}"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-success">Submit Recommendation</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
+                        <td>{{ application.remarks|default_if_none:"-" }}</td>
+                        
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="{% url 'security_view_specific_application' application.pk %}" class="btn btn-sm btn-info">View</a>
+
+                                {% if request.user_profile.securityprofile.level == 'gso director' %}
+                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#approveModal-{{ application.pk }}">
+                                    Decision
+                                </button>
+                                {% endif %}
                             </div>
 
                             <div class="modal fade" id="approveModal-{{ application.pk }}" tabindex="-1" aria-labelledby="approveModalLabel-{{ application.pk }}" aria-hidden="true">
@@ -116,32 +97,36 @@
                                         <form action="{% url 'security_approve_application' application.pk %}" method="POST">
                                             {% csrf_token %}
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="approveModalLabel-{{ application.pk }}">Final Approval</h5>
+                                                <h5 class="modal-title text-dark" id="approveModalLabel-{{ application.pk }}">Final Approval</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
-                                            <div class="modal-body">
-                                                <p><strong>Applicant:</strong> {{ application.user.get_full_name }}</p>
+                                            
+                                            <div class="modal-body text-dark text-start">
+                                                <p><strong>Applicant:</strong> {{ application.user.firstname }} {{ application.user.lastname }}</p>
                                                 <p><strong>Vehicle:</strong> {{ application.vehicle.plate_number }}</p>
                                                 <p><strong>OIC Remarks:</strong> {{ application.remarks|default:"N/A" }}</p>
                                                 <hr>
+                                                
                                                 <div class="mb-3">
-                                                    <label class="form-label">Action:</label>
+                                                    <label class="form-label fw-bold">Action:</label>
                                                     {{ director_form.status }}
                                                 </div>
+                                                
                                                 <div class="mb-3">
-                                                    <label for="id_remarks_dir_{{ application.pk }}" class="form-label">Final Remarks (Optional):</label>
+                                                    <label for="id_remarks_dir_{{ application.pk }}" class="form-label fw-bold">Final Remarks (Optional):</label>
                                                     <textarea name="remarks" class="form-control" rows="3" id="id_remarks_dir_{{ application.pk }}"></textarea>
                                                 </div>
                                             </div>
+                                            
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Submit Final Decision</button>
+                                                <button type="submit" class="btn btn-primary">Submit Decision</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                            </td>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
