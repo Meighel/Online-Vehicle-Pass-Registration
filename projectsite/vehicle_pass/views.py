@@ -1177,63 +1177,58 @@ class SecurityViewSpecificApplication(CustomLoginRequiredMixin, DetailView):
 #     success_url = reverse_lazy('security_manage_application')
 
 class SecurityRecommendView(CustomLoginRequiredMixin, OICRequiredMixin, UpdateView):
-    """
-    View for the OIC to recommend or reject an application.
-    Checks: 1. Logged in (CustomLogin) 2. Is OIC (OICRequired)
-    """
     model = Registration
     form_class = OICRecommendForm
     template_name = 'Security/Security_Application.html'
     success_url = reverse_lazy('security_manage_application')
 
+    # REMOVE the 'def get_object' method entirely from here. 
+    # Letting the default get_object run prevents the "NoneType" crash.
+
     def form_valid(self, form):
-        # 1. Safety Check: Ensure application is in the correct stage
+        # Debugging: Check your terminal to see the REAL status
+        print(f"DEBUG: ID {self.object.pk} Status is: '{self.object.status}'") 
+
+        # 1. Safety Check
         if self.object.status != 'application submitted':
-            messages.error(self.request, "This application is not ready for recommendation.")
+            messages.error(self.request, f"Error: Status is '{self.object.status}', expected 'application submitted'.")
             return redirect('security_manage_application')
 
-        # 2. Use simple fields for the name to avoid 'get_full_name' error
+        # 2. Success Logic
         messages.success(
             self.request, 
             f"Application for {self.object.user.firstname} {self.object.user.lastname} has been updated."
         )
-        
-        # 3. Set the approver to the current user's security profile
         form.instance.initial_approved_by = self.request.user_profile.securityprofile
-        
         return super().form_valid(form)
 
 class SecurityApproveView(CustomLoginRequiredMixin, DirectorRequiredMixin, UpdateView):
-    """
-    View for the Director to give final approval or reject.
-    Checks: 1. Logged in (CustomLogin) 2. Is Director (DirectorRequired)
-    """
     model = Registration
     form_class = DirectorApproveForm
     template_name = 'Security/Security_Application.html'
-    success_url = reverse_lazy('security_final_approvals')
+    success_url = reverse_lazy('security_manage_application')
+
+    # REMOVE the 'def get_object' method entirely from here too.
 
     def form_valid(self, form):
-        # 1. Safety Check: Ensure application is in the correct stage
+        # 1. Safety Check
         if self.object.status != 'initial approval':
-            messages.error(self.request, "This application is not ready for final approval.")
+            messages.error(self.request, f"Error: Status is '{self.object.status}', expected 'initial approval'.")
             return redirect('security_manage_application')
 
-        # 2. Use simple fields for the name to avoid 'get_full_name' error
+        # 2. Success Logic
         messages.success(
             self.request, 
-            f"Application for {self.object.user.firstname} {self.object.user.lastname} has been processed."
+            f"Application for {self.object.user.firstname} {self.object.user.lastname} has been approved."
         )
-        
-        # 3. Set the final approver to the current user's security profile
         form.instance.final_approved_by = self.request.user_profile.securityprofile
         
-        # 4. (Optional) Auto-convert 'final approval' to 'approved' if that's your workflow preference
-        # If you want the status to strictly be 'approved' after this step:
+        # Auto-set status to 'approved' if the director selected 'final approval'
         if form.cleaned_data['status'] == 'final approval':
              form.instance.status = 'approved'
 
         return super().form_valid(form)
+    
 @login_required
 def security_release_stickers(request):
     stickers = VehiclePass.objects.select_related('vehicle__applicant').all().order_by('-created_at')

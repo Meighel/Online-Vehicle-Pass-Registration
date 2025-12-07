@@ -112,9 +112,9 @@ class OICRecommendForm(forms.ModelForm):
 
 class DirectorApproveForm(forms.ModelForm):
     STATUS_CHOICES = [
-        ('final approval', 'Final Approval (Ready to Release)'),
+        ('approved', 'Final Approval (Ready to Release)'),
         ('rejected', 'Rejected')
-        ]
+    ]
     
     status = forms.ChoiceField(choices=STATUS_CHOICES, widget=forms.RadioSelect, label='Recommendation')
     remarks = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False)
