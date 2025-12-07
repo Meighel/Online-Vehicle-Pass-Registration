@@ -1018,7 +1018,7 @@ def security_dashboard(request):
     percentage = round((verified_count / total_count * 100) if total_count else 0, 2)
 
     unreleased_stickers = Registration.objects.filter(
-        status__in=['approved', 'final approval'],
+        status='approved',
         sticker_released_date__isnull=True
     ).select_related('user').order_by('-created_at')
 
@@ -1222,10 +1222,6 @@ class SecurityApproveView(CustomLoginRequiredMixin, DirectorRequiredMixin, Updat
             f"Application for {self.object.user.firstname} {self.object.user.lastname} has been approved."
         )
         form.instance.final_approved_by = self.request.user_profile.securityprofile
-        
-        # Auto-set status to 'approved' if the director selected 'final approval'
-        if form.cleaned_data['status'] == 'final approval':
-             form.instance.status = 'approved'
 
         return super().form_valid(form)
     

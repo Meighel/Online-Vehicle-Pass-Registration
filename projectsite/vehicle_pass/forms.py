@@ -112,7 +112,7 @@ class OICRecommendForm(forms.ModelForm):
 
 class DirectorApproveForm(forms.ModelForm):
     STATUS_CHOICES = [
-        ('approved', 'Final Approval (Ready to Release)'),
+        ('approved', 'Final Approval (Grant Pass)'),
         ('rejected', 'Rejected')
     ]
     

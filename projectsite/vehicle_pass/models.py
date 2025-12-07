@@ -273,20 +273,13 @@ class Vehicle(BaseModel):
 
 class Registration(BaseModel):
     STATUS_CHOICES = [
-            ('no application', 'No Application'),
-            # When created, it waits for OIC:
-            ('application submitted', 'Pending Initial Approval (OIC)'), 
-            
-            # When OIC approves, it waits for Director:
-            ('initial approval', 'Initial Approved (Waiting for GSO Director)'), 
-            
-            # When Director approves, it is Ready for Release:
-            ('final approval', 'Final Approved (Ready for Sticker)'), 
-            
-            ('approved', 'Approved'),
-            ('sticker released', 'Vehicle Pass Sticker Released'),
-            ('rejected', 'Rejected')
-        ]
+        ('no application', 'No Application'),
+        ('application submitted', 'Pending Initial Approval (OIC)'),
+        ('initial approval', 'Initial Approved (Waiting for GSO Director)'),
+        ('approved', 'Approved (Ready for Release)'),    
+        ('sticker released', 'Vehicle Pass Sticker Released'),
+        ('rejected', 'Rejected')
+    ]
     registration_number = models.BigAutoField(primary_key=True) 
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE) 

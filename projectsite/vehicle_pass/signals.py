@@ -16,7 +16,7 @@ def log_user_login(sender, request, user, **kwargs):
 # Create VehiclePass when registration status is "sticker released"
 @receiver(post_save, sender=Registration)
 def create_vehicle_pass_on_sticker_release(sender, instance, **kwargs):
-    if instance.status == 'sticker released':
+    if instance.status == 'approved':
         try:
             # Create vehicle pass using the updated method
             vehicle_pass = VehiclePass.create_from_registration(instance)
