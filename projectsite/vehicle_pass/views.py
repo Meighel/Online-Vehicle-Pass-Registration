@@ -1182,16 +1182,14 @@ class SecurityRecommendView(CustomLoginRequiredMixin, OICRequiredMixin, UpdateVi
     template_name = 'Security/Security_Application.html'
     success_url = reverse_lazy('security_manage_application')
 
-    # REMOVE the 'def get_object' method entirely from here. 
-    # Letting the default get_object run prevents the "NoneType" crash.
-
     def form_valid(self, form):
-        # Debugging: Check your terminal to see the REAL status
-        print(f"DEBUG: ID {self.object.pk} Status is: '{self.object.status}'") 
+        # FIX: Get the ACTUAL status from the database, because self.object.status 
+        # has already been updated to the new value by the form.
+        original_obj = Registration.objects.get(pk=self.object.pk)
 
-        # 1. Safety Check
-        if self.object.status != 'application submitted':
-            messages.error(self.request, f"Error: Status is '{self.object.status}', expected 'application submitted'.")
+        # 1. Safety Check (Check original_obj instead of self.object)
+        if original_obj.status != 'application submitted':
+            messages.error(self.request, f"Error: Status is '{original_obj.status}', expected 'application submitted'.")
             return redirect('security_manage_application')
 
         # 2. Success Logic
@@ -1199,8 +1197,10 @@ class SecurityRecommendView(CustomLoginRequiredMixin, OICRequiredMixin, UpdateVi
             self.request, 
             f"Application for {self.object.user.firstname} {self.object.user.lastname} has been updated."
         )
+        # Assign the user explicitly
         form.instance.initial_approved_by = self.request.user_profile.securityprofile
         return super().form_valid(form)
+
 
 class SecurityApproveView(CustomLoginRequiredMixin, DirectorRequiredMixin, UpdateView):
     model = Registration
@@ -1208,12 +1208,13 @@ class SecurityApproveView(CustomLoginRequiredMixin, DirectorRequiredMixin, Updat
     template_name = 'Security/Security_Application.html'
     success_url = reverse_lazy('security_manage_application')
 
-    # REMOVE the 'def get_object' method entirely from here too.
-
     def form_valid(self, form):
-        # 1. Safety Check
-        if self.object.status != 'initial approval':
-            messages.error(self.request, f"Error: Status is '{self.object.status}', expected 'initial approval'.")
+        # FIX: Get the ACTUAL status from the database
+        original_obj = Registration.objects.get(pk=self.object.pk)
+
+        # 1. Safety Check (Check original_obj instead of self.object)
+        if original_obj.status != 'initial approval':
+            messages.error(self.request, f"Error: Status is '{original_obj.status}', expected 'initial approval'.")
             return redirect('security_manage_application')
 
         # 2. Success Logic
@@ -1223,8 +1224,7 @@ class SecurityApproveView(CustomLoginRequiredMixin, DirectorRequiredMixin, Updat
         )
         form.instance.final_approved_by = self.request.user_profile.securityprofile
 
-        return super().form_valid(form)
-    
+        return super().form_valid(form)   
 @login_required
 def security_release_stickers(request):
     stickers = VehiclePass.objects.select_related('vehicle__applicant').all().order_by('-created_at')
