@@ -462,7 +462,6 @@ def vehicle_registration_step_3(request):
         form = VehicleRegistrationStep3Form(request.POST, request.FILES)
         if form.is_valid():
             google_folder_link = form.cleaned_data['google_drive_link']
-            printed_name = form.cleaned_data['printed_name']
             e_signature = form.cleaned_data['e_signature']
 
 
@@ -540,7 +539,6 @@ def vehicle_registration_step_3(request):
                     user=user,
                     vehicle=vehicle,
                     files=google_folder_link,
-                    printed_name=printed_name,
                     e_signature=e_signature,
                     signature_date=timezone.now(),
                     status='application submitted'

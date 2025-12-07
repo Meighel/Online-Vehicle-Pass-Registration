@@ -373,11 +373,6 @@ class VehicleRegistrationStep3Form(forms.Form):
         label='Google Folder Link',
         widget=forms.URLInput(attrs={'placeholder': 'Paste the link of your Google Drive folder'}) 
     )
-    printed_name = forms.CharField(
-        max_length = 125,
-        label='Printed Name',
-        widget = forms.TextInput(attrs={'placeholder': 'First Name MI. Surname Suffix'})
-    )
     e_signature = forms.ImageField(
         label='E-signature',
         required=True,

@@ -75,14 +75,6 @@
         </div>
 
         <div class="form-group form3-form-group">
-          <label for="{{ form.printed_name.id_for_label }}">Printed Name</label>
-          {{ form.printed_name }}
-          {% if form.printed_name.errors %}
-            <div class="field-error">{{ form.printed_name.errors }}</div>
-          {% endif %}
-        </div>
-
-        <div class="form-group form3-form-group">
           <label for="signature-canvas">E-signature (Draw your signature below)</label>
           <div class="signature-container">
             <canvas id="signature-canvas" width="400" height="200"></canvas>
